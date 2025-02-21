@@ -143,7 +143,7 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
               <u>Get Direction</u>
             </Flex>
 
-            <Flex
+            {booking.guests && (<Flex
               justify="flex-end"
               style={{
                 fontWeight: "bold",
@@ -163,12 +163,12 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
               >
                 ↓
               </span>
-            </Flex>
+            </Flex>)}
           </Flex>
         </Flex>
 
         {/* Expanded Section */}
-        {isExpanded && (
+        {isExpanded && booking.guests && (
           <Flex
             vertical
             style={{
