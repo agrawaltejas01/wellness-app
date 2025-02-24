@@ -261,7 +261,7 @@ const calculateFinalPrice = (
 
 const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   const [userDetails] = useAtom(userDetailsAtom);
-  const [showDiscount, setShowDiscount] = useState(true);
+  const [showDiscount, setShowDiscount] = useState(false);
   const [discountedAmount, setDiscountedAmount] = useState(props.totalAmount);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);

@@ -80,21 +80,14 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
 
   useEffect(() => {
     // Get isFromApp from window object
-    const userSource = window?.platformInfo?.platform || 'web';
-    const appFlag = userSource !== 'web';
+    const userSource = window?.platformInfo?.platform || "web";
+    const appFlag = userSource !== "web";
     setIsFromApp(appFlag);
 
     // Get pastAppBookings from window object or initialize empty
     const storedBookings = window?.pastAppBookings || {};
     setPastAppBookings(storedBookings);
   }, []);
-
-  const showDiscountForUser = gym && shouldShowDiscount(
-    gym,
-    userDetails,
-    isFromApp,
-    pastAppBookings
-  );
 
   const gymId = batchDetails?.gymId;
 
@@ -380,7 +373,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
             ""
           )}
 
-        <div className="text-[#696969]">
+          <div className="text-[#696969]">
             {[
               {
                 title: "ABOUT THE ACTIVITY",
@@ -404,59 +397,61 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
                       ))}
                     </ol>
                   </div>
-                )
+                ),
             )}
           </div>
-            {batchDetails?.venue && (
-              <div className="sectionAct">
-                <div className="sectionActHeading">
-                  {leftDivider()}
-                  <span style={{ margin: "0px 12px" }}>Address</span>
-                  {rightDivider()}
-                </div>
-                <div className="locWrp locWrpCol">
-                  <div
-                    className="baseTxt baseTxt1"
-                    style={{ color: "#828081", marginLeft: "16px" }}
+          {batchDetails?.venue && (
+            <div className="sectionAct">
+              <div className="sectionActHeading">
+                {leftDivider()}
+                <span style={{ margin: "0px 12px" }}>Address</span>
+                {rightDivider()}
+              </div>
+              <div className="locWrp locWrpCol">
+                <div
+                  className="baseTxt baseTxt1"
+                  style={{ color: "#828081", marginLeft: "16px" }}
+                >
+                  <span
+                    className="baseTxt"
+                    style={{ color: "#828081", alignItems: "flex-start" }}
                   >
-                    <span
-                      className="baseTxt"
-                      style={{ color: "#828081", alignItems: "flex-start" }}
-                    >
-                      <LocationLogo
-                        style={{ marginRight: "8px", marginTop: "4px" }}
-                      />{" "}
-                      <span style={{ color: "#828081", maxWidth: "80%" }}>
-                        {batchDetails?.venue}
-                      </span>
+                    <LocationLogo
+                      style={{ marginRight: "8px", marginTop: "4px" }}
+                    />{" "}
+                    <span style={{ color: "#828081", maxWidth: "80%" }}>
+                      {batchDetails?.venue}
                     </span>
-                    <span
-                      style={{
-                        textDecoration: "underline",
-                        color: "#000",
-                        minWidth: "30%",
-                      }}
-                      onClick={() => {
-                        window.open(mapsLink);
-                      }}
-                    >
-                      View on map
-                    </span>
-                  </div>
+                  </span>
+                  <span
+                    style={{
+                      textDecoration: "underline",
+                      color: "#000",
+                      minWidth: "30%",
+                    }}
+                    onClick={() => {
+                      window.open(mapsLink);
+                    }}
+                  >
+                    View on map
+                  </span>
                 </div>
               </div>
-            )}
-          </div>
-        <BookNowFooter
-          checkoutType={ECheckoutType.BATCH}
-          batchDetails={batchDetails}
-          gymData={gym || undefined}
-          batchId={Number(batchId)}
-          isFromApp={isFromApp}
-          totalAmount={batchDetails?.price as number}
-          comingFrom={EBookNowComingFromPage.BATCH_CHECKOUT_PAGE}
-          forceBookNowCta={true}
-        />
+            </div>
+          )}
+        </div>
+        {gym && (
+          <BookNowFooter
+            checkoutType={ECheckoutType.BATCH}
+            batchDetails={batchDetails}
+            gymData={gym}
+            batchId={Number(batchId)}
+            isFromApp={isFromApp}
+            totalAmount={batchDetails?.price as number}
+            comingFrom={EBookNowComingFromPage.BATCH_CHECKOUT_PAGE}
+            forceBookNowCta={true}
+          />
+        )}
       </Flex>
       {/* </PullToRefresh> */}
       {/* </SwipeHandler> */}
