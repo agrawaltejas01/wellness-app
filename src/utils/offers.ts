@@ -48,7 +48,7 @@ export function shouldShowDiscount(
   }
 
   // Show discount for new users or if no disqualifying conditions met
-  return !userDetails || false;
+  return !userDetails;
 }
 
 /**
