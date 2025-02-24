@@ -2,7 +2,7 @@ import { EOfferType, IGymCard, IGymDetails } from "../types/gyms";
 import IUser from "../types/user";
 
 interface PastAppBookingObject {
-  [key: string]: boolean;  // Changed to boolean since it's used as a boolean check
+  [key: string]: boolean; // Changed to boolean since it's used as a boolean check
 }
 
 /**
@@ -13,7 +13,7 @@ interface PastAppBookingObject {
  */
 export function calculateDiscountedPrice(
   basePrice: number,
-  discountPercentage: number
+  discountPercentage: number,
 ): [number, number] {
   const finalAmount = Math.floor(basePrice * (1 - discountPercentage / 100));
   const discountAmount = basePrice - finalAmount;
@@ -21,7 +21,8 @@ export function calculateDiscountedPrice(
 }
 
 // Constants
-export const FIRST_BOOKING_DISCOUNT_TEXT = "50% off on your first booking on ZenfitX";
+export const FIRST_BOOKING_DISCOUNT_TEXT =
+  "50% off on your first booking on ZenfitX";
 
 /**
  * Determines if discount should be shown based on gym, user, and booking conditions
@@ -35,11 +36,12 @@ export function shouldShowDiscount(
   gym: IGymCard | IGymDetails,
   userDetails: IUser | null,
   isFromApp: boolean,
-  pastAppBookings: PastAppBookingObject
+  pastAppBookings: PastAppBookingObject,
 ): boolean {
   // Check for conditions that definitely hide discount
   if (
     gym.discountType === "NONE" ||
+    gym.discountType === "" ||
     !isFromApp ||
     gym.offerType === EOfferType.BATCH_WITH_GUESTS ||
     hasPastBooking(gym.gymId, pastAppBookings)
@@ -54,6 +56,9 @@ export function shouldShowDiscount(
 /**
  * Helper function to check if user has past bookings for a gym
  */
-function hasPastBooking(gymId: number, pastAppBookings: PastAppBookingObject): boolean {
+function hasPastBooking(
+  gymId: number,
+  pastAppBookings: PastAppBookingObject,
+): boolean {
   return Boolean(pastAppBookings[gymId]);
 }
