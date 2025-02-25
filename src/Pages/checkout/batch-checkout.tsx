@@ -18,7 +18,6 @@ import { Mixpanel } from "../../mixpanel/init";
 import {
   getActivityById,
   getGymById,
-  getPastAppBookings,
 } from "../../apis/gym/activities";
 import { useMutation } from "@tanstack/react-query";
 import { errorToast } from "../../components/Toast";
@@ -26,11 +25,7 @@ import { formatDate, formatTimeIntToAmPm } from "../../utils/date";
 import { createMapsLink } from "../../utils/string-operation";
 import { ReactComponent as LocationLogo } from "../../images/home/location.svg";
 import MetaPixel from "../../components/meta-pixel";
-import ShareMetadata from "../../components/share-metadata";
 import Loader from "../../components/Loader";
-import { handleRefresh } from "../../utils/refresh";
-import SwipeHandler from "../../components/back-swipe-handler";
-import { shouldShowDiscount } from "../../utils/offers";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -54,10 +49,6 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
     // Add your right swipe logic here
     navigateToHome();
   };
-  // const data = JSON.stringify(location?.state);
-  // alert(location?.state?.isFromApp);
-  // const isFromApp = JSON.parse(data).isFromApp;
-  // const pastAppBookings = JSON.parse(data).pastAppBookings
   const batchId = window.location.pathname.split("/")[3];
   const [selectedPlan, setSelectedPlan] = useState<ESelectedPlan>(
     ESelectedPlan.BATCH,
