@@ -38,19 +38,35 @@ export function shouldShowDiscount(
   isFromApp: boolean,
   pastAppBookings: PastAppBookingObject,
 ): boolean {
-  // Check for conditions that definitely hide discount
-  if (
-    gym.discountType === "NONE" ||
-    gym.discountType === "" ||
-    !isFromApp ||
-    gym.offerType === EOfferType.BATCH_WITH_GUESTS ||
-    hasPastBooking(gym.gymId, pastAppBookings)
-  ) {
+  //Case 1: If gym is not offering any discount
+  if(gym.discountType === "NONE" || gym.discountType === "" || gym.offerType === EOfferType.BATCH_WITH_GUESTS){
     return false;
   }
 
+  // Case 2: If user is not logged in
+  if(!userDetails){
+    return true;
+  }
+
+  // Case 3: If user has past booking
+  if(hasPastBooking(gym.gymId, pastAppBookings) || !isFromApp){
+    return false;
+  }
+  return true;
+
+  // Check for conditions that definitely hide discount
+  // if (
+  //   gym.discountType === "NONE" ||
+  //   gym.discountType === "" ||
+  //   !isFromApp ||
+  //   gym.offerType === EOfferType.BATCH_WITH_GUESTS ||
+  //   hasPastBooking(gym.gymId, pastAppBookings)
+  // ) {
+  //   return false;
+  // }
+
   // Show discount for new users or if no disqualifying conditions met
-  return !userDetails || true;
+  // return !userDetails || true;
 }
 
 /**
