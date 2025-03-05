@@ -31,6 +31,7 @@ import Loader from "../../components/Loader";
 import { handleRefresh } from "../../utils/refresh";
 import SwipeHandler from "../../components/back-swipe-handler";
 import { shouldShowDiscount } from "../../utils/offers";
+import GameLevelSelector from "../game_level/GameLevelSelector";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -77,6 +78,44 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   const [isFromApp, setIsFromApp] = useState(false);
   const [pastAppBookings, setPastAppBookings] = useState({});
   const slotsRemainingVisible = [6, 22, 24, 25, 27, 28, 31, 32];
+
+  //Constants related to game level
+  const [showLevelSelector, setShowLevelSelector] = useState(false);
+  const [userGameLevel, setUserGameLevel] = useState<string | null>(null);
+
+  const handleLevelSelect = (level: string) => {
+    setUserGameLevel(level);
+    setShowLevelSelector(false);
+
+    // Track in analytics
+    if (Mixpanel) {
+      Mixpanel.track("game_level_selected", {
+        level,
+        batchId,
+        gymId,
+      });
+    }
+
+    // Create booking object with game level
+    const bookingObject = {
+      batchId,
+      gymId,
+      gameLevel: level,
+      // Add other booking details as needed
+    };
+
+    console.log("Booking with level:", bookingObject);
+
+    // Proceed with booking automatically
+    // Code to continue with booking process
+  };
+  const handleBookNowClick = () => {
+    if (!userGameLevel) {
+      setShowLevelSelector(true);
+      return false; // Prevent default booking behavior
+    }
+    return true; // Allow booking to proceed
+  };
 
   useEffect(() => {
     // Get isFromApp from window object
@@ -450,11 +489,19 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
             totalAmount={batchDetails?.price as number}
             comingFrom={EBookNowComingFromPage.BATCH_CHECKOUT_PAGE}
             forceBookNowCta={true}
+            onBeforeAction={handleBookNowClick} // Add this line
           />
         )}
       </Flex>
       {/* </PullToRefresh> */}
       {/* </SwipeHandler> */}
+      <GameLevelSelector
+        isVisible={showLevelSelector}
+        onLevelSelect={handleLevelSelect}
+        batchId={batchId}
+        gymId={String(gymId)}
+      />
+
       <MetaPixel />
     </>
   );
