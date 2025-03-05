@@ -51,6 +51,7 @@ export interface IBookNowFooter {
   isFromApp?: boolean;
   pastAppBookings?: PastAppBookingObject;
   disabled?: boolean;
+  onBeforeAction?: () => boolean;
 }
 
 function loadScript(src: string) {
@@ -368,6 +369,10 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
         : "";
 
   const handleBookNowClick = async () => {
+    if (props.onBeforeAction && !props.onBeforeAction()) {
+      return;
+    }
+
     if (disabled) {
       setErrorMessage(
         `Please select ${totalGuests} ${totalGuests === 1 ? "bike" : "bikes"} to continue`,
