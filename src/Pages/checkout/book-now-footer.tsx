@@ -137,6 +137,7 @@ async function displayRazorpay(
     method: {
       upi: true,
     },
+    webview_intent: true,
     handler: (response: any) => {
       if (response.razorpay_payment_id) {
         if (props.checkoutType == ECheckoutType.BATCH)
