@@ -90,7 +90,6 @@ function createOrderPayload(props: IBookNowFooter, userDetails: IUser) {
   Mixpanel.track("pay_now_button_clicked_on_checkout_page", {
     ...payload,
   });
-
   return payload;
 }
 
