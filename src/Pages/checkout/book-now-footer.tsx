@@ -133,7 +133,6 @@ async function displayRazorpay(
     theme: {
       color: "#1a1a1a",
     },
-    webview_intent: true,
     method: {
       upi: true,
     },
