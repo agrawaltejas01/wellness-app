@@ -138,10 +138,9 @@ async function displayRazorpay(
   let shouldEnableWebViewIntent = false;
 
   if (window.platformInfo?.platform === "ios") {
-    shouldEnableWebViewIntent = isVersionGreaterOrEqual(
-      window.platformInfo?.version || "",
-      "1.2.0",
-    );
+    shouldEnableWebViewIntent = false;
+  } else if (window.platformInfo?.platform === "android") {
+    shouldEnableWebViewIntent = true;
   }
 
   const options = {
