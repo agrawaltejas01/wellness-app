@@ -135,7 +135,7 @@ async function displayRazorpay(
     return;
   }
 
-  let shouldEnableWebViewIntent = true;
+  let shouldEnableWebViewIntent = false;
 
   if (window.platformInfo?.platform === "ios") {
     shouldEnableWebViewIntent = isVersionGreaterOrEqual(
