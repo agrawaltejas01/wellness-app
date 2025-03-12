@@ -469,7 +469,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
           width: "100%",
         }}
       >
-        {showDiscount && <div className="discountLine">{discountText}</div>}
+        {showDiscount && !showLoginCTA && <div className="discountLine">{discountText}</div>}
         {errorMessage && (
           <div className="text-sm text-red-600 text-center absolute -top-8 left-0 right-0">
             {errorMessage}
