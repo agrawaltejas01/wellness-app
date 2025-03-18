@@ -18,6 +18,9 @@ import { useEffect, useState } from "react";
 import Loader from "../../components/Loader";
 import { shouldShowDiscount } from "../../utils/offers";
 import { trackEvent } from "../../firebase/config";
+import { getPastAppBookings } from "../../apis/gym/activities";
+import { useMutation } from "@tanstack/react-query";
+import { errorToast } from "../../components/Toast";
 
 interface RazorpayResponse {
   razorpay_payment_id?: string;
@@ -48,6 +51,7 @@ export interface IBookNowFooter {
   isFromApp?: boolean;
   pastAppBookings?: PastAppBookingObject;
   disabled?: boolean;
+  onBeforeAction?: () => boolean;
 }
 
 function loadScript(src: string) {
@@ -266,18 +270,30 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [, setAfterLoginRedirect] = useAtom(afterLoginRedirectAtom);
+  const [isFromApp, setIsFromApp] = useState(false);
+  const [pastAppBookings, setPastAppBookings] = useState({});
 
   const BACKEND_URL = process.env.REACT_APP_BE_URL;
   const batchBookingUrl = `/checkout/batch/${props.batchId}/booking`;
   const {
     batchDetails,
     totalGuests = 1,
-    isFromApp,
-    pastAppBookings = {},
     comingFrom,
     disabled,
     gymData,
   } = props;
+
+  const { mutate: _getPastAppBookings } = useMutation({
+    mutationFn: getPastAppBookings,
+    onError: () => {
+      errorToast("Error in getting past app bookings");
+    },
+    onSuccess: (result) => {
+      console.log("past app bookings - ", result);
+      setPastAppBookings(result.bookings);
+      window.pastAppBookings = result.bookings;
+    },
+  });
 
   useEffect(() => {
     if (gymData) {
@@ -291,6 +307,19 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
       );
     }
   }, [gymData, isFromApp, pastAppBookings, comingFrom, userDetails]);
+
+  useEffect(() => {
+    const userSource = window?.platformInfo?.platform || "web";
+    const appFlag = userSource != "web" ? true : false;
+    setIsFromApp(appFlag);
+    window.isFromApp = appFlag;
+    const userId = window.localStorage["zenfitx-user-details"]
+      ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || null
+      : null;
+    if (userId) {
+      _getPastAppBookings(userId);
+    }
+  }, []);
 
   useEffect(() => {
     if (showDiscount && batchDetails) {
@@ -313,6 +342,10 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
         : "";
 
   const handleBookNowClick = async () => {
+    if (props.onBeforeAction && !props.onBeforeAction()) {
+      return;
+    }
+
     if (disabled) {
       setErrorMessage(
         `Please select ${totalGuests} ${totalGuests === 1 ? "bike" : "bikes"} to continue`,
