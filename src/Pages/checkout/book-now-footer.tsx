@@ -138,11 +138,11 @@ async function displayRazorpay(
 
   let shouldEnableWebViewIntent = false;
 
-  if (window.platformInfo?.platform === "ios") {
-    shouldEnableWebViewIntent = false;
+  if (window.platformInfo?.platform === "ios" && window.platformInfo?.appVersion && window.platformInfo?.appVersion > '1.2.0') {
+    shouldEnableWebViewIntent = true;
   } else if (window.platformInfo?.platform === "android") {
     shouldEnableWebViewIntent = true;
-  }
+  } 
 
   const options = {
     key: process.env.REACT_APP_RZP_CLIENT_KEY,

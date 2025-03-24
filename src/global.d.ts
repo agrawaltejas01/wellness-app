@@ -14,6 +14,7 @@ interface Window {
   platformInfo?: {
     platform: ?string;
     version?: string;
+    appVersion: ?string;
   };
 }
 
