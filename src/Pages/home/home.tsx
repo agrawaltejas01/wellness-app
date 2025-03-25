@@ -201,7 +201,6 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     if(window.platformInfo?.platform == "ios" && window.platformInfo?.appVersion && window.platformInfo?.appVersion < '1.2.1') {
       setShowUpdatePopup(true);
     }
-    setShowUpdatePopup(true);
   }, []);
 
   useEffect(() => {
