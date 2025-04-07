@@ -17,11 +17,12 @@ import activityToSvgMap from "../../images/class-images/activity-map";
 import { Mixpanel } from "../../mixpanel/init";
 import {
   getActivityById,
+  getBatchWithGameLevel,
   getGymById,
   getPastAppBookings,
 } from "../../apis/gym/activities";
 import { useMutation } from "@tanstack/react-query";
-import { errorToast } from "../../components/Toast";
+import { errorToast, successToast } from "../../components/Toast";
 import { formatDate, formatTimeIntToAmPm } from "../../utils/date";
 import { createMapsLink } from "../../utils/string-operation";
 import { ReactComponent as LocationLogo } from "../../images/home/location.svg";
@@ -32,6 +33,7 @@ import { handleRefresh } from "../../utils/refresh";
 import SwipeHandler from "../../components/back-swipe-handler";
 import { shouldShowDiscount } from "../../utils/offers";
 import GameLevelSelector from "../game_level/GameLevelSelector";
+import { upsertGameLevel } from "../../apis/user/gameLevel";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -83,9 +85,12 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   const [showLevelSelector, setShowLevelSelector] = useState(false);
   const [userGameLevel, setUserGameLevel] = useState<string | null>(null);
 
-  const handleLevelSelect = (level: string) => {
+  const handleLevelSelect = async (level: string) => {
     setUserGameLevel(level);
     setShowLevelSelector(false);
+    
+    // Set loading state while making API call
+    setLoading(true);
 
     // Track in analytics
     if (Mixpanel) {
@@ -96,21 +101,42 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
       });
     }
 
-    // Create booking object with game level
-    const bookingObject = {
-      batchId,
-      gymId,
-      gameLevel: level,
-      // Add other booking details as needed
-    };
-
-    console.log("Booking with level:", bookingObject);
-
-    // Proceed with booking automatically
-    // Code to continue with booking process
+    try {
+      // Send the level data to the backend
+      // Use the batchActivityId from batch details as required by the backend
+      const gameLevelData = {
+        batchActivityId: batchDetails?.batchActivity?.id || Number(batchId),
+        level
+      };
+      
+      await upsertGameLevel(gameLevelData);
+      
+      // Success toast notification
+      successToast("Game level saved successfully");
+      
+      // Create booking object with game level for future reference
+      const bookingObject = {
+        batchId,
+        gymId,
+        gameLevel: level,
+      };
+      console.log("Booking with level:", bookingObject);
+      
+      // Proceed with booking automatically
+      navigateToBookingPage();
+    } catch (error) {
+      console.error("Error saving game level:", error);
+      errorToast("Failed to save game level, but continuing with booking");
+      
+      // Proceed anyway even if the API call fails
+      navigateToBookingPage();
+    } finally {
+      setLoading(false);
+    }
   };
   const handleBookNowClick = () => {
-    if (!userGameLevel) {
+    // Only show game level selector if required by the batch activity
+    if (batchDetails?.batchActivity?.showGameLevel === true && !userGameLevel) {
       setShowLevelSelector(true);
       return false; // Prevent default booking behavior
     }
@@ -136,15 +162,32 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
     }
   }, [gym, batchDetails]);
 
+  // Mutation for the new API with game level information
+  const { mutate: _getBatchWithGameLevel } = useMutation({
+    mutationFn: getBatchWithGameLevel,
+    onSuccess: (result) => {
+      console.log("Batch with game level:", result.batch);
+      setBatchDetails(result.batch);
+      setLoading(false);
+    },
+    onError: (error) => {
+      console.error("Error using new API, falling back to old one:", error);
+      // Fall back to the old API on error
+      _getActivityById(batchId);
+    },
+  });
+
+  // Keep the old API mutation as fallback
   const { mutate: _getActivityById } = useMutation({
     mutationFn: getActivityById,
     onSuccess: (result) => {
-      console.log(result.batch);
+      console.log("Batch from old API:", result.batch);
       setBatchDetails(result.batch);
       setLoading(false);
     },
     onError: (error) => {
       errorToast("Error in getting gym data");
+      setLoading(false);
     },
   });
 
@@ -161,7 +204,8 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   });
 
   useEffect(() => {
-    _getActivityById(batchId);
+    // Try the new API first, with fallback to old API in the error handler
+    _getBatchWithGameLevel(batchId);
   }, []);
   useEffect(() => {
     if (batchDetails?.gymId) {
@@ -201,6 +245,14 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
 
   const navigateToHome = () => {
     navigate(`/gym/${gymId}/batch`);
+  };
+  
+  const navigateToBookingPage = () => {
+    const batchBookingUrl = `/checkout/batch/${batchId}/booking`;
+    Mixpanel.track("open_batch_checkout_booking", { batchId });
+    navigate(batchBookingUrl, {
+      state: { isFromApp, pastAppBookings }
+    });
   };
 
   const leftDivider = () => {

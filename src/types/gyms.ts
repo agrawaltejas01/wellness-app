@@ -20,6 +20,14 @@ export enum EOfferType {
   APP = "APP",
 }
 
+export interface IBatchActivity {
+  id: number;
+  code: string;
+  name: string;
+  showGameLevel: boolean;
+  showSlots: boolean;
+}
+
 export interface IBatch {
   id?: number;
   batchId: number;
@@ -46,6 +54,8 @@ export interface IBatch {
   participants?: ParticipantDetail[];
   noOfParticipants?: number;
 
+  batchActivity?: IBatchActivity; // Added batchActivity field
+  
   guestsAllowed?: boolean;
   offerType?: EOfferType;
   offerPercentage: number;

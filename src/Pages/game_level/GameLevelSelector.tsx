@@ -55,7 +55,7 @@ const GameLevelSelector: React.FC<GameLevelProps> = ({
   };
 
   const handleConfirm = () => {
-    // Just pass the selection to the parent component
+    // Pass the selection to the parent component and automatically proceed
     onLevelSelect(selectedLevel);
   };
 
