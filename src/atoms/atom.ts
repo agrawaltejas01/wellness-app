@@ -38,3 +38,16 @@ export const afterLoginRedirectAtom =
     null,
     checkoutSdkRedirectStorage
   );
+
+// Temporary storage for game level before saving to backend
+export interface IPendingGameLevel {
+  batchActivityId: number;
+  level: string;
+}
+
+const pendingGameLevelStorage = createJSONStorage<IPendingGameLevel | null>(() => localStorage);
+export const pendingGameLevelAtom = atomWithStorage<IPendingGameLevel | null>(
+  "zenfitx-pending-game-level",
+  null,
+  pendingGameLevelStorage
+);
