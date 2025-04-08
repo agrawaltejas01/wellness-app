@@ -11,7 +11,7 @@ import {
   ECheckoutType,
   ESelectedPlan,
 } from "../../types/checkout";
-import { plusDetailsAtom, userDetailsAtom } from "../../atoms/atom";
+import { pendingGameLevelAtom, plusDetailsAtom, userDetailsAtom } from "../../atoms/atom";
 import { useAtom } from "jotai/react";
 import activityToSvgMap from "../../images/class-images/activity-map";
 import { Mixpanel } from "../../mixpanel/init";
@@ -70,6 +70,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   const [totalAmount, setTotalAmount] = useState();
 
   const [plusDetails] = useAtom(plusDetailsAtom);
+  const [pendingGameLevel, setPendingGameLevel] = useAtom(pendingGameLevelAtom);
   const mixpanelSet = useRef(false);
 
   const [isClicked, setIsClicked] = useState<Boolean>(false);
@@ -85,13 +86,10 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   const [showLevelSelector, setShowLevelSelector] = useState(false);
   const [userGameLevel, setUserGameLevel] = useState<string | null>(null);
 
-  const handleLevelSelect = async (level: string) => {
+  const handleLevelSelect = (level: string) => {
     setUserGameLevel(level);
     setShowLevelSelector(false);
     
-    // Set loading state while making API call
-    setLoading(true);
-
     // Track in analytics
     if (Mixpanel) {
       Mixpanel.track("game_level_selected", {
@@ -101,41 +99,28 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
       });
     }
 
-    try {
-      // Send the level data to the backend
-      // Use the batchActivityId from batch details as required by the backend
-      const gameLevelData = {
-        batchActivityId: batchDetails?.batchActivity?.id || Number(batchId),
-        level
-      };
-      
-      await upsertGameLevel(gameLevelData);
-      
-      // Success toast notification
-      successToast("Game level saved successfully");
-      
-      // Create booking object with game level for future reference
-      const bookingObject = {
-        batchId,
-        gymId,
-        gameLevel: level,
-      };
-      console.log("Booking with level:", bookingObject);
-      
-      // Proceed with booking automatically
-      navigateToBookingPage();
-    } catch (error) {
-      console.error("Error saving game level:", error);
-      errorToast("Failed to save game level, but continuing with booking");
-      
-      // Proceed anyway even if the API call fails
-      navigateToBookingPage();
-    } finally {
-      setLoading(false);
-    }
+    // Store the level data in atom for later use after successful booking
+    const gameLevelData = {
+      batchActivityId: batchDetails?.batchActivity?.id || Number(batchId),
+      level
+    };
+    
+    // Save to atom for later API call after successful booking
+    setPendingGameLevel(gameLevelData);
+    
+    // Create booking object with game level for future reference
+    const bookingObject = {
+      batchId,
+      gymId,
+      gameLevel: level,
+    };
+    console.log("Booking with level:", bookingObject);
+    
+    // Proceed with booking automatically
+    navigateToBookingPage();
   };
   const handleBookNowClick = () => {
-    // Only show game level selector if required by the batch activity
+    // Show game level selector if required by the batch activity, regardless of login status
     if (batchDetails?.batchActivity?.showGameLevel === true && !userGameLevel) {
       setShowLevelSelector(true);
       return false; // Prevent default booking behavior

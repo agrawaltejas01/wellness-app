@@ -6,6 +6,10 @@ import { ReactComponent as PaymentSuccessLogo } from "../../images/checkout/paym
 import colors from "../../constants/colours";
 import { useEffect } from "react";
 import MetaPixel from "../../components/meta-pixel";
+import { pendingGameLevelAtom } from "../../atoms/atom";
+import { useAtom } from "jotai/react";
+import { upsertGameLevel } from "../../apis/user/gameLevel";
+import { successToast, errorToast } from "../../components/Toast";
 
 interface IPaymentSuccess extends RouteComponentProps {
   batchDetails?: IBatch;
@@ -28,6 +32,8 @@ const BatchPaymentSuccess: React.FC<IPaymentSuccess> = ({
     : null;
   gymData = gymData || gymDataSentFromBatchSchedule;
   batchDetails = batchDetails || batchDetailsFromBatchSchedule;
+  
+  const [pendingGameLevel, setPendingGameLevel] = useAtom(pendingGameLevelAtom);
 
   const logoTsx = (
     <Flex flex={1} vertical justify="center" align="center">
@@ -41,7 +47,27 @@ const BatchPaymentSuccess: React.FC<IPaymentSuccess> = ({
   );
   
   const refreshInterval = 3000;
+  
+  // Save game level after successful booking
   useEffect(() => {
+    const saveGameLevel = async () => {
+      // If we have pending game level data, save it now
+      if (pendingGameLevel) {
+        try {
+          await upsertGameLevel(pendingGameLevel);
+          successToast("Game level saved successfully");
+          // Clear the pending game level data after saving
+          setPendingGameLevel(null);
+        } catch (error) {
+          console.error("Error saving game level:", error);
+          errorToast("Failed to save game level");
+        }
+      }
+    };
+    
+    saveGameLevel();
+    
+    // Navigate to home after delay
     setTimeout(() => {
       navigate("/");
     }, refreshInterval);
