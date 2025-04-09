@@ -154,6 +154,19 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   }, []);
 
   useEffect(() => {
+    if(userDetails) {
+      const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
+      const firebaseToken = window.localStorage["token"];
+      if (firebaseToken){
+        Mixpanel.track("generated_notification_token", {
+          userId,
+          firebaseToken,
+        });
+      }
+    }
+  }, [userDetails])
+
+  useEffect(() => {
     _getGymById(gymId as string);
   }, [gymId]);
 
