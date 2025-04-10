@@ -100,8 +100,10 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
     if (userId) {
       _getPastAppBookings(userId);
       const firebaseToken = window.localStorage["token"];
-      if (firebaseToken)
+      if (firebaseToken) {
         _saveNotificationToken({ userId, token: firebaseToken });
+        alert(firebaseToken)
+      }
     } else {
       setGotPastAppBookings(true);
     }
