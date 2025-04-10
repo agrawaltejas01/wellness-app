@@ -166,14 +166,14 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     const appFlag = userSource != 'web' ? true : false;
     setIsFromApp(appFlag);
     window.isFromApp = appFlag;
+    window?.ReactNativeWebView?.postMessage("notification alert");
   }, [])
 
   useEffect(() => {
     if (onboarding) {
       setCookie("onboarding", "done", 1);
-      window?.ReactNativeWebView?.postMessage("notification alert");
     }
-  }, []);
+  }, [onboarding]);
 
   useEffect(() => {
     const userDetails =
