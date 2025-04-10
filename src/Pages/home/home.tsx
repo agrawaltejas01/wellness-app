@@ -168,6 +168,9 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     const appFlag = userSource != 'web' ? true : false;
     setIsFromApp(appFlag);
     window.isFromApp = appFlag;
+    if(onboarding) {
+      window?.ReactNativeWebView?.postMessage("notification alert");
+    }
   }, [])
 
   useEffect(() => {
