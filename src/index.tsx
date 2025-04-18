@@ -34,7 +34,7 @@ function checkAndRedirect() {
         window.location.href =
           "https://play.google.com/store/apps/details?id=com.zenfitx.zenfitxapp";
       }
-    }, 100);
+    }, 200);
   }
 }
 
