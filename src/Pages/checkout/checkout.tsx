@@ -100,8 +100,14 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
     if (userId) {
       _getPastAppBookings(userId);
       const firebaseToken = window.localStorage["token"];
+      const tokenPermission = window.localStorage["notificationPermission"];
       if (firebaseToken)
         _saveNotificationToken({ userId, token: firebaseToken });
+      if(tokenPermission == "false") {
+        Mixpanel.track("notification_permission_denied", {
+          userId
+        });
+      }
     } else {
       setGotPastAppBookings(true);
     }
