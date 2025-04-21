@@ -51,7 +51,7 @@ function mobileRedirect() {
       // Redirect to app store
       window.location.href = appStoreLink;
     }
-  }, 2000);
+  }, 200);
   
   // Clear timeout if app opens
   const clearRedirectTimeout = () => {
@@ -69,7 +69,9 @@ function mobileRedirect() {
 
   // Try Android intent first for Android devices
   if (isAndroid) {
-    const intentUrl = `intent://${currentPath.substring(1)}#Intent;scheme=zenfitx;package=com.zenfitx.zenfitxapp;S.browser_fallback_url=${encodeURIComponent(appStoreLink)};end`;
+    const currentUrl = new URL(window.location.href);
+    const intentUrl = `intent://${currentUrl.host}${currentUrl.pathname}${currentUrl.search}#Intent;scheme=https;package=com.zenfitx.zenfitxapp;S.browser_fallback_url=${encodeURIComponent(appStoreLink)};end`;
+    // const intentUrl = `intent://${currentPath.substring(1)}#Intent;scheme=zenfitx;package=com.zenfitx.zenfitxapp;S.browser_fallback_url=${encodeURIComponent(appStoreLink)};end`;
     window.location.href = intentUrl;
   } else {
     // For iOS, try universal links first (if configured), then custom scheme
