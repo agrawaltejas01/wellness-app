@@ -65,9 +65,8 @@ const Profile: React.FC<IProfile> = () => {
       setAfterLoginRedirectAtom({
         afterLoginUrl: "/profile",
       });
-      setTimeout(() => {
-        navigate("/login");
-      }, 1000);
+
+      navigate("/login");
     }
 
     _getBookingOfUser();
