@@ -32,7 +32,7 @@ function mobileRedirect() {
   const isAndroid = /android/i.test(navigator.userAgent.toLowerCase());
   const appScheme = isAndroid 
   ? "zenfitx://" + currentPath.substring(1) 
-  : "zenfitx://" + currentPath.substring(1);
+  : "zenfitx://zenfitx.in/" + currentPath.substring(1);
   
   const appStoreLink = isAndroid
     ? "https://play.google.com/store/apps/details?id=com.zenfitx.zenfitxapp"
