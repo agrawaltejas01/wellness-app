@@ -1,5 +1,5 @@
 import { RouteComponentProps, navigate } from "@reach/router";
-import { Button, Flex } from "antd";
+import { Flex } from "antd";
 import UserDetails from "./user-details";
 import NeedHelpBanner from "./need-help";
 import DeleteAccountButton from "./delete-account";
@@ -39,7 +39,6 @@ const Profile: React.FC<IProfile> = () => {
   const [pastBookings, setPastBookings] = useState<IBookings[]>([]);
   const [upcomingBookings, setUpcomingBookings] = useState<IBookings[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showLoginButton, setShowLoginButton] = useState(false);
 
   const { mutate: _getBookingOfUser } = useMutation({
     mutationFn: getBookingOfUser,
@@ -67,8 +66,7 @@ const Profile: React.FC<IProfile> = () => {
         afterLoginUrl: "/profile",
       });
 
-      setShowLoginButton(true);
-      // navigate("/login");
+      navigate("/login");
     }
 
     _getBookingOfUser();
@@ -139,13 +137,6 @@ const Profile: React.FC<IProfile> = () => {
         ) : null}
       </Flex>
       
-      <Flex flex={1} align="flex-mid" justify="center">   
-        {showLoginButton ? (
-          <Button type="primary" style={{ backgroundColor: "black" }} onClick={() => navigate("/login")}>
-            Login
-          </Button>
-        ) : null}
-      </Flex>
 
       <Flex flex={1} align="flex-end">
         <NeedHelpBanner />
