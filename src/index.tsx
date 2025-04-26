@@ -75,7 +75,16 @@ function mobileRedirect() {
     window.location.href = intentUrl;
   } else {
     // For iOS, try universal links first (if configured), then custom scheme
-    window.location.href = appScheme;
+    const universalLink = `https://zenfitx.in${currentPath}`;
+    window.location.href = universalLink;
+    
+    // Small delay before trying custom scheme as fallback
+    setTimeout(() => {
+      if (!appOpened) {
+        window.location.href = appScheme;
+      }
+    }, 1000);
+    // window.location.href = appScheme;
   }
 }
 
