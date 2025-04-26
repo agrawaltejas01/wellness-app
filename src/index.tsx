@@ -51,7 +51,7 @@ function mobileRedirect() {
       // Redirect to app store
       window.location.href = appStoreLink;
     }
-  }, 1500);
+  }, 10000);
   
   // Clear timeout if app opens
   const clearRedirectTimeout = () => {
