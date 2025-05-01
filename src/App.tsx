@@ -13,9 +13,10 @@ import VerifyMagicLink from "./Pages/auth/verify";
 import Profile from "./Pages/profile/Profle";
 import SchedulePage from "./Pages/checkout/schedule-page";
 import Activity from "./Pages/activity/Activity";
-import BatchCheckoutBooking from "./Pages/checkout/checkout";
+// import BatchCheckoutBooking from "./Pages/checkout/checkout";
 import PrivacyPolicy from "./Pages/privacy/privacy";
-
+import BatchCheckoutV2 from "./Pages/checkout/batch-checkout-v2";
+import BatchCheckoutBookingV2 from "./Pages/checkout/checkout-v2";
 // Create a client
 const queryClient = new QueryClient();
 
@@ -34,8 +35,8 @@ function App() {
         <Gym path="/gym/:gymId" />
         <SchedulePage path="/gym/:gymId/batch" />
         {/* <GuestCheckout path="/gym/:gymId/batch/checkout" /> */}
-        <BatchCheckout path="/checkout/batch/:batchId" />
-        <BatchCheckoutBooking path="/checkout/batch/:batchId/booking" />
+        <BatchCheckoutV2 path="/checkout/batch/:batchId" />
+        <BatchCheckoutBookingV2 path="/checkout/batch/:batchId/booking" />
         <PlusCheckout path="/checkout/plus" />
         <BatchPaymentSuccess path="/checkout/success" />
         <PlusPaymentSuccess path="/plus/success" />
