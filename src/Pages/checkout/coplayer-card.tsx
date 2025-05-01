@@ -9,14 +9,20 @@ import { errorToast } from "../../components/Toast";
 
 const CoplayerCard = ( {players, loading, spotsLeft, spotsTotal}: {players: any[], loading: boolean, spotsLeft: number, spotsTotal: number} ) => {
 
-    const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
+    const userId = window.localStorage["zenfitx-user-details"] ? JSON.parse(window.localStorage["zenfitx-user-details"]).id : null;
 
     if(loading) {
         return (
            <PlayersLoadingComponent />
         )
     } else {
-        if(players.length > 0) {
+        if(userId == null) {
+            return (
+                <div className="flex items-center justify-center shadow-gray rounded-xl mx-8 my-4 px-4 py-8">
+                    <h1 className="text-sm font-semibold">Please login to see your coplayers</h1>
+                </div>
+            )
+        } else if(players.length > 0) {
         return (
             <div className="flex-col items-center justify-between shadow-gray rounded-xl mx-8 my-4 ">
                 <div className="flex-col items-center justify-between px-4 py-2">
