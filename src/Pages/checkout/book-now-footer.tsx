@@ -90,8 +90,26 @@ function createOrderPayload(props: IBookNowFooter, userDetails: IUser) {
   Mixpanel.track("pay_now_button_clicked_on_checkout_page", {
     ...payload,
   });
-
   return payload;
+}
+
+function isVersionGreaterOrEqual(
+  currentVersion: string,
+  minVersion: string,
+): boolean {
+  if (!currentVersion) return false;
+
+  const current = currentVersion.split(".").map(Number);
+  const min = minVersion.split(".").map(Number);
+
+  for (let i = 0; i < Math.max(current.length, min.length); i++) {
+    const a = current[i] || 0;
+    const b = min[i] || 0;
+    if (a > b) return true;
+    if (a < b) return false;
+  }
+
+  return true; // Versions are equal
 }
 
 async function displayRazorpay(
@@ -118,6 +136,14 @@ async function displayRazorpay(
     return;
   }
 
+  let shouldEnableWebViewIntent = false;
+
+  if (window.platformInfo?.platform === "ios" && window.platformInfo?.appVersion && window.platformInfo?.appVersion > '1.2.0') {
+    shouldEnableWebViewIntent = true;
+  } else if (window.platformInfo?.platform === "android") {
+    shouldEnableWebViewIntent = true;
+  } 
+
   const options = {
     key: process.env.REACT_APP_RZP_CLIENT_KEY,
     amount: props.totalAmount * 100,
@@ -134,6 +160,7 @@ async function displayRazorpay(
     theme: {
       color: "#1a1a1a",
     },
+    webview_intent: shouldEnableWebViewIntent,
     method: {
       upi: true,
     },
@@ -442,7 +469,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
           width: "100%",
         }}
       >
-        {showDiscount && <div className="discountLine">{discountText}</div>}
+        {showDiscount && !showLoginCTA && <div className="discountLine">{discountText}</div>}
         {errorMessage && (
           <div className="text-sm text-red-600 text-center absolute -top-8 left-0 right-0">
             {errorMessage}

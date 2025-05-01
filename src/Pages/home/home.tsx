@@ -26,6 +26,7 @@ import { getUserDeatils } from "../../apis/user/userDetails";
 import Onboarding from "./onboarding";
 import MetaPixel from "../../components/meta-pixel";
 import {handleRefresh} from '../../utils/refresh';
+import ForceUpdatePopup from "../../components/ForceUpdatePopup";
 
 
 interface PastAppBookingObject {
@@ -71,6 +72,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   const [userDetails, setUserDetailsAtom] = useAtom(userDetailsAtom);
   const [onboarding, setOnboarding] = useState<boolean>(false);
   const [gotPastBookings, setGotPastAppBookings] = useState(false);
+  const [showUpdatePopup, setShowUpdatePopup] = useState(false);
   const showClassesNearYouRef = useRef(true);
 
   const mixpanelSet = useRef(false);
@@ -166,7 +168,9 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     const appFlag = userSource != 'web' ? true : false;
     setIsFromApp(appFlag);
     window.isFromApp = appFlag;
-    window?.ReactNativeWebView?.postMessage("notification alert");
+    if(!showOnBoarding()) {
+      window?.ReactNativeWebView?.postMessage("notification alert");
+    }
   }, [])
 
   useEffect(() => {
@@ -194,6 +198,14 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
 
     // _getPlusDetailsOfUser(userDetails?.phone as string);
   }, [activitySelected]);
+
+  useEffect(() => {
+    if(window.platformInfo?.platform == "ios") {
+      if(!window.platformInfo?.appVersion || (window.platformInfo?.appVersion < '1.2.3')) {
+        setShowUpdatePopup(true);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (!mixpanelSet.current) {
@@ -228,6 +240,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     return null;
   }
 
+  if(showUpdatePopup) return <ForceUpdatePopup />
   if (showOnBoarding()) return <Onboarding setOnboarding={setOnboarding} />;
   if (!activities.length || !gotPastBookings) return <Loader />;
 

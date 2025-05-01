@@ -33,7 +33,7 @@ import { shouldShowDiscount } from "../../utils/offers";
 import MetaPixel from "../../components/meta-pixel";
 
 const COUPLE_BATCH_IDS = [25992, 25993, 25994, 25740, 25744];
-const SLOTS_REMAINING_VISIBLE_GYM_IDS = [6, 22, 24, 25, 27, 28, 29, 31, 32, 34, 3];
+const SLOTS_REMAINING_VISIBLE_GYM_IDS = [6, 22, 24, 25, 27, 28, 29, 31, 32, 34, 35, 3];
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -152,6 +152,19 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   useEffect(() => {
     Mixpanel.track("open_schedule_page", { gymId });
   }, []);
+
+  useEffect(() => {
+    if(userDetails) {
+      const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
+      const firebaseToken = window.localStorage["token"];
+      if (firebaseToken){
+        Mixpanel.track("generated_notification_token", {
+          userId,
+          firebaseToken,
+        });
+      }
+    }
+  }, [userDetails])
 
   useEffect(() => {
     _getGymById(gymId as string);
