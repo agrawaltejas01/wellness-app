@@ -82,6 +82,7 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
         mutationFn: getCoplayers,
         onSuccess: (result) => {  
             setPlayers(result.map((player: any) => ({name: player.name, 
+                        userId: player.userId,
                         level: player.skillLevel, 
                         noOfBookings: player.noOfGuests, 
                         gamesPlayed: player.activityBookCount})));

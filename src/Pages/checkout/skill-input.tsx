@@ -57,12 +57,16 @@ const SkillLevelInput = ({userId, activityId, batchId}: {userId: number, activit
     const { mutate: _updateUserSkillLevel } = useMutation({
         mutationFn: updateUserSkillLevel,
         onSuccess: (result) => {
-            successToast("Skill level updated successfully");
             localStorage.setItem(`skillLevel-${activityId}`, selectedSkillLevel.toUpperCase());
         },
         onError: (error) => {
             errorToast("Error in updating user skill level");
         },
+        onSettled: () => {
+            localStorage.setItem(`skillLevel-${activityId}`, selectedSkillLevel.toUpperCase());
+            const bookingUrl = `/checkout/batch/${batchId}/booking`;
+            window.location.href = bookingUrl;
+        }
     });
 
     const handleConfirm = () => {
@@ -73,9 +77,6 @@ const SkillLevelInput = ({userId, activityId, batchId}: {userId: number, activit
         if(userId) {
             _updateUserSkillLevel({userId, activityId, skillLevel: selectedSkillLevel.toUpperCase()});
         }
-        localStorage.setItem(`skillLevel-${activityId}`, selectedSkillLevel.toUpperCase());
-        const bookingUrl = `/checkout/batch/${batchId}/booking`;
-        window.location.href = bookingUrl;
     }
 
     return (

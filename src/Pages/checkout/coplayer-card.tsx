@@ -9,6 +9,7 @@ import { errorToast } from "../../components/Toast";
 
 const CoplayerCard = ( {players, loading, spotsLeft, spotsTotal}: {players: any[], loading: boolean, spotsLeft: number, spotsTotal: number} ) => {
 
+    const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
 
     if(loading) {
         return (
@@ -26,7 +27,7 @@ const CoplayerCard = ( {players, loading, spotsLeft, spotsTotal}: {players: any[
                 <div key={index} className="flex-col items-center justify-center">
                     <div className="flex items-center justify-between px-4 py-2">
                         <div className="flex items-center justify-center">
-                            <h1 className="text-sm"> {players[index].name}</h1>
+                            <h1 className="text-sm"> {players[index].userId === userId ? "You" : players[index].name}</h1>
                             <h1 className="text-sm px-1"> {players[index].noOfBookings > 1 ? ` +${players[index].noOfBookings - 1}` : ""}</h1>
                         </div>
                         <div className="flex items-center justify-center gap-2">
