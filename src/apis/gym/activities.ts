@@ -33,3 +33,8 @@ export async function getPastAppBookings(id: string){
   const result = await networkAdapter.get(`bookings/pastAppBookings?id=${id}`);
   return result.data;
 }
+
+export async function getCoplayers(id: string){
+  const result = await networkAdapter.get(`users/batch-coplayers?batchId=${id}`);
+  return result.data;
+}

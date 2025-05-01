@@ -1,0 +1,548 @@
+import { EOfferType, IBatch, IGymDetails, ParticipantDetail } from "../../types/gyms";
+
+import { useMutation } from "@tanstack/react-query";
+import { getActivityById, getPastAppBookings } from "../../apis/gym/activities";
+import { errorToast } from "../../components/Toast";
+import { useEffect, useRef, useState } from "react";
+import { ReactComponent as BackButtonCheckout } from "../../images/utils/back-button-checkout.svg";
+import { getGymById } from "../../apis/gym/activities";
+import SkillCapsule, { SkillLevel } from "../../components/skill-capsule";
+import SpotsLeft from "./spots-left";
+import Circle from "../../components/circle";
+import SkillLevelInput from "./skill-input";
+import { navigate, RouteComponentProps, useLocation } from "@reach/router";
+import Loader from "../../components/Loader";
+import IncrementDecrementButton from "../../components/increment-decrement-button";
+import SpotsLeftCheckout from "./spots-left-checkout";
+import BookNowFooter from "./book-now-footer";
+import { EBookNowComingFromPage } from "../../types/checkout";
+import { ECheckoutType } from "../../types/checkout";
+import { getUserSkillLevel } from "../../apis/user/userDetails";
+import { userDetailsAtom } from "../../atoms/atom";
+import { useAtom } from "jotai";
+import { saveNotificationToken } from "../../apis/notifications/notifications";
+import { Mixpanel } from "../../mixpanel/init";
+import { Rs } from "../../constants/symbols";
+import { ACTIVITY_NAME_TO_ID_MAP, COPLAYER_CARD_ENABLED } from "../../constants/activities";
+// Function to convert 24-hour time to 12-hour format
+const convert24HourTo12Hour = (timeStr: string): { formattedTime: string; error: string | null } => {
+    // Handle empty input
+    if (!timeStr || timeStr.trim() === '') {
+      return { formattedTime: '', error: 'Please enter a time' };
+    }
+  
+    // Validate input length
+    if (timeStr.length < 3 || timeStr.length > 4) {
+      return { formattedTime: '', error: `Invalid time format: ${timeStr}` };
+    }
+  
+    let hourStr: string, minuteStr: string;
+    
+    // Parse hour and minute parts
+    if (timeStr.length === 3) {
+      hourStr = timeStr.substring(0, 1);
+      minuteStr = timeStr.substring(1);
+    } else { // length === 4
+      hourStr = timeStr.substring(0, 2);
+      minuteStr = timeStr.substring(2);
+    }
+    
+    // Convert to numbers
+    const hour = parseInt(hourStr, 10);
+    const minute = parseInt(minuteStr, 10);
+    
+    // Validate hour and minute
+    if (isNaN(hour) || isNaN(minute) || hour < 0 || hour > 23 || minute < 0 || minute > 59) {
+      return { formattedTime: '', error: `Invalid time: ${hour}:${minute}` };
+    }
+    
+    // Convert to 12-hour format
+    const period = hour >= 12 ? 'PM' : 'AM';
+    // Calculate 12-hour format hour
+    let twelveHour = hour % 12;
+    if (twelveHour === 0) {
+      twelveHour = 12;
+    }
+    
+    // Format the time as a string
+    const formattedTime = `${twelveHour}:${minute.toString().padStart(2, '0')} ${period}`;
+    return { formattedTime, error: null };
+  };
+
+interface IClassCheckout extends RouteComponentProps {
+    skillLevel: string;
+}
+
+const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
+    const batchId = window.location.pathname.split("/")[3];
+    const [batchDetails, setBatchDetails] = useState<IBatch>();
+    const [gymDetails, setGymDetails] = useState<IGymDetails>();
+    // const [skillLevel, setSkillLevel] = useState<string>();
+    const [spotsLeft, setSpotsLeft] = useState<number>(0);
+    const [spotsTotal, setSpotsTotal] = useState<number>(0);
+    const [showSkillInput, setShowSkillInput] = useState<boolean>(false);
+    const [showSkillLevel, setShowSkillLevel] = useState<boolean>(false);
+    const [activityId, setActivityId] = useState<number>(0);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [count, setCount] = useState<number>(1);
+
+
+    const [totalAmount, setTotalAmount] = useState(0);
+    const [totalSavings, setTotalSavings] = useState(0);
+    let [baseAmount, setBaseAmount] = useState(0);
+    let [noOfGuests, setNoOfGuests] = useState(1);
+    const [showDiscount, setShowDiscount] = useState(false);
+    const [participantErrors, setParticipantErrors] = useState<{
+        [key: string]: string;
+    }>({});
+    const [gym, setGym] = useState<IGymDetails | null>(null);
+
+    const [userDetails] = useAtom(userDetailsAtom);
+    const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>(
+        {},
+    );
+    const [isFromApp, setIsFromApp] = useState(false);
+    const [gotPastBookings, setGotPastAppBookings] = useState(false);
+    const [selectedRides, setSelectedRides] = useState<number[]>([]);
+    const offerStrip = useRef("");
+
+
+    const { mutate: _getActivityById } = useMutation({
+        mutationFn: getActivityById,
+        onSuccess: (result) => {
+            setBatchDetails(result.batch);
+        },
+        onError: (error) => {
+            errorToast("Error in getting batch details");
+        },
+    });
+
+    const { mutate: _getGymById } = useMutation({
+        mutationFn: getGymById,
+        onSuccess: (result) => {
+            setGym(result.gym);
+        },
+        onError: (error) => {
+            errorToast("Error in getting gym details");
+        },
+    });
+
+
+    const { mutate: _getPastAppBookings } = useMutation({
+        mutationFn: getPastAppBookings,
+        onError: () => {
+          errorToast("Error in getting past app bookings");
+        },
+        onSuccess: (result) => {
+          console.log("past app bookings - ", result);
+          setPastAppBookings(result.bookings);
+          setGotPastAppBookings(true);
+          window.pastAppBookings = result.bookings;
+        },
+    });
+
+    const { mutate: _saveNotificationToken } = useMutation({
+        mutationFn: saveNotificationToken,
+        onError: () => {},
+        onSuccess: (result) => {
+          console.log("notification token stored successfully!");
+        },
+    });
+
+    // const { mutate: _getUserSkillLevel } = useMutation({
+    //     mutationFn: getUserSkillLevel,
+    //     onSuccess: (result) => {
+    //         setSkillLevel(result.skillLevel);
+    //         if(result.skillLevel == 'UNKNOWN') {
+    //             setShowSkillInput(true);
+    //         } else {
+    //             setShowSkillInput(false);
+    //             setSkillLevel(result.skillLevel);
+    //         }
+    //     },
+    //     onError: (error) => {
+    //         errorToast("Error in getting user skill level");
+    //     },
+    // });
+
+    // const location = useLocation();
+    // const queryParams = new URLSearchParams(location.search);
+    // const edit = queryParams.get('edit') || 'false';
+
+    // useEffect(() => {
+    //     if(edit == 'true') {
+    //         setShowSkillInput(true);
+    //     } else {
+    //         setShowSkillInput(false);
+    //     }
+    // }, [location.search]);
+
+    useEffect(() => {
+        const userSource = window?.platformInfo?.platform || "web";
+        const appFlag = userSource != "web" ? true : false;
+        setIsFromApp(appFlag);
+        window.isFromApp = appFlag;
+        const userId = window.localStorage["zenfitx-user-details"]
+          ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || null
+          : null;
+        if (userId) {
+          _getPastAppBookings(userId);
+          const firebaseToken = window.localStorage["token"];
+          const tokenPermission = window.localStorage["notificationPermission"];
+          if (firebaseToken)
+            _saveNotificationToken({ userId, token: firebaseToken });
+          if(tokenPermission == "false") {
+            Mixpanel.track("notification_permission_denied", {
+              userId
+            });
+          }
+        } else {
+          setGotPastAppBookings(true);
+        }
+    }, []);
+
+    const validateBooking = (): boolean => {
+        if (batchDetails?.isRideActivity && selectedRides.length < noOfGuests) {
+          errorToast(
+            `Please select ${noOfGuests} ${noOfGuests === 1 ? "ride" : "rides"}`,
+          );
+          return false;
+        }
+        return true;
+    };
+
+    useEffect(() => {
+        if (batchDetails) {
+          if (!userDetails) {
+            setShowDiscount(true);
+          } else if (!isFromApp) {
+            setShowDiscount(false);
+          } else if (pastAppBookings?.[batchDetails.gymId]) {
+            setShowDiscount(false);
+          } else {
+            setShowDiscount(true);
+          }
+        }
+    }, [batchDetails, pastAppBookings]);
+
+
+    useEffect(() => {
+        _getActivityById(batchId);
+    }, [batchId]);
+
+
+    useEffect(() => {
+        if (batchDetails?.gymId) {
+          setBaseAmount(batchDetails.price);
+          setTotalAmount(batchDetails.price);
+          _getGymById(String(batchDetails.gymId));
+    
+          Mixpanel.track("open_checkout_page", {
+            batchId,
+            gym,
+          });
+    
+          // offerStrip.current = "50% off on your 1st booking on ZenfitX";
+          if (
+            batchDetails.offerType == EOfferType.BATCH_WITH_GUESTS &&
+            batchDetails.offerPercentage
+          )
+            offerStrip.current = `${batchDetails.offerPercentage}% off on booking for ${batchDetails.minGuestsForOffer} people (full court)`;
+          else if (showDiscount) {
+            if (batchDetails.discountType == "PERCENTAGE") {
+              offerStrip.current = `${batchDetails.offerPercentage}% discount upto ${Rs}${batchDetails.maxDiscount} on 1st booking at this center`;
+            } else if (batchDetails.discountType == "FLAT") {
+              offerStrip.current = `FLAT ${batchDetails.offerPercentage}% off on 1st booking at this center`;
+            }
+          } else {
+            offerStrip.current = "";
+          }
+          // else if ((!userDetails || (userDetails && userDetails.noOfBookings < 1)) && ![6, 21].includes(batchDetails.gymId)) {
+          //   offerStrip.current = "50% off on your 1st booking on ZenfitX";
+          // }
+        }
+      }, [batchDetails, showDiscount]);
+
+    useEffect(() => {
+        if (
+          batchDetails != undefined &&
+          // (!userDetails || (userDetails && userDetails.noOfBookings < 1)) &&
+          // ![6, 21].includes(batchDetails.gymId) &&
+          // batchDetails?.offerType !== EOfferType.BATCH_WITH_GUESTS
+          (showDiscount ||
+            (batchDetails?.offerType == EOfferType.BATCH_WITH_GUESTS &&
+              batchDetails?.offerPercentage))
+        ) {
+          // const [newTotalAmount, discount] = deductPercentage(
+          //   batchDetails?.price || 0,
+          //   50
+          // );
+          let price = batchDetails?.price;
+          let maxDiscount = batchDetails?.maxDiscount;
+          let offerPercentage = batchDetails?.offerPercentage;
+          let finalPrice = price * noOfGuests;
+          if (
+            batchDetails.offerType == EOfferType.BATCH_WITH_GUESTS &&
+            (batchDetails.minGuestsForOffer || 100) <= noOfGuests
+          ) {
+            let totalDiscount = (price * noOfGuests * offerPercentage) / 100;
+            finalPrice = Math.ceil(price * noOfGuests - totalDiscount);
+            batchDetails.offerType = EOfferType.BATCH_WITH_GUESTS;
+          } else if (batchDetails.discountType == "PERCENTAGE") {
+            finalPrice =
+              price * noOfGuests - maxDiscount >
+              price * noOfGuests - (price * noOfGuests * offerPercentage) / 100
+                ? price * noOfGuests - maxDiscount
+                : price * noOfGuests - (price * noOfGuests * offerPercentage) / 100;
+            finalPrice = Math.ceil(finalPrice);
+            batchDetails.offerType = EOfferType.APP;
+          } else if (batchDetails.discountType == "FLAT") {
+            finalPrice =
+              price * noOfGuests - (price * noOfGuests * offerPercentage) / 100;
+            batchDetails.offerType = EOfferType.APP;
+            finalPrice = Math.ceil(finalPrice);
+          } else {
+            finalPrice = Math.ceil(finalPrice);
+          }
+          let newTotalAmount = finalPrice;
+          let discount = price * noOfGuests - finalPrice;
+    
+          setTotalAmount(newTotalAmount);
+          setTotalSavings(discount);
+          if (batchDetails.discountType == "PERCENTAGE") {
+            batchDetails.offerPercentage = (discount * 100) / (price * noOfGuests);
+          }
+        } else if (!showDiscount) {
+          let finalPrice = (batchDetails?.price as number) * noOfGuests;
+          let discount = 0;
+          setTotalAmount(finalPrice);
+          setTotalSavings(discount);
+        }
+    }, [showDiscount, batchDetails, pastAppBookings, noOfGuests]);
+
+    // useEffect(() => {
+    //         const skill = localStorage?.getItem(`skillLevel-${ACTIVITY_NAME_TO_ID_MAP[`${batchDetails?.activity}` as keyof typeof ACTIVITY_NAME_TO_ID_MAP]}`);
+    //         if(skill != null && skill != "UNKNOWN") {
+    //             setSkillLevel(skill);
+    //         } else {
+    //             const userId = window.localStorage["zenfitx-user-details"]
+    //                             ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || null
+    //                             : null;
+
+    //             if(userId == null) { 
+    //                 setShowSkillInput(false);
+    //             } else {
+    //                 if(userId && batchId) {
+    //                     _getUserSkillLevel({userId, batchId: Number(batchId)});
+    //                 } else if(showSkillInput){ 
+    //                     navigate(`/checkout/batch/${batchId}/booking?edit=true`);
+    //                 } else {
+    //                     setSkillLevel("UNKNOWN");
+    //                     navigate(`/checkout/batch/${batchId}/booking`);
+    //                 }
+    //             } 
+    //         } 
+    //         setLoading(false);
+    // }, [batchDetails, location.search]);
+
+    useEffect(() => {
+        setSpotsLeft(batchDetails?.slots ? batchDetails?.slots - batchDetails?.slotsBooked : 0);
+        setSpotsTotal(batchDetails?.slots ? batchDetails?.slots : 0);
+    }, [batchDetails]);
+
+    // const manageGuests = (increment: boolean) => {
+    //     if(increment && count < spotsLeft) {
+    //         setCount(count + 1);
+    //     } else if(!increment && count > 1) {
+    //         setCount(count - 1);
+    //     }
+    // }
+
+
+    const setParticipants = (participants: ParticipantDetail[]) => {
+        if (batchDetails) {
+          setBatchDetails({
+            ...batchDetails,
+            participants,
+          });
+        }
+    };
+    
+    const updateParticipantsWithRides = (rides: number[]) => {
+        if (batchDetails) {
+          const updatedParticipants: ParticipantDetail[] = rides.map(
+            (rideNumber) => ({
+              participantName: "", // Empty string for participant name
+              rideNumber: rideNumber, // Just the ride number
+            }),
+          );
+    
+          setBatchDetails({
+            ...batchDetails,
+            participants: updatedParticipants,
+          });
+    
+          setSelectedRides(rides);
+        }
+    };
+
+    const validateParticipants = (): boolean => {
+        const errors: { [key: string]: string } = {};
+        let isValid = true;
+
+        batchDetails?.participants?.forEach((participant, index) => {
+            if (!participant.participantName.trim()) {
+            errors[`participant_${index}_name`] = "Participant name is required";
+            isValid = false;
+            }
+            // if (!participant.jerseySize) {
+            //   errors[`participant_${index}_size`] = 'Jersey size is required';
+            //   isValid = false;
+            // }
+        });
+
+        setParticipantErrors(errors);
+        return isValid;
+    };
+
+    const manageGuests = (increment: boolean) => {
+        if (noOfGuests === 1 && !increment) {
+          return;
+        }
+        if (
+          noOfGuests + (batchDetails?.slotsBooked || 0) >=
+            (batchDetails?.slots || 0) &&
+          increment
+        ) {
+          return;
+        }
+        let noOfGuestIncremented = increment ? noOfGuests + 1 : noOfGuests - 1;
+        noOfGuests = noOfGuests || 1;
+        let baseAmountAfterIncrement =
+          (batchDetails?.price as number) * noOfGuestIncremented;
+    
+        // Reset selected rides when guest count changes
+        setSelectedRides([]);
+        if (batchDetails) {
+          setBatchDetails({
+            ...batchDetails,
+            participants: [],
+          });
+        }
+    
+        setNoOfGuests(noOfGuestIncremented);
+        setBaseAmount(baseAmountAfterIncrement);
+    
+        let finalAmount = baseAmountAfterIncrement;
+        let discount = 0;
+        let offerPercentage = batchDetails?.offerPercentage || 0;
+        let maxDiscount = batchDetails?.maxDiscount || 0;
+        if (showDiscount) {
+          finalAmount =
+            baseAmountAfterIncrement - maxDiscount >
+            baseAmountAfterIncrement -
+              (baseAmountAfterIncrement * offerPercentage) / 100
+              ? baseAmountAfterIncrement - maxDiscount
+              : baseAmountAfterIncrement -
+                (baseAmountAfterIncrement * offerPercentage) / 100;
+          if (batchDetails?.discountType == "FLAT") {
+            finalAmount =
+              baseAmountAfterIncrement -
+              (baseAmountAfterIncrement * offerPercentage) / 100;
+          }
+          discount = baseAmountAfterIncrement - finalAmount;
+        }
+    
+        setTotalAmount(finalAmount);
+        setTotalSavings(discount);
+    
+        Mixpanel.track(`clicked_change_guest_on_checkout_page`, {
+          add: increment,
+          remove: increment,
+          finalAmount,
+          discount,
+          baseAmount,
+        });
+    }
+
+    const isCoplayerCardEnabled = COPLAYER_CARD_ENABLED.includes(batchDetails?.activity?.toUpperCase() || "");
+
+
+    if (!gym || !batchDetails || !gotPastBookings) return <Loader />;
+
+    return (
+        <div className="flex flex-col">
+            <div className="flex flex-row items-center px-6 py-4">
+                <BackButtonCheckout onClick={() => navigate(`/checkout/batch/${batchId}`)} />
+                <div className="flex flex-col font-jakarta ml-6">
+                    <p className="text-sm font-bold">{batchDetails?.activity} | {convert24HourTo12Hour(batchDetails?.startTime?.toString() || '').formattedTime} | {batchDetails?.DurationMin} mins</p>
+                    <p className="text-xs text-activity-name-checkout-page">{batchDetails?.activityName} at {gym?.name}</p>
+                </div>
+            </div>
+            {isCoplayerCardEnabled && <div className="flex flex-row px-6 py-2">
+                 <div className="flex flex-row justify-between w-full bg-white shadow-gray rounded-xl p-4 items-center">
+                    <div className="flex flex-col">
+                        <p className="text-sm font-bold font-sm">You</p>
+                        <p className="text-sm text-gray font-xs">No games yet</p>
+                    </div>
+                    <div className="flex flex-col" onClick={() => { navigate(`/checkout/batch/${batchId}/booking?edit=true`) }}>
+                        {skillLevel != "" && <SkillCapsule level={skillLevel as SkillLevel} editable={true} />}
+                    </div>
+                </div>
+            </div>}
+            {isCoplayerCardEnabled && <div className="flex flex-row px-6 py-2">
+                <div className="flex flex-col justify-between w-full bg-white shadow-gray rounded-xl">
+                    <SpotsLeftCheckout spotsLeft={spotsLeft} spotsTotal={spotsTotal} noOfGuests={noOfGuests} />
+                    <div className="flex flex-row justify-between px-4">
+                        <div className="flex flex-col py-2">
+
+                            <p className="text-sm font-sm">Book Spots</p>
+                            <p className="text-sm text-gray font-xs">{Rs}{batchDetails?.price} per slot</p>
+                        </div>
+                        <div className="flex flex-row justify-between items-center">
+                            <IncrementDecrementButton radius={12} borderColor="#212121" borderStyle="solid" backgroundColor="#FFFFFF" character="-" fontColor="#000000" disabled={noOfGuests === 1} onClick={() => manageGuests(false)}  />
+                            <p className="text-sm font-bold font-sm px-4">{noOfGuests}</p>
+                            <IncrementDecrementButton radius={12} borderColor="#212121" borderStyle="solid" backgroundColor="#FFFFFF" character="+" fontColor="#000000" disabled={noOfGuests === spotsLeft} onClick={() => manageGuests(true)}  />
+                        </div>
+                    </div>
+                </div>
+            </div>}
+            <div className="flex flex-row px-6 py-2">
+                <div className="flex flex-col justify-between w-full bg-white shadow-gray rounded-xl">
+                    <div className="flex flex-row justify-between px-4 pt-4">
+                        <p className="text-sm font-bold font-sm">To Pay</p>
+                        <p className="text-sm font-bold font-sm">{Rs}{totalAmount}</p>
+                    </div>
+                    <div className="flex flex-row justify-between px-4 py-2">
+                        {totalSavings > 0 && <p className="text-xs text-gray font-sm">Total Savings: {Rs}{totalSavings}</p>}
+                    </div>
+                    <hr className="border-1 border-separate mx-4 border-gray border-spacing-16" />
+                    <div className="flex flex-row justify-between px-4 py-2">
+                        {isCoplayerCardEnabled ? <p className="text-sm font-sm py-2">Spots ({noOfGuests})</p> : <p className="text-sm font-sm py-2">Session Price</p>}
+                        <div className="flex flex-row justify-between gap-2">
+                            {totalSavings > 0 && <p className="text-sm line-through ml-1 self-end text-gray py-2">{Rs}{totalAmount + totalSavings} </p>}
+                            <p className="text-sm font-sm py-2">{Rs}{totalAmount} </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <BookNowFooter
+                batchDetails={batchDetails}
+                gymData={gym}
+                batchId={Number(batchId)}
+                checkoutType={ECheckoutType.BATCH}
+                totalAmount={totalAmount || batchDetails?.price || 0}
+                comingFrom={EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE}
+                totalGuests={noOfGuests}
+                totalSavings={totalSavings}
+                isFromApp={isFromApp}
+                pastAppBookings={pastAppBookings}
+                disabled={
+                  selectedRides.length !== noOfGuests && batchDetails?.isRideActivity
+                }
+            />
+        </div>
+    )
+}   
+
+export default CheckoutV3;

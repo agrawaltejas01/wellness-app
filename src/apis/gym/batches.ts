@@ -27,3 +27,12 @@ export async function getGymBatchesForSchedulePage({
   );
   return result.data;
 }
+
+export async function getCoplayersForBatch({
+  id,
+}: {
+  id: number;
+}) {
+  const result = await networkAdapter.get(`/gyms/batch/coplayers?batchId=${id}`);
+  return result.data;
+}
