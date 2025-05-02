@@ -16,17 +16,18 @@ const CoplayerCard = ( {players, loading, spotsLeft, spotsTotal}: {players: any[
            <PlayersLoadingComponent />
         )
     } else {
-        if(userId == null) {
-            return (
-                <div className="flex items-center justify-center shadow-gray rounded-xl mx-8 my-4 px-4 py-8">
-                    <h1 className="text-sm font-semibold">Please login to see your coplayers</h1>
-                </div>
-            )
-        } else if(players.length > 0) {
+        // if(userId == null) {
+        //     return (
+        //         <div className="flex items-center justify-center shadow-gray rounded-xl mx-8 my-4 px-4 py-8">
+        //             <h1 className="text-sm font-semibold">Please login to see your coplayers</h1>
+        //         </div>
+        //     )
+        // } else 
+    if(players.length > 0) {
         return (
             <div className="flex-col items-center justify-between shadow-gray rounded-xl mx-8 my-4 ">
                 <div className="flex-col items-center justify-between px-4 py-2">
-                <h1 className="text-sm font-semibold">Players ({spotsTotal - spotsLeft})</h1>
+                <h1 className="text-sm font-semibold"> Players ({spotsTotal - spotsLeft})</h1>
                 <h1 className="text-xs text-gray-500">Levels are marked by the players.</h1>
             </div>
             {Array.from({length: players.length}).map((_, index) => (
@@ -37,7 +38,7 @@ const CoplayerCard = ( {players, loading, spotsLeft, spotsTotal}: {players: any[
                             <h1 className="text-sm px-1"> {players[index].noOfBookings > 1 ? ` +${players[index].noOfBookings - 1}` : ""}</h1>
                         </div>
                         <div className="flex items-center justify-center gap-2">
-                            <h1 className="text-sm"> {players[index].noOfBookings} spots </h1>
+                            <h1 className="text-sm"> {players[index].noOfBookings} {players[index].noOfBookings > 1 ? "spots" : "spot"} </h1>
                             <div className="flex items-center justify-center gap-1">
                                 {Array.from({ length:  players[index].noOfBookings}).map((_, index) => (
                                     <BookedSlot key={index} />
@@ -49,8 +50,8 @@ const CoplayerCard = ( {players, loading, spotsLeft, spotsTotal}: {players: any[
                     <div className="flex items-center px-4 py-4 pb-4 justify-between">
                         {players[index].level && players[index].level !== 'UNKNOWN' ? <h1 className="text-xs text-gray-500"> <SkillCapsule level={players[index].level} /> </h1> : <h1 className="text-xs text-gray-500"> </h1>}
                         <div className="flex-col items-center justify-center gap-2">
-                            <h1 className="text-sm text-black font-bold text-right"> {players[index].gamesPlayed > 0 ? `${players[index].gamesPlayed} Games` : "No Games"} </h1>
-                            <h1 className="text-sm text-gray-500 text-right"> Played On ZenfitX </h1>
+                            <h1 className="text-sm text-black font-bold text-right"> {players[index].gamesPlayed > 0 ? `${players[index].gamesPlayed} ${players[index].gamesPlayed > 1 ? "Games" : "Game"}` : "No Games"} </h1>
+                            <h1 className="text-sm text-gray-500 text-right"> Played on ZenfitX </h1>
                         </div>
                     </div>
                     <hr className={`${index === players.length - 1 ? "hidden" : "border-t-1 border-gray-200"}`} />
@@ -59,13 +60,13 @@ const CoplayerCard = ( {players, loading, spotsLeft, spotsTotal}: {players: any[
         </div>
         )
     } else {
-        return (
-            <div>
-                {/* <h1>No coplayers found</h1> */}
-            </div>
-        )
+            return (
+                <div className="flex items-center justify-center shadow-gray rounded-xl mx-8 my-4 px-4 py-8">
+                    <h1 className="text-sm font-semibold">Be the first to book this batch</h1>
+                </div>
+            )
+        }
     }
-}
 }
 
 export default CoplayerCard;
