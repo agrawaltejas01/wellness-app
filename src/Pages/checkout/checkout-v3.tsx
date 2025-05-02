@@ -483,7 +483,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                  <div className="flex flex-row justify-between w-full bg-white shadow-gray rounded-xl p-4 items-center">
                     <div className="flex flex-col">
                         <p className="text-sm font-bold font-sm">You</p>
-                        <p className="text-sm text-gray font-xs">No games yet</p>
+                        {/* <p className="text-sm text-gray font-xs">No games yet</p> */}
                     </div>
                     <div className="flex flex-col" onClick={() => { navigate(`/checkout/batch/${batchId}/booking?edit=true`) }}>
                         {skillLevel != "" && <SkillCapsule level={skillLevel as SkillLevel} editable={true} />}
