@@ -20,6 +20,7 @@ import { convert24HourTo12Hour } from "../../utils/functions/utils";
 import { formatDate, formatTimeIntToAmPm } from "../../utils/date";
 import Circle from "../../components/circle";
 import Loader from "../../components/Loader";
+import {ReactComponent as LocationIcon} from '../../images/utils/location-icon.svg';
 
 interface IClassCheckout extends RouteComponentProps {
 }
@@ -143,7 +144,7 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
           <div className="flex flex-col px-6 text-white ">
             <p className="text-sm font-normal font-jakarta pt-3">{activity.toLowerCase()}</p>
             <p className="text-xl font-normal font-jakarta pt-1">{activityName}</p>
-            <p className="text-xs font-normal font-jakarta pt-1">{location}</p>
+            <p className="text-xs font-normal font-jakarta pt-1 inline-flex items-center gap-1"><LocationIcon />{location}</p>
             <div className="flex flex-row pt-1 pb-4 text-white font-jakarta text-2xl pt-3">
               <p className="text-white">{batchDetails?.date ? formatDate(batchDetails.date)["date suffix"] : "Date not available"}</p>
               <p className="dotWhite"></p>
