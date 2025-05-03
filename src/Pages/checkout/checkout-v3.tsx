@@ -48,7 +48,7 @@ const convert24HourTo12Hour = (timeStr: string): { formattedTime: string; error:
       hourStr = timeStr.substring(0, 2);
       minuteStr = timeStr.substring(2);
     }
-    
+    // comment
     // Convert to numbers
     const hour = parseInt(hourStr, 10);
     const minute = parseInt(minuteStr, 10);
