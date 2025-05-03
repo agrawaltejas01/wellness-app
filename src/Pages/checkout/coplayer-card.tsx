@@ -34,12 +34,12 @@ const CoplayerCard = ( {players, loading, spotsLeft, spotsTotal}: {players: any[
                 <div key={index} className="flex-col items-center justify-center">
                     <div className="flex items-center justify-between pt-4 pb-3">
                         <div className="flex items-center justify-center">
-                            <h1 className="text-sm font-normal px-4 font-jakarta"> {players[index].userId === userId ? "You" : players[index].name}</h1>
+                            <h1 className="text-sm font-normal pl-4 font-jakarta"> {players[index].userId === userId ? "You" : players[index].name}</h1>
                             <h1 className="text-sm font-normal px-1 font-jakarta"> {players[index].noOfBookings > 1 ? ` +${players[index].noOfBookings - 1}` : ""}</h1>
                         </div>
                         <div className="flex items-center justify-center">
                             <h1 className="text-sm pr-2"> {players[index].noOfBookings} {players[index].noOfBookings > 1 ? "spots" : "spot"} </h1>
-                            <div className="flex items-center justify-center pr-4">
+                            <div className="flex items-center justify-center pr-4 gap-1">
                                 {Array.from({ length:  players[index].noOfBookings}).map((_, index) => (
                                     <BookedSlot key={index} />
                                 ))}
