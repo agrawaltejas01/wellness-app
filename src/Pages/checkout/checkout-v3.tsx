@@ -541,7 +541,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                 gymData={gym}
                 batchId={Number(batchId)}
                 checkoutType={ECheckoutType.BATCH}
-                totalAmount={totalAmount || batchDetails?.price || 0}
+                totalAmount={totalAmount + totalSavings || batchDetails?.price || 0}
                 comingFrom={EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE}
                 totalGuests={noOfGuests}
                 totalSavings={totalSavings}
