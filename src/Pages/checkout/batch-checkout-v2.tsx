@@ -63,10 +63,12 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
       mutationFn: getActivityById,
       onSuccess: (result) => {
         setBatchDetails(result.batch);
-        setLoading(false);
       },
       onError: (error) => {
         errorToast("Error in getting gym data");
+      },
+      onSettled: () => {
+        setLoading(false);
       },
     });
 
