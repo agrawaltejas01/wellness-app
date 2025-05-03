@@ -65,7 +65,7 @@ const SkillLevelInput = ({userId, activityId, batchId}: {userId: number, activit
         onSettled: () => {
             localStorage.setItem(`skillLevel-${activityId}`, selectedSkillLevel.toUpperCase());
             const bookingUrl = `/checkout/batch/${batchId}/booking`;
-            window.location.href = bookingUrl;
+            window.location.replace(bookingUrl);
         }
     });
 
