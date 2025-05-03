@@ -6,6 +6,7 @@ import { updateUserSkillLevel } from "../../apis/user/userDetails";
 import { errorToast, successToast } from "../../components/Toast";
 import { navigate } from "@reach/router";
 import { ACTIVITY_NAME_TO_ID_MAP } from "../../constants/activities";
+import { ReactComponent as TickMarkCircle } from "../../images/checkout/tick-mark-circle.svg";
 
 const skillLevels = [
     {
@@ -80,12 +81,12 @@ const SkillLevelInput = ({userId, activityId, batchId}: {userId: number, activit
     }
 
     return (
-        <div className="flex flex-col px-4 rounded-lg fixed bottom-0 w-full bg-white">    
-            <div className="flex flex-row justify-between px-4 py-4 my-2 rounded-lg">
-                <p className="text-lg font-bold">First tell us your game level</p>
+        <div className="flex flex-col rounded-lg fixed bottom-0 w-full bg-white shadow-gray px-4">    
+            <div className="flex flex-row justify-between px-2 pt-4 pb-1 rounded-lg">
+                <p className="text-base font-bold">First tell us your game level</p>
             </div>
             {skillLevels.map((skillLevel) => (
-                <div key={skillLevel.id} className="flex flex-row justify-between px-4 py-4 my-2 rounded-lg"
+                <div key={skillLevel.id} className="flex flex-row justify-between px-4 py-3 my-2 rounded-lg"
                      style={{ backgroundColor: skillLevelBackgroundColorMap[skillLevel.name as SkillLevel] }}
                      onClick={() => setSelectedSkillLevel(skillLevel.name)}>
                     <div className="flex flex-row gap-2">
@@ -96,23 +97,27 @@ const SkillLevelInput = ({userId, activityId, batchId}: {userId: number, activit
                         backgroundColor= {skillLevelColor[skillLevel.name as SkillLevel]}
                         character={skillLevel.symbol}
                     />
-                    <div style={{ fontSize: '14px', color: 'black' }} className="flex flex-col">
+                    <div style={{ fontSize: '16px', color: 'black' }} className="flex flex-col">
                         <p className="font-bold"> {skillLevel.name}</p>
-                        <p>{skillLevel.description}</p>
+                        <p className="text-sm">{skillLevel.description}</p>
                     </div>
                     </div>
-                    <Circle
-                        radius={8}
+                    {selectedSkillLevel === skillLevel.name ? (
+                        <TickMarkCircle />
+                    ) : (
+                        <Circle
+                        radius={10}
                         borderColor= "black"
                         borderStyle="solid"
                         backgroundColor= {selectedSkillLevel === skillLevel.name ? "black" : skillLevelBackgroundColorMap[skillLevel.name as SkillLevel]}
                         character=''
                     />
+                    )}
                 </div>
             ))}
-            <hr className="my-4" />
-            <div className="flex flex-row px-4 my-2 rounded-lg pb-2">
-                <button className="bg-black font-bold text-md text-white px-4 py-2 rounded-lg w-full text-center" onClick={handleConfirm}>Confirm</button>
+            <hr className="my-3" />
+            <div className="flex flex-row my-2 rounded-lg pb-2">
+                <button className="bg-black font-jakarta font-bold text-base text-white py-3 rounded-lg w-full text-center" onClick={handleConfirm}>Confirm</button>
             </div>
         </div>
     )

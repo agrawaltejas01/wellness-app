@@ -5,7 +5,7 @@ interface CircleProps {
   borderColor: string;
   borderStyle: string;
   backgroundColor: string;
-  character?: string;
+  character?: string | React.ReactNode;
   fontColor?: string;
 }
 
