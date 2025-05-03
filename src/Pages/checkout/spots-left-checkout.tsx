@@ -5,8 +5,8 @@ import EmptySlot from "../../components/empty-slot";
 const SpotsLeftCheckout = ({ spotsLeft, spotsTotal, noOfGuests }: { spotsLeft: number, spotsTotal: number, noOfGuests: number }) => {
 
     return (
-        <div className={`flex items-center justify-between pt-4 pb-2 px-4`}>
-            <h1 className="text-sm font-semibold">{spotsLeft}/{spotsTotal} spot(s) left</h1>
+        <div className={`flex items-center justify-between pt-4 pb-6 px-4`}>
+            <h1 className="text-base font-bold">{spotsLeft}/{spotsTotal} {spotsLeft === 1 ? "spot" : "spots"} left</h1>
             <div className="flex gap-1">
                 {Array.from({ length: spotsTotal - spotsLeft }).map((_, index) => (
                     <DisabledSlot key={index} />

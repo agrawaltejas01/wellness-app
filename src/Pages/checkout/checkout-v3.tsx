@@ -24,6 +24,8 @@ import { saveNotificationToken } from "../../apis/notifications/notifications";
 import { Mixpanel } from "../../mixpanel/init";
 import { Rs } from "../../constants/symbols";
 import { ACTIVITY_NAME_TO_ID_MAP, COPLAYER_CARD_ENABLED } from "../../constants/activities";
+import { formatDate } from "../../utils/date";
+import { capitalizeFirstLetter } from "../../utils/functions/utils";
 // Function to convert 24-hour time to 12-hour format
 const convert24HourTo12Hour = (timeStr: string): { formattedTime: string; error: string | null } => {
     // Handle empty input
@@ -472,14 +474,22 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
 
     return (
         <div className="flex flex-col">
-            <div className="flex flex-row items-center px-6 py-4">
+            <div className="flex flex-row items-center pl-4 py-3">
                 <BackButtonCheckout onClick={() => navigate(`/checkout/batch/${batchId}`)} />
-                <div className="flex flex-col font-jakarta ml-6">
-                    <p className="text-sm font-bold">{batchDetails?.activity} | {convert24HourTo12Hour(batchDetails?.startTime?.toString() || '').formattedTime} | {batchDetails?.DurationMin} mins</p>
-                    <p className="text-xs text-activity-name-checkout-page">{batchDetails?.activityName} at {gym?.name}</p>
+                <div className="flex flex-col font-jakarta ml-4">
+                    <div className="flex flex-row font-jakarta font-bold text-sm">
+                        <p className="text-sm font-bold"> { capitalizeFirstLetter(batchDetails?.activity)} | </p>
+                        {/* <p className="dot"></p> */}
+                        <p className="text-sm pl-1"> { batchDetails?.date ? formatDate(batchDetails.date)["date suffix"] : "Date not available"} </p>
+                        <p className="dotBlack"></p>
+                        <p className="text-sm pl-1"> {convert24HourTo12Hour(batchDetails?.startTime?.toString() || '').formattedTime}</p>
+                        <p className="dotBlack"></p>
+                        <p className="text-sm pl-1"> {batchDetails?.DurationMin} mins</p>
+                    </div>
+                    <p className="text-xs font-normal text-activity-name-checkout-page pt-1">{batchDetails?.activityName} at {gym?.name}</p>
                 </div>
             </div>
-            {isCoplayerCardEnabled && <div className="flex flex-row px-6 py-2">
+            {isCoplayerCardEnabled && <div className="flex flex-row px-4 pt-4">
                  <div className="flex flex-row justify-between w-full bg-white shadow-gray rounded-xl p-4 items-center">
                     <div className="flex flex-col">
                         <p className="text-sm font-bold font-sm">You</p>
@@ -490,14 +500,14 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                     </div>
                 </div>
             </div>}
-            {isCoplayerCardEnabled && <div className="flex flex-row px-6 py-2">
+            {isCoplayerCardEnabled && <div className="flex flex-row px-4 pt-4">
                 <div className="flex flex-col justify-between w-full bg-white shadow-gray rounded-xl">
                     <SpotsLeftCheckout spotsLeft={spotsLeft} spotsTotal={spotsTotal} noOfGuests={noOfGuests} />
                     <div className="flex flex-row justify-between px-4">
-                        <div className="flex flex-col py-2">
+                        <div className="flex flex-col">
 
                             <p className="text-sm font-sm">Book Spots</p>
-                            <p className="text-sm text-gray font-xs">{Rs}{batchDetails?.price} per slot</p>
+                            <p className="text-xs text-gray pt-1 pb-4">{Rs}{batchDetails?.price} per slot</p>
                         </div>
                         <div className="flex flex-row justify-between items-center">
                             <IncrementDecrementButton radius={12} borderColor="#212121" borderStyle="solid" backgroundColor="#FFFFFF" character="-" fontColor="#000000" disabled={noOfGuests === 1} onClick={() => manageGuests(false)}  />
@@ -507,21 +517,21 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                     </div>
                 </div>
             </div>}
-            <div className="flex flex-row px-6 py-2">
+            <div className="flex flex-row px-4 pt-4">
                 <div className="flex flex-col justify-between w-full bg-white shadow-gray rounded-xl">
-                    <div className="flex flex-row justify-between px-4 pt-4">
-                        <p className="text-sm font-bold font-sm">To Pay</p>
-                        <p className="text-sm font-bold font-sm">{Rs}{totalAmount}</p>
+                    <div className={`flex flex-row justify-between px-4 pt-4 ${totalSavings > 0 ? "" : "pb-2"}`}>
+                        <p className="text-sm font-bold">To pay</p>
+                        <p className="text-sm font-bold">{Rs}{totalAmount}</p>
                     </div>
-                    <div className="flex flex-row justify-between px-4 py-2">
+                    <div className={`flex flex-row justify-between px-4 ${totalSavings > 0 ? "pt-2 pb-4" : " "}`}>
                         {totalSavings > 0 && <p className="text-xs text-gray font-sm">Total Savings: {Rs}{totalSavings}</p>}
                     </div>
                     <hr className="border-1 border-separate mx-4 border-gray border-spacing-16" />
-                    <div className="flex flex-row justify-between px-4 py-2">
-                        {isCoplayerCardEnabled ? <p className="text-sm font-sm py-2">Spots ({noOfGuests})</p> : <p className="text-sm font-sm py-2">Session Price</p>}
+                    <div className="flex flex-row justify-between px-4 pt-4 pb-6">
+                        {isCoplayerCardEnabled ? <p className="text-sm font-sm"> Spots ({noOfGuests})</p> : <p className="text-sm font-sm">Session Price</p>}
                         <div className="flex flex-row justify-between gap-2">
-                            {totalSavings > 0 && <p className="text-sm line-through ml-1 self-end text-gray py-2">{Rs}{totalAmount + totalSavings} </p>}
-                            <p className="text-sm font-sm py-2">{Rs}{totalAmount} </p>
+                            {totalSavings > 0 && <p className="text-sm line-through ml-1 self-end text-gray">{Rs}{totalAmount + totalSavings} </p>}
+                            <p className="text-sm font-sm">{Rs}{totalAmount} </p>
                         </div>
                     </div>
                 </div>

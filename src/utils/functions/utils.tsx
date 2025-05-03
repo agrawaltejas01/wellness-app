@@ -41,3 +41,17 @@ export const convert24HourTo12Hour = (timeStr: string): { formattedTime: string;
     const formattedTime = `${twelveHour}:${minute.toString().padStart(2, '0')} ${period}`;
     return { formattedTime, error: null };
 };
+
+export const capitalizeFirstLetter = (string: string) => {
+    if (!string || typeof string !== 'string') {
+      return '';
+    }
+    
+    // Handle empty string case
+    if (string.length === 0) {
+      return '';
+    }
+    
+    // Capitalize first letter and make the rest lowercase
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+};

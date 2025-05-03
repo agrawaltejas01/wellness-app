@@ -107,6 +107,16 @@ margin-top:12px;
     align-self: center;
 }
 
+.dotBlack{
+    display: inline-block;
+    height: 4px;
+    width: 4px;
+    border-radius: 50%;
+    background-color: #212121;
+    margin:0px 4px;
+    align-self: center;
+}
+
 .activityLoc{
     color: var(--Text-Primary, #05070B);
 font-family: "Plus Jakarta Sans";
