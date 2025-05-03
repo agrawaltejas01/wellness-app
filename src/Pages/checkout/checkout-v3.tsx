@@ -222,8 +222,8 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
           } else if (pastAppBookings?.[batchDetails.gymId]) {
             setShowDiscount(false);
           } else {
-            setShowDiscount(true);
-          }
+        setShowDiscount(true);
+        }
         }
     }, [batchDetails, pastAppBookings]);
 
@@ -451,6 +451,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
             finalAmount =
               baseAmountAfterIncrement -
               (baseAmountAfterIncrement * offerPercentage) / 100;
+              finalAmount = Math.floor(finalAmount);
           }
           discount = baseAmountAfterIncrement - finalAmount;
         }
