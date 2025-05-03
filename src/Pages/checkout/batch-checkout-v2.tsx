@@ -19,6 +19,7 @@ import AboutTheActivity from "./about-the-activity";
 import { convert24HourTo12Hour } from "../../utils/functions/utils";
 import { formatDate, formatTimeIntToAmPm } from "../../utils/date";
 import Circle from "../../components/circle";
+import Loader from "../../components/Loader";
 
 interface IClassCheckout extends RouteComponentProps {
 }
@@ -123,6 +124,11 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
     const navigateToHome = () => {
         navigate(`/gym/${gymId}/batch`);
     }
+
+
+  if(loading) {
+      return <Loader />
+  }
 
   return (
     <div className="flex flex-col">

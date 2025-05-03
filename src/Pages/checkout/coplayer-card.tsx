@@ -61,9 +61,10 @@ const CoplayerCard = ( {players, loading, spotsLeft, spotsTotal}: {players: any[
         )
     } else {
             return (
-                <div className="flex items-center justify-center shadow-gray rounded-xl mx-8 my-4 px-4 py-8">
-                    <h1 className="text-sm font-semibold">Be the first to book this batch</h1>
-                </div>
+                // <div className="flex items-center justify-center shadow-gray rounded-xl mx-8 my-4 px-4 py-8">
+                //     {/* <h1 className="text-sm font-semibold">Be the first to book this batch</h1> */}
+                // </div>
+                <div></div>
             )
         }
     }
