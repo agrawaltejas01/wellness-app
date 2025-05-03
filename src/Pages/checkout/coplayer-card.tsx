@@ -25,21 +25,21 @@ const CoplayerCard = ( {players, loading, spotsLeft, spotsTotal}: {players: any[
         // } else 
     if(players.length > 0) {
         return (
-            <div className="flex-col items-center justify-between shadow-gray rounded-xl mx-8 my-4 ">
-                <div className="flex-col items-center justify-between px-4 py-2">
-                <h1 className="text-sm font-semibold"> Players ({spotsTotal - spotsLeft})</h1>
-                <h1 className="text-xs text-gray-500">Levels are marked by the players.</h1>
+            <div className="flex-col items-center justify-between shadow-gray rounded-xl mx-4 my-3 ">
+                <div className="flex-col items-center justify-between px-4">
+                <h1 className="text-sm font-semibold pt-3"> Players ({spotsTotal - spotsLeft})</h1>
+                <h1 className="text-xs font-normal text-#626262 pt-1 pb-2">Levels are marked by the players</h1>
             </div>
             {Array.from({length: players.length}).map((_, index) => (
                 <div key={index} className="flex-col items-center justify-center">
-                    <div className="flex items-center justify-between px-4 py-2">
+                    <div className="flex items-center justify-between pt-4 pb-3">
                         <div className="flex items-center justify-center">
-                            <h1 className="text-sm"> {players[index].userId === userId ? "You" : players[index].name}</h1>
-                            <h1 className="text-sm px-1"> {players[index].noOfBookings > 1 ? ` +${players[index].noOfBookings - 1}` : ""}</h1>
+                            <h1 className="text-sm font-normal px-4 font-jakarta"> {players[index].userId === userId ? "You" : players[index].name}</h1>
+                            <h1 className="text-sm font-normal px-1 font-jakarta"> {players[index].noOfBookings > 1 ? ` +${players[index].noOfBookings - 1}` : ""}</h1>
                         </div>
-                        <div className="flex items-center justify-center gap-2">
-                            <h1 className="text-sm"> {players[index].noOfBookings} {players[index].noOfBookings > 1 ? "spots" : "spot"} </h1>
-                            <div className="flex items-center justify-center gap-1">
+                        <div className="flex items-center justify-center">
+                            <h1 className="text-sm pr-2"> {players[index].noOfBookings} {players[index].noOfBookings > 1 ? "spots" : "spot"} </h1>
+                            <div className="flex items-center justify-center pr-4">
                                 {Array.from({ length:  players[index].noOfBookings}).map((_, index) => (
                                     <BookedSlot key={index} />
                                 ))}
@@ -47,14 +47,14 @@ const CoplayerCard = ( {players, loading, spotsLeft, spotsTotal}: {players: any[
                         </div>
                     </div>
                     <hr className="border-1 border-separate border-dashed mx-4 border-gray border-spacing-16" />
-                    <div className="flex items-center px-4 py-4 pb-4 justify-between">
-                        {players[index].level && players[index].level !== 'UNKNOWN' ? <h1 className="text-xs text-gray-500"> <SkillCapsule level={players[index].level} /> </h1> : <h1 className="text-xs text-gray-500"> </h1>}
-                        <div className="flex-col items-center justify-center gap-2">
+                    <div className="flex items-center pt-3 px-4 pb-4 justify-between">
+                        {players[index].level && players[index].level !== 'UNKNOWN' ? <h1> <SkillCapsule level={players[index].level} /> </h1> : <h1> </h1>}
+                        <div className="flex-col items-center justify-center">
                             <h1 className="text-sm text-black font-bold text-right"> {players[index].gamesPlayed > 0 ? `${players[index].gamesPlayed} ${players[index].gamesPlayed > 1 ? "Games" : "Game"}` : "No Games"} </h1>
                             <h1 className="text-sm text-gray-500 text-right"> Played on ZenfitX </h1>
                         </div>
                     </div>
-                    <hr className={`${index === players.length - 1 ? "hidden" : "border-t-1 border-gray-200"}`} />
+                    <hr className={`${index === players.length - 1 ? "border-b-1 border-white pb-2" : "border-t-1 border-gray-200"}`} />
                 </div>
             ))}
         </div>

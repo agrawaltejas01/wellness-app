@@ -17,6 +17,8 @@ import { EBookNowComingFromPage } from "../../types/checkout";
 import { ECheckoutType } from "../../types/checkout";
 import AboutTheActivity from "./about-the-activity";
 import { convert24HourTo12Hour } from "../../utils/functions/utils";
+import { formatDate, formatTimeIntToAmPm } from "../../utils/date";
+import Circle from "../../components/circle";
 
 interface IClassCheckout extends RouteComponentProps {
 }
@@ -126,16 +128,21 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
     <div className="flex flex-col">
         <div className="flex flex-col bg-gradient-to-r from-black to-transparent bg-cover bg-center"
              style={{ backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0)), url(${require('../../images/utils/pickleball.png')})` }}>
-          <div className="flex flex-row justify-between px-4 py-4">
+          <div className="flex flex-row justify-between pl-2 pt-2 pr-2">
             <BackButton onClick={() => navigateToHome()} />
             <ShareButton />
           </div>
-          <div className="flex flex-col px-8 gap-2 text-white">
-            <p className="text-sm font-bold">{activity.toLowerCase()}</p>
-            <p className="text-xl font-bold">{activityName}</p>
-            <p className="text-sm text-gray-500">{location}</p>
-            {/* <p className="text-sm text-gray-500">Coolulu Turfpark, Bangalore</p> */}
-            <p className="text-2xl text-gray-500 pb-4">{convert24HourTo12Hour(batchDetails?.startTime?.toString() || '').formattedTime} | {batchDetails?.DurationMin} mins</p>
+          <div className="flex flex-col px-6 text-white ">
+            <p className="text-sm font-normal font-jakarta pt-3">{activity.toLowerCase()}</p>
+            <p className="text-xl font-normal font-jakarta pt-1">{activityName}</p>
+            <p className="text-xs font-normal font-jakarta pt-1">{location}</p>
+            <div className="flex flex-row pt-1 pb-4 text-white font-jakarta text-2xl pt-3">
+              <p className="text-white">{batchDetails?.date ? formatDate(batchDetails.date)["date suffix"] : "Date not available"}</p>
+              <p className="dotWhite"></p>
+              <p className="text-white">{formatTimeIntToAmPm(batchDetails?.startTime || 0)}</p>
+              <p className="dotWhite"></p>
+              <p className="text-white">{batchDetails?.DurationMin} mins</p>
+            </div>
           </div>
         </div>
         <div>
