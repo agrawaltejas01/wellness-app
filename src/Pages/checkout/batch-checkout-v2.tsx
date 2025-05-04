@@ -148,9 +148,13 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
             <div className="flex flex-row pt-1 pb-4 text-white font-jakarta text-2xl pt-3">
               <p className="text-white">{batchDetails?.date ? formatDate(batchDetails.date)["date suffix"] : "Date not available"}</p>
               <p className="dotWhite"></p>
-              <p className="text-white">{formatTimeIntToAmPm(batchDetails?.startTime || 0)}</p>
-              <p className="dotWhite"></p>
-              <p className="text-white">{batchDetails?.DurationMin} mins</p>
+              {batchDetails?.isDayPass ? <p className="text-white">All Day</p> : 
+              <>
+                <p className="text-white">{formatTimeIntToAmPm(batchDetails?.startTime || 0)}</p>
+                <p className="dotWhite"></p>
+                <p className="text-white">{batchDetails?.DurationMin} mins</p>
+              </>
+              }
             </div>
           </div>
         </div>

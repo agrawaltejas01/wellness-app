@@ -24,7 +24,7 @@ import { saveNotificationToken } from "../../apis/notifications/notifications";
 import { Mixpanel } from "../../mixpanel/init";
 import { Rs } from "../../constants/symbols";
 import { ACTIVITY_NAME_TO_ID_MAP, COPLAYER_CARD_ENABLED } from "../../constants/activities";
-import { formatDate } from "../../utils/date";
+import { formatDate, formatTimeIntToAmPm } from "../../utils/date";
 import { capitalizeFirstLetter } from "../../utils/functions/utils";
 // Function to convert 24-hour time to 12-hour format
 const convert24HourTo12Hour = (timeStr: string): { formattedTime: string; error: string | null } => {
@@ -483,9 +483,13 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                         {/* <p className="dot"></p> */}
                         <p className="text-sm pl-1"> { batchDetails?.date ? formatDate(batchDetails.date)["date suffix"] : "Date not available"} </p>
                         <p className="dotBlack"></p>
-                        <p className="text-sm pl-1"> {convert24HourTo12Hour(batchDetails?.startTime?.toString() || '').formattedTime}</p>
-                        <p className="dotBlack"></p>
-                        <p className="text-sm pl-1"> {batchDetails?.DurationMin} mins</p>
+                        {batchDetails?.isDayPass ? <p className="text-sm pl-1">All Day</p> : 
+                        <>
+                            <p className="text-sm pl-1"> {formatTimeIntToAmPm(batchDetails?.startTime || 0)}</p>
+                            <p className="dotBlack"></p>
+                            <p className="text-sm pl-1"> {batchDetails?.DurationMin} mins</p>
+                        </>
+                        }
                     </div>
                     <p className="text-xs font-normal text-activity-name-checkout-page pt-1">{batchDetails?.activityName} at {gym?.name}</p>
                 </div>
