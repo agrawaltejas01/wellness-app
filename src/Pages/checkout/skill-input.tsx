@@ -8,6 +8,14 @@ import { navigate } from "@reach/router";
 import { ACTIVITY_NAME_TO_ID_MAP } from "../../constants/activities";
 import { ReactComponent as TickMarkCircle } from "../../images/checkout/tick-mark-circle.svg";
 
+const skillLevelMessageMap: Record<SkillLevel, string> = {
+    "Beginner": "Noob status: loading...",
+    "Amateur": "Amateur mode: activating...",
+    "Intermediate": "Intermediate? Not bad! Saving...",
+    "Professional": "Pro mode: unlocking...",
+    "Unknown": "Confirm"
+}
+
 const skillLevels = [
     {
         id: 1,
@@ -54,6 +62,7 @@ const skillLevelColor: Record<SkillLevel, string> = {
 const SkillLevelInput = ({userId, activityId, batchId}: {userId: number, activityId: number, batchId: number}) => {
 
     const [selectedSkillLevel, setSelectedSkillLevel] = useState<string>("UNKNOWN");
+    const [isClicked, setIsClicked] = useState<boolean>(false);
 
     const { mutate: _updateUserSkillLevel } = useMutation({
         mutationFn: updateUserSkillLevel,
@@ -71,7 +80,9 @@ const SkillLevelInput = ({userId, activityId, batchId}: {userId: number, activit
     });
 
     const handleConfirm = () => {
+        setIsClicked(true);
         if(selectedSkillLevel === "UNKNOWN") {
+            setIsClicked(false);
             alert("Please select a game level");
             return;
         }
@@ -117,7 +128,9 @@ const SkillLevelInput = ({userId, activityId, batchId}: {userId: number, activit
             ))}
             <hr className="my-3" />
             <div className="flex flex-row my-2 rounded-lg pb-2">
-                <button className="bg-black font-jakarta font-bold text-base text-white py-3 rounded-lg w-full text-center" onClick={handleConfirm}>Confirm</button>
+                <button className="bg-black font-jakarta font-bold text-base text-white py-3 rounded-lg w-full text-center" onClick={handleConfirm}>
+                    {isClicked ? (selectedSkillLevel === "UNKNOWN" ? "Confirm" : `${skillLevelMessageMap[selectedSkillLevel as SkillLevel]}`) : "Confirm"}
+                </button>
             </div>
         </div>
     )
