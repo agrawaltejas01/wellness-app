@@ -50,7 +50,7 @@ const CoplayerCard = ( {players, loading, spotsLeft, spotsTotal}: {players: any[
                     <div className="flex items-center pt-3 px-4 pb-4 justify-between">
                         {players[index].level && players[index].level !== 'UNKNOWN' ? <h1> <SkillCapsule level={players[index].level} /> </h1> : <h1> </h1>}
                         <div className="flex-col items-center justify-center">
-                            <h1 className="text-sm text-black font-bold text-right"> {players[index].gamesPlayed > 0 ? `${players[index].gamesPlayed} ${players[index].gamesPlayed > 1 ? "Games" : "Game"}` : "No Games"} </h1>
+                            <h1 className="text-sm text-black font-bold text-right"> {players[index].activityBookCount > 0 ? `${players[index].activityBookCount} ${players[index].activityBookCount > 1 ? "Games" : "Game"}` : "No Games"} </h1>
                             <h1 className="text-sm text-gray-500 text-right"> Played on ZenfitX </h1>
                         </div>
                     </div>
