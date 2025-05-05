@@ -5,8 +5,8 @@ import { useState } from "react";
 const GoToApp = () => {
     const [continueToBrowser, setContinueToBrowser] = useState(false);
     return (
-        <div className={`flex flex-col items-center rounded-lg fixed bottom-0 w-full bg-white shadow-gray px-4 pb-10 z-10 ${continueToBrowser ? "hidden" : ""}`}>
-            <div className="flex flex-row justify-between w-full px-4 pt-10">
+        <div className={`flex flex-col items-center rounded-lg fixed bottom-0 w-full bg-white shadow-upper-shadow px-4 pb-10 pt-10 z-10 ${continueToBrowser ? "hidden" : ""}`}>
+            <div className="flex flex-row justify-between w-full px-4">
                 <div className="flex flex-row items-center justify-between gap-3">
                     <Chrome style={{width: "30px", height: "30px"}}/>
                     <div className="flex flex-col justify-left">

@@ -8,6 +8,7 @@ module.exports = {
       },
       boxShadow: {
         'gray': '4px 0px 16px 0px rgba(0, 0, 0, 0.08)',
+        'upper-shadow': '0px -4px 16px 0px rgba(0, 0, 0, 0.08)',
       },
       borderColor: {
         'gray': 'rgba(209, 207, 207, 1)',
