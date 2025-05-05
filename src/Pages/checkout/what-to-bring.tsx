@@ -11,11 +11,11 @@ const WhatToBring = ({whatToBring}: {whatToBring: string}) => {
     }, [whatToBring]);
 
     return (
-        <div className="flex flex-col justify-center shadow-gray rounded-xl mx-8 my-4 py-4 px-4 rounded-xl">
+        <div className="flex flex-col justify-center px-8 pt-3">
         <h1 className="text-sm font-bold">What to bring</h1>
-        <ul className="list-disc text-sm mt-2 pl-2"> 
+        <ul className="list-disc text-sm font-normal mt-2 pl-2"> 
             {whatToBringList && whatToBringList.map((item, index) => (
-                <li key={index} className="text-sm text-gray">{item}</li>
+                <li key={index} className="text-sm text-activity-description">{item}</li>
             ))}
         </ul>
     </div>
