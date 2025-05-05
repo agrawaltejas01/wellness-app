@@ -62,7 +62,7 @@ const SkillCapsule = ({ level, editable }: SkillCapsuleProps) => {
                 backgroundColor= {skillLevelColor[capitalizeFirstLetters(level) as SkillLevel]}
                 character={capitalizeFirstLetters(level).charAt(0)}
             />
-            <p style={{ fontSize: '14px', color: 'black' }}>
+            <p style={{ fontSize: '14px', color: 'black', fontFamily: 'Plus Jakarta Sans' }}>
                 {capitalizeFirstLetters(level)}
             </p>
             {editable && (

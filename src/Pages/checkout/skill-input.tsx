@@ -6,6 +6,15 @@ import { updateUserSkillLevel } from "../../apis/user/userDetails";
 import { errorToast, successToast } from "../../components/Toast";
 import { navigate } from "@reach/router";
 import { ACTIVITY_NAME_TO_ID_MAP } from "../../constants/activities";
+import { ReactComponent as TickMarkCircle } from "../../images/checkout/tick-mark-circle.svg";
+
+const skillLevelMessageMap: Record<SkillLevel, string> = {
+    "Beginner": "Noob status: loading...",
+    "Amateur": "Amateur mode: activating...",
+    "Intermediate": "Intermediate? Not bad! Saving...",
+    "Professional": "Pro mode: unlocking...",
+    "Unknown": "Confirm"
+}
 
 const skillLevels = [
     {
@@ -53,38 +62,42 @@ const skillLevelColor: Record<SkillLevel, string> = {
 const SkillLevelInput = ({userId, activityId, batchId}: {userId: number, activityId: number, batchId: number}) => {
 
     const [selectedSkillLevel, setSelectedSkillLevel] = useState<string>("UNKNOWN");
+    const [isClicked, setIsClicked] = useState<boolean>(false);
 
     const { mutate: _updateUserSkillLevel } = useMutation({
         mutationFn: updateUserSkillLevel,
         onSuccess: (result) => {
-            successToast("Skill level updated successfully");
             localStorage.setItem(`skillLevel-${activityId}`, selectedSkillLevel.toUpperCase());
         },
         onError: (error) => {
             errorToast("Error in updating user skill level");
         },
+        onSettled: () => {
+            localStorage.setItem(`skillLevel-${activityId}`, selectedSkillLevel.toUpperCase());
+            const bookingUrl = `/checkout/batch/${batchId}/booking`;
+            window.location.replace(bookingUrl);
+        }
     });
 
     const handleConfirm = () => {
+        setIsClicked(true);
         if(selectedSkillLevel === "UNKNOWN") {
+            setIsClicked(false);
             alert("Please select a game level");
             return;
         }
         if(userId) {
             _updateUserSkillLevel({userId, activityId, skillLevel: selectedSkillLevel.toUpperCase()});
         }
-        localStorage.setItem(`skillLevel-${activityId}`, selectedSkillLevel.toUpperCase());
-        const bookingUrl = `/checkout/batch/${batchId}/booking`;
-        window.location.href = bookingUrl;
     }
 
     return (
-        <div className="flex flex-col px-4 rounded-lg fixed bottom-0 w-full bg-white">    
-            <div className="flex flex-row justify-between px-4 py-4 my-2 rounded-lg">
-                <p className="text-lg font-bold">First tell us your game level</p>
+        <div className="flex flex-col rounded-lg fixed bottom-0 w-full bg-white shadow-gray px-4">    
+            <div className="flex flex-row justify-between px-2 pt-4 pb-1 rounded-lg">
+                <p className="text-base font-bold">First tell us your game level</p>
             </div>
             {skillLevels.map((skillLevel) => (
-                <div key={skillLevel.id} className="flex flex-row justify-between px-4 py-4 my-2 rounded-lg"
+                <div key={skillLevel.id} className="flex flex-row justify-between px-4 py-3 my-2 rounded-lg"
                      style={{ backgroundColor: skillLevelBackgroundColorMap[skillLevel.name as SkillLevel] }}
                      onClick={() => setSelectedSkillLevel(skillLevel.name)}>
                     <div className="flex flex-row gap-2">
@@ -95,23 +108,29 @@ const SkillLevelInput = ({userId, activityId, batchId}: {userId: number, activit
                         backgroundColor= {skillLevelColor[skillLevel.name as SkillLevel]}
                         character={skillLevel.symbol}
                     />
-                    <div style={{ fontSize: '14px', color: 'black' }} className="flex flex-col">
+                    <div style={{ fontSize: '16px', color: 'black' }} className="flex flex-col">
                         <p className="font-bold"> {skillLevel.name}</p>
-                        <p>{skillLevel.description}</p>
+                        <p className="text-sm">{skillLevel.description}</p>
                     </div>
                     </div>
-                    <Circle
-                        radius={8}
+                    {selectedSkillLevel === skillLevel.name ? (
+                        <TickMarkCircle />
+                    ) : (
+                        <Circle
+                        radius={10}
                         borderColor= "black"
                         borderStyle="solid"
                         backgroundColor= {selectedSkillLevel === skillLevel.name ? "black" : skillLevelBackgroundColorMap[skillLevel.name as SkillLevel]}
                         character=''
                     />
+                    )}
                 </div>
             ))}
-            <hr className="my-4" />
-            <div className="flex flex-row px-4 my-2 rounded-lg pb-2">
-                <button className="bg-black font-bold text-md text-white px-4 py-2 rounded-lg w-full text-center" onClick={handleConfirm}>Confirm</button>
+            <hr className="my-3" />
+            <div className="flex flex-row my-2 rounded-lg pb-2">
+                <button className="bg-black font-jakarta font-bold text-base text-white py-3 rounded-lg w-full text-center" onClick={handleConfirm}>
+                    {isClicked ? (selectedSkillLevel === "UNKNOWN" ? "Confirm" : `${skillLevelMessageMap[selectedSkillLevel as SkillLevel]}`) : "Confirm"}
+                </button>
             </div>
         </div>
     )

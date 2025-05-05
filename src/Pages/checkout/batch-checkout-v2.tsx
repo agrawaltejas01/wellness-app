@@ -17,6 +17,10 @@ import { EBookNowComingFromPage } from "../../types/checkout";
 import { ECheckoutType } from "../../types/checkout";
 import AboutTheActivity from "./about-the-activity";
 import { convert24HourTo12Hour } from "../../utils/functions/utils";
+import { formatDate, formatTimeIntToAmPm } from "../../utils/date";
+import Circle from "../../components/circle";
+import Loader from "../../components/Loader";
+import {ReactComponent as LocationIcon} from '../../images/utils/location-icon.svg';
 
 interface IClassCheckout extends RouteComponentProps {
 }
@@ -60,10 +64,12 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
       mutationFn: getActivityById,
       onSuccess: (result) => {
         setBatchDetails(result.batch);
-        setLoading(false);
       },
       onError: (error) => {
         errorToast("Error in getting gym data");
+      },
+      onSettled: () => {
+        setLoading(false);
       },
     });
 
@@ -81,7 +87,8 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
     const { mutate: _getCoplayers } = useMutation({
         mutationFn: getCoplayers,
         onSuccess: (result) => {  
-            setPlayers(result.map((player: any) => ({name: player.name, 
+            setPlayers(result.map((player: any) => ({name: player.name,
+                        userId: player.userId, 
                         level: player.skillLevel, 
                         noOfBookings: player.noOfGuests, 
                         gamesPlayed: player.activityBookCount})));
@@ -121,20 +128,34 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
         navigate(`/gym/${gymId}/batch`);
     }
 
+
+  if(loading) {
+      return <Loader />
+  }
+
   return (
     <div className="flex flex-col">
-        <div className="flex flex-col fixed top-0 left-0 right-0 z-10 bg-gradient-to-r from-black to-transparent bg-cover bg-center"
-             style={{ backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0)), url(${require('../../images/utils/pickleball.png')})` }}>
-          <div className="flex flex-row justify-between px-4 py-4">
+        <div className="flex flex-col bg-gradient-to-r from-black to-transparent bg-cover bg-center"
+             style={{ backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0)), url(${batchDetails?.image || require('../../images/utils/pickleball.png')})` }}>
+          <div className="flex flex-row justify-between pl-2 pt-2 pr-2">
             <BackButton onClick={() => navigateToHome()} />
             <ShareButton />
           </div>
-          <div className="flex flex-col px-8 gap-2 text-white">
-            <p className="text-sm font-bold">{activity.toLowerCase()}</p>
-            <p className="text-xl font-bold">{activityName}</p>
-            <p className="text-sm text-gray-500">{location}</p>
-            {/* <p className="text-sm text-gray-500">Coolulu Turfpark, Bangalore</p> */}
-            <p className="text-2xl text-gray-500 pb-4">{convert24HourTo12Hour(batchDetails?.startTime?.toString() || '').formattedTime} | {batchDetails?.DurationMin} mins</p>
+          <div className="flex flex-col px-6 text-white ">
+            <p className="text-sm font-normal font-jakarta pt-3">{activity.toLowerCase()}</p>
+            <p className="text-xl font-normal font-jakarta pt-1">{activityName}</p>
+            <p className="text-xs font-normal font-jakarta pt-1 inline-flex items-center gap-1"><LocationIcon />{location}</p>
+            <div className="flex flex-row pt-1 pb-4 text-white font-jakarta text-2xl pt-3">
+              <p className="text-white">{batchDetails?.date ? formatDate(batchDetails.date)["date suffix"] : "Date not available"}</p>
+              <p className="dotWhite"></p>
+              {batchDetails?.isDayPass ? <p className="text-white">All Day</p> : 
+              <>
+                <p className="text-white">{formatTimeIntToAmPm(batchDetails?.startTime || 0)}</p>
+                <p className="dotWhite"></p>
+                <p className="text-white">{batchDetails?.DurationMin} mins</p>
+              </>
+              }
+            </div>
           </div>
         </div>
         <div>

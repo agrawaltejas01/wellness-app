@@ -21,7 +21,7 @@ const ScrollableContent: React.FC<ScrollableContentProps> = ({
     const updatePadding = () => {
       if (contentRef.current) {
         contentRef.current.style.paddingBottom = `${bottomPadding}px`;
-        contentRef.current.style.marginTop = '250px';
+        // contentRef.current.style.marginTop = '250px';
       }
     };
 
