@@ -136,7 +136,7 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
   return (
     <div className="flex flex-col">
         <div className="flex flex-col bg-gradient-to-r from-black to-transparent bg-cover bg-center"
-             style={{ backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0)), url(${require('../../images/utils/pickleball.png')})` }}>
+             style={{ backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0)), url(${batchDetails?.image || require('../../images/utils/pickleball.png')})` }}>
           <div className="flex flex-row justify-between pl-2 pt-2 pr-2">
             <BackButton onClick={() => navigateToHome()} />
             <ShareButton />
