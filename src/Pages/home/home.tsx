@@ -249,7 +249,6 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     <>
       <MetaPixel />
       {/* <PullToRefresh onRefresh={handleRefresh}> */}
-      <GoToApp />
       <div>
       <Flex flex={1} vertical style={{ overflowX: "hidden" }}>
         <div>
