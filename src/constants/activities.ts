@@ -1,5 +1,5 @@
 export const ACTIVITY_NAME_TO_ID_MAP = {
-    "PICKLEBALL": 9,
+    "PICKLEBALL": 13,
     "BADMINTON": 1
 }
 
