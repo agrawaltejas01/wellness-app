@@ -529,7 +529,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                         <p className="text-sm font-bold">{Rs}{totalAmount}</p>
                     </div>
                     <div className={`flex flex-row justify-between px-4 ${totalSavings > 0 ? "pt-2 pb-4" : " "}`}>
-                        {totalSavings > 0 && <p className="text-xs text-gray font-sm">Total Savings: {Rs}{totalSavings}</p>}
+                        {totalSavings > 0 && <p className="text-xs text-gray font-sm">Total saved {Rs}{totalSavings}</p>}
                     </div>
                     <hr className="border-1 border-separate mx-4 border-gray border-spacing-16" />
                     <div className="flex flex-row justify-between px-4 pt-4 pb-6">
