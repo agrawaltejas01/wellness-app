@@ -509,12 +509,12 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                 <div className="flex flex-col justify-between w-full bg-white shadow-gray rounded-xl">
                     <SpotsLeftCheckout spotsLeft={spotsLeft} spotsTotal={spotsTotal} noOfGuests={noOfGuests} />
                     <div className="flex flex-row justify-between px-4">
-                        <div className="flex flex-col">
+                        <div className="flex flex-col pb-4">
 
                             <p className="text-sm font-sm">Book Spots</p>
-                            <p className="text-xs text-gray pt-1 pb-4">{Rs}{batchDetails?.price} per slot</p>
+                            {/* <p className="text-xs text-gray pt-1 pb-4">{Rs}{batchDetails?.price} per slot</p> */}
                         </div>
-                        <div className="flex flex-row justify-between items-center">
+                        <div className="flex flex-row justify-between items-center pb-4">
                             <IncrementDecrementButton radius={12} borderColor="#212121" borderStyle="solid" backgroundColor="#FFFFFF" character="-" fontColor="#000000" disabled={noOfGuests === 1} onClick={() => manageGuests(false)}  />
                             <p className="text-sm font-bold font-sm px-4">{noOfGuests}</p>
                             <IncrementDecrementButton radius={12} borderColor="#212121" borderStyle="solid" backgroundColor="#FFFFFF" character="+" fontColor="#000000" disabled={noOfGuests === spotsLeft} onClick={() => manageGuests(true)}  />
@@ -540,6 +540,9 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                         </div>
                     </div>
                 </div>
+            </div>
+            <div className="flex flex-row px-4 pt-4">
+                {offerStrip.current && <p className="text-xs text-center rounded-lg p-2 bg-gray-100 w-full">{offerStrip.current}</p>}
             </div>
             <BookNowFooter
                 batchDetails={batchDetails}
