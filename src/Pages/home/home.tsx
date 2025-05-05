@@ -27,6 +27,7 @@ import Onboarding from "./onboarding";
 import MetaPixel from "../../components/meta-pixel";
 import {handleRefresh} from '../../utils/refresh';
 import ForceUpdatePopup from "../../components/ForceUpdatePopup";
+import GoToApp from "../../components/go-to-app";
 
 
 interface PastAppBookingObject {
@@ -244,11 +245,14 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   if (showOnBoarding()) return <Onboarding setOnboarding={setOnboarding} />;
   if (!activities.length || !gotPastBookings) return <Loader />;
 
+  const [isGoToBrowser, setIsGoToBrowser] = useState(false);
+
   return (
     <>
       <MetaPixel />
       {/* <PullToRefresh onRefresh={handleRefresh}> */}
-        <div>
+      {!isGoToBrowser ? <GoToApp isGoToBrowser={isGoToBrowser} setIsGoToBrowser={setIsGoToBrowser} /> : null}
+      <div>
       <Flex flex={1} vertical style={{ overflowX: "hidden" }}>
         <div>
           <Space></Space>
