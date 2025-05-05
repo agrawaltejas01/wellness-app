@@ -129,7 +129,7 @@ const SkillLevelInput = ({userId, activityId, batchId}: {userId: number, activit
             <hr className="my-3" />
             <div className="flex flex-row my-2 rounded-lg pb-2">
                 <button className="bg-black font-jakarta font-bold text-base text-white py-3 rounded-lg w-full text-center" onClick={handleConfirm}>
-                    {isClicked ? (selectedSkillLevel === "UNKNOWN" ? "Confirm" : `${skillLevelMessageMap[selectedSkillLevel as SkillLevel]}`) : "Confirm"}
+                    {isClicked ? (selectedSkillLevel === "UNKNOWN" ? "Confirm" : "Confirming...") : "Confirm"}
                 </button>
             </div>
         </div>
