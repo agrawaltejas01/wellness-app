@@ -4,3 +4,4 @@ const STAGING = "https://stag-be.zenfitx.link";
 // const LOCAL = "https://64ad4d4f2beb7c.lhr.life";
 
 export const BE_URL = process.env.REACT_APP_BE_URL;
+

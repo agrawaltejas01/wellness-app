@@ -29,7 +29,22 @@ export async function getActivityById(id: string) {
   return result.data;
 }
 
+/**
+ * Gets batch details with game level information
+ * @param id - The batch ID
+ * @returns The batch details with game level information
+ */
+export async function getBatchWithGameLevel(id: string) {
+  const result = await networkAdapter.get(`gyms/batch/${id}/withGameLevel`);
+  return result.data;
+}
+
 export async function getPastAppBookings(id: string){
   const result = await networkAdapter.get(`bookings/pastAppBookings?id=${id}`);
+  return result.data;
+}
+
+export async function getCoplayers(id: string){
+  const result = await networkAdapter.get(`users/batch-coplayers?batchId=${id}`);
   return result.data;
 }

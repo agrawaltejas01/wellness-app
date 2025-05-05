@@ -11,26 +11,27 @@ import {
   ECheckoutType,
   ESelectedPlan,
 } from "../../types/checkout";
-import { plusDetailsAtom, userDetailsAtom } from "../../atoms/atom";
+import { pendingGameLevelAtom, plusDetailsAtom, userDetailsAtom } from "../../atoms/atom";
 import { useAtom } from "jotai/react";
 import activityToSvgMap from "../../images/class-images/activity-map";
 import { Mixpanel } from "../../mixpanel/init";
 import {
   getActivityById,
+  getBatchWithGameLevel,
   getGymById,
-  getPastAppBookings,
 } from "../../apis/gym/activities";
 import { useMutation } from "@tanstack/react-query";
-import { errorToast } from "../../components/Toast";
+import { errorToast, successToast } from "../../components/Toast";
 import { formatDate, formatTimeIntToAmPm } from "../../utils/date";
 import { createMapsLink } from "../../utils/string-operation";
 import { ReactComponent as LocationLogo } from "../../images/home/location.svg";
 import MetaPixel from "../../components/meta-pixel";
-import ShareMetadata from "../../components/share-metadata";
 import Loader from "../../components/Loader";
 import { handleRefresh } from "../../utils/refresh";
 import SwipeHandler from "../../components/back-swipe-handler";
 import { shouldShowDiscount } from "../../utils/offers";
+import GameLevelSelector from "../game_level/GameLevelSelector";
+import { upsertGameLevel } from "../../apis/user/gameLevel";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -54,10 +55,6 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
     // Add your right swipe logic here
     navigateToHome();
   };
-  // const data = JSON.stringify(location?.state);
-  // alert(location?.state?.isFromApp);
-  // const isFromApp = JSON.parse(data).isFromApp;
-  // const pastAppBookings = JSON.parse(data).pastAppBookings
   const batchId = window.location.pathname.split("/")[3];
   const [selectedPlan, setSelectedPlan] = useState<ESelectedPlan>(
     ESelectedPlan.BATCH,
@@ -67,6 +64,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   const [totalAmount, setTotalAmount] = useState();
 
   const [plusDetails] = useAtom(plusDetailsAtom);
+  const [pendingGameLevel, setPendingGameLevel] = useAtom(pendingGameLevelAtom);
   const mixpanelSet = useRef(false);
 
   const [isClicked, setIsClicked] = useState<Boolean>(false);
@@ -77,6 +75,52 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   const [isFromApp, setIsFromApp] = useState(false);
   const [pastAppBookings, setPastAppBookings] = useState({});
   const slotsRemainingVisible = [6, 22, 24, 25, 27, 28, 31, 32];
+
+  //Constants related to game level
+  const [showLevelSelector, setShowLevelSelector] = useState(false);
+  const [userGameLevel, setUserGameLevel] = useState<string | null>(null);
+
+  const handleLevelSelect = (level: string) => {
+    setUserGameLevel(level);
+    setShowLevelSelector(false);
+    
+    // Track in analytics
+    if (Mixpanel) {
+      Mixpanel.track("game_level_selected", {
+        level,
+        batchId,
+        gymId,
+      });
+    }
+
+    // Store the level data in atom for later use after successful booking
+    const gameLevelData = {
+      batchActivityId: batchDetails?.batchActivity?.id || Number(batchId),
+      level
+    };
+    
+    // Save to atom for later API call after successful booking
+    setPendingGameLevel(gameLevelData);
+    
+    // Create booking object with game level for future reference
+    const bookingObject = {
+      batchId,
+      gymId,
+      gameLevel: level,
+    };
+    console.log("Booking with level:", bookingObject);
+    
+    // Proceed with booking automatically
+    navigateToBookingPage();
+  };
+  const handleBookNowClick = () => {
+    // Show game level selector if required by the batch activity, regardless of login status
+    if (batchDetails?.batchActivity?.showGameLevel === true && !userGameLevel) {
+      setShowLevelSelector(true);
+      return false; // Prevent default booking behavior
+    }
+    return true; // Allow booking to proceed
+  };
 
   useEffect(() => {
     // Get isFromApp from window object
@@ -97,15 +141,32 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
     }
   }, [gym, batchDetails]);
 
+  // Mutation for the new API with game level information
+  const { mutate: _getBatchWithGameLevel } = useMutation({
+    mutationFn: getBatchWithGameLevel,
+    onSuccess: (result) => {
+      console.log("Batch with game level:", result.batch);
+      setBatchDetails(result.batch);
+      setLoading(false);
+    },
+    onError: (error) => {
+      console.error("Error using new API, falling back to old one:", error);
+      // Fall back to the old API on error
+      _getActivityById(batchId);
+    },
+  });
+
+  // Keep the old API mutation as fallback
   const { mutate: _getActivityById } = useMutation({
     mutationFn: getActivityById,
     onSuccess: (result) => {
-      console.log(result.batch);
+      console.log("Batch from old API:", result.batch);
       setBatchDetails(result.batch);
       setLoading(false);
     },
     onError: (error) => {
       errorToast("Error in getting gym data");
+      setLoading(false);
     },
   });
 
@@ -122,7 +183,8 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   });
 
   useEffect(() => {
-    _getActivityById(batchId);
+    // Try the new API first, with fallback to old API in the error handler
+    _getBatchWithGameLevel(batchId);
   }, []);
   useEffect(() => {
     if (batchDetails?.gymId) {
@@ -162,6 +224,14 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
 
   const navigateToHome = () => {
     navigate(`/gym/${gymId}/batch`);
+  };
+  
+  const navigateToBookingPage = () => {
+    const batchBookingUrl = `/checkout/batch/${batchId}/booking`;
+    Mixpanel.track("open_batch_checkout_booking", { batchId });
+    navigate(batchBookingUrl, {
+      state: { isFromApp, pastAppBookings }
+    });
   };
 
   const leftDivider = () => {
@@ -450,11 +520,19 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
             totalAmount={batchDetails?.price as number}
             comingFrom={EBookNowComingFromPage.BATCH_CHECKOUT_PAGE}
             forceBookNowCta={true}
+            onBeforeAction={handleBookNowClick} // Add this line
           />
         )}
       </Flex>
       {/* </PullToRefresh> */}
       {/* </SwipeHandler> */}
+      <GameLevelSelector
+        isVisible={showLevelSelector}
+        onLevelSelect={handleLevelSelect}
+        batchId={batchId}
+        gymId={String(gymId)}
+      />
+
       <MetaPixel />
     </>
   );

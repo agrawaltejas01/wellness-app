@@ -1,0 +1,6 @@
+export const ACTIVITY_NAME_TO_ID_MAP = {
+    "PICKLEBALL": 13,
+    "BADMINTON": 1
+}
+
+export const COPLAYER_CARD_ENABLED = ["BADMINTON", "PICKLEBALL"];

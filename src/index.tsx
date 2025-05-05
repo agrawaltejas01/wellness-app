@@ -89,9 +89,9 @@ function mobileRedirect() {
 }
 
 // Run immediately before React loads
-if (typeof window !== 'undefined') {
-  mobileRedirect();
-}
+// if (typeof window !== 'undefined') {
+//   mobileRedirect();
+// }
 
 
 // function checkAndRedirect() {

@@ -10,6 +10,25 @@ import { formatDate, formatTimeIntToAmPm } from "../../utils/date";
 import useWindowDimensions from "../../hooks/getWindowDimensions";
 import { createMapsLink, toLetterCase } from "../../utils/string-operation";
 
+// Function to get background color based on game level
+const getGameLevelColor = (level: string): string => {
+  const normalizedLevel = level.toLowerCase();
+  
+  switch (normalizedLevel) {
+    case 'beginner':
+      return 'rgba(104, 227, 156, 0.15)'; // Light green
+    case 'amaeture':
+    case 'amateur':
+      return 'rgba(255, 199, 91, 0.15)'; // Light amber
+    case 'intermediate':
+      return 'rgba(108, 160, 220, 0.15)'; // Light blue
+    case 'advanced':
+      return 'rgba(156, 106, 222, 0.15)'; // Light purple
+    default:
+      return '#F0F0F0'; // Default light gray
+  }
+};
+
 interface BookingClassCard {
   booking: IBookings & {
     guests?: Array<{
@@ -203,15 +222,12 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
                           fontSize: "12px",
                           color: colors.secondary,
                           padding: "2px 8px",
-                          background:
-                            guest.skillLevel.toLowerCase() === "advanced"
-                              ? "#F0E6FF"
-                              : "#E6F0FF",
+                          background: getGameLevelColor(guest.skillLevel),
                           borderRadius: "4px",
                           display: "inline-block",
                         }}
                       >
-                        {guest.skillLevel}
+                        {toLetterCase(guest.skillLevel)}
                       </span>
                     )}
                   </Flex>
