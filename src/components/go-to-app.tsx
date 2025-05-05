@@ -1,9 +1,11 @@
 import { Button } from "antd";
 import {ReactComponent as Chrome} from "../images/utils/chrome.svg";
+import { useState } from "react";
 
-const GoToApp = ({isGoToBrowser, setIsGoToBrowser}: {isGoToBrowser: boolean, setIsGoToBrowser: (isGoToBrowser: boolean) => void}) => {
+const GoToApp = () => {
+    const [continueToBrowser, setContinueToBrowser] = useState(false);
     return (
-        <div className="flex flex-col items-center rounded-lg fixed bottom-0 w-full bg-white shadow-gray px-4 pb-10 z-10">
+        <div className={`flex flex-col items-center rounded-lg fixed bottom-0 w-full bg-white shadow-gray px-4 pb-10 z-10 ${continueToBrowser ? "hidden" : ""}`}>
             <div className="flex flex-row justify-between w-full px-4 pt-10">
                 <div className="flex flex-row items-center justify-between gap-3">
                     <Chrome style={{width: "30px", height: "30px"}}/>
@@ -21,7 +23,7 @@ const GoToApp = ({isGoToBrowser, setIsGoToBrowser}: {isGoToBrowser: boolean, set
                         <div className="flex text-xs font-bold  justify-left">Browser</div>
                     </div>
                 </div>
-                <Button className="flex text-sm items-center bg-white text-black border border-black" style={{borderRadius: "20px", width: "100px", justifyContent: "center"}} onClick={() => setIsGoToBrowser(true)}>Continue</Button>
+                <Button className="flex text-sm items-center bg-white text-black border border-black" style={{borderRadius: "20px", width: "100px", justifyContent: "center"}} onClick={() => setContinueToBrowser(true)}>Continue</Button>
             </div>
         </div>
     )

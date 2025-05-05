@@ -245,13 +245,11 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   if (showOnBoarding()) return <Onboarding setOnboarding={setOnboarding} />;
   if (!activities.length || !gotPastBookings) return <Loader />;
 
-  const [isGoToBrowser, setIsGoToBrowser] = useState(false);
-
   return (
     <>
       <MetaPixel />
       {/* <PullToRefresh onRefresh={handleRefresh}> */}
-      {!isGoToBrowser ? <GoToApp isGoToBrowser={isGoToBrowser} setIsGoToBrowser={setIsGoToBrowser} /> : null}
+      <GoToApp />
       <div>
       <Flex flex={1} vertical style={{ overflowX: "hidden" }}>
         <div>
