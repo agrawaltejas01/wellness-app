@@ -501,7 +501,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                         {/* <p className="text-sm text-gray font-xs">No games yet</p> */}
                     </div>
                     <div className="flex flex-col" onClick={() => { navigate(`/checkout/batch/${batchId}/booking?edit=true`, {replace: true}) }}>
-                        {skillLevel != "" && <SkillCapsule level={skillLevel as SkillLevel} editable={true} />}
+                        {skillLevel != "" && (batchDetails?.slots && batchDetails?.slots <= 6) && <SkillCapsule level={skillLevel as SkillLevel} editable={true} />}
                     </div>
                 </div>
             </div>}

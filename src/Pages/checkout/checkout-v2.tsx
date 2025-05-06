@@ -77,7 +77,7 @@ const BatchCheckoutBookingV2: React.FC<IClassCheckout> = () => {
             setShowSkillInput(false);
             setLoading(false);
         } else {
-            if(batchDetails?.activity.toUpperCase() == "FOOTBALL") {
+            if(batchDetails?.activity.toUpperCase() == "FOOTBALL" || (batchDetails?.slots && batchDetails?.slots > 6)) {
                 setShowSkillInput(false);
             } else if(!COPLAYER_CARD_ENABLED.includes(batchDetails?.activity.toUpperCase() || "")) {
                 setShowSkillInput(false);
