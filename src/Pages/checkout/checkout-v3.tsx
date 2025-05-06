@@ -508,7 +508,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
             {isCoplayerCardEnabled && <div className="flex flex-row px-4 pt-4">
                 <div className="flex flex-col justify-between w-full bg-white shadow-gray rounded-xl">
                     <SpotsLeftCheckout spotsLeft={spotsLeft} spotsTotal={spotsTotal} noOfGuests={noOfGuests} />
-                    <div className="flex flex-row justify-between px-4">
+                    {batchDetails?.guestsAllowed && <div className="flex flex-row justify-between px-4">
                         <div className="flex flex-col pb-4">
 
                             <p className="text-sm font-sm">Book Spots</p>
@@ -519,7 +519,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                             <p className="text-sm font-bold font-sm px-4">{noOfGuests}</p>
                             <IncrementDecrementButton radius={12} borderColor="#212121" borderStyle="solid" backgroundColor="#FFFFFF" character="+" fontColor="#000000" disabled={noOfGuests === spotsLeft} onClick={() => manageGuests(true)}  />
                         </div>
-                    </div>
+                    </div>}
                 </div>
             </div>}
             <div className="flex flex-row px-4 pt-4">
