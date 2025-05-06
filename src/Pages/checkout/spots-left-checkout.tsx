@@ -7,7 +7,7 @@ const SpotsLeftCheckout = ({ spotsLeft, spotsTotal, noOfGuests }: { spotsLeft: n
     return (
         <div className={`flex items-center justify-between pt-4 pb-6 px-4`}>
             <h1 className="text-base font-bold">{spotsLeft}/{spotsTotal} {spotsLeft === 1 ? "spot" : "spots"} left</h1>
-            <div className="flex gap-1">
+            {spotsTotal <= 6 && <div className="flex gap-1">
                 {Array.from({ length: spotsTotal - spotsLeft }).map((_, index) => (
                     <DisabledSlot key={index} />
                 ))}
@@ -18,7 +18,7 @@ const SpotsLeftCheckout = ({ spotsLeft, spotsTotal, noOfGuests }: { spotsLeft: n
                     <EmptySlot key={index} />
                 ))}
 
-            </div>
+            </div>}
         </div>
     )
 }
