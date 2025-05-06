@@ -77,7 +77,9 @@ const BatchCheckoutBookingV2: React.FC<IClassCheckout> = () => {
             setShowSkillInput(false);
             setLoading(false);
         } else {
-            if(!COPLAYER_CARD_ENABLED.includes(batchDetails?.activity.toUpperCase() || "")) {
+            if(batchDetails?.activity.toUpperCase() == "FOOTBALL") {
+                setShowSkillInput(false);
+            } else if(!COPLAYER_CARD_ENABLED.includes(batchDetails?.activity.toUpperCase() || "")) {
                 setShowSkillInput(false);
             } else if(userId && batchId) {
                 _getUserSkillLevel({userId, batchId: Number(batchId)});
