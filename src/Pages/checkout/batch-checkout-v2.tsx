@@ -21,6 +21,7 @@ import { formatDate, formatTimeIntToAmPm } from "../../utils/date";
 import Circle from "../../components/circle";
 import Loader from "../../components/Loader";
 import {ReactComponent as LocationIcon} from '../../images/utils/location-icon.svg';
+import { message } from "antd";
 
 interface IClassCheckout extends RouteComponentProps {
 }
@@ -46,6 +47,7 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
     const [isFromApp, setIsFromApp] = useState(false);
     const [pastAppBookings, setPastAppBookings] = useState({});
     const { COPLAYER_CARD_ENABLED } = require("../../constants/activities");
+    const [isShareButtonClicked, setIsShareButtonClicked] = useState(false);
 
     const batchId = window.location.pathname.split("/")[3];
 
@@ -119,6 +121,40 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
         setSpotsTotal(batchDetails?.slots ? batchDetails?.slots : 0);
     }, [batchDetails]);
 
+    const shareUrl = window.location.href;
+    
+    const handleShare = () => {
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        message.success("Link copied to clipboard! You can now paste it to share.");
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+        message.error("Failed to copy link. Please try again.");
+      });
+    };
+
+
+    useEffect(() => {
+      const shareButton = document.getElementById("share-button");
+      shareButton?.addEventListener("click", () => {
+        if (navigator.share) {
+          navigator
+            .share({
+              title: "ZenfitX",
+              text: `Hey, I just discovered this awesome fitness studio on ZenfitX called ${gym?.name}. Check it out and let's plan some awesome activities together! 😉 `,
+              url: window.location.href,
+            })
+            .then(() => console.log("Successful share"))
+            .catch((error) => console.log("Error sharing", error));
+        } else {
+          handleShare();
+          console.log("error");
+        }
+      });
+      shareButton?.removeEventListener("click", () => {
+        setIsShareButtonClicked(false);
+      });
+    }, [isShareButtonClicked]);
+
     const gymId = batchDetails?.gymId;
     const activityName = batchDetails?.activityName ? batchDetails?.activityName : "";
     const activity = batchDetails?.activity ? batchDetails?.activity : "";
@@ -139,7 +175,7 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
              style={{ backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0)), url(${batchDetails?.image || require('../../images/utils/pickleball.png')})` }}>
           <div className="flex flex-row justify-between pl-2 pt-2 pr-2">
             <BackButton onClick={() => navigateToHome()} />
-            <ShareButton />
+            <ShareButton id="share-button" onClick={() => setIsShareButtonClicked(true)} />
           </div>
           <div className="flex flex-col px-6 text-white ">
             <p className="text-sm font-normal font-jakarta pt-3">{activity.toLowerCase()}</p>
