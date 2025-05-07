@@ -306,7 +306,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
           } else {
             finalPrice = Math.floor(finalPrice);
           }
-          let newTotalAmount = price * noOfGuests;
+          let newTotalAmount = finalPrice;
           let discount = price * noOfGuests - finalPrice;
     
           setTotalAmount(newTotalAmount);
