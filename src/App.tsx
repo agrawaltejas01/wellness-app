@@ -17,19 +17,31 @@ import Activity from "./Pages/activity/Activity";
 import PrivacyPolicy from "./Pages/privacy/privacy";
 import BatchCheckoutV2 from "./Pages/checkout/batch-checkout-v2";
 import BatchCheckoutBookingV2 from "./Pages/checkout/checkout-v2";
+import GoToApp from "./components/go-to-app";
 // Create a client
 const queryClient = new QueryClient();
+
+// Layout component that includes the GoToApp banner on all pages
+const AppLayout: React.FC<{ children: React.ReactNode}> = ({ children }) => {
+  return (
+    <>
+      {children}
+      <GoToApp />
+    </>
+  );
+};
 
 function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Router>
-        {/* <LandingPage path="/" /> */}
-        <Home path="/" />
-        <Activity path="/:activity" />
-        <Login path="/login" />
-        <VerifyMagicLink path="/verify" />
+      <AppLayout>
+        <Router>
+          {/* <LandingPage path="/" /> */}
+          <Home path="/" />
+          <Activity path="/:activity" />
+          <Login path="/login" />
+          <VerifyMagicLink path="/verify" />
 
         <Profile path="/profile" />
         <Gym path="/gym/:gymId" />
@@ -41,10 +53,11 @@ function App() {
         <BatchPaymentSuccess path="/checkout/success" />
         <PlusPaymentSuccess path="/plus/success" />
         <PlusPaymentSuccess path="/plus/success" />
-        <PrivacyPolicy path="/privacy" />
-      </Router>
+          <PrivacyPolicy path="/privacy" />
+        </Router>
+      </AppLayout>
     </QueryClientProvider>
   );
-}
+} 
 
 export default App;
