@@ -122,7 +122,7 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
     }, [batchDetails]);
 
     const shareUrl = window.location.href;
-    
+
     const handleShare = () => {
       navigator.clipboard.writeText(shareUrl).then(() => {
         message.success("Link copied to clipboard! You can now paste it to share.");
@@ -136,24 +136,23 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
     useEffect(() => {
       const shareButton = document.getElementById("share-button");
       shareButton?.addEventListener("click", () => {
-        if (navigator.share) {
+        if (navigator.share && gotGymDetails && gotBatchDetails) {
           navigator
             .share({
               title: "ZenfitX",
-              text: `Hey, I just discovered this awesome fitness studio on ZenfitX called ${gym?.name}. Check it out and let's plan some awesome activities together! 😉 `,
+              text: `Hey, Join me for ${batchDetails?.activityName} at ${("0" + batchDetails?.startTime.toString()).slice(-4).substring(0, 2)}:00 on ${new Date(`${batchDetails?.date}`).toDateString()} at the ${gym?.name}. Let's sweat it out together! 😬`,
               url: window.location.href,
             })
             .then(() => console.log("Successful share"))
             .catch((error) => console.log("Error sharing", error));
         } else {
-          handleShare();
-          console.log("error");
+          console.log("Share not supported on this browser, do it the old way.");
         }
       });
       shareButton?.removeEventListener("click", () => {
         setIsShareButtonClicked(false);
       });
-    }, [isShareButtonClicked]);
+    }, [isShareButtonClicked, gotBatchDetails, gotGymDetails]);
 
     const gymId = batchDetails?.gymId;
     const activityName = batchDetails?.activityName ? batchDetails?.activityName : "";
