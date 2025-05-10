@@ -36,3 +36,52 @@
     transform: rotate(360deg);
   }
 }
+
+/* Add dimming class for when app banner is visible */
+.app-content-dimmed {
+  position: relative;
+  filter: brightness(0.7);
+  transition: filter 0.3s ease-in-out;
+  pointer-events: none; /* Prevents interaction with content when dimmed */
+  overflow: hidden !important; /* Prevent scrolling */
+}
+
+/* Overlay to prevent scrolling and clicking */
+.app-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 5;
+  pointer-events: auto; /* Capture all events */
+  touch-action: none; /* Disable touch actions on mobile */
+}
+
+/* Keep normal styles for when banner is not visible */
+.app-content-dimmed:not(.app-content-dimmed) {
+  filter: brightness(1);
+  pointer-events: auto;
+  overflow: auto;
+}
+
+/* Additional CSS for z-index management */
+.fixed {
+  position: fixed;
+}
+
+.inset-0 {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.pointer-events-none {
+  pointer-events: none;
+}
+
+.z-5 {
+  z-index: 5;
+}
