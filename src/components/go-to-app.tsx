@@ -43,7 +43,7 @@ const GoToApp: React.FC<GoToAppProps> = ({ onVisibilityChange }) => {
     return (
         <div className="flex flex-col items-center rounded-t-2xl border-1 fixed bottom-0 w-full bg-white shadow-upper-shadow px-4 pb-10 pt-6 z-10">
             <div className="flex flex-row justify-between w-full px-4 pb-4">
-                <p className="text-xs font-bold">For better experience, download the app</p>
+                <p className="text-sm font-bold">Download the app to get upto 80% off on 1st booking</p>
             </div>
             <hr className="w-full border-t border-gray-300 pb-4" />
             <div className="flex flex-row justify-between w-full px-4">
@@ -51,10 +51,10 @@ const GoToApp: React.FC<GoToAppProps> = ({ onVisibilityChange }) => {
                     <img src={logo} style={{width: "40px", height: "40px", borderRadius: "50%"}}/>
                     <div className="flex flex-col justify-left">
                         <div className="flex text-xs font-bold  justify-left">ZenfitX App</div>
-                        <div className="flex text-xs font-thin justify-left">For offers and rewards</div>
+                        <div className="flex text-xs font-thin text-gray justify-left">For smooth experience</div>
                     </div>
                 </div>
-                <Button 
+                <Button
                     className="flex text-sm items-center bg-blue-600 text-white" 
                     style={{borderRadius: "20px", width: "100px", justifyContent: "center"}} 
                     onClick={() => window.open(appStoreUrl, "_blank")}
@@ -64,9 +64,9 @@ const GoToApp: React.FC<GoToAppProps> = ({ onVisibilityChange }) => {
             </div>
             <div className="flex flex-row justify-between w-full px-4 pt-6">
                 <div className="flex flex-row items-center justify-between gap-3">
-                    <Chrome style={{width: "40px", height: "40px"}}/>
+                    <Chrome style={{width: "40px", height: "40px", borderRadius: "50%"}}/>
                     <div className="flex flex-col justify-left">
-                        <div className="flex text-xs font-bold  justify-left">Browser</div>
+                        <div className="flex text-xs font-bold justify-left">Browser</div>
                     </div>
                 </div>
                 <Button 
