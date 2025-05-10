@@ -3,7 +3,11 @@ import {ReactComponent as Chrome} from "../images/utils/chrome.svg";
 import logo from "../images/utils/zenfitx-logo.jpeg";
 import { useEffect, useState } from "react";
 
-const GoToApp = () => {
+interface GoToAppProps {
+    onVisibilityChange?: (isVisible: boolean) => void;
+}
+
+const GoToApp: React.FC<GoToAppProps> = ({ onVisibilityChange }) => {
     // Check sessionStorage when component mounts
     const [continueToBrowser, setContinueToBrowser] = useState(() => {
         return sessionStorage.getItem('continueToBrowser') === 'true';
@@ -20,6 +24,13 @@ const GoToApp = () => {
         }
     }, []);
     
+    // Update parent about visibility changes
+    useEffect(() => {
+        if (onVisibilityChange) {
+            onVisibilityChange(!continueToBrowser);
+        }
+    }, [continueToBrowser, onVisibilityChange]);
+    
     // Function to handle continue click
     const handleContinueClick = () => {
         sessionStorage.setItem('continueToBrowser', 'true');
@@ -30,7 +41,7 @@ const GoToApp = () => {
     if (continueToBrowser) return null;
     
     return (
-        <div className="flex flex-col items-center rounded-2xl border-1 fixed bottom-0 w-full bg-white shadow-upper-shadow px-4 pb-10 pt-6 z-10">
+        <div className="flex flex-col items-center rounded-t-2xl border-1 fixed bottom-0 w-full bg-white shadow-upper-shadow px-4 pb-10 pt-6 z-10">
             <div className="flex flex-row justify-between w-full px-4 pb-4">
                 <p className="text-xs font-bold">For better experience, download the app</p>
             </div>
