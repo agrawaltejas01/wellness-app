@@ -2,6 +2,7 @@ import { Button } from "antd";
 import {ReactComponent as Chrome} from "../images/utils/chrome.svg";
 import logo from "../images/utils/zenfitx-logo.jpeg";
 import { useEffect, useState } from "react";
+import { Mixpanel } from "../mixpanel/init";
 
 interface GoToAppProps {
     onVisibilityChange?: (isVisible: boolean) => void;
@@ -12,6 +13,8 @@ const GoToApp: React.FC<GoToAppProps> = ({ onVisibilityChange }) => {
     const [continueToBrowser, setContinueToBrowser] = useState(() => {
         return sessionStorage.getItem('continueToBrowser') === 'true';
     });
+
+    const userId = window.localStorage["zenfitx-user-details"] ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || null : null;
 
     const [appStoreUrl, setAppStoreUrl] = useState("https://play.google.com/store/apps/details?id=com.zenfitx.zenfitxapp");
 
@@ -35,6 +38,9 @@ const GoToApp: React.FC<GoToAppProps> = ({ onVisibilityChange }) => {
     const handleContinueClick = () => {
         sessionStorage.setItem('continueToBrowser', 'true');
         setContinueToBrowser(true);
+        Mixpanel.track("clicked_continue_to_browser", {
+            userId
+        });
     };
 
     // If banner is hidden in this session, don't render anything
@@ -57,7 +63,12 @@ const GoToApp: React.FC<GoToAppProps> = ({ onVisibilityChange }) => {
                 <Button
                     className="flex text-sm items-center bg-blue-600 text-white" 
                     style={{borderRadius: "20px", width: "100px", justifyContent: "center"}} 
-                    onClick={() => window.open(appStoreUrl, "_blank")}
+                    onClick={() => {
+                        Mixpanel.track("clicked_get_app", {
+                            userId
+                        });
+                        window.open(appStoreUrl, "_blank");
+                    }}
                 >
                     Get
                 </Button>
