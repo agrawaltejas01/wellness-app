@@ -23,7 +23,7 @@ const Login: React.FC<ILoginProps> = () => {
     name: "",
   });
 
-  const { signup } = useLocation().state as { signup?: boolean };
+  const { signup } = useLocation().state as { signup?: boolean } || { signup: false };
   useAuthRedirect();
 
   function setValue(e: React.ChangeEvent<HTMLInputElement>) {
