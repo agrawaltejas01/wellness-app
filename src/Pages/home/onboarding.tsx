@@ -64,7 +64,7 @@ const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
 						// setOnboarding(true);
             setShowLoader(true);
 						Mixpanel.track("clicked_explore_now_on_onboarding_page");
-						navigate('/login');
+						navigate('/login', { state: { signup: true } });
             // navigate('/');
 					}}
 				>

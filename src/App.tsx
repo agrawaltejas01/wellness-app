@@ -59,7 +59,7 @@ const AppLayout: React.FC<{ children: React.ReactNode}> = ({ children }) => {
   return (
     <>
       {/* Main content with conditional dimming */}
-      <div className={isAppBannerVisible ? "app-content-dimmed" : ""}>
+      <div className={isAppBannerVisible ? "" : ""}>
         {children}
       </div>
       
