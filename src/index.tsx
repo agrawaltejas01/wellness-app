@@ -45,13 +45,14 @@ function mobileRedirect() {
   const timeout = setTimeout(() => {
     if (!appOpened) {
       // Clear the page content for cleaner transition
-      document.body.innerHTML = "";
-      document.body.style.backgroundColor = "#FFFFFF";
+      // document.body.innerHTML = "";
+      // document.body.style.backgroundColor = "#FFFFFF";
       
-      // Redirect to app store
-      window.location.href = appStoreLink;
+      // // Redirect to app store
+      // window.location.href = appStoreLink;
+      // alert("redirecting to app store");
     }
-  }, 10000);
+  }, 200);
   
   // Clear timeout if app opens
   const clearRedirectTimeout = () => {
@@ -89,9 +90,9 @@ function mobileRedirect() {
 }
 
 // Run immediately before React loads
-// if (typeof window !== 'undefined') {
-//   mobileRedirect();
-// }
+if (typeof window !== 'undefined') {
+  mobileRedirect();
+}
 
 
 // function checkAndRedirect() {
