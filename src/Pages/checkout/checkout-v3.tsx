@@ -311,9 +311,9 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
     
           setTotalAmount(newTotalAmount);
           setTotalSavings(discount);
-          if (batchDetails.discountType == "PERCENTAGE") {
-            batchDetails.offerPercentage = (discount * 100) / (price * noOfGuests);
-          }
+        //   if (batchDetails.discountType == "PERCENTAGE") {
+        //     batchDetails.offerPercentage = (discount * 100) / (price * noOfGuests);
+        //   }
         } else if (!showDiscount) {
           let finalPrice = (batchDetails?.price as number) * noOfGuests;
           let discount = 0;
