@@ -181,7 +181,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
 
     useEffect(() => {
         const userSource = window?.platformInfo?.platform || "web";
-        const appFlag = userSource != "web" ? true : false;
+        const appFlag = userSource !== "web" ? true : false;
         setIsFromApp(appFlag);
         window.isFromApp = appFlag;
         const userId = window.localStorage["zenfitx-user-details"]
@@ -215,10 +215,10 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
 
     useEffect(() => {
         if (batchDetails) {
-          if (!userDetails) {
-            setShowDiscount(true);
-          } else if (!isFromApp) {
+          if (!isFromApp) {
             setShowDiscount(false);
+          } else if (!userDetails) {
+            setShowDiscount(true);
           } else if (pastAppBookings?.[batchDetails.gymId]) {
             setShowDiscount(false);
           } else {
