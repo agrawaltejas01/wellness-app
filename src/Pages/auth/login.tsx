@@ -1,4 +1,4 @@
-import { RouteComponentProps, navigate } from "@reach/router";
+import { RouteComponentProps, navigate, useLocation } from "@reach/router";
 import { Button, Flex } from "antd";
 import colors from "../../constants/colours";
 import { useEffect, useRef, useState } from "react";
@@ -23,6 +23,7 @@ const Login: React.FC<ILoginProps> = () => {
     name: "",
   });
 
+  const { signup } = useLocation().state as { signup?: boolean } || { signup: false };
   useAuthRedirect();
 
   function setValue(e: React.ChangeEvent<HTMLInputElement>) {
@@ -160,7 +161,7 @@ const Login: React.FC<ILoginProps> = () => {
         >
           {" "}
           {/* Welcome To ZenfitX!{" "} */}
-          One step to go!
+          {signup ? "Welcome To ZenfitX!" : "One step to go!"}
         </span>
         {/* <span
           style={{

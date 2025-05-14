@@ -10,6 +10,7 @@ import Pickleball from "../../images/home/Pickleball.png";
 import { Carousel } from "react-responsive-carousel";
 import { Mixpanel } from "../../mixpanel/init";
 import Loader from "../../components/Loader";
+import { navigate } from "@reach/router";
 
 interface Onboarding {
   setOnboarding: (val: boolean) => void;
@@ -60,13 +61,15 @@ const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
 				<button
 					className="obBtn"
 					onClick={() => {
-						setOnboarding(true);
+						// setOnboarding(true);
             setShowLoader(true);
 						Mixpanel.track("clicked_explore_now_on_onboarding_page");
+						navigate('/login', { state: { signup: true } });
             // navigate('/');
 					}}
 				>
-					Explore Now
+					{/* Explore Now */}
+					Login/Signup
 				</button>
 			</div>
 		</>

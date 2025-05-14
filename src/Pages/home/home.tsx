@@ -225,7 +225,8 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   // Set the 'onboarding' cookie to 'done' and expire it after 1 day
   const showOnBoarding = () => {
     return (
-      !onboarding && !userDetails?.id && getCookie("onboarding") !== "done"
+      // !onboarding && !userDetails?.id && getCookie("onboarding") !== "done"
+      !userDetails?.id
       // !userDetails?.id && getCookie("onboarding") !== "done"
     );
   };
