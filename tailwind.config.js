@@ -17,7 +17,7 @@ module.exports = {
         'gray': 'rgba(105, 105, 105, 1)',
         'activity-name-checkout-page': 'rgba(33, 33, 33, 0.75)',
         '#626262': 'rgba(98, 98, 98, 1)',
-        'activity-description': 'rgba(105, 105, 105, 1)'
+        'activity-description': 'rgba(105, 105, 105, 1)' 
       },
       backgroundColor: {
         'discountStrip': 'rgba(11, 156, 93, 1)',
