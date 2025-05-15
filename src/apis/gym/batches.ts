@@ -4,13 +4,15 @@ export async function getGymBatchesForDate({
   id,
   date,
   activity,
+  userId,
 }: {
   id: number;
   date: string;
   activity: string;
+  userId: string;
 }) {
   const result = await networkAdapter.get(
-    `/gyms/batch/?gymId=${id}&date=${date}&activity=${activity}`
+    `/gyms/batch/?gymId=${id}&date=${date}&activity=${activity}&userId=${userId}`
   );
   return result.data;
 }

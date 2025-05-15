@@ -116,7 +116,7 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
   const { mutate: _getActivityById } = useMutation({
     mutationFn: getActivityById,
     onSuccess: (result) => {
-      console.log(result.batch);
+      // console.log(result.batch);
       setBatchDetails(result.batch);
     },
     onError: (error) => {
@@ -160,7 +160,10 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
   }, [batchDetails, pastAppBookings]);
 
   useEffect(() => {
-    _getActivityById(batchId);
+    const userId = window.localStorage["zenfitx-user-details"]
+      ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || "0"
+      : "0";
+    _getActivityById({id: batchId.toString(), userId: userId.toString()});
   }, []);
 
   useEffect(() => {

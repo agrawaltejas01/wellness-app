@@ -58,7 +58,10 @@ const BatchCheckoutBookingV2: React.FC<IClassCheckout> = () => {
     });
 
     useEffect(() => {   
-        _getActivityById(batchId);
+        const userId = window.localStorage["zenfitx-user-details"]
+                                ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || "0"
+                                : "0";
+        _getActivityById({id: batchId, userId: userId.toString()});
     }, [batchId]);
 
     useEffect(() => {
