@@ -24,8 +24,8 @@ export async function getGymById(id: string) {
   return result.data;
 }
 
-export async function getActivityById(id: string) {
-  const result = await networkAdapter.get(`gyms/batch/byBatchId?batchId=${id}`);
+export async function getActivityById({id, userId}: {id: string, userId: string }) {
+  const result = await networkAdapter.get(`gyms/batch/byBatchId?batchId=${id}&userId=${userId}`);
   return result.data;
 }
 

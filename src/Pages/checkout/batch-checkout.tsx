@@ -80,6 +80,10 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   const [showLevelSelector, setShowLevelSelector] = useState(false);
   const [userGameLevel, setUserGameLevel] = useState<string | null>(null);
 
+  const userId = window.localStorage["zenfitx-user-details"]
+    ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || "0"
+    : "0";
+
   const handleLevelSelect = (level: string) => {
     setUserGameLevel(level);
     setShowLevelSelector(false);
@@ -152,7 +156,7 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
     onError: (error) => {
       console.error("Error using new API, falling back to old one:", error);
       // Fall back to the old API on error
-      _getActivityById(batchId);
+      _getActivityById({id: batchId, userId: userId});
     },
   });
 

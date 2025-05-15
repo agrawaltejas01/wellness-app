@@ -103,7 +103,10 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
     const isCoplayerCardEnabled = COPLAYER_CARD_ENABLED.includes(batchDetails?.activity?.toUpperCase() || "");
 
     useEffect(() => {
-        _getActivityById(batchId);
+      const userId = window.localStorage["zenfitx-user-details"]
+                                  ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || "0"
+                                  : "0";
+        _getActivityById({id: batchId.toString(), userId: userId.toString()});
         _getCoplayers(batchId);
         setGotCoplayers(true);
         // setPlayers([{name: "Pratik", level: "Beginner", noOfBookings: 1, gamesPlayed: 0}, {name: "Nikita", level: "Amateur", noOfBookings: 2, gamesPlayed: 5}, {name: "Whiskey", level: "Intermediate", noOfBookings: 3, gamesPlayed: 23}]);

@@ -231,7 +231,11 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
 
 
     useEffect(() => {
-        _getActivityById(batchId);
+        const userId = window.localStorage["zenfitx-user-details"]  
+                        ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || "0"
+                        : "0";
+        console.log(userId, "userId");
+        _getActivityById({id: batchId, userId: userId.toString()});
     }, [batchId]);
 
 

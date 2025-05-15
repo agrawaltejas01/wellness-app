@@ -82,6 +82,10 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   const urlParams = new URLSearchParams(window.location.search);
   const dateFromURL = urlParams.get("date");
 
+  const userId = window.localStorage["zenfitx-user-details"]
+    ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || "0"
+    : "0";
+
   useEffect(() => {
     const initialDate = dateFromURL || formatDate(new Date()).isoDate;
     setSelectedDate(initialDate);
@@ -181,6 +185,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           id: gym.gymId,
           date: result[0],
           activity: selectedActivity,
+          userId: userId,
         });
       } else if (gym?.isOnlyWeekend) {
         _getGymBatchesForSchedulePage({
@@ -192,6 +197,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           id: gym?.gymId as number,
           date: selectedDate,
           activity: selectedActivity,
+          userId: userId,
         });
       }
     }
@@ -616,6 +622,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
             id: gym?.gymId ?? 0,
             date: dateString,
             activity: selectedActivity,
+            userId: userId,
           });
         }}
       >
@@ -748,6 +755,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                   id: gym.gymId,
                   date: selectedDate,
                   activity: activity,
+                  userId: userId,
                 });
               }}
               reposition
