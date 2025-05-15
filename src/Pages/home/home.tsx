@@ -226,7 +226,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   const showOnBoarding = () => {
     return (
       // !onboarding && !userDetails?.id && getCookie("onboarding") !== "done"
-      !userDetails?.id 
+      !userDetails?.id
       // !userDetails?.id && getCookie("onboarding") !== "done"
     );
   };

@@ -9,7 +9,7 @@ import SkillLevelInput from "./skill-input";
 import BatchCheckoutV2 from "./batch-checkout-v2";
 import Home from "../home/home";
 import CheckoutV3 from "./checkout-v3";
-import { ACTIVITY_NAME_TO_ID_MAP } from "../../constants/activities";
+import { ACTIVITY_NAME_TO_ID_MAP, COPLAYER_CARD_ENABLED } from "../../constants/activities";
 import Loader from "../../components/Loader";
 interface IClassCheckout extends RouteComponentProps {}
 
@@ -58,7 +58,10 @@ const BatchCheckoutBookingV2: React.FC<IClassCheckout> = () => {
     });
 
     useEffect(() => {   
-        _getActivityById(batchId);
+        const userId = window.localStorage["zenfitx-user-details"]
+                                ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || "0"
+                                : "0";
+        _getActivityById({id: batchId, userId: userId.toString()});
     }, [batchId]);
 
     useEffect(() => {
@@ -77,7 +80,11 @@ const BatchCheckoutBookingV2: React.FC<IClassCheckout> = () => {
             setShowSkillInput(false);
             setLoading(false);
         } else {
-            if(userId && batchId) {
+            if(batchDetails?.activity.toUpperCase() == "FOOTBALL" || (batchDetails?.slots && batchDetails?.slots > 6)) {
+                setShowSkillInput(false);
+            } else if(!COPLAYER_CARD_ENABLED.includes(batchDetails?.activity.toUpperCase() || "")) {
+                setShowSkillInput(false);
+            } else if(userId && batchId) {
                 _getUserSkillLevel({userId, batchId: Number(batchId)});
                 console.log(`skillLevel: ${skillLevel}`);
                 

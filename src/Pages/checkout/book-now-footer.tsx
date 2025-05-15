@@ -552,7 +552,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
                 className={showDiscount ? "discountedAmount" : ""}
               >
                 {Rs}
-                {props.totalAmount}
+                {props.totalAmount + (props.totalSavings || 0)}
               </span>
             </Flex>
             <button

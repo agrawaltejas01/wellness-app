@@ -21,6 +21,7 @@ import { formatDate, formatTimeIntToAmPm } from "../../utils/date";
 import Circle from "../../components/circle";
 import Loader from "../../components/Loader";
 import {ReactComponent as LocationIcon} from '../../images/utils/location-icon.svg';
+import { message } from "antd";
 
 interface IClassCheckout extends RouteComponentProps {
 }
@@ -46,6 +47,7 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
     const [isFromApp, setIsFromApp] = useState(false);
     const [pastAppBookings, setPastAppBookings] = useState({});
     const { COPLAYER_CARD_ENABLED } = require("../../constants/activities");
+    const [isShareButtonClicked, setIsShareButtonClicked] = useState(false);
 
     const batchId = window.location.pathname.split("/")[3];
 
@@ -101,7 +103,10 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
     const isCoplayerCardEnabled = COPLAYER_CARD_ENABLED.includes(batchDetails?.activity?.toUpperCase() || "");
 
     useEffect(() => {
-        _getActivityById(batchId);
+      const userId = window.localStorage["zenfitx-user-details"]
+                                  ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || "0"
+                                  : "0";
+        _getActivityById({id: batchId.toString(), userId: userId.toString()});
         _getCoplayers(batchId);
         setGotCoplayers(true);
         // setPlayers([{name: "Pratik", level: "Beginner", noOfBookings: 1, gamesPlayed: 0}, {name: "Nikita", level: "Amateur", noOfBookings: 2, gamesPlayed: 5}, {name: "Whiskey", level: "Intermediate", noOfBookings: 3, gamesPlayed: 23}]);
@@ -118,6 +123,39 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
         setSpotsLeft(batchDetails?.slots ? batchDetails?.slots - batchDetails?.slotsBooked : 0);
         setSpotsTotal(batchDetails?.slots ? batchDetails?.slots : 0);
     }, [batchDetails]);
+
+    const shareUrl = window.location.href;
+
+    const handleShare = () => {
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        message.success("Link copied to clipboard! You can now paste it to share.");
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+        message.error("Failed to copy link. Please try again.");
+      });
+    };
+
+
+    useEffect(() => {
+      const shareButton = document.getElementById("share-button");
+      shareButton?.addEventListener("click", () => {
+        if (navigator.share && gotGymDetails && gotBatchDetails) {
+          navigator
+            .share({
+              title: "ZenfitX",
+              text: `Hey, Join me for ${batchDetails?.activityName} at ${("0" + batchDetails?.startTime.toString()).slice(-4).substring(0, 2)}:00 on ${new Date(`${batchDetails?.date}`).toDateString()} at the ${gym?.name}. Let's sweat it out together! 😬`,
+              url: window.location.href,
+            })
+            .then(() => console.log("Successful share"))
+            .catch((error) => console.log("Error sharing", error));
+        } else {
+          console.log("Share not supported on this browser, do it the old way.");
+        }
+      });
+      shareButton?.removeEventListener("click", () => {
+        setIsShareButtonClicked(false);
+      });
+    }, [isShareButtonClicked, gotBatchDetails, gotGymDetails]);
 
     const gymId = batchDetails?.gymId;
     const activityName = batchDetails?.activityName ? batchDetails?.activityName : "";
@@ -139,7 +177,7 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
              style={{ backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0)), url(${batchDetails?.image || require('../../images/utils/pickleball.png')})` }}>
           <div className="flex flex-row justify-between pl-2 pt-2 pr-2">
             <BackButton onClick={() => navigateToHome()} />
-            <ShareButton />
+            <ShareButton id="share-button" onClick={() => setIsShareButtonClicked(true)} />
           </div>
           <div className="flex flex-col px-6 text-white ">
             <p className="text-sm font-normal font-jakarta pt-3">{activity.toLowerCase()}</p>

@@ -21,25 +21,25 @@ const skillLevels = [
         id: 1,
         name: "Beginner",
         symbol: "B",
-        description: "No game played before"
+        description: { 1: "1-5 games played before", 13: "No game played before" }
     },
     {
         id: 2,
         name: "Amateur",
         symbol: "A",
-        description: "1+ game played before"
+        description: { 1: "5-15 games played before", 13: "1+ game played before" }
     },
     {
         id: 3,
         name: "Intermediate",
         symbol: "I",
-        description: "3+ games played before"
+        description: { 1: "15+ games played before", 13: "3+ games played before" }
     },
     {
         id: 4,
         name: "Professional",
         symbol: "P",
-        description: "15+ games played before"
+        description: { 1: "50+ games played before", 13: "15+ games played before" }
     }
 ]
 
@@ -110,7 +110,10 @@ const SkillLevelInput = ({userId, activityId, batchId}: {userId: number, activit
                     />
                     <div style={{ fontSize: '16px', color: 'black' }} className="flex flex-col">
                         <p className="font-bold"> {skillLevel.name}</p>
-                        <p className="text-sm">{skillLevel.description}</p>
+                        <p className="text-sm">
+                          {skillLevel.description[activityId as keyof typeof skillLevel.description] || 
+                           skillLevel.description[13] /* fallback to default description */}
+                        </p>
                     </div>
                     </div>
                     {selectedSkillLevel === skillLevel.name ? (
@@ -129,7 +132,7 @@ const SkillLevelInput = ({userId, activityId, batchId}: {userId: number, activit
             <hr className="my-3" />
             <div className="flex flex-row my-2 rounded-lg pb-2">
                 <button className="bg-black font-jakarta font-bold text-base text-white py-3 rounded-lg w-full text-center" onClick={handleConfirm}>
-                    {isClicked ? (selectedSkillLevel === "UNKNOWN" ? "Confirm" : `${skillLevelMessageMap[selectedSkillLevel as SkillLevel]}`) : "Confirm"}
+                    {isClicked ? (selectedSkillLevel === "UNKNOWN" ? "Confirm" : "Confirming...") : "Confirm"}
                 </button>
             </div>
         </div>

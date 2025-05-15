@@ -38,6 +38,11 @@ export function shouldShowDiscount(
   isFromApp: boolean,
   pastAppBookings: PastAppBookingObject,
 ): boolean {
+  // If request is not from app, don't show discount
+  if(!isFromApp) {
+    return false;
+  }
+
   //Case 1: If gym is not offering any discount
   if(gym.discountType === "NONE" || gym.discountType === "" || gym.offerType === EOfferType.BATCH_WITH_GUESTS){
     return false;

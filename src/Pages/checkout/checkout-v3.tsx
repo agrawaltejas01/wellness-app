@@ -181,7 +181,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
 
     useEffect(() => {
         const userSource = window?.platformInfo?.platform || "web";
-        const appFlag = userSource != "web" ? true : false;
+        const appFlag = userSource !== "web" ? true : false;
         setIsFromApp(appFlag);
         window.isFromApp = appFlag;
         const userId = window.localStorage["zenfitx-user-details"]
@@ -215,10 +215,10 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
 
     useEffect(() => {
         if (batchDetails) {
-          if (!userDetails) {
-            setShowDiscount(true);
-          } else if (!isFromApp) {
+          if (!isFromApp) {
             setShowDiscount(false);
+          } else if (!userDetails) {
+            setShowDiscount(true);
           } else if (pastAppBookings?.[batchDetails.gymId]) {
             setShowDiscount(false);
           } else {
@@ -229,7 +229,11 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
 
 
     useEffect(() => {
-        _getActivityById(batchId);
+        const userId = window.localStorage["zenfitx-user-details"]  
+                        ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || "0"
+                        : "0";
+        console.log(userId, "userId");
+        _getActivityById({id: batchId, userId: userId.toString()});
     }, [batchId]);
 
 
@@ -311,9 +315,9 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
     
           setTotalAmount(newTotalAmount);
           setTotalSavings(discount);
-          if (batchDetails.discountType == "PERCENTAGE") {
-            batchDetails.offerPercentage = (discount * 100) / (price * noOfGuests);
-          }
+        //   if (batchDetails.discountType == "PERCENTAGE") {
+        //     batchDetails.offerPercentage = (discount * 100) / (price * noOfGuests);
+        //   }
         } else if (!showDiscount) {
           let finalPrice = (batchDetails?.price as number) * noOfGuests;
           let discount = 0;
@@ -501,14 +505,14 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                         {/* <p className="text-sm text-gray font-xs">No games yet</p> */}
                     </div>
                     <div className="flex flex-col" onClick={() => { navigate(`/checkout/batch/${batchId}/booking?edit=true`, {replace: true}) }}>
-                        {skillLevel != "" && <SkillCapsule level={skillLevel as SkillLevel} editable={true} />}
+                        {skillLevel != "" && (batchDetails?.slots && batchDetails?.slots <= 6) && <SkillCapsule level={skillLevel as SkillLevel} editable={true} />}
                     </div>
                 </div>
             </div>}
             {isCoplayerCardEnabled && <div className="flex flex-row px-4 pt-4">
                 <div className="flex flex-col justify-between w-full bg-white shadow-gray rounded-xl">
                     <SpotsLeftCheckout spotsLeft={spotsLeft} spotsTotal={spotsTotal} noOfGuests={noOfGuests} />
-                    <div className="flex flex-row justify-between px-4">
+                    {batchDetails?.guestsAllowed && <div className="flex flex-row justify-between px-4">
                         <div className="flex flex-col pb-4">
 
                             <p className="text-sm font-sm">Book Spots</p>
@@ -519,7 +523,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                             <p className="text-sm font-bold font-sm px-4">{noOfGuests}</p>
                             <IncrementDecrementButton radius={12} borderColor="#212121" borderStyle="solid" backgroundColor="#FFFFFF" character="+" fontColor="#000000" disabled={noOfGuests === spotsLeft} onClick={() => manageGuests(true)}  />
                         </div>
-                    </div>
+                    </div>}
                 </div>
             </div>}
             <div className="flex flex-row px-4 pt-4">
@@ -529,7 +533,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                         <p className="text-sm font-bold">{Rs}{totalAmount}</p>
                     </div>
                     <div className={`flex flex-row justify-between px-4 ${totalSavings > 0 ? "pt-2 pb-4" : " "}`}>
-                        {totalSavings > 0 && <p className="text-xs text-gray font-sm">Total Savings: {Rs}{totalSavings}</p>}
+                        {totalSavings > 0 && <p className="text-xs text-gray font-sm">Total saved {Rs}{totalSavings}</p>}
                     </div>
                     <hr className="border-1 border-separate mx-4 border-gray border-spacing-16" />
                     <div className="flex flex-row justify-between px-4 pt-4 pb-6">

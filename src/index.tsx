@@ -32,7 +32,7 @@ function mobileRedirect() {
   const isAndroid = /android/i.test(navigator.userAgent.toLowerCase());
   const appScheme = isAndroid 
   ? "zenfitx://" + currentPath.substring(1) 
-  : "zenfitx://" + currentPath.substring(1);
+  : "zenfitx://zenfitx.in/" + currentPath.substring(1);
   
   const appStoreLink = isAndroid
     ? "https://play.google.com/store/apps/details?id=com.zenfitx.zenfitxapp"
@@ -45,13 +45,14 @@ function mobileRedirect() {
   const timeout = setTimeout(() => {
     if (!appOpened) {
       // Clear the page content for cleaner transition
-      document.body.innerHTML = "";
-      document.body.style.backgroundColor = "#FFFFFF";
+      // document.body.innerHTML = "";
+      // document.body.style.backgroundColor = "#FFFFFF";
       
-      // Redirect to app store
-      window.location.href = appStoreLink;
+      // // Redirect to app store
+      // window.location.href = appStoreLink;
+      // alert("redirecting to app store");
     }
-  }, 1500);
+  }, 200);
   
   // Clear timeout if app opens
   const clearRedirectTimeout = () => {
@@ -75,6 +76,15 @@ function mobileRedirect() {
     window.location.href = intentUrl;
   } else {
     // For iOS, try universal links first (if configured), then custom scheme
+    // const universalLink = `https://zenfitx.in${currentPath}`;
+    // window.location.href = universalLink;
+    
+    // Small delay before trying custom scheme as fallback
+    // setTimeout(() => {
+    //   if (!appOpened) {
+    //     window.location.href = appScheme;
+    //   }
+    // }, 1000);
     window.location.href = appScheme;
   }
 }

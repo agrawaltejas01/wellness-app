@@ -48,7 +48,7 @@ const getPlatformInfo = () => {
   if (storedPlatformInfo) {
     return JSON.parse(storedPlatformInfo).platform !== 'web';
   }
-  return window?.platformInfo?.platform !== 'web' || false;
+  return false;
 };
 
 const getPastBookings = () => {
@@ -71,7 +71,6 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   const activityFromURl = new URLSearchParams(window.location.search).get(
     "activity",
   );
-  console.log(activityFromURl, "activityFromURl");
 
   const gymId = window.location.pathname.split("/")[2] || "";
 
@@ -82,6 +81,10 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
 
   const urlParams = new URLSearchParams(window.location.search);
   const dateFromURL = urlParams.get("date");
+
+  const userId = window.localStorage["zenfitx-user-details"]
+    ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || "0"
+    : "0";
 
   useEffect(() => {
     const initialDate = dateFromURL || formatDate(new Date()).isoDate;
@@ -137,8 +140,6 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   const { mutate: _getGymBatchesForSchedulePage } = useMutation({
     mutationFn: getGymBatchesForSchedulePage,
     onSuccess: (result) => {
-      console.log(result.data);
-
       setBatches(Object.values(result.data).flat() as IBatch[]);
       if (!Object.values(result.data).flat().length)
         errorToast("No batches found");
@@ -184,6 +185,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           id: gym.gymId,
           date: result[0],
           activity: selectedActivity,
+          userId: userId,
         });
       } else if (gym?.isOnlyWeekend) {
         _getGymBatchesForSchedulePage({
@@ -195,6 +197,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           id: gym?.gymId as number,
           date: selectedDate,
           activity: selectedActivity,
+          userId: userId,
         });
       }
     }
@@ -616,6 +619,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
             id: gym?.gymId ?? 0,
             date: dateString,
             activity: selectedActivity,
+            userId: userId,
           });
         }}
       >
@@ -748,6 +752,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                   id: gym.gymId,
                   date: selectedDate,
                   activity: activity,
+                  userId: userId,
                 });
               }}
               reposition

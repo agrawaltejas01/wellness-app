@@ -138,6 +138,10 @@ const BatchSchedule: React.FC<IBatchSchedule> = ({ gymData }) => {
   const [selectedActivity, setSelectedActivity] = useState("all");
 
   const [batches, setBatches] = useState(gymData.batches);
+  const userId = window.localStorage["zenfitx-user-details"]
+        ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || "0"
+        : "0";
+
 
   const { mutate: _getGymBatchesForDate } = useMutation({
     mutationFn: getGymBatchesForDate,
@@ -169,7 +173,7 @@ const BatchSchedule: React.FC<IBatchSchedule> = ({ gymData }) => {
       fontWeight: "bold",
     };
 
-    const dateTile = (number: number, day: string, dateString: string) => (
+    const dateTile = (number: number, day: string, dateString: string, userId: string) => (
       <Flex
         vertical
         justify="center"
@@ -180,12 +184,14 @@ const BatchSchedule: React.FC<IBatchSchedule> = ({ gymData }) => {
             gymId: gymData.gymId,
             date: dateString,
             day: `${number}-${day}`,
+            userId: userId,
           });
           setSelectedDate(dateString);
           _getGymBatchesForDate({
             id: gymData.gymId,
             date: dateString,
             activity: selectedActivity,
+            userId: userId,
           });
         }}
       >
@@ -231,7 +237,7 @@ const BatchSchedule: React.FC<IBatchSchedule> = ({ gymData }) => {
         justify="flex-start"
       >
         {weekDateAndDays.map(({ number, day, dateString }) => (
-          <span key={dateString}> {dateTile(number, day, dateString)} </span>
+          <span key={dateString}> {dateTile(number, day, dateString, userId)} </span>
         ))}
       </Flex>
     );
@@ -253,6 +259,7 @@ const BatchSchedule: React.FC<IBatchSchedule> = ({ gymData }) => {
               id: gymData.gymId,
               date: selectedDate,
               activity: activity,
+              userId: userId,
             });
           }}
         />
