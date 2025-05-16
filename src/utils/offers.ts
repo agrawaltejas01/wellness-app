@@ -1,4 +1,4 @@
-import { EOfferType, IGymCard, IGymDetails } from "../types/gyms";
+import { EOfferType, IBatch, IGymCard, IGymDetails } from "../types/gyms";
 import IUser from "../types/user";
 
 interface PastAppBookingObject {
@@ -37,9 +37,18 @@ export function shouldShowDiscount(
   userDetails: IUser | null,
   isFromApp: boolean,
   pastAppBookings: PastAppBookingObject,
+  batch: IBatch | null
 ): boolean {
   // If request is not from app, don't show discount
   if(!isFromApp) {
+    return false;
+  }
+
+  if(batch?.offerPercentage === 0 || gym.offerPercentage === 0) {
+    return false;
+  }
+
+  if(batch?.discountType === "NONE" || batch?.discountType === "" || batch?.offerType === EOfferType.BATCH_WITH_GUESTS){
     return false;
   }
 

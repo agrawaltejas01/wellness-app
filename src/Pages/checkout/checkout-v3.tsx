@@ -217,13 +217,15 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
         if (batchDetails) {
           if (!isFromApp) {
             setShowDiscount(false);
+          } else if (batchDetails.offerPercentage === 0) {
+            setShowDiscount(false);
           } else if (!userDetails) {
             setShowDiscount(true);
           } else if (pastAppBookings?.[batchDetails.gymId]) {
             setShowDiscount(false);
           } else {
-        setShowDiscount(true);
-        }
+            setShowDiscount(true);
+          }
         }
     }, [batchDetails, pastAppBookings]);
 
