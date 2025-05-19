@@ -207,11 +207,9 @@ function getListOfCenters(
   return (
     <Flex flex={1} vertical justify="space-evenly" style={{ width: "100%" }}>
       {/* {generateCards} */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {gymCardsData.map((gymCard) => {
           return cardWidget(gymCard, isFromApp, pastAppBookings);
         })}
-      </div>
     </Flex>
   );
 }
