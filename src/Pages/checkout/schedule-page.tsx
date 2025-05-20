@@ -719,7 +719,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
               <div className="backBtn" onClick={() => goToGymPage()}>
                 {backBtn()}
               </div>
-              <div className="gymNames" style={{ fontSize: gym?.name?.length > 30 ? "18px" : "20px" }} >{gym?.name}</div>
+              <div className="gymNames" style={{ fontSize: gym?.name?.length > 30 ? "15px" : "20px" }} >{gym?.name}</div>
               {gym?.area && (
                 <div className="locationName">
                   <span>{locationIcon()}</span>
