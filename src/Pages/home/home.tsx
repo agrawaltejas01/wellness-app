@@ -28,7 +28,7 @@ import MetaPixel from "../../components/meta-pixel";
 import {handleRefresh} from '../../utils/refresh';
 import ForceUpdatePopup from "../../components/ForceUpdatePopup";
 import GoToApp from "../../components/go-to-app";
-
+import { saveNotificationToken } from "../../apis/notifications/notifications";  
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -135,6 +135,13 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     },
   });
 
+  const { mutate: _saveNotificationToken } = useMutation({
+    mutationFn: saveNotificationToken,
+    onError: () => {},
+    onSuccess: (result) => {
+      console.log("notification token stored successfully!");
+    },
+  });
   
 
   // useEffect(()=>{
@@ -169,10 +176,17 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     const appFlag = userSource != 'web' ? true : false;
     setIsFromApp(appFlag);
     window.isFromApp = appFlag;
-    if(!showOnBoarding()) {
-      window?.ReactNativeWebView?.postMessage("notification alert");
-    }
   }, [])
+
+  useEffect(() => {
+    if(userDetails?.id) {
+      window?.ReactNativeWebView?.postMessage("notification alert");
+      const notificationToken = window.localStorage["token"];
+      if (notificationToken) {
+        _saveNotificationToken({ userId: userDetails?.id as number, token: notificationToken });
+      }
+    }
+  }, [userDetails])
 
   useEffect(() => {
     if (onboarding) {
