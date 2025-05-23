@@ -330,10 +330,11 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
           userDetails,
           Boolean(isFromApp),
           pastAppBookings,
+          batchDetails ? batchDetails : null
         ),
       );
     }
-  }, [gymData, isFromApp, pastAppBookings, comingFrom, userDetails]);
+  }, [gymData, isFromApp, pastAppBookings, comingFrom, userDetails, batchDetails]);
 
   useEffect(() => {
     const userSource = window?.platformInfo?.platform || "web";

@@ -263,8 +263,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
 
   function generateBatchTile(gym: IGymDetails, batches: IBatch[]) {
     const batchTile = (batch: IBatch) => {
-      const { maxDiscount, offerPercentage, discountType } = gym;
-      const { price } = batch;
+      const { maxDiscount, offerPercentage, discountType, price } = batch;
       let finalPrice =
         price - maxDiscount > (price * (100 - offerPercentage)) / 100
           ? price - maxDiscount
@@ -408,6 +407,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                       userDetails,
                       isFromApp,
                       pastAppBookings,
+                      batch
                     ) ? (
                       discountedPrice(
                         batch.price,
@@ -446,6 +446,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                         userDetails,
                         isFromApp,
                         pastAppBookings,
+                        batch
                       ) && batch.slots != 1
                         ? COUPLE_BATCH_IDS.includes(batch.batchId)
                           ? "per couple"
@@ -466,6 +467,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                     userDetails,
                     isFromApp,
                     pastAppBookings,
+                    batch
                   ) && batch.discountType == "PERCENTAGE"
                     ? "11px"
                     : "0px",
@@ -479,8 +481,9 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                 userDetails,
                 isFromApp,
                 pastAppBookings,
+                batch
               ) && batch.discountType == "PERCENTAGE"
-                ? `${offerPercentage}% off upto ${Rs}${maxDiscount} on 1st booking at this center`
+                ? `${batch.offerPercentage}% off upto ${Rs}${batch.maxDiscount} on 1st booking at this center`
                 : `.`}
             </Flex>
           </Flex>

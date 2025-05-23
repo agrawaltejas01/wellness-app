@@ -12,6 +12,7 @@ import { plusDetailsAtom, userDetailsAtom } from "../../atoms/atom";
 import IUser, { IPlusDetails } from "../../types/user";
 import { Mixpanel } from "../../mixpanel/init";
 import { shouldShowDiscount } from "../../utils/offers";
+import { discount } from "../../constants/gym-discount";
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
 }
@@ -148,7 +149,7 @@ function getListOfCenters(
     const { medias, name, activities, area, minPrice, isExclusive, maxDiscount, offerPercentage, discountType } = gymCard;
     console.log(medias, "media");
 
-    let showDiscount = shouldShowDiscount(gymCard, userDetails, isFromApp, pastAppBookings);
+    let showDiscount = shouldShowDiscount(gymCard, userDetails, isFromApp, pastAppBookings, null);
     const discountText = discountType == 'PERCENTAGE' ? `${offerPercentage}% off upto ${Rs}${maxDiscount} on your 1st booking at this center` :
                          discountType == 'FLAT' ? `FLAT ${offerPercentage}% off on your 1st booking at this center` : ``;
 
@@ -193,7 +194,7 @@ function getListOfCenters(
                 {discountIcon()}
                 {/* <span className="dTxt">{discountTxt}</span> */}
                 <span className="dTxt">{
-                discountText
+                discount[gymCard.gymId as keyof typeof discount].replace("Rs.", `₹`)
                 }</span>
               </div>
             </div>
@@ -206,9 +207,9 @@ function getListOfCenters(
   return (
     <Flex flex={1} vertical justify="space-evenly" style={{ width: "100%" }}>
       {/* {generateCards} */}
-      {gymCardsData.map((gymCard) => {
-        return cardWidget(gymCard, isFromApp, pastAppBookings);
-      })}
+        {gymCardsData.map((gymCard) => {
+          return cardWidget(gymCard, isFromApp, pastAppBookings);
+        })}
     </Flex>
   );
 }

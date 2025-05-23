@@ -172,6 +172,7 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
   }
 
   return (
+    <ScrollableContent bottomPadding={100}>
     <div className="flex flex-col">
         <div className="flex flex-col bg-gradient-to-r from-black to-transparent bg-cover bg-center"
              style={{ backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0)), url(${batchDetails?.image || require('../../images/utils/pickleball.png')})` }}>
@@ -197,7 +198,6 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
           </div>
         </div>
         <div>
-        <ScrollableContent bottomPadding={100}>
           {isCoplayerCardEnabled && <SpotsLeft spotsLeft={spotsLeft} spotsTotal={spotsTotal} />}
           {isCoplayerCardEnabled && <CoplayerCard players={players} loading={!gotCoplayers} spotsLeft={spotsLeft} spotsTotal={spotsTotal}/>}
           {batchDetails?.aboutTheActivity && <AboutTheActivity aboutTheActivity={batchDetails?.aboutTheActivity} />}
@@ -215,9 +215,9 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
             forceBookNowCta={true}
           />
         )}
-        </ScrollableContent>
         </div>
       </div>
+      </ScrollableContent>
   )
   
 };

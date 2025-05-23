@@ -25,6 +25,7 @@ import { getPastAppBookings } from "../../apis/gym/activities";
 import { useMutation } from "@tanstack/react-query";
 import { errorToast } from "../../components/Toast";
 import { Rs } from "../../constants/symbols";
+import { discount } from "../../constants/gym-discount";
 
 const maxChar = 250;
 
@@ -78,6 +79,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
     userDetails,
     isFromApp,
     pastAppBookings,
+    null
   );
   const [showTimeOptions, setShowTimeOptions] = useState<Boolean>(false);
 
@@ -301,7 +303,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
     console.log({ discountText });
     return showDiscount ? (
       // <div className="discountLine1">{calculateDiscountedPrice}</div>
-      <div className="discountLine1">{discountText}</div>
+      <div className="discountLine1">{discount[gymData.gymId as keyof typeof discount].replace("Rs.", `₹`)}</div>
     ) : null;
   };
 
