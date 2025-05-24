@@ -22,7 +22,8 @@ const CancelConfirmation: React.FC<CancelConfirmationProps> = ({ bookingId, reas
             message.success("Booking cancelled successfully");
             setShowSuccessModal(true);
         },
-        onError: (error) => {
+        onError: (error: any) => {
+            alert(error);
             errorToast("Error in cancelling booking");
             setShowErrorModal(true);
         },
