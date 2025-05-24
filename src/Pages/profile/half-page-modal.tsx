@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ReactNode } from 'react';
-
+import './style.css';
 // Type definitions
 interface BottomUpModalProps {
   isOpen: boolean;
@@ -89,7 +89,7 @@ const BottomUpModal: React.FC<BottomUpModalProps> = ({
 
   return (
     <div
-      className={`fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end justify-center ${overlayClassName}`}
+      className={`fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end justify-center ${overlayClassName} ${isOpen ? "slide-in" : "slide-out"}`}
       style={{ 
         backdropFilter: 'blur(3px)',
         WebkitBackdropFilter: 'blur(3px)'
