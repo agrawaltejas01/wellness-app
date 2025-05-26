@@ -35,7 +35,7 @@ const CancellationDetails: React.FC<{booking: IBookings, setShowCancelReasonModa
         refundConditions.sort((a: any, b: any) => b.minutes_before - a.minutes_before);
 
         for(const condition of refundConditions) {
-            if(condition.minutes_before >= timeDifferenceInMinutes) {
+            if(condition.minutes_before < timeDifferenceInMinutes) {
                 refundAmount = booking.bookingPrice * (condition.refund_percentage / 100);
                 break;
             }
