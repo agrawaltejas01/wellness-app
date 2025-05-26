@@ -25,8 +25,10 @@ const CancellationDetails: React.FC<{booking: IBookings, setShowCancelReasonModa
 
         const currentTime = new Date();
         const bookingTime = new Date(booking.date);
-        bookingTime.setMinutes(booking.startTime);
-        const timeDifference = currentTime.getTime() - bookingTime.getTime();
+        const hours = Math.floor(booking.startTime / 100);
+        const minutes = booking.startTime % 100;
+        bookingTime.setHours(hours, minutes, 0, 0);
+        const timeDifference = bookingTime.getTime() - currentTime.getTime();
         const timeDifferenceInMinutes = timeDifference / (1000 * 60);
         let refundAmount = 0;
 
@@ -39,7 +41,7 @@ const CancellationDetails: React.FC<{booking: IBookings, setShowCancelReasonModa
                 refundAmount = booking.bookingPrice * (condition.refund_percentage / 100);
                 break;
             }
-        }
+        }  
         
         return refundAmount;
     }
