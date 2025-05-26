@@ -6,6 +6,9 @@ import { useState } from "react";
 
 
 const CancellationDetails: React.FC<{booking: IBookings, setShowCancelReasonModal: (show: boolean) => void, setShowCancelModal: (show: boolean) => void}> = ({booking, setShowCancelReasonModal, setShowCancelModal }) => {
+   
+    let refundDetailString = "No refund available";
+
     const calculateRefundAmount = (booking: IBookings) => {
         
         const refundPolicy = JSON.parse(booking?.refundPolicy || "{}");
@@ -39,13 +42,22 @@ const CancellationDetails: React.FC<{booking: IBookings, setShowCancelReasonModa
         for(const condition of refundConditions) {
             if(condition.minutes_before < timeDifferenceInMinutes) {
                 refundAmount = booking.bookingPrice * (condition.refund_percentage / 100);
+                
+                if(condition.refund_percentage === 100) {
+                    refundDetailString = `Full refund on cancellation at least ${condition.minutes_before / 60} hours before`;
+                } else {
+                    refundDetailString = `${condition.refund_percentage}% refund on cancellation at least ${condition.minutes_before} hours before`;
+                }
                 break;
             }
         }  
+
+        if(refundDetailString === "No refund available") {
+            refundDetailString = `No refund available on cancellation less than ${refundConditions[refundConditions.length - 1].minutes_before / 60} hours before`;
+        }
         
         return refundAmount;
     }
-
 
   return (
     <div className="flex flex-col gap-2">
@@ -62,13 +74,15 @@ const CancellationDetails: React.FC<{booking: IBookings, setShowCancelReasonModa
       <div className="flex flex-col">
         <div className="w-full font-bold text-gray bg-gray-100 border-gray-200 h-3"></div>
         <div className="flex flex-row justify-between border-gray-200 rounded-lg p-4">
-            <div className="text-m font-bold text-gray">Total Price</div>
+            <div className="text-m font-bold text-black">Total Price</div>
             <div className="text-m font-bold text-black">₹{booking.bookingPrice}</div>
         </div>
-        <div className="flex flex-row justify-between border-gray-200 rounded-lg p-4">
-            <div className="text-m font-bold text-gray">Refund Amount</div>
+        <div className="flex flex-row justify-between border-gray-200 rounded-lg px-4">
+            <div className="text-m font-bold text-black">Refund Amount</div>
             <div className="text-m font-bold text-black">₹{calculateRefundAmount(booking)}</div>
         </div>
+        {/* <div className="text-m font-bold text-gray">Refund Details</div> */}
+        <div className="text-xs font-normal text-gray px-4 pb-2">{refundDetailString}</div>
       </div>
       <div className="flex flex-col mx-4 mb-8 py-3 rounded-lg justify-center items-center bg-black text-m font-bold text-white" onClick={() => {setShowCancelReasonModal(true); setShowCancelModal(false)}}>
         Cancel 

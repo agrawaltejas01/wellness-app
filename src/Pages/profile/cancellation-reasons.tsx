@@ -56,7 +56,7 @@ export const CancellationReasons = ({ bookingId, selectedReason, setSelectedReas
                     ) : (
                         <Circle
                         radius={10}
-                        borderColor= "black"
+                        borderColor= "#C4CDD2"
                         borderStyle="solid"
                         backgroundColor= "white"
                         character=''
@@ -67,7 +67,12 @@ export const CancellationReasons = ({ bookingId, selectedReason, setSelectedReas
                 </div>
                 ))}
     </div>
-    <div className={`flex flex-col font-semibold text-m rounded-lg justify-center items-center py-3 mx-4 mb-8  ${selectedReason == ""  ? "text-gray bg-gray-200 pointer-events-none" : "text-white bg-black"}`} onClick={() => {setIsLoading(true); _cancelBooking({bookingId, reason: selectedReason});}}>
+    <div className={`flex flex-col font-semibold text-m rounded-lg justify-center items-center py-3 mx-4 mb-8 
+                     ${selectedReason == ""  ? "text-gray bg-gray-200 pointer-events-none" : "text-white bg-black"}`} 
+                     onClick={() => {
+                        setIsLoading(true);
+                      _cancelBooking({bookingId, reason: selectedReason});
+                      }}>
         {isLoading ? (
           <div className="flex flex-row items-center justify-center">
             <Loading className="animate-spin w-5 h-5 mr-2" /> Cancelling...

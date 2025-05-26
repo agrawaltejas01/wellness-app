@@ -326,8 +326,8 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking, isPast = fals
         </BottomUpModal>
       )} */}
       {showSuccessModal && (
-        <BottomUpModal isOpen={showSuccessModal} onClose={() => setShowSuccessModal(false)} showCloseButton={false}>
-          <CancellationSuccess isOpen={showSuccessModal} onClose={() => setShowSuccessModal(false)} />
+        <BottomUpModal isOpen={showSuccessModal} onClose={() => {setShowSuccessModal(false); setSelectedReason(""); navigate("/")}} showCloseButton={true}>
+          <CancellationSuccess booking={booking} isOpen={showSuccessModal} onClose={() => setShowSuccessModal(false)}/>
         </BottomUpModal>
       )}
       {showErrorModal && (
