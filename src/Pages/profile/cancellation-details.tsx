@@ -70,7 +70,7 @@ const CancellationDetails: React.FC<{booking: IBookings, setShowCancelReasonModa
             <div className="text-m font-bold text-black">₹{calculateRefundAmount(booking)}</div>
         </div>
       </div>
-      <div className="flex flex-col mx-4 mb-8 py-3 rounded-lg justify-center items-center bg-gray-100 text-m font-bold text-red-700" onClick={() => {setShowCancelReasonModal(true); setShowCancelModal(false)}}>
+      <div className="flex flex-col mx-4 mb-8 py-3 rounded-lg justify-center items-center bg-black text-m font-bold text-white" onClick={() => {setShowCancelReasonModal(true); setShowCancelModal(false)}}>
         Cancel 
       </div>
     </div>
