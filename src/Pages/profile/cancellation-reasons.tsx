@@ -10,6 +10,7 @@ import Circle from "../../components/circle";
 import { SkillLevel } from "../../components/skill-capsule";
 import { ReactComponent as TickMarkCircle } from "../../images/checkout/tick-mark-circle.svg";
 import { errorToast } from "../../components/Toast";
+import { ReactComponent as Loading } from "../../images/utils/loading.svg";
 
 export const CancellationReasons = ({ bookingId, selectedReason, setSelectedReason, setShowCancelReasonModal, setShowSuccessModal, setShowErrorModal }: {bookingId: string, selectedReason: string, setSelectedReason: (reason: string) => void, setShowCancelReasonModal: (show: boolean) => void, setShowSuccessModal: (show: boolean) => void, setShowErrorModal: (show: boolean) => void }) => {
     const reasons = [
@@ -22,16 +23,18 @@ export const CancellationReasons = ({ bookingId, selectedReason, setSelectedReas
   ];
 
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const { mutate: _cancelBooking} = useMutation({
     mutationFn: cancelBooking, 
     onSuccess: (result) => {
         message.success("Booking cancelled successfully");
-        // setShowCancelReasonModal(false);
+        setShowCancelReasonModal(false);
         setShowSuccessModal(true);
     },
     onError: (error) => {
         errorToast("Error in cancelling booking");
-        // setShowCancelReasonModal(false);
+        setShowCancelReasonModal(false);
         setShowErrorModal(true);
     },
 });
@@ -64,8 +67,12 @@ export const CancellationReasons = ({ bookingId, selectedReason, setSelectedReas
                 </div>
                 ))}
     </div>
-    <div className={`flex flex-col font-semibold text-m rounded-lg justify-center items-center py-3 mx-4 mb-8 ${selectedReason == ""  ? "text-gray bg-gray-200 pointer-events-none" : "text-white bg-black"}`} onClick={() => {_cancelBooking({bookingId, reason: selectedReason}); setShowCancelReasonModal(false);}}>
-        Cancel Booking
+    <div className={`flex flex-col font-semibold text-m rounded-lg justify-center items-center py-3 mx-4 mb-8  ${selectedReason == ""  ? "text-gray bg-gray-200 pointer-events-none" : "text-white bg-black"}`} onClick={() => {setIsLoading(true); _cancelBooking({bookingId, reason: selectedReason});}}>
+        {isLoading ? (
+          <div className="flex flex-row items-center justify-center">
+            <Loading className="animate-spin w-5 h-5 mr-2" /> Cancelling...
+          </div>
+        ) : "Cancel Booking"}
     </div>
     </div>
   );
