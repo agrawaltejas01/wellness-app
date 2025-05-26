@@ -9,8 +9,9 @@ import { navigate } from "@reach/router";
 import Circle from "../../components/circle";
 import { SkillLevel } from "../../components/skill-capsule";
 import { ReactComponent as TickMarkCircle } from "../../images/checkout/tick-mark-circle.svg";
+import { errorToast } from "../../components/Toast";
 
-export const CancellationReasons = ({ selectedReason, setSelectedReason, setShowCancelReasonModal, setShowCancelConfirmationModal }: {selectedReason: string, setSelectedReason: (reason: string) => void, setShowCancelReasonModal: (show: boolean) => void, setShowCancelConfirmationModal: (show: boolean) => void }) => {
+export const CancellationReasons = ({ bookingId, selectedReason, setSelectedReason, setShowCancelReasonModal, setShowSuccessModal, setShowErrorModal }: {bookingId: string, selectedReason: string, setSelectedReason: (reason: string) => void, setShowCancelReasonModal: (show: boolean) => void, setShowSuccessModal: (show: boolean) => void, setShowErrorModal: (show: boolean) => void }) => {
     const reasons = [
     "Change of plans",
     "Too much traffic",
@@ -19,6 +20,21 @@ export const CancellationReasons = ({ selectedReason, setSelectedReason, setShow
     "Weather condition is not suitable",
     "Other"
   ];
+
+
+  const { mutate: _cancelBooking} = useMutation({
+    mutationFn: cancelBooking, 
+    onSuccess: (result) => {
+        message.success("Booking cancelled successfully");
+        // setShowCancelReasonModal(false);
+        setShowSuccessModal(true);
+    },
+    onError: (error) => {
+        errorToast("Error in cancelling booking");
+        // setShowCancelReasonModal(false);
+        setShowErrorModal(true);
+    },
+});
 
 
   return (
@@ -48,8 +64,8 @@ export const CancellationReasons = ({ selectedReason, setSelectedReason, setShow
                 </div>
                 ))}
     </div>
-    <div className={`flex flex-col font-semibold text-m text-gray bg-gray-200 rounded-lg justify-center items-center py-3 mx-4 mb-8 ${selectedReason == ""  ? "opacity-50 pointer-events-none" : ""}`} onClick={() => {setShowCancelConfirmationModal(true); setShowCancelReasonModal(false)}}>
-        Continue
+    <div className={`flex flex-col font-semibold text-m rounded-lg justify-center items-center py-3 mx-4 mb-8 ${selectedReason == ""  ? "text-gray bg-gray-200 pointer-events-none" : "text-white bg-black"}`} onClick={() => {_cancelBooking({bookingId, reason: selectedReason}); setShowCancelReasonModal(false);}}>
+        Cancel Booking
     </div>
     </div>
   );

@@ -311,10 +311,10 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking, isPast = fals
           subtitle="Please select the reason for cancellation"
           showCloseButton={false}
         > 
-          <CancellationReasons selectedReason={selectedReason} setSelectedReason={setSelectedReason} setShowCancelReasonModal={setShowCancelReasonModal} setShowCancelConfirmationModal={setShowCancelConfirmationModal} />
+          <CancellationReasons bookingId={booking.bookingId} selectedReason={selectedReason} setSelectedReason={setSelectedReason} setShowCancelReasonModal={setShowCancelReasonModal} setShowSuccessModal={setShowSuccessModal} setShowErrorModal={setShowErrorModal} />
         </BottomUpModal>
       )}
-      {showCancelConfirmationModal && (
+      {/* {showCancelConfirmationModal && (
         <BottomUpModal 
           isOpen={showCancelConfirmationModal} 
           onClose={() => {setShowCancelConfirmationModal(false); setSelectedReason("")}} 
@@ -324,7 +324,7 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking, isPast = fals
         >
           <CancelConfirmation bookingId={booking.bookingId} reason={selectedReason} setShowCancelConfirmationModal={setShowCancelConfirmationModal} setShowCancelReasonModal={setShowCancelReasonModal} setShowSuccessModal={setShowSuccessModal} setShowErrorModal={setShowErrorModal} />
         </BottomUpModal>
-      )}
+      )} */}
       {showSuccessModal && (
         <BottomUpModal isOpen={showSuccessModal} onClose={() => setShowSuccessModal(false)} showCloseButton={false}>
           <CancellationSuccess isOpen={showSuccessModal} onClose={() => setShowSuccessModal(false)} />
