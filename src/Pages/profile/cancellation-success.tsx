@@ -15,7 +15,7 @@ const CancellationSuccess: React.FC<CancellationSuccessProps> = ({ isOpen, onClo
                 setCountdown(countdown - 1);
             } else {
                 onClose();
-                window.location.reload();
+                navigate("/");
             }
         }, 1000);
         return () => clearInterval(interval);
@@ -32,7 +32,7 @@ const CancellationSuccess: React.FC<CancellationSuccessProps> = ({ isOpen, onClo
                     <div className="flex flex-row justify-center text-black text-sm font-bold">Done</div>
                 </div> */}
                 <div className="w-full px-4 py-3 text-xs font-normal text-black text-center" >
-                    Redirecting to profile page in {countdown} seconds...
+                    Redirecting to home page in {countdown} seconds...
                 </div>
             </div>
         </div>
