@@ -8,7 +8,6 @@ const RefundPolicy: React.FC<{booking: IBookings}> = ({ booking }) => {
 
         const refundPolicyObject = JSON.parse(refundPolicy);
 
-        alert(typeof refundPolicy);
         if(!refundPolicy) {
             points.push("There is no refund policy for this booking");
             return points;
