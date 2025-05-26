@@ -46,9 +46,10 @@ interface BookingClassCard {
   } & {
     status?: string;
   };
+  isPast?: boolean;
 }
 
-const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
+const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking, isPast = false }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showCancelReasonModal, setShowCancelReasonModal] = useState(false);
@@ -142,9 +143,11 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
               </Flex>
             </Flex>
             <Flex vertical flex={1} align="flex-end">
-              <div style={{ cursor: "pointer", alignSelf: "flex-end"}} onClick={() => setShowCancelModal(true)}>
-                <MenuDotsSVG />
-              </div>
+              {!isPast && (
+                <div style={{ cursor: "pointer", alignSelf: "flex-end"}} onClick={() => setShowCancelModal(true)}>
+                  <MenuDotsSVG />
+                </div>
+              )}
               {booking?.status === "CANCELLED" && (
                 <div className="border-1 shadow-md bg-red-400 rounded-md p-2 text-xs">
                   Cancelled
