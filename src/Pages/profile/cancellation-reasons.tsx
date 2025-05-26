@@ -11,11 +11,12 @@ import { SkillLevel } from "../../components/skill-capsule";
 import { ReactComponent as TickMarkCircle } from "../../images/checkout/tick-mark-circle.svg";
 
 export const CancellationReasons = ({ selectedReason, setSelectedReason, setShowCancelReasonModal, setShowCancelConfirmationModal }: {selectedReason: string, setSelectedReason: (reason: string) => void, setShowCancelReasonModal: (show: boolean) => void, setShowCancelConfirmationModal: (show: boolean) => void }) => {
-  const reasons = [
-    "I have another commitment",
-    "I'm not feeling well",
-    "Weather conditions are not suitable",
-    "Transportation issues",
+    const reasons = [
+    "Change of plans",
+    "Too much traffic",
+    "I am feeling lazy",
+    "I am not feeling well",
+    "Weather condition is not suitable",
     "Other"
   ];
 
