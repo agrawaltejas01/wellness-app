@@ -104,7 +104,7 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking }) => {
               justifyContent: "space-between",
             }}
           >
-            <Flex align="flex-start">{activityToSvgMap(booking.activity)}</Flex>
+            {/* <Flex align="flex-start">{activityToSvgMap(booking.activity)}</Flex> */}
             <Flex vertical align="flex-start" style={{ marginLeft: "8px" }}>
               <Flex
                 flex={1}
