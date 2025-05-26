@@ -3,9 +3,9 @@ import { IBookings } from "../../types/user";
 import { formatTimeIntToAmPm } from "../../utils/date";
 import { formatDate } from "../../utils/date";
 import { useState } from "react";
+import info from "../../images/utils/info.svg";
 
-
-const CancellationDetails: React.FC<{booking: IBookings, setShowCancelReasonModal: (show: boolean) => void, setShowCancelModal: (show: boolean) => void}> = ({booking, setShowCancelReasonModal, setShowCancelModal }) => {
+const CancellationDetails: React.FC<{booking: IBookings, setShowCancelReasonModal: (show: boolean) => void, setShowCancelModal: (show: boolean) => void, setShowRefundInfoModal: (show: boolean) => void}> = ({booking, setShowCancelReasonModal, setShowCancelModal, setShowRefundInfoModal }) => {
    
     let refundDetailString = "No refund available";
 
@@ -78,7 +78,14 @@ const CancellationDetails: React.FC<{booking: IBookings, setShowCancelReasonModa
             <div className="text-m font-bold text-black">₹{booking.bookingPrice}</div>
         </div>
         <div className="flex flex-row justify-between border-gray-200 rounded-lg px-4">
-            <div className="text-m font-bold text-black">Refund Amount</div>
+            <div className="text-m font-bold text-black flex flex-row gap-2">
+                <div className="flex flex-row gap-2">
+                    Refund Amount
+                </div>
+                <div className="flex items-center cursor-pointer" onClick={() => {setShowRefundInfoModal(true)}}>
+                    <img src={info} alt="info" className="w-4 h-4" />
+                </div>
+            </div>
             <div className="text-m font-bold text-black">₹{calculateRefundAmount(booking)}</div>
         </div>
         {/* <div className="text-m font-bold text-gray">Refund Details</div> */}

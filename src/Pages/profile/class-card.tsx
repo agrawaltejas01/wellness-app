@@ -17,6 +17,8 @@ import CancelConfirmation from "./cancel-confirmation";
 import CancelledImage from "../../images/utils/cancelled.png";
 import CancellationDetails from "./cancellation-details";
 import CancellationSuccess from "./cancellation-success";
+import RefundPolicy from "./refund-policy";
+import { CenterModal } from "./center-modal";
 // Function to get background color based on game level
 const getGameLevelColor = (level: string): string => {
   const normalizedLevel = level.toLowerCase();
@@ -57,7 +59,7 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking, isPast = fals
   const [selectedReason, setSelectedReason] = useState("");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
-  
+  const [showRefundInfoModal, setShowRefundInfoModal] = useState(false);
   let addressLine1: string, addressLine2: string;
   if (booking.venueAddressLine1 && booking.venueAddressLine2) {
     addressLine1 = booking.venueAddressLine1;
@@ -299,7 +301,7 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking, isPast = fals
           showCloseButton={false}
           borderBottom={true}
         >
-          <CancellationDetails booking={booking} setShowCancelReasonModal={setShowCancelReasonModal} setShowCancelModal={setShowCancelModal} />
+          <CancellationDetails booking={booking} setShowCancelReasonModal={setShowCancelReasonModal} setShowCancelModal={setShowCancelModal} setShowRefundInfoModal={setShowRefundInfoModal} />
           {/* <Button type="primary" onClick={() => {setShowCancelReasonModal(true); setShowCancelModal(false)}}>Cancel Booking</Button> */}
         </BottomUpModal>
       )}
@@ -313,6 +315,11 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking, isPast = fals
         > 
           <CancellationReasons bookingId={booking.bookingId} selectedReason={selectedReason} setSelectedReason={setSelectedReason} setShowCancelReasonModal={setShowCancelReasonModal} setShowSuccessModal={setShowSuccessModal} setShowErrorModal={setShowErrorModal} />
         </BottomUpModal>
+      )}
+      {showRefundInfoModal && (
+        <CenterModal isOpen={showRefundInfoModal} onClose={() => {setShowRefundInfoModal(false)}} title="Refund Policy">
+          <RefundPolicy booking={booking} />
+        </CenterModal>
       )}
       {/* {showCancelConfirmationModal && (
         <BottomUpModal 
