@@ -17,8 +17,10 @@ import CancelConfirmation from "./cancel-confirmation";
 import CancelledImage from "../../images/utils/cancelled.png";
 import CancellationDetails from "./cancellation-details";
 import CancellationSuccess from "./cancellation-success";
-import { CenterModal } from "./center-modal";
 import RefundPolicy from "./refund-policy";
+import { CenterModal } from "./center-modal";
+import CancelError from "./cancel-error";
+
 // Function to get background color based on game level
 const getGameLevelColor = (level: string): string => {
   const normalizedLevel = level.toLowerCase();
@@ -60,7 +62,6 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking, isPast = fals
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [showRefundInfoModal, setShowRefundInfoModal] = useState(false);
-
   let addressLine1: string, addressLine2: string;
   if (booking.venueAddressLine1 && booking.venueAddressLine2) {
     addressLine1 = booking.venueAddressLine1;
@@ -339,8 +340,8 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking, isPast = fals
         </BottomUpModal>
       )}
       {showErrorModal && (
-        <BottomUpModal isOpen={showErrorModal} onClose={() => setShowErrorModal(false)} title="Error" showCloseButton={false}>
-          <div>Error in cancelling booking</div>
+        <BottomUpModal isOpen={showErrorModal} onClose={() => setShowErrorModal(false)} showCloseButton={true}>
+          <CancelError />
         </BottomUpModal>
       )}
     </>
