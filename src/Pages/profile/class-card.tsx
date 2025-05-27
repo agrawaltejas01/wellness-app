@@ -19,6 +19,8 @@ import CancellationDetails from "./cancellation-details";
 import CancellationSuccess from "./cancellation-success";
 import RefundPolicy from "./refund-policy";
 import { CenterModal } from "./center-modal";
+import CancelError from "./cancel-error";
+
 // Function to get background color based on game level
 const getGameLevelColor = (level: string): string => {
   const normalizedLevel = level.toLowerCase();
@@ -338,8 +340,8 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking, isPast = fals
         </BottomUpModal>
       )}
       {showErrorModal && (
-        <BottomUpModal isOpen={showErrorModal} onClose={() => setShowErrorModal(false)} title="Error" showCloseButton={false}>
-          <div>Error in cancelling booking</div>
+        <BottomUpModal isOpen={showErrorModal} onClose={() => setShowErrorModal(false)} showCloseButton={true}>
+          <CancelError />
         </BottomUpModal>
       )}
     </>
