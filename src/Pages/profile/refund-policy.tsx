@@ -30,6 +30,10 @@ const RefundPolicy: React.FC<{booking: IBookings}> = ({ booking }) => {
                 }
             }
         }
+        
+        if(points.length == 0) {
+            points.push("There is no refund policy for this booking");
+        }
         return points;
     }
 
