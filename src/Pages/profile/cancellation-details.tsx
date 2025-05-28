@@ -7,7 +7,7 @@ import info from "../../images/utils/info.svg";
 
 const CancellationDetails: React.FC<{booking: IBookings, setShowCancelReasonModal: (show: boolean) => void, setShowCancelModal: (show: boolean) => void, setShowRefundInfoModal: (show: boolean) => void}> = ({booking, setShowCancelReasonModal, setShowCancelModal, setShowRefundInfoModal }) => {
    
-    let refundDetailString = "No refund available";
+    let refundDetailString = "No refund, fam! 😔";
 
     const calculateRefundAmount = (booking: IBookings) => {
         
@@ -44,16 +44,16 @@ const CancellationDetails: React.FC<{booking: IBookings, setShowCancelReasonModa
                 refundAmount = booking.bookingPrice * (condition.refund_percentage / 100);
                 
                 if(condition.refund_percentage === 100) {
-                    refundDetailString = `Full refund on cancellation at least ${condition.minutes_before / 60} hours before`;
+                    refundDetailString = `💯 Full refund on cancelling at least ${condition.minutes_before / 60} hours before`;
                 } else {
-                    refundDetailString = `${condition.refund_percentage}% refund on cancellation at least ${condition.minutes_before / 60} hours before`;
+                    refundDetailString = `😌 ${condition.refund_percentage}% refund on cancelling at least ${condition.minutes_before / 60} hours before`;
                 }
                 break;
             }
         }  
 
         if(refundDetailString === "No refund available") {
-            refundDetailString = `No refund available on cancellation less than ${refundConditions[refundConditions.length - 1].minutes_before / 60} hours before`;
+            refundDetailString = `No refund, fam! You missed the ${refundConditions[refundConditions.length - 1].minutes_before / 60} hours window 😔`;
         }
         
         return refundAmount;
