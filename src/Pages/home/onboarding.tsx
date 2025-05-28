@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Dance from "../../images/home/Dance.png";
-import Yoga from "../../images/home/Yoga.png";
-import Boxing from "../../images/home/Boxing.png";
-import Badminton from "../../images/home/Badminton.png";
-import Gym from "../../images/home/Gym.png";
-import Swim from "../../images/home/Swim.png";
-import Pickleball from "../../images/home/Pickleball.png";
+import Dance from "../../images/home/Dance-home.png";
+import Yoga from "../../images/home/Yoga-home.png";
+import Boxing from "../../images/home/Boxing-home.png";
+import Badminton from "../../images/home/Badminton-home.png";
+import Gym from "../../images/home/Gym-home.png";
+import Swim from "../../images/home/Swimming-home.png";
+import Pickleball from "../../images/home/Pickleball-home.png";
 
 import { Carousel } from "react-responsive-carousel";
 import { Mixpanel } from "../../mixpanel/init";
