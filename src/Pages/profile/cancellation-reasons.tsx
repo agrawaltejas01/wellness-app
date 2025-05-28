@@ -13,15 +13,16 @@ import { errorToast } from "../../components/Toast";
 import { ReactComponent as Loading } from "../../images/utils/loading.svg";
 
 export const CancellationReasons = ({ bookingId, selectedReason, setSelectedReason, setShowCancelReasonModal, setShowSuccessModal, setShowErrorModal }: {bookingId: string, selectedReason: string, setSelectedReason: (reason: string) => void, setShowCancelReasonModal: (show: boolean) => void, setShowSuccessModal: (show: boolean) => void, setShowErrorModal: (show: boolean) => void }) => {
-    const reasons = [
-    "Change of plans",
-    "Too much traffic",
-    "I am feeling lazy",
-    "I am not feeling well",
-    "Weather condition is not suitable",
-    "Other"
-  ];
+    const reasons = {
+        "🌀 Plans changed, life happened": "Change of plans",
+        "🚗 Traffic was on demon mode": "Too much traffic",
+        "😴 Too lazy to move today": "I am feeling lazy",
+        "💊 Not feelin’ it — health’s off": "I am not feeling well",
+        "🌧️ Weather’s just not it": "Weather condition is not suitable",
+        "📝 Something else": "Other"
+    }
 
+  const reasonsArray = Object.keys(reasons);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -43,15 +44,15 @@ export const CancellationReasons = ({ bookingId, selectedReason, setSelectedReas
   return (
     <div className="flex flex-col">
         <div className="flex flex-col">
-            {reasons.map((_, index) => (
+            {reasonsArray.map((_, index) => (
                 <div key={index} className="flex flex-col">
                 <div key={index} className="flex flex-row justify-between px-4 py-3 rounded-lg"
-                     style={{ backgroundColor: reasons[index] === selectedReason ? "white" : "transparent" }}
-                     onClick={() => setSelectedReason(reasons[index])}>
+                     style={{ backgroundColor: reasons[reasonsArray[index] as keyof typeof reasons] === selectedReason ? "white" : "transparent" }}
+                     onClick={() => setSelectedReason(reasons[reasonsArray[index] as keyof typeof reasons])}>
                     <div style={{ fontSize: '15px', color: 'black' }} className="flex flex-col">
-                        <p className="font-light"> {reasons[index]}</p>
+                        <p className="font-light"> {reasonsArray[index]}</p>
                     </div>
-                    {selectedReason === reasons[index] ? (
+                    {selectedReason === reasons[reasonsArray[index] as keyof typeof reasons] ? (
                         <TickMarkCircle />
                     ) : (
                         <Circle
@@ -63,7 +64,7 @@ export const CancellationReasons = ({ bookingId, selectedReason, setSelectedReas
                     />
                     )}
                 </div>
-                <hr className={`${index === reasons.length - 1 ? "mx-4 border-b-1 border-white pb-2" : "mx-4 border-t-1 border-gray-200"}`} />
+                <hr className={`${index === reasonsArray.length - 1 ? "mx-4 border-b-1 border-white pb-2" : "mx-4 border-t-1 border-gray-200"}`} />
                 </div>
                 ))}
     </div>
