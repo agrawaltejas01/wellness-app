@@ -25,13 +25,13 @@ const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
   }, []);
 
   const images = [
-		{ id: "Pickleball", url: Pickleball },
-		{ id: "Baddy", url: Badminton },
-		{ id: "Swim", url: Swim },
-		{ id: "Gym", url: Gym },
-		{ id: "Dance", url: Dance },
-		{ id: "Yoga", url: Yoga },
-		{ id: "Boxing", url: Boxing }
+		{ id: "Pickleball", url: "https://zfx-gyms.zenfitx.link/images/onboarding/Pickleball-HD.png" },
+		{ id: "Baddy", url: "https://zfx-gyms.zenfitx.link/images/onboarding/Badminton-HD.png" },
+		{ id: "Swim", url: "https://zfx-gyms.zenfitx.link/images/onboarding/Swim-HD.png" },
+		{ id: "Gym", url: "https://zfx-gyms.zenfitx.link/images/onboarding/Gym-HD.png" },
+		{ id: "Dance", url: "https://zfx-gyms.zenfitx.link/images/onboarding/Dance-HD.png" },
+		{ id: "Yoga", url: "https://zfx-gyms.zenfitx.link/images/onboarding/Yoga-HD.png" },
+		{ id: "Boxing", url: "https://zfx-gyms.zenfitx.link/images/onboarding/Boxing-HD.png" }
 	];
 	const medias = images.map((i) => <img src={i.url} className="obImg" />);
 
