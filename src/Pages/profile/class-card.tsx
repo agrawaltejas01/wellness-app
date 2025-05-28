@@ -311,8 +311,8 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking, isPast = fals
         <BottomUpModal 
           isOpen={showCancelReasonModal} 
           onClose={() => {setShowCancelReasonModal(false); setSelectedReason("")}} 
-          title="Why do you want to cancel?"
-          subtitle="Please select the reason for cancellation"
+          title="Ditching us already? 💔"
+          subtitle="Spill the tea - what made you cancel this sesh?"
           showCloseButton={false}
         > 
           <CancellationReasons bookingId={booking.bookingId} selectedReason={selectedReason} setSelectedReason={setSelectedReason} setShowCancelReasonModal={setShowCancelReasonModal} setShowSuccessModal={setShowSuccessModal} setShowErrorModal={setShowErrorModal} />
