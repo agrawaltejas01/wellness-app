@@ -32,13 +32,8 @@ import "./style.css";
 import { shouldShowDiscount } from "../../utils/offers";
 import MetaPixel from "../../components/meta-pixel";
 
-<<<<<<< HEAD
 const COUPLE_BATCH_IDS = [25992, 25993, 25994, 25740, 25744];
 const SLOTS_REMAINING_VISIBLE_GYM_IDS = [6, 22, 24, 25, 27, 28, 29, 31, 32, 34, 35, 3];
-=======
-const COUPLE_BATCH_IDS = [25992, 25993, 25994, 25740, 25744, 36127];
-const SLOTS_REMAINING_VISIBLE_GYM_IDS = [6, 22, 24, 25, 27, 28, 29, 31, 32, 34, 35];
->>>>>>> cancellation-v1
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
