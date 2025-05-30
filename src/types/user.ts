@@ -37,6 +37,7 @@ export interface IBookings {
   participants?: Array<{
     participantName: string;
   }>;
+  refundPolicy?: string;
 }
 
 export default IUser;

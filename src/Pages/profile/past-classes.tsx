@@ -7,7 +7,7 @@ function generateCards(bookings: IBookings[]) {
     <Flex vertical justify="space-evenly">
       {" "}
       {bookings.map((booking, index) => (
-        <ClassCardInProfile key={`past-${index}`} booking={booking} />
+        <ClassCardInProfile key={`past-${index}`} booking={booking} isPast={true} />
       ))}
     </Flex>
   );
