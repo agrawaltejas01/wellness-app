@@ -156,10 +156,7 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking, isPast = fals
                 <div style={{ cursor: "pointer", alignSelf: "flex-end"}} onClick={() => {
                   Mixpanel.track("upcoming_booking_three_dots_clicked", {
                     bookingId: booking.bookingId,
-                    userId: userId,
-                    activity: booking.activity,
-                    date: booking.date,
-                    time: booking.startTime,
+                    userId: userId
                   });
                   setShowCancelModal(true);
                 }}>

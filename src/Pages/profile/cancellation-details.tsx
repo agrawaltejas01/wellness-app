@@ -100,10 +100,7 @@ const CancellationDetails: React.FC<{booking: IBookings, setShowCancelReasonModa
         {
             Mixpanel.track("cancel_button_clicked", {
                 userId: userId,
-                bookingId: booking.bookingId,
-                activity: booking.activity,
-                date: booking.date,
-                time: booking.startTime,
+                bookingId: booking.bookingId
             });
             setShowCancelReasonModal(true); 
             setShowCancelModal(false);
