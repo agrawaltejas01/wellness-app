@@ -34,7 +34,6 @@ export const CancellationReasons = ({ bookingId, selectedReason, setSelectedReas
   const { mutate: _cancelBooking} = useMutation({
     mutationFn: cancelBooking, 
     onSuccess: (result) => {
-        message.success("Booking cancelled successfully");
         setShowCancelReasonModal(false);
         setShowSuccessModal(true);
         Mixpanel.track("cancel_booking_success", {
@@ -43,7 +42,6 @@ export const CancellationReasons = ({ bookingId, selectedReason, setSelectedReas
         });
     },
     onError: (error) => {
-        errorToast("Error in cancelling booking");
         setShowCancelReasonModal(false);
         setShowErrorModal(true);
         Mixpanel.track("cancel_booking_error", {
