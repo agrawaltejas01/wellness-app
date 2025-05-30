@@ -430,10 +430,10 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
             </>
           )}
         </div>
-        <div className="gymPageheading">
+        {gymData.gymId != 40 && <div className="gymPageheading">
           <div>Choose Activity</div>
-        </div>
-        <div className="activities">
+        </div>}
+        {gymData.gymId != 40 && <div className="activities">
           {gymData?.activities?.map((activity: string) => {
             return (
               <span
@@ -452,7 +452,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
               </span>
             );
           })}
-        </div>
+        </div>}
         <div className="gymPageheading">About Center</div>
         <div
           className="gPageDesc"

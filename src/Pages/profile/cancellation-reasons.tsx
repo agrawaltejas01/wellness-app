@@ -11,6 +11,7 @@ import { SkillLevel } from "../../components/skill-capsule";
 import { ReactComponent as TickMarkCircle } from "../../images/checkout/tick-mark-circle.svg";
 import { errorToast } from "../../components/Toast";
 import { ReactComponent as Loading } from "../../images/utils/loading.svg";
+import { Mixpanel } from "../../mixpanel/init";
 
 export const CancellationReasons = ({ bookingId, selectedReason, setSelectedReason, setShowCancelReasonModal, setShowSuccessModal, setShowErrorModal }: {bookingId: string, selectedReason: string, setSelectedReason: (reason: string) => void, setShowCancelReasonModal: (show: boolean) => void, setShowSuccessModal: (show: boolean) => void, setShowErrorModal: (show: boolean) => void }) => {
     const reasons = {
@@ -22,6 +23,10 @@ export const CancellationReasons = ({ bookingId, selectedReason, setSelectedReas
         "📝 Something else": "Other"
     }
 
+    const userId = window.localStorage["zenfitx-user-details"]
+          ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || null
+          : null;
+
   const reasonsArray = Object.keys(reasons);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -32,11 +37,19 @@ export const CancellationReasons = ({ bookingId, selectedReason, setSelectedReas
         message.success("Booking cancelled successfully");
         setShowCancelReasonModal(false);
         setShowSuccessModal(true);
+        Mixpanel.track("cancel_booking_success", {
+            userId: userId,
+            bookingId: bookingId
+        });
     },
     onError: (error) => {
         errorToast("Error in cancelling booking");
         setShowCancelReasonModal(false);
         setShowErrorModal(true);
+        Mixpanel.track("cancel_booking_error", {
+            userId: userId,
+            bookingId: bookingId
+        });
     },
 });
 
@@ -72,6 +85,11 @@ export const CancellationReasons = ({ bookingId, selectedReason, setSelectedReas
                      ${selectedReason == ""  ? "text-gray bg-gray-200 pointer-events-none" : "text-white bg-black"}`} 
                      onClick={() => {
                         setIsLoading(true);
+                        Mixpanel.track("cancel_booking_button_clicked", {
+                            userId: userId,
+                            bookingId: bookingId,
+                            reason: selectedReason
+                        });
                       _cancelBooking({bookingId, reason: selectedReason});
                       }}>
         {isLoading ? (

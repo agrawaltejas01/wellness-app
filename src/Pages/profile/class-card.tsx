@@ -20,6 +20,7 @@ import CancellationSuccess from "./cancellation-success";
 import RefundPolicy from "./refund-policy";
 import { CenterModal } from "./center-modal";
 import CancelError from "./cancel-error";
+import { Mixpanel } from "../../mixpanel/init";
 
 // Function to get background color based on game level
 const getGameLevelColor = (level: string): string => {
@@ -71,6 +72,10 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking, isPast = fals
     addressLine2 = booking.addressLine2;
   }
   const mapsLink = createMapsLink(addressLine1, addressLine2);
+  const userId = window.localStorage["zenfitx-user-details"]
+          ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || null
+          : null;
+  
 
   return (
     <>
@@ -148,7 +153,16 @@ const ClassCardInProfile: React.FC<BookingClassCard> = ({ booking, isPast = fals
             </Flex>
             <Flex vertical flex={1} align="flex-end">
               {!isPast && (
-                <div style={{ cursor: "pointer", alignSelf: "flex-end"}} onClick={() => setShowCancelModal(true)}>
+                <div style={{ cursor: "pointer", alignSelf: "flex-end"}} onClick={() => {
+                  Mixpanel.track("upcoming_booking_three_dots_clicked", {
+                    bookingId: booking.bookingId,
+                    userId: userId,
+                    activity: booking.activity,
+                    date: booking.date,
+                    time: booking.startTime,
+                  });
+                  setShowCancelModal(true);
+                }}>
                   <MenuDotsSVG />
                 </div>
               )}
