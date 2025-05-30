@@ -4,10 +4,15 @@ import { formatTimeIntToAmPm } from "../../utils/date";
 import { formatDate } from "../../utils/date";
 import { useState } from "react";
 import info from "../../images/utils/info.svg";
+import { Mixpanel } from "../../mixpanel/init";
 
 const CancellationDetails: React.FC<{booking: IBookings, setShowCancelReasonModal: (show: boolean) => void, setShowCancelModal: (show: boolean) => void, setShowRefundInfoModal: (show: boolean) => void}> = ({booking, setShowCancelReasonModal, setShowCancelModal, setShowRefundInfoModal }) => {
    
     let refundDetailString = "No refund, fam! 😔";
+
+    const userId = window.localStorage["zenfitx-user-details"]
+          ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || null
+          : null;
 
     const calculateRefundAmount = (booking: IBookings) => {
         
@@ -91,7 +96,18 @@ const CancellationDetails: React.FC<{booking: IBookings, setShowCancelReasonModa
         {/* <div className="text-m font-bold text-gray">Refund Details</div> */}
         <div className="text-xs font-normal text-gray px-4 pb-2">{refundDetailString}</div>
       </div>
-      <div className="flex flex-col mx-4 mb-8 py-3 rounded-lg justify-center items-center bg-black text-m font-bold text-white" onClick={() => {setShowCancelReasonModal(true); setShowCancelModal(false)}}>
+      <div className="flex flex-col mx-4 mb-8 py-3 rounded-lg justify-center items-center bg-black text-m font-bold text-white" onClick={() => 
+        {
+            Mixpanel.track("cancel_button_clicked", {
+                userId: userId,
+                bookingId: booking.bookingId,
+                activity: booking.activity,
+                date: booking.date,
+                time: booking.startTime,
+            });
+            setShowCancelReasonModal(true); 
+            setShowCancelModal(false);
+        }}>
         Cancel 
       </div>
     </div>
