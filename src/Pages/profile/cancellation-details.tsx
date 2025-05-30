@@ -41,7 +41,7 @@ const CancellationDetails: React.FC<{booking: IBookings, setShowCancelReasonModa
 
         for(const condition of refundConditions) {
             if(condition.minutes_before < timeDifferenceInMinutes) {
-                refundAmount = booking.bookingPrice * (condition.refund_percentage / 100);
+                refundAmount = Math.round(booking.bookingPrice * (condition.refund_percentage / 100));
                 
                 if(condition.refund_percentage === 100) {
                     refundDetailString = `💯 Full refund on cancelling at least ${condition.minutes_before / 60} hours before`;
