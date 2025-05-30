@@ -24,14 +24,14 @@ const RefundPolicy: React.FC<{booking: IBookings}> = ({ booking }) => {
             const refundConditions = refundPolicyObject.conditions;
             refundConditions.sort((a: any, b: any) => b.minutes_before - a.minutes_before);
             // headers.push("Refund conditions are as follows:");
-            for(let i = refundConditions.length - 1; i >= 0; i--) {
+            for(let i = 0; i < refundConditions.length; i++) {
                 const condition = refundConditions[i];
                 if(condition.refund_percentage == 100) {
                     points.push(`💯 Full refund if cancelled at least ${condition.minutes_before / 60} hours before the start time.`);
                 } else {
                     points.push(`🔁 ${condition.refund_percentage}% refund if cancelled at least ${condition.minutes_before / 60} hours before the start time.`);
                 }
-                if(i == 0) {
+                if(i == refundConditions.length - 1) {
                     points.push(`❌ No refund if cancelled less than ${condition.minutes_before / 60} hours before the start time.`);
                 }
             }
