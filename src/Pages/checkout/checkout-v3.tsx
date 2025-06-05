@@ -528,7 +528,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                 <div className="flex flex-col justify-between w-full bg-white shadow-gray rounded-xl">
                     <div className={`flex flex-row justify-between px-4 pt-4 ${totalSavings > 0 ? "" : "pb-2"}`}>
                         <p className="text-sm font-bold">To pay</p>
-                        <p className="text-sm font-bold">{Rs}{totalAmount}</p>
+                        <p className="text-sm font-bold">{Rs}{gym?.gymId == 41 ? totalAmount + 500 : totalAmount}</p>
                     </div>
                     <div className={`flex flex-row justify-between px-4 ${totalSavings > 0 ? "pt-2 pb-4" : " "}`}>
                         {totalSavings > 0 && <p className="text-xs text-gray font-sm">Total saved {Rs}{totalSavings}</p>}
@@ -541,6 +541,10 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                             <p className="text-sm font-sm">{Rs}{totalAmount} </p>
                         </div>
                     </div>
+                    {gym?.gymId == 41 && <div className="flex flex-row justify-between px-4 pb-6">
+                          <p className="text-sm font-sm">One time registration Fee</p>
+                          <p className="text-sm font-sm">{Rs}500</p>
+                        </div>}
                 </div>
             </div>
             <div className="flex flex-row px-4 pt-4">
@@ -551,7 +555,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                 gymData={gym}
                 batchId={Number(batchId)}
                 checkoutType={ECheckoutType.BATCH}
-                totalAmount={totalAmount || batchDetails?.price || 0}
+                totalAmount={gym?.gymId == 41 ? totalAmount + 500 : totalAmount || batchDetails?.price || 0}
                 comingFrom={EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE}
                 totalGuests={noOfGuests}
                 totalSavings={totalSavings}
