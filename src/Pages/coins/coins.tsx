@@ -119,8 +119,8 @@ const Coins: React.FC<RouteComponentProps> = () => {
             handler: (response: any) => {
               if (response.razorpay_payment_id) {
                 setOrderStatus('success');
-                setShowConfetti(true);
-                // navigate("/");       
+                // setShowConfetti(true);
+                navigate("/", { replace: true });       
               }
             },
           };
@@ -174,13 +174,13 @@ const Coins: React.FC<RouteComponentProps> = () => {
             </div>
             }
             {/* Success Message */}
-            {orderStatus === 'success' && (
+            {/* {orderStatus === 'success' && (
                 <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
                     <p className="text-green-800 text-center">
                     🎉 Watch the SVG confetti celebration!
                     </p>
                 </div>
-            )}
+            )} */}
 
             {/* {showConfetti && (
                 <SVGConfettiSystem
