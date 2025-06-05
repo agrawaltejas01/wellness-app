@@ -155,7 +155,7 @@ const Coins: React.FC<RouteComponentProps> = () => {
             <div className="flex flex-col items-center justify-center rounded-full bg-white text-black shadow-lg px-8 py-4 mt-4  mx-4"> 
                 <p className="text-md font-bold">Available ZenfitX Cash: {coins}</p>
             </div>
-            {coins != 0  && <div className="flex flex-col w-full mt-4"> 
+            <div className="flex flex-col w-full mt-4"> 
                 { coinsPackages && coinsPackages.map((coinsPackage: any) => (
                     <div className="flex flex-row rounded-lg text-black shadow-md px-8 py-4 mt-4 mx-4 items-center justify-between">
                         <div className="flex flex-col gap-2">
@@ -172,7 +172,6 @@ const Coins: React.FC<RouteComponentProps> = () => {
                     </div>
                 ))}
             </div>
-            }
             {/* Success Message */}
             {/* {orderStatus === 'success' && (
                 <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
