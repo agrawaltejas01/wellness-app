@@ -576,7 +576,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
                 </span>
               </Flex>
               {(coinsAvailable && coinsUsed && coinsUsed > 0) ? <div className="flex flex-row gap-2 items-center font-light text-xs text-gray">
-                      {coinsAvailable > 0 ? `Paying ${props.totalAmount <= coinsAvailable ? props.totalAmount : props.totalAmount - coinsAvailable} with ZenfitX Cash` : ``}
+                      {coinsAvailable > 0 ? `Paying ${props.totalAmount <= coinsAvailable ? props.totalAmount : coinsAvailable} with ZenfitX Cash` : ``}
               </div> : ``} 
             </div>
             <button
