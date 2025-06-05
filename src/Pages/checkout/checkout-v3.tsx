@@ -26,6 +26,10 @@ import { Rs } from "../../constants/symbols";
 import { ACTIVITY_NAME_TO_ID_MAP, COPLAYER_CARD_ENABLED } from "../../constants/activities";
 import { formatDate, formatTimeIntToAmPm } from "../../utils/date";
 import { capitalizeFirstLetter } from "../../utils/functions/utils";
+import { getCoins } from "../../apis/coins/coins";
+import { ReactComponent as ToggleButtonOff } from "../../images/utils/toggle-off.svg";
+import { ReactComponent as ToggleButtonOn } from "../../images/utils/toggle-on.svg";
+import { ReactComponent as Wallet } from "../../images/utils/wallet.svg";
 // Function to convert 24-hour time to 12-hour format
 const convert24HourTo12Hour = (timeStr: string): { formattedTime: string; error: string | null } => {
     // Handle empty input
@@ -87,6 +91,8 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
     const [activityId, setActivityId] = useState<number>(0);
     const [loading, setLoading] = useState<boolean>(true);
     const [count, setCount] = useState<number>(1);
+    const [coinsAvailable, setCoinsAvailable] = useState<number>(0);
+    const [coinsUsed, setCoinsUsed] = useState<number>(0);
 
 
     const [totalAmount, setTotalAmount] = useState(0);
@@ -116,6 +122,14 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
         },
         onError: (error) => {
             errorToast("Error in getting batch details");
+        },
+    });
+
+
+    const { mutate: _getCoinsAvailable } = useMutation({
+        mutationFn: getCoins,
+        onSuccess: (result) => {
+            setCoinsAvailable(result.coins);
         },
     });
 
@@ -200,6 +214,10 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
           }
         } else {
           setGotPastAppBookings(true);
+        }
+        _getCoinsAvailable(userId);
+        if(coinsAvailable > 0) {
+          setCoinsUsed(1);
         }
     }, []);
 
@@ -550,6 +568,24 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
             <div className="flex flex-row px-4 pt-4">
                 {offerStrip.current && <p className="text-xs text-center rounded-lg p-2 bg-gray-100 w-full">{offerStrip.current}</p>}
             </div>
+            <div className="flex flex-row px-4 items-center">
+              <div className="flex flex-row justify-between w-full bg-white shadow-gray rounded-xl items-center">
+                <div className="flex flex-row gap-4 items-center p-4">
+                  <div className="flex flex-row gap-2 items-center justify-center" style={{width: "30px", height: "30px"}}>
+                      <Wallet />
+                  </div>
+                  <div className="flex flex-row gap-2 items-center">
+                    <div className="flex flex-col">
+                      <p className="text-sm font-sm">Pay with ZenfitX Cash</p>
+                      <p className="text-xs text-gray">Balance: {coinsAvailable}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-row items-center justify-center p-2">
+                  {coinsUsed > 0 ? <ToggleButtonOn onClick={() => setCoinsUsed(0)} /> : <ToggleButtonOff onClick={() => setCoinsUsed(1)} />}
+                </div>
+              </div>
+            </div>
             <BookNowFooter
                 batchDetails={batchDetails}
                 gymData={gym}
@@ -561,6 +597,8 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                 totalSavings={totalSavings}
                 isFromApp={isFromApp}
                 pastAppBookings={pastAppBookings}
+                coinsAvailable={coinsAvailable}
+                coinsUsed={coinsUsed}
                 disabled={
                   selectedRides.length !== noOfGuests && batchDetails?.isRideActivity
                 }
