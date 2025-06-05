@@ -29,6 +29,7 @@ import {handleRefresh} from '../../utils/refresh';
 import ForceUpdatePopup from "../../components/ForceUpdatePopup";
 import GoToApp from "../../components/go-to-app";
 import { saveNotificationToken } from "../../apis/notifications/notifications";  
+import CoinsHomepage from "../coins/coins-homepage";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -276,6 +277,8 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
           <Flex flex={3}>
             <HomeBanner />
           </Flex>
+
+          <CoinsHomepage />
 
           {showClassesNearYou ? (
             <Flex style={{ marginLeft: "16px" }} flex={3}>

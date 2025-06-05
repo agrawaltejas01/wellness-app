@@ -19,6 +19,7 @@ import PrivacyPolicy from "./Pages/privacy/privacy";
 import BatchCheckoutV2 from "./Pages/checkout/batch-checkout-v2";
 import BatchCheckoutBookingV2 from "./Pages/checkout/checkout-v2";
 import GoToApp from "./components/go-to-app";
+import Coins from "./Pages/coins/coins";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -102,6 +103,7 @@ function App() {
         <PlusPaymentSuccess path="/plus/success" />
         <PlusPaymentSuccess path="/plus/success" />
           <PrivacyPolicy path="/privacy" />
+          <Coins path="/coins" />
         </Router>
       </AppLayout>
     </QueryClientProvider>
