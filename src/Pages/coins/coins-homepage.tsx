@@ -1,0 +1,68 @@
+import { useEffect, useState } from "react";
+import { getCoins, getCoinsPackages } from "../../apis/coins/coins";
+import { useMutation } from "@tanstack/react-query";
+import { errorToast } from "../../components/Toast";
+import Circle from "../../components/circle";
+import { Rs } from "../../constants/symbols";
+import {ReactComponent as RightArrow} from "../../images/utils/right-arrow.svg";
+import { navigate } from "@reach/router";
+
+
+
+
+
+const CoinCapsule = ({ coins }: { coins: number }) => {
+    return (
+        <div className="flex flex-col rounded-full bg-white text-black shadow-lg px-8 py-4 mt-4 mx-4">
+            <div className="flex flex-col">
+                {coins == 0 && <div className="flex flex-row gap-2 justify-between">
+                    <div className="flex flex-row gap-2 justify-between">
+                        <p className="text-md font-bold">ZenfitX Cash: </p>
+                        <p className="text-md font-bold">{coins}</p>
+                    </div>
+                    <RightArrow />
+                </div>}
+                {coins != 0 && 
+                <div className="flex flex-row gap-2 justify-between items-center">
+                    <p className="text-sm font-bold">Get 12,000 cash points on 20% off.</p>
+                    <RightArrow />
+                </div>
+                }
+            </div>
+        </div>
+    );
+};
+
+
+const CoinsHomepage: React.FC = () => {
+
+    const [coins, setCoins] = useState(0);
+
+    const { mutate: _getCoins } = useMutation({
+        mutationFn: getCoins,
+        onSuccess: (result) => {
+            setCoins(result.coins);
+            // setCoins(10);
+        }
+    });
+
+    const userId = window.localStorage["zenfitx-user-details"]
+          ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || null
+          : null;
+
+    useEffect(() => {
+        if (userId) {
+            _getCoins(userId);
+        }
+    }, [coins]);
+
+    return (    
+        <div className="cursor-pointer" onClick={() => {
+            navigate("/coins");
+        }}>
+           <CoinCapsule coins={coins} />
+        </div>
+    );
+};
+
+export default CoinsHomepage;

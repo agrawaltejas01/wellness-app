@@ -21,6 +21,7 @@ import { trackEvent } from "../../firebase/config";
 import { getPastAppBookings } from "../../apis/gym/activities";
 import { useMutation } from "@tanstack/react-query";
 import { errorToast } from "../../components/Toast";
+import wallet from "../../images/utils/wallet.svg";
 
 interface RazorpayResponse {
   razorpay_payment_id?: string;
@@ -52,6 +53,8 @@ export interface IBookNowFooter {
   pastAppBookings?: PastAppBookingObject;
   disabled?: boolean;
   onBeforeAction?: () => boolean;
+  coinsAvailable?: number;
+  coinsUsed?: number;
 }
 
 function loadScript(src: string) {
@@ -85,6 +88,8 @@ function createOrderPayload(props: IBookNowFooter, userDetails: IUser) {
     batchDate: props?.batchDetails?.date || "",
     batchTime: props?.batchDetails?.startTime || 0,
     participants: props?.batchDetails?.participants || [],
+    coins: props.coinsUsed ? props.coinsUsed : props.coinsAvailable || 0,
+    coinsUsed: props.coinsUsed && props.coinsAvailable ? props.totalAmount <= props.coinsAvailable ? props.totalAmount : props.totalAmount - props.coinsAvailable : 0,
   };
 
   Mixpanel.track("pay_now_button_clicked_on_checkout_page", {
@@ -133,6 +138,17 @@ async function displayRazorpay(
   if (!orderResult?.orderId) {
     alert(`Could not place order!`);
     setLoading(false);
+    return;
+  }
+
+  if(orderResult.orderId == "COINS") {
+    setLoading(false);
+    navigate("/checkout/success", {
+      state: {
+        gymData: props.gymData,
+        batchDetails: props.batchDetails,
+      },
+    });
     return;
   }
 
@@ -308,6 +324,8 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
     comingFrom,
     disabled,
     gymData,
+    coinsAvailable,
+    coinsUsed,
   } = props;
 
   const { mutate: _getPastAppBookings } = useMutation({
@@ -529,33 +547,38 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
               paddingLeft: "24px",
             }}
           >
-            <Flex
-              flex={2}
-              vertical
-              justify="center"
-              align="left"
-              className={discountedAmount ? "discountedAmountWrap" : ""}
-            >
-              {showDiscount && (
-                <span>
-                  {Rs}
-                  {discountedAmount}
-                </span>
-              )}
-              &nbsp;&nbsp;
-              <span
-                style={{
-                  fontWeight: "bold",
-                  fontSize: "20px",
-                  textDecorationLine: showDiscount ? "line-through" : "",
-                  marginBottom: showDiscount ? "3px" : "",
-                }}
-                className={showDiscount ? "discountedAmount" : ""}
+            <div className="flex flex-col gap-2">
+              <Flex
+                flex={2}
+                vertical
+                justify="center"
+                align="left"
+                className={discountedAmount ? "discountedAmountWrap" : ""}
               >
-                {Rs}
-                {props.totalAmount + (props.totalSavings || 0)}
-              </span>
-            </Flex>
+                {showDiscount && (
+                  <span>
+                    {Rs}
+                    {discountedAmount}
+                  </span>
+                )}
+                &nbsp;&nbsp;
+                <span
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "20px",
+                    textDecorationLine: showDiscount ? "line-through" : "",
+                    marginBottom: showDiscount ? "3px" : "",
+                  }}
+                  className={showDiscount ? "discountedAmount" : ""}
+                >
+                  {Rs}
+                  {props.totalAmount + (props.totalSavings || 0)}
+                </span>
+              </Flex>
+              {(coinsAvailable && coinsUsed && coinsUsed > 0) ? <div className="flex flex-row gap-2 items-center font-light text-xs text-gray">
+                      {coinsAvailable > 0 ? `Paying ${props.totalAmount <= coinsAvailable ? props.totalAmount : props.totalAmount - coinsAvailable} with ZenfitX Cash` : ``}
+              </div> : ``} 
+            </div>
             <button
               id={
                 props.comingFrom ===
