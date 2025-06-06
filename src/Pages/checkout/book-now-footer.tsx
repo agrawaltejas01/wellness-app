@@ -539,7 +539,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
               {showDiscount && (
                 <span>
                   {Rs}
-                  {discountedAmount}
+                  {gymData?.gymId == 41 ? discountedAmount + 500 : discountedAmount}
                 </span>
               )}
               &nbsp;&nbsp;
