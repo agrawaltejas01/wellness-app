@@ -358,7 +358,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
         batchDetails.offerPercentage || 0,
         batchDetails.maxDiscount || 0,
       );
-      setDiscountedAmount(finalPrice);
+      setDiscountedAmount(props.comingFrom == EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE && gymData?.gymId == 41 ? finalPrice + 500 : finalPrice);
     }
   }, [showDiscount, batchDetails, totalGuests]);
 
