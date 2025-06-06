@@ -755,6 +755,29 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           </Flex>
         )}
 
+        {gym?.gymId == 41 && (
+          <Flex flex={1} style={{ paddingLeft: "24px" }}>
+            <ActivityTiles
+              activities={gym.activities}
+              activitySelected={selectedActivity}
+              onClickFunction={(activity: string) => {
+                Mixpanel.track("clicked_activity_pill_gym", {
+                  gymId: gym.gymId,
+                  activity,
+                });
+                setSelectedActivity(activity);
+                _getGymBatchesForDate({
+                  id: gym.gymId,
+                  activity: activity,
+                  date: "2025-08-05",
+                });
+              }}
+              reposition
+            />
+          </Flex>
+        )}
+        
+
         <Flex flex={3} style={{ marginTop: "10px" }}>
           {batches && batches.length
             ? generateBatchTile(gym, batches)

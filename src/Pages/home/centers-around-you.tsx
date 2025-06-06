@@ -179,7 +179,7 @@ function getListOfCenters(
               <span>{name}</span> {priceCard(minPrice, showDiscount, maxDiscount, offerPercentage, discountType)}
             </div>
             <div className="activity">
-              {concatAndUpperCaseActivities(activities?.slice(0, 8))}
+              {gymCard.gymId == 41 ? "Badminton Kids Coaching" : concatAndUpperCaseActivities(activities?.slice(0, 8))}
             </div>
             <div className="separator"></div>
             {area && <div className="location">
