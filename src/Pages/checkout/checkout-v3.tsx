@@ -546,7 +546,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                         </div>
                     </div>
                     {gym?.gymId == 41 && <div className="flex flex-row justify-between px-4 pb-6">
-                          <p className="text-sm font-sm">One time registration Fee</p>
+                          <p className="text-sm font-sm">One Time Registration Fee</p>
                           <p className="text-sm font-sm">{Rs}500</p>
                         </div>}
                 </div>
@@ -620,7 +620,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                 </div>
             </div>}
             <div className="flex flex-row px-4 pt-4">
-                {offerStrip.current && <p className="text-xs text-center rounded-lg p-2 bg-gray-100 w-full">{offerStrip.current}</p>}
+                {offerStrip.current && <p className="text-xs text-center rounded-lg p-2 bg-mint-green w-full">{offerStrip.current}</p>}
             </div>
             <BookNowFooter
                 batchDetails={batchDetails}
