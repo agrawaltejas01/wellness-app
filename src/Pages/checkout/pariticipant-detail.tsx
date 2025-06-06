@@ -25,6 +25,8 @@ const ParticipantDetailsForm: React.FC<ParticipantDetailsFormProps> = ({
       for (let i = participants.length; i < noOfGuests; i++) {
         newParticipants.push({
           participantName: '',
+          participantAge: 0,
+          participantGender: "",
         //   jerseyName: '',
         //   jerseySize: ''
         });
@@ -38,6 +40,8 @@ const ParticipantDetailsForm: React.FC<ParticipantDetailsFormProps> = ({
     if (!updatedParticipants[index]) {
       updatedParticipants[index] = {
         participantName: '',
+        participantAge: 0,
+        participantGender: "",
         // jerseyName: '',
         // jerseySize: ''
       };

@@ -75,6 +75,8 @@ export interface IBatch {
 
 export interface ParticipantDetail {
   participantName: string;
+  participantAge: number;
+  participantGender: string;
   // jerseyName?: string;
   // jerseySize: string;
 }

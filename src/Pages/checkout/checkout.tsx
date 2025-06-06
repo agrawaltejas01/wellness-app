@@ -267,6 +267,8 @@ const BatchCheckoutBooking: React.FC<IClassCheckout> = () => {
       const updatedParticipants: ParticipantDetail[] = rides.map(
         (rideNumber) => ({
           participantName: "", // Empty string for participant name
+          participantAge: 0,
+          participantGender: "",
           rideNumber: rideNumber, // Just the ride number
         }),
       );
