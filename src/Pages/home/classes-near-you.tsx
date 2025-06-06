@@ -88,6 +88,7 @@ function createUpperFlexTiles(isFromApp: boolean, pastAppBookings: PastAppBookin
       }}
     >
       <span>{trendingTile(isFromApp, pastAppBookings)}</span>
+      <span> {classTile("badmintonKids", isFromApp, pastAppBookings)} </span>
       <span> {classTile("ride", isFromApp, pastAppBookings)} </span>
       <span>{classTile("badminton", isFromApp, pastAppBookings)}</span>
       <span>{classTile("strength", isFromApp, pastAppBookings)}</span>
