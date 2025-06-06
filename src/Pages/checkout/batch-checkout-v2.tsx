@@ -22,6 +22,7 @@ import Circle from "../../components/circle";
 import Loader from "../../components/Loader";
 import {ReactComponent as LocationIcon} from '../../images/utils/location-icon.svg';
 import { message } from "antd";
+import MoreInfo from "./more-info";
 
 interface IClassCheckout extends RouteComponentProps {
 }
@@ -200,6 +201,7 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
           {batchDetails?.aboutTheActivity && <AboutTheActivity aboutTheActivity={batchDetails?.aboutTheActivity} />}
           {batchDetails?.whatToExpect && <WhatToExpect whatToExpect={batchDetails?.whatToExpect} />}
           {batchDetails?.whatToBring && <WhatToBring whatToBring={batchDetails?.whatToBring} />}
+          {batchDetails?.moreInfo && <MoreInfo moreInfo={batchDetails?.moreInfo} />}
           {gym && (
           <BookNowFooter
             checkoutType={ECheckoutType.BATCH}
