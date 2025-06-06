@@ -483,8 +483,8 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                     <div className="flex flex-row font-jakarta font-bold text-sm">
                         <p className="text-sm font-bold"> { capitalizeFirstLetter(batchDetails?.activity)} | </p>
                         {/* <p className="dot"></p> */}
-                        <p className="text-sm pl-1"> { batchDetails?.date ? formatDate(batchDetails.date)["date suffix"] : "Date not available"} </p>
-                        <p className="dotBlack"></p>
+                        {!gym?.isOnlyWeekend && <p className="text-sm pl-1"> { batchDetails?.date ? formatDate(batchDetails.date)["date suffix"] : "Date not available"} </p>}
+                        {!gym?.isOnlyWeekend && <p className="dotBlack"></p>}
                         {batchDetails?.isDayPass ? <p className="text-sm pl-1">All Day</p> : 
                         <>
                             <p className="text-sm pl-1"> {formatTimeIntToAmPm(batchDetails?.startTime || 0)}</p>
