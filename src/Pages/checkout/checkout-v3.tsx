@@ -620,7 +620,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                 </div>
             </div>}
             <div className="flex flex-row px-4 pt-4">
-                {offerStrip.current && <p className="text-xs text-center rounded-lg p-2 bg-mint-green w-full">{offerStrip.current}</p>}
+                {offerStrip.current && <p className="text-xs text-center text-white rounded-lg p-2 bg-discountStrip w-full">{offerStrip.current}</p>}
             </div>
             <BookNowFooter
                 batchDetails={batchDetails}
