@@ -66,7 +66,7 @@ function repositionActivity(arr: string[], str: string) {
          whiteSpace:'nowrap'
         }}
       >
-        {toLetterCase(activity)}
+        {toLetterCase(activity).replace("One", "1").replace("Two", "2").replace("Three", "3")}
       </span>
     </Flex>
   );
