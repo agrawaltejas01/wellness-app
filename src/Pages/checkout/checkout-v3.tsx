@@ -558,7 +558,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                 totalAmount={gym?.gymId == 41 ? totalAmount + 500 : totalAmount || batchDetails?.price || 0}
                 comingFrom={EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE}
                 totalGuests={noOfGuests}
-                totalSavings={totalSavings}
+                totalSavings={gym?.gymId == 41 ? totalSavings + 500 : totalSavings}
                 isFromApp={isFromApp}
                 pastAppBookings={pastAppBookings}
                 disabled={
