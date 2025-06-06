@@ -94,6 +94,9 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
     const [coinsAvailable, setCoinsAvailable] = useState<number>(0);
     const [coinsUsed, setCoinsUsed] = useState<number>(0);
 
+    const [kidName, setKidName] = useState<string>("");
+    const [kidAge, setKidAge] = useState<number>(0); 
+    const [kidGender, setKidGender] = useState<string>("");
 
     const [totalAmount, setTotalAmount] = useState(0);
     const [totalSavings, setTotalSavings] = useState(0);
@@ -399,6 +402,8 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
           const updatedParticipants: ParticipantDetail[] = rides.map(
             (rideNumber) => ({
               participantName: "", // Empty string for participant name
+              participantAge: 0,
+              participantGender: "",
               rideNumber: rideNumber, // Just the ride number
             }),
           );
@@ -565,6 +570,74 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                     </div>
                 </div>
             </div>
+            {gym?.gymId == 3 && <div className="flex flex-col mt-4 mx-4 px-4 pt-4 rounded-xl bg-white shadow-gray">
+                <div className="flex flex-col justify-between w-full">
+                    <p className="text-sm font-sm font-bold">Enter Kid's Details</p>
+                </div>
+                <hr className="border-1 border-separate mt-2 border-gray border-spacing-16" />
+                <div className="flex flex-col justify-between w-full mt-4 mb-2">
+                    <input 
+                        type="text" 
+                        className={`w-full border-1 ${!kidName.trim() ? 'border-red-500' : 'border-gray'} rounded-lg p-1`}
+                        placeholder="Name" 
+                        value={kidName} 
+                        onChange={(e) => {
+                            setKidName(e.target.value);
+                            if (e.target.value.trim()) {
+                                const participant = {
+                                    participantName: e.target.value,
+                                    participantAge: kidAge,
+                                    participantGender: kidGender,
+                                };
+                                setParticipants([participant]);
+                            }
+                        }}
+                    />
+                    {!kidName.trim() && <p className="text-xs text-red-500 mt-1 px-1">Please enter kid's name</p>}
+                </div>
+                <div className="flex flex-col justify-between w-full mb-4">
+                    <input 
+                        type="number" 
+                        className={`w-full border-1 ${(kidAge <= 0 || kidAge > 18) ? 'border-red-500' : 'border-gray'} rounded-lg p-1`}
+                        placeholder="Age" 
+                        value={kidAge || ""} 
+                        onChange={(e) => {
+                            const age = Number(e.target.value);
+                            setKidAge(age);
+                            if (age > 0 && age <= 18) {
+                                const participant = {
+                                    participantName: kidName,
+                                    participantAge: age,
+                                    participantGender: kidGender,
+                                };
+                                setParticipants([participant]);
+                            }
+                        }}
+                    />
+                    {(kidAge <= 0 || kidAge > 18) && <p className="text-xs text-red-500 mt-1 px-1">Age must be between 1 and 18</p>}
+                </div>
+                <div className="flex flex-col justify-between w-full mb-4">
+                    <select
+                        className={`w-full border-1 border-gray rounded-lg p-1`}
+                        value={kidGender}
+                        onChange={(e) => {
+                            setKidGender(e.target.value);
+                            if (kidName.trim() && kidAge > 0 && kidAge <= 18) {
+                                const participant = {
+                                    participantName: kidName,
+                                    participantAge: kidAge,
+                                    participantGender: e.target.value,
+                                };
+                                setParticipants([participant]);
+                            }
+                        }}
+                    >
+                        <option value="" disabled>Select Gender</option>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+                    </select>
+                </div>
+            </div>}
             <div className="flex flex-row px-4 pt-4">
                 {offerStrip.current && <p className="text-xs text-center rounded-lg p-2 bg-gray-100 w-full">{offerStrip.current}</p>}
             </div>
@@ -600,7 +673,8 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                 coinsAvailable={coinsAvailable}
                 coinsUsed={coinsUsed}
                 disabled={
-                  selectedRides.length !== noOfGuests && batchDetails?.isRideActivity
+                  (selectedRides.length !== noOfGuests && batchDetails?.isRideActivity) ||
+                  (gym?.gymId == 3 && (!kidName.trim() || kidAge <= 0 || kidAge > 18 || !kidGender.trim()))
                 }
             />
         </div>
