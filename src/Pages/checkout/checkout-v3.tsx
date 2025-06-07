@@ -566,7 +566,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                         value={kidName} 
                         onChange={(e) => {
                             setKidName(e.target.value);
-                            if (kidJerseySize.trim() && kidGender.trim() && kidName.trim() && kidAge > 0 && kidAge <= 18) {
+                            if (kidJerseySize.trim() && kidGender.trim() && kidName.trim() && kidAge >= 5 && kidAge <= 18) {
                                 const participant = {
                                     participantName: e.target.value,
                                     participantAge: kidAge,
@@ -588,7 +588,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                         onChange={(e) => {
                             const age = Number(e.target.value);
                             setKidAge(age);
-                            if (kidJerseySize.trim() && kidGender.trim() && kidName.trim() && kidAge > 0 && kidAge <= 18) {
+                            if (kidJerseySize.trim() && kidGender.trim() && kidName.trim() && kidAge >= 5 && kidAge <= 18) {
                                 const participant = {
                                     participantName: kidName,
                                     participantAge: age,
@@ -599,7 +599,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                             }
                         }}
                     />
-                    {(kidAge <= 0 || kidAge > 18) && <p className="text-xs text-red-500 mt-1 px-1">Age must be between 1 and 18</p>}
+                    {(kidAge < 5 || kidAge > 18) && <p className="text-xs text-red-500 mt-1 px-1">Age must be between 5 and 18</p>}
                 </div>
                 <div className="flex flex-col justify-between w-full mb-4">
                     <select
@@ -607,7 +607,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                         value={kidGender}
                         onChange={(e) => {
                             setKidGender(e.target.value);
-                            if (kidJerseySize.trim() && kidGender.trim() && kidName.trim() && kidAge > 0 && kidAge <= 18) {
+                            if (kidJerseySize.trim() && kidGender.trim() && kidName.trim() && kidAge >= 5 && kidAge <= 18) {
                                 const participant = {
                                     participantName: kidName,
                                     participantAge: kidAge,
@@ -629,7 +629,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                         value={kidJerseySize}
                         onChange={(e) => {
                             setKidJerseySize(e.target.value);
-                            if (kidJerseySize.trim() && kidGender.trim() && kidName.trim() && kidAge > 0 && kidAge <= 18) {
+                            if (kidJerseySize.trim() && kidGender.trim() && kidName.trim() && kidAge >= 5 && kidAge <= 18) {
                                 const participant = {
                                     participantName: kidName,
                                     participantAge: kidAge,
