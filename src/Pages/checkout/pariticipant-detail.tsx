@@ -27,8 +27,7 @@ const ParticipantDetailsForm: React.FC<ParticipantDetailsFormProps> = ({
           participantName: '',
           participantAge: 0,
           participantGender: "",
-        //   jerseyName: '',
-        //   jerseySize: ''
+          jerseySize: ""
         });
       }
       setParticipants(newParticipants);
@@ -42,8 +41,7 @@ const ParticipantDetailsForm: React.FC<ParticipantDetailsFormProps> = ({
         participantName: '',
         participantAge: 0,
         participantGender: "",
-        // jerseyName: '',
-        // jerseySize: ''
+        jerseySize: ""
       };
     }
     updatedParticipants[index] = {

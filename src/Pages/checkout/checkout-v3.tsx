@@ -90,6 +90,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
     const [kidName, setKidName] = useState<string>("");
     const [kidAge, setKidAge] = useState<number>(0); 
     const [kidGender, setKidGender] = useState<string>("");
+    const [kidJerseySize, setKidJerseySize] = useState<string>("");
 
     const [totalAmount, setTotalAmount] = useState(0);
     const [totalSavings, setTotalSavings] = useState(0);
@@ -381,6 +382,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
               participantName: "", // Empty string for participant name
               participantAge: 0,
               participantGender: "",
+              jerseySize: "",
               rideNumber: rideNumber, // Just the ride number
             }),
           );
@@ -564,11 +566,12 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                         value={kidName} 
                         onChange={(e) => {
                             setKidName(e.target.value);
-                            if (e.target.value.trim()) {
+                            if (kidJerseySize.trim() && kidGender.trim() && kidName.trim() && kidAge > 0 && kidAge <= 18) {
                                 const participant = {
                                     participantName: e.target.value,
                                     participantAge: kidAge,
                                     participantGender: kidGender,
+                                    jerseySize: kidJerseySize,
                                 };
                                 setParticipants([participant]);
                             }
@@ -585,11 +588,12 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                         onChange={(e) => {
                             const age = Number(e.target.value);
                             setKidAge(age);
-                            if (age > 0 && age <= 18) {
+                            if (kidJerseySize.trim() && kidGender.trim() && kidName.trim() && kidAge > 0 && kidAge <= 18) {
                                 const participant = {
                                     participantName: kidName,
                                     participantAge: age,
                                     participantGender: kidGender,
+                                    jerseySize: kidJerseySize,
                                 };
                                 setParticipants([participant]);
                             }
@@ -603,11 +607,12 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                         value={kidGender}
                         onChange={(e) => {
                             setKidGender(e.target.value);
-                            if (kidName.trim() && kidAge > 0 && kidAge <= 18) {
+                            if (kidJerseySize.trim() && kidGender.trim() && kidName.trim() && kidAge > 0 && kidAge <= 18) {
                                 const participant = {
                                     participantName: kidName,
                                     participantAge: kidAge,
                                     participantGender: e.target.value,
+                                    jerseySize: kidJerseySize,
                                 };
                                 setParticipants([participant]);
                             }
@@ -616,6 +621,30 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                         <option value="" disabled>Select Gender</option>
                         <option value="M">Male</option>
                         <option value="F">Female</option>
+                    </select>
+                </div>
+                <div className="flex flex-col justify-between w-full mb-4">
+                    <select
+                        className={`w-full border-1 border-gray rounded-lg p-1`}
+                        value={kidJerseySize}
+                        onChange={(e) => {
+                            setKidJerseySize(e.target.value);
+                            if (kidJerseySize.trim() && kidGender.trim() && kidName.trim() && kidAge > 0 && kidAge <= 18) {
+                                const participant = {
+                                    participantName: kidName,
+                                    participantAge: kidAge,
+                                    participantGender: kidGender,
+                                    jerseySize: e.target.value, 
+                                };
+                                setParticipants([participant]);
+                            }
+                        }}
+                    >
+                        <option value="" disabled>Select T-Shirt Size</option>
+                        <option value="S">Small</option>
+                        <option value="M">Medium</option>
+                        <option value="L">Large</option>
+                        <option value="XL">Extra Large</option>
                     </select>
                 </div>
             </div>}
@@ -635,7 +664,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                 pastAppBookings={pastAppBookings}
                 disabled={
                   (selectedRides.length !== noOfGuests && batchDetails?.isRideActivity) ||
-                  (gym?.gymId == 41 && (!kidName.trim() || kidAge <= 0 || kidAge > 18 || !kidGender.trim()))
+                  (gym?.gymId == 41 && (!kidName.trim() || kidAge <= 0 || kidAge > 18 || !kidGender.trim() || !kidJerseySize.trim()))
                 }
             />
         </div>
