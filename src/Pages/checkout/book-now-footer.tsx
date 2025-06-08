@@ -562,7 +562,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
                 vertical
                 justify="center"
                 align="left"
-                className={discountedAmount ? "discountedAmountWrap" : ""}
+                className={showDiscount ? "discountedAmountWrap" : ""}
               >
                 {showDiscount && (
                   <span>
