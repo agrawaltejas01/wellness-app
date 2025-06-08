@@ -133,6 +133,9 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
         mutationFn: getCoins,
         onSuccess: (result) => {
             setCoinsAvailable(result.coins);
+            if(result.coins > 0) {
+              setCoinsUsed(1);
+            }
         },
     });
 
@@ -219,9 +222,6 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
           setGotPastAppBookings(true);
         }
         _getCoinsAvailable(userId);
-        if(coinsAvailable > 0) {
-          setCoinsUsed(1);
-        }
     }, []);
 
     const validateBooking = (): boolean => {
