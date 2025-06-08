@@ -670,7 +670,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
             <div className="flex flex-row px-4 pt-4">
                 {offerStrip.current && <p className="text-xs text-center text-white rounded-lg p-2 bg-discountStrip w-full">{offerStrip.current}</p>}
             </div>
-            <div className="flex flex-row px-4 items-center">
+            {coinsAvailable > 0 && <div className="flex flex-row px-4 items-center">
               <div className="flex flex-row justify-between w-full bg-white shadow-gray rounded-xl items-center">
                 <div className="flex flex-row gap-4 items-center p-4">
                   <div className="flex flex-row gap-2 items-center justify-center" style={{width: "30px", height: "30px"}}>
@@ -687,7 +687,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                   {coinsUsed > 0 ? <ToggleButtonOn onClick={() => setCoinsUsed(0)} /> : <ToggleButtonOff onClick={() => setCoinsUsed(1)} />}
                 </div>
               </div>
-            </div>
+            </div>}
             <BookNowFooter
                 batchDetails={batchDetails}
                 gymData={gym}
