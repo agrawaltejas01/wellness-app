@@ -13,6 +13,7 @@ import Loader from "../../components/Loader";
 import CoinsCheckout from "./coins-checkout";
 import { BottomUpModal } from "../profile/half-page-modal";
 import { toLetterCase } from "../../utils/string-operation";
+import Faqs from "./faqs";
 // import ConfettiSystem from "../../components/confetti-system";
 
 function loadScript(src: string) {
@@ -189,6 +190,7 @@ const Coins: React.FC<RouteComponentProps> = () => {
                     </div>
                 ))}
             </div>
+            <Faqs />
             {/* Success Message */}
             {orderStatus === 'success' && (
                 <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
