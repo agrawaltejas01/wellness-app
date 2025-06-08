@@ -13,11 +13,11 @@ import { navigate } from "@reach/router";
 
 const CoinCapsule = ({ coins }: { coins: number }) => {
     return (
-        <div className="flex flex-col rounded-full bg-white text-black shadow-lg px-8 py-4 mt-4 mx-4">
+        <div className="flex flex-col rounded-full bg-mint-green text-black shadow-lg px-8 py-4 mt-4 mx-4">
             <div className="flex flex-col">
                 {coins != 0 && <div className="flex flex-row gap-2 justify-between">
                     <div className="flex flex-row gap-2 justify-between">
-                        <p className="text-md font-bold">ZenfitX Cash: </p>
+                        <p className="text-md font-bold">Available ZenfitX Cash: </p>
                         <p className="text-md font-bold">{coins}</p>
                     </div>
                     <RightArrow />

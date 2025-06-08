@@ -55,6 +55,7 @@ export interface IBookNowFooter {
   onBeforeAction?: () => boolean;
   coinsAvailable?: number;
   coinsUsed?: number;
+  orderType?: string;
 }
 
 function loadScript(src: string) {
@@ -89,7 +90,8 @@ function createOrderPayload(props: IBookNowFooter, userDetails: IUser) {
     batchTime: props?.batchDetails?.startTime || 0,
     participants: props?.batchDetails?.participants || [],
     coins: props.coinsUsed ? props.coinsUsed : props.coinsAvailable || 0,
-    coinsUsed: props.coinsUsed && props.coinsAvailable ? props.totalAmount <= props.coinsAvailable ? props.totalAmount : props.coinsAvailable : 0,
+    coinsUsed: props.coinsUsed && props.coinsAvailable ? props.totalAmount <= props.coinsAvailable ? props.totalAmount : props.totalAmount - props.coinsAvailable : 0,
+    orderType: props.orderType || "BATCH",
   };
 
   Mixpanel.track("pay_now_button_clicked_on_checkout_page", {

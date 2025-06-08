@@ -10,6 +10,9 @@ import { userDetailsAtom } from "../../atoms/atom";
 import { useAtom } from "jotai";
 import logo from "../../logo.svg";
 import Loader from "../../components/Loader";
+import CoinsCheckout from "./coins-checkout";
+import { BottomUpModal } from "../profile/half-page-modal";
+import { toLetterCase } from "../../utils/string-operation";
 // import ConfettiSystem from "../../components/confetti-system";
 
 function loadScript(src: string) {
@@ -27,6 +30,14 @@ function loadScript(src: string) {
   }
 
 
+  interface CoinsPackage {
+    Id: number;
+    Name: string;
+    CoinValue: number;
+    SellingPrice: number;
+    ValidityDays: number;
+  }
+
 const Coins: React.FC<RouteComponentProps> = () => {
 
     const [coins, setCoins] = useState(0);
@@ -35,6 +46,8 @@ const Coins: React.FC<RouteComponentProps> = () => {
     const [loading, setLoading] = useState(false);
     const [orderStatus, setOrderStatus] = useState('idle');
     const [showConfetti, setShowConfetti] = useState(false);
+    const [showCoinsCheckout, setShowCoinsCheckout] = useState(false);
+    const [coinPackage, setCoinPackage] = useState<CoinsPackage | null>(null);
 
     const userId = window.localStorage["zenfitx-user-details"]
           ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || null
@@ -152,12 +165,12 @@ const Coins: React.FC<RouteComponentProps> = () => {
                 </div>
                 <hr className="w-full mt-4"/>
             </div>
-            <div className="flex flex-col items-center justify-center rounded-full bg-white text-black shadow-lg px-8 py-4 mt-4  mx-4"> 
+            <div className="flex flex-col items-center justify-center rounded-full bg-mint-green text-black shadow-lg px-8 py-4 mt-4  mx-4"> 
                 <p className="text-md font-bold">Available ZenfitX Cash: {coins}</p>
             </div>
             <div className="flex flex-col w-full mt-4"> 
                 { coinsPackages && coinsPackages.map((coinsPackage: any) => (
-                    <div className="flex flex-row rounded-lg text-black shadow-md px-8 py-4 mt-4 mx-4 items-center justify-between">
+                    <div className="flex flex-row rounded-lg bg-gray-100 text-black shadow-md px-8 py-4 mt-4 mx-4 items-center justify-between">
                         <div className="flex flex-col gap-2">
                             <p className="text-md font-bold">{coinsPackage.Name}</p>
                             <div className="flex flex-row gap-2">
@@ -167,7 +180,9 @@ const Coins: React.FC<RouteComponentProps> = () => {
                             <p className="text-md font-bold">Validity: {coinsPackage.ValidityDays} days</p>
                         </div>
                         <button className="bg-black text-white rounded-lg px-4 py-2" onClick={() => {
-                            handleBuyNow(coinsPackage.Id, setLoading);
+                            setCoinPackage(coinsPackage);
+                            setShowCoinsCheckout(true);
+                            // handleBuyNow(coinsPackage.Id, setLoading);
                         }}>Buy Now</button>
                     </div>
                 ))}
@@ -180,15 +195,18 @@ const Coins: React.FC<RouteComponentProps> = () => {
                     </p>
                 </div>
             )} */}
-
-            {/* {showConfetti && (
-                <SVGConfettiSystem
-                isActive={showConfetti}
-                onComplete={handleConfettiComplete}
-                method={animationMethod}
-                />
-            )}  */}
-
+            {showCoinsCheckout && (
+                <BottomUpModal 
+                isOpen={showCoinsCheckout} 
+                onClose={() => {setShowCoinsCheckout(false);}} 
+                title={toLetterCase(coinPackage?.Name as string)}
+                showCloseButton={false}
+                borderBottom={true}
+                >
+                <CoinsCheckout coinPackage={coinPackage as CoinsPackage} setShowCoinsCheckout={setShowCoinsCheckout} />
+                {/* <Button type="primary" onClick={() => {setShowCancelReasonModal(true); setShowCancelModal(false)}}>Cancel Booking</Button> */}
+                </BottomUpModal>
+            )}
         </div>
     );
 
