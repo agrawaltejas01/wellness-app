@@ -13,7 +13,7 @@ import { navigate } from "@reach/router";
 
 const CoinCapsule = ({ coins, loading }: { coins: number, loading: boolean }) => {
     return (
-        <div className={`flex flex-col rounded-full bg-mint-green text-black shadow-lg px-8 py-4 mt-4 mx-4 ${loading ? "animate-pulse" : ""}`}>
+        <div className={`flex flex-col rounded-full bg-mint-green text-black shadow-lg px-8 py-2 mt-4 mx-4 ${loading ? "animate-pulse" : ""}`}>
             <div className="flex flex-col">
                 {coins != 0 && !loading && <div className="flex flex-row gap-2 justify-between">
                     <div className="flex flex-row gap-2 justify-between">
@@ -24,7 +24,7 @@ const CoinCapsule = ({ coins, loading }: { coins: number, loading: boolean }) =>
                 </div>}
                 {coins == 0 && !loading && 
                 <div className="flex flex-row gap-2 justify-between items-center">
-                    <p className="text-sm font-bold">Get upto 20% off on buying ZenfitX coins</p>
+                    <p className="text-xs font-bold">Get upto 20% off on buying ZenfitX coins</p>
                     <RightArrow />
                 </div>
                 }

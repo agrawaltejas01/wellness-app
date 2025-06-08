@@ -575,15 +575,15 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                                 checked={coinsUsed > 0}
                                 onChange={() => setCoinsUsed(coinsUsed > 0 ? 0 : 1)}
                             />
-                            <p className="text-sm font-sm">Pay with ZenfitX Cash</p>
+                            <p className="text-sm font-sm">Pay with ZenfitX Coins</p>
                         </div>
                         <div className="flex flex-row items-center gap-2">
                             <p className="text-sm font-sm">{Rs}{totalAmount <= coinsAvailable ? totalAmount : coinsAvailable}</p>
                         </div>
                     </div>}
-                    {coinsAvailable && <div className="flex flex-row justify-between px-4 pb-6">
+                    {coinsAvailable > 0 && <div className="flex flex-row justify-between px-4 pb-6">
                         <div className="flex flex-row items-center">
-                            <p className="text-xs font-light">ZenfitX Cash Balance: {coinsAvailable}</p>
+                            <p className="text-xs font-light">ZenfitX Coins Balance: {coinsAvailable}</p>
                         </div>
                       </div>}
                 </div>
@@ -674,7 +674,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                 </div>
               </div>
             </div>} */}
-            <div className="flex flex-row px-4 pt-4">
+            <div className="flex flex-row px-4 pt-4 mb-10">
                 {offerStrip.current && <p className="text-xs text-center rounded-lg p-2 bg-gray-100 w-full">{offerStrip.current}</p>}
             </div>
             <BookNowFooter
