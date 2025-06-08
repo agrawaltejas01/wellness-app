@@ -290,6 +290,8 @@ const calculateFinalPrice = (
   discountType: string,
   offerPercentage: number,
   maxDiscount: number,
+  coinsAvailable: number,
+  coinsUsed: number,
 ): number => {
   if (!basePrice || !noOfGuests) return 0;
 
@@ -303,6 +305,10 @@ const calculateFinalPrice = (
     const percentageDiscount = (totalPrice * offerPercentage) / 100;
     const discountAmount = Math.min(maxDiscount, percentageDiscount);
     return Math.floor(totalPrice - discountAmount);
+  }
+
+  if (coinsAvailable && coinsUsed && coinsUsed > 0) {
+    return totalPrice - (totalPrice <= coinsAvailable ? totalPrice : coinsAvailable);
   }
 
   return totalPrice;
@@ -377,6 +383,8 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
         batchDetails.discountType || "",
         batchDetails.offerPercentage || 0,
         batchDetails.maxDiscount || 0,
+        coinsAvailable || 0,
+        coinsUsed || 0,
       );
       setDiscountedAmount(finalPrice);
     }
@@ -574,12 +582,9 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
                   className={showDiscount ? "discountedAmount" : ""}
                 >
                   {Rs}
-                  {props.totalAmount + (props.totalSavings || 0)}
+                  {props.totalAmount + (props.totalSavings || 0) - (coinsAvailable && coinsUsed && coinsUsed > 0 ? (props.totalAmount <= coinsAvailable ? props.totalAmount : coinsAvailable) : 0)}
                 </span>
               </Flex>
-              {(coinsAvailable && coinsUsed && coinsUsed > 0) ? <div className="flex flex-row gap-2 items-center font-light text-xs text-gray">
-                      {coinsAvailable > 0 ? `Paying ${props.totalAmount <= coinsAvailable ? props.totalAmount : coinsAvailable} with ZenfitX Cash` : ``}
-              </div> : ``} 
             </div>
             <button
               id={
