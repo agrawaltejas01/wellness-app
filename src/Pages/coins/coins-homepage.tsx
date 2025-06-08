@@ -11,18 +11,18 @@ import { navigate } from "@reach/router";
 
 
 
-const CoinCapsule = ({ coins }: { coins: number }) => {
+const CoinCapsule = ({ coins, loading }: { coins: number, loading: boolean }) => {
     return (
-        <div className="flex flex-col rounded-full bg-mint-green text-black shadow-lg px-8 py-4 mt-4 mx-4">
+        <div className={`flex flex-col rounded-full bg-mint-green text-black shadow-lg px-8 py-4 mt-4 mx-4 ${loading ? "animate-pulse" : ""}`}>
             <div className="flex flex-col">
-                {coins != 0 && <div className="flex flex-row gap-2 justify-between">
+                {coins != 0 && !loading && <div className="flex flex-row gap-2 justify-between">
                     <div className="flex flex-row gap-2 justify-between">
                         <p className="text-md font-bold">Available ZenfitX Cash: </p>
                         <p className="text-md font-bold">{coins}</p>
                     </div>
                     <RightArrow />
                 </div>}
-                {coins == 0 && 
+                {coins == 0 && !loading && 
                 <div className="flex flex-row gap-2 justify-between items-center">
                     <p className="text-sm font-bold">Get 12,000 cash points on 20% off.</p>
                     <RightArrow />
@@ -37,11 +37,13 @@ const CoinCapsule = ({ coins }: { coins: number }) => {
 const CoinsHomepage: React.FC = () => {
 
     const [coins, setCoins] = useState(0);
+    const [loading, setLoading] = useState(true);
 
     const { mutate: _getCoins } = useMutation({
         mutationFn: getCoins,
         onSuccess: (result) => {
             setCoins(result.coins);
+            setLoading(false);
             // setCoins(10);
         }
     });
@@ -60,7 +62,7 @@ const CoinsHomepage: React.FC = () => {
         <div className="cursor-pointer" onClick={() => {
             navigate("/coins");
         }}>
-           <CoinCapsule coins={coins} />
+           <CoinCapsule coins={coins} loading={loading} />
         </div>
     );
 };
