@@ -569,7 +569,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                             <p className="text-sm font-sm">{Rs}{totalAmount} </p>
                         </div>
                     </div>
-                    {coinsAvailable > 0 && <div className="flex flex-row justify-between px-4 pb-6">
+                    {coinsAvailable > 0 && <div className="flex flex-row justify-between px-4 pb-2">
                         <div className="flex flex-row items-center gap-2">
                             <Checkbox
                                 checked={coinsUsed > 0}
@@ -581,6 +581,11 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                             <p className="text-sm font-sm">{Rs}{totalAmount <= coinsAvailable ? totalAmount : coinsAvailable}</p>
                         </div>
                     </div>}
+                    {coinsAvailable && <div className="flex flex-row justify-between px-4 pb-6">
+                        <div className="flex flex-row items-center">
+                            <p className="text-xs font-light">ZenfitX Cash Balance: {coinsAvailable}</p>
+                        </div>
+                      </div>}
                 </div>
             </div>
             {gym?.gymId == 3 && <div className="flex flex-col mt-4 mx-4 px-4 pt-4 rounded-xl bg-white shadow-gray">

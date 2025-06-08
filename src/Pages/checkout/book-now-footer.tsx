@@ -295,20 +295,20 @@ const calculateFinalPrice = (
 ): number => {
   if (!basePrice || !noOfGuests) return 0;
 
-  const totalPrice = basePrice * noOfGuests;
+  let totalPrice = basePrice * noOfGuests;
 
   if (discountType === "FLAT") {
-    return Math.floor((totalPrice * (100 - offerPercentage)) / 100);
+    totalPrice =  Math.floor((totalPrice * (100 - offerPercentage)) / 100);
   }
 
   if (discountType === "PERCENTAGE") {
     const percentageDiscount = (totalPrice * offerPercentage) / 100;
     const discountAmount = Math.min(maxDiscount, percentageDiscount);
-    return Math.floor(totalPrice - discountAmount);
+    totalPrice = Math.floor(totalPrice - discountAmount);
   }
 
   if (coinsAvailable && coinsUsed && coinsUsed > 0) {
-    return totalPrice - (totalPrice <= coinsAvailable ? totalPrice : coinsAvailable);
+    totalPrice = totalPrice - (totalPrice <= coinsAvailable ? totalPrice : coinsAvailable);
   }
 
   return totalPrice;
@@ -582,7 +582,8 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
                   className={showDiscount ? "discountedAmount" : ""}
                 >
                   {Rs}
-                  {props.totalAmount + (props.totalSavings || 0) - (coinsAvailable && coinsUsed && coinsUsed > 0 ? (props.totalAmount <= coinsAvailable ? props.totalAmount : coinsAvailable) : 0)}
+                  {!showDiscount ? props.totalAmount + (props.totalSavings || 0) - (coinsAvailable && coinsUsed && coinsUsed > 0 ? (props.totalAmount <= coinsAvailable ? props.totalAmount : coinsAvailable) : 0)
+                  : props.totalAmount + (props.totalSavings || 0)}
                 </span>
               </Flex>
             </div>
