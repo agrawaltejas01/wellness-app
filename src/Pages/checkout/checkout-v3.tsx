@@ -321,7 +321,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
               price * noOfGuests - (price * noOfGuests * offerPercentage) / 100
                 ? price * noOfGuests - maxDiscount
                 : price * noOfGuests - (price * noOfGuests * offerPercentage) / 100;
-            finalPrice = Math.floor(finalPrice);
+            finalPrice = Math.floor(finalPrice);  
             batchDetails.offerType = EOfferType.APP;
           } else if (batchDetails.discountType == "FLAT") {
             finalPrice =
@@ -583,6 +583,11 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                             <p className="text-sm font-sm">{Rs}{totalAmount <= coinsAvailable ? totalAmount : coinsAvailable}</p>
                         </div>
                     </div>}
+                    {coinsAvailable > 0 && <div className="flex flex-row justify-between px-4 pb-6">
+                        <div className="flex flex-row items-center">
+                            <p className="text-xs font-light">ZenfitX Coins Balance: {coinsAvailable}</p>
+                        </div>
+                      </div>}
                 </div>
             </div>
             {gym?.gymId == 41 && <div className="flex flex-col mt-4 mx-4 px-4 pt-4 rounded-xl bg-white shadow-gray">
