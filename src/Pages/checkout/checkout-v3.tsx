@@ -30,6 +30,7 @@ import { getCoins } from "../../apis/coins/coins";
 import { ReactComponent as ToggleButtonOff } from "../../images/utils/toggle-off.svg";
 import { ReactComponent as ToggleButtonOn } from "../../images/utils/toggle-on.svg";
 import { ReactComponent as Wallet } from "../../images/utils/wallet.svg";
+import Checkbox from "antd/es/checkbox/Checkbox";
 // Function to convert 24-hour time to 12-hour format
 const convert24HourTo12Hour = (timeStr: string): { formattedTime: string; error: string | null } => {
     // Handle empty input
@@ -570,6 +571,18 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                           <p className="text-sm font-sm">One Time Registration Fee</p>
                           <p className="text-sm font-sm">{Rs}500</p>
                         </div>}
+                    {coinsAvailable > 0 && <div className="flex flex-row justify-between px-4 pb-6">
+                        <div className="flex flex-row items-center gap-2">
+                            <Checkbox
+                                checked={coinsUsed > 0}
+                                onChange={() => setCoinsUsed(coinsUsed > 0 ? 0 : 1)}
+                            />
+                            <p className="text-sm font-sm">Pay with ZenfitX Coins</p>
+                        </div>
+                        <div className="flex flex-row items-center gap-2">
+                            <p className="text-sm font-sm">{Rs}{totalAmount <= coinsAvailable ? totalAmount : coinsAvailable}</p>
+                        </div>
+                    </div>}
                 </div>
             </div>
             {gym?.gymId == 41 && <div className="flex flex-col mt-4 mx-4 px-4 pt-4 rounded-xl bg-white shadow-gray">
@@ -670,7 +683,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
             <div className="flex flex-row px-4 pt-4">
                 {offerStrip.current && <p className="text-xs text-center text-white rounded-lg p-2 bg-discountStrip w-full">{offerStrip.current}</p>}
             </div>
-            {coinsAvailable > 0 && <div className="flex flex-row px-4 items-center">
+            {/* {coinsAvailable > 0 && <div className="flex flex-row px-4 items-center">
               <div className="flex flex-row justify-between w-full bg-white shadow-gray rounded-xl items-center">
                 <div className="flex flex-row gap-4 items-center p-4">
                   <div className="flex flex-row gap-2 items-center justify-center" style={{width: "30px", height: "30px"}}>
@@ -687,7 +700,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                   {coinsUsed > 0 ? <ToggleButtonOn onClick={() => setCoinsUsed(0)} /> : <ToggleButtonOff onClick={() => setCoinsUsed(1)} />}
                 </div>
               </div>
-            </div>}
+            </div>} */}
             <BookNowFooter
                 batchDetails={batchDetails}
                 gymData={gym}
