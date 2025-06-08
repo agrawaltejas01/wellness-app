@@ -388,7 +388,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
       );
       setDiscountedAmount(finalPrice);
     }
-  }, [showDiscount, batchDetails, totalGuests]);
+  }, [showDiscount, batchDetails, totalGuests, coinsAvailable, coinsUsed]);
 
   const discountText =
     gymData?.discountType === "FLAT"
