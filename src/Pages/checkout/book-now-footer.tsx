@@ -557,7 +557,6 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
               paddingLeft: "24px",
             }}
           >
-            <div className="flex flex-col gap-2">
               <Flex
                 flex={2}
                 vertical
@@ -586,7 +585,6 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
                   : props.totalAmount + (props.totalSavings || 0)}
                 </span>
               </Flex>
-            </div>
             <button
               id={
                 props.comingFrom ===
