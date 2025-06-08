@@ -17,7 +17,7 @@ const CoinCapsule = ({ coins }: { coins: number }) => {
             <div className="flex flex-col">
                 {coins != 0 && <div className="flex flex-row gap-2 justify-between">
                     <div className="flex flex-row gap-2 justify-between">
-                        <p className="text-md font-bold">Available ZenfitX Cash: </p>
+                        <p className="text-md font-bold">Available ZenfitX Coins: </p>
                         <p className="text-md font-bold">{coins}</p>
                     </div>
                     <RightArrow />

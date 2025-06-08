@@ -161,23 +161,25 @@ const Coins: React.FC<RouteComponentProps> = () => {
                     <BackArrow className="cursor-pointer absolute left-4" onClick={() => {
                         navigate("/");
                     }} />
-                    <p className="text-xl font-bold">ZenfitX Cash</p>
+                    <p className="text-xl font-bold">ZenfitX Coins (1 Coin = ₹1)</p>
                 </div>
                 <hr className="w-full mt-4"/>
             </div>
             <div className="flex flex-col items-center justify-center rounded-full bg-mint-green text-black shadow-lg px-8 py-4 mt-4  mx-4"> 
-                <p className="text-md font-bold">Available ZenfitX Cash: {coins}</p>
+                <p className="text-md font-bold">Available ZenfitX Coins: {coins}</p>
             </div>
-            <div className="flex flex-col w-full mt-4"> 
+            <div className="flex flex-col w-full text-sm mt-4"> 
                 { coinsPackages && coinsPackages.map((coinsPackage: any) => (
                     <div className="flex flex-row rounded-lg bg-gray-100 text-black shadow-md px-8 py-4 mt-4 mx-4 items-center justify-between">
                         <div className="flex flex-col gap-2">
-                            <p className="text-md font-bold">{coinsPackage.Name}</p>
+                            <p className="text-md ">{coinsPackage.Name}</p>
+                            <p className="text-md">{coinsPackage.CoinValue} Coins</p>
                             <div className="flex flex-row gap-2">
-                                <p className="text-md font-bold line-through">₹{coinsPackage.CoinValue}</p>
+                                <p className="text-md line-through">₹{coinsPackage.CoinValue}</p>
                                 <p className="text-md font-bold">₹{coinsPackage.SellingPrice}</p>
                             </div>
-                            <p className="text-md font-bold">Validity: {coinsPackage.ValidityDays} days</p>
+                            <p className="text-md">{Math.floor(((coinsPackage.CoinValue - coinsPackage.SellingPrice) / coinsPackage.CoinValue) * 100)}% Off</p>
+                            <p className="text-md">Validity: {coinsPackage.ValidityDays} days</p>
                         </div>
                         <button className="bg-black text-white rounded-lg px-4 py-2" onClick={() => {
                             setCoinPackage(coinsPackage);
@@ -200,6 +202,7 @@ const Coins: React.FC<RouteComponentProps> = () => {
                 isOpen={showCoinsCheckout} 
                 onClose={() => {setShowCoinsCheckout(false);}} 
                 title={toLetterCase(coinPackage?.Name as string)}
+                subtitle="Pay using coins instead of cash on next booking. (1 Coin = ₹1)"
                 showCloseButton={false}
                 borderBottom={true}
                 >
