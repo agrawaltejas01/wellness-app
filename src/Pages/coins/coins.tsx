@@ -162,7 +162,7 @@ const Coins: React.FC<RouteComponentProps> = () => {
                     <BackArrow className="cursor-pointer absolute left-4" onClick={() => {
                         navigate("/");
                     }} />
-                    <p className="text-xl font-bold">ZenfitX Coins (1 Coin = ₹1)</p>
+                    <p className="text-md font-bold">ZenfitX Coins (1 Coin = ₹1)</p>
                 </div>
                 <hr className="w-full mt-4"/>
             </div>
@@ -192,13 +192,13 @@ const Coins: React.FC<RouteComponentProps> = () => {
             </div>
             <Faqs />
             {/* Success Message */}
-            {orderStatus === 'success' && (
+            {/* {orderStatus === 'success' && (
                 <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
                     <p className="text-green-800 text-center">
                     🎉 Watch the SVG confetti celebration!
                     </p>
                 </div>
-            )}
+            )} */}
             {showCoinsCheckout && (
                 <BottomUpModal 
                 isOpen={showCoinsCheckout} 
