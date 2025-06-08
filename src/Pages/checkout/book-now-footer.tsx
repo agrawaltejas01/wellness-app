@@ -90,7 +90,7 @@ function createOrderPayload(props: IBookNowFooter, userDetails: IUser) {
     batchTime: props?.batchDetails?.startTime || 0,
     participants: props?.batchDetails?.participants || [],
     coins: props.coinsUsed ? props.coinsUsed : props.coinsAvailable || 0,
-    coinsUsed: props.coinsUsed && props.coinsAvailable ? props.totalAmount <= props.coinsAvailable ? props.totalAmount : props.totalAmount - props.coinsAvailable : 0,
+    coinsUsed: props.coinsUsed && props.coinsAvailable ? props.totalAmount <= props.coinsAvailable ? props.totalAmount : props.coinsAvailable : 0,
     orderType: props.orderType || "BATCH",
   };
 
