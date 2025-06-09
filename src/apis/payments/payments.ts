@@ -18,6 +18,10 @@ export interface ICreateRzpOrder {
   username: string;
   platform: string;
   participants: ParticipantDetail[];
+  coins?: number;
+  coinsUsed?: number;
+  coinsAvailable?: number;
+  orderType: string;
 }
 
 export async function createRzpOrder(data: ICreateRzpOrder) {

@@ -21,6 +21,7 @@ import { trackEvent } from "../../firebase/config";
 import { getPastAppBookings } from "../../apis/gym/activities";
 import { useMutation } from "@tanstack/react-query";
 import { errorToast } from "../../components/Toast";
+import wallet from "../../images/utils/wallet.svg";
 
 interface RazorpayResponse {
   razorpay_payment_id?: string;
@@ -52,6 +53,9 @@ export interface IBookNowFooter {
   pastAppBookings?: PastAppBookingObject;
   disabled?: boolean;
   onBeforeAction?: () => boolean;
+  coinsAvailable?: number;
+  coinsUsed?: number;
+  orderType?: string;
 }
 
 function loadScript(src: string) {
@@ -85,6 +89,9 @@ function createOrderPayload(props: IBookNowFooter, userDetails: IUser) {
     batchDate: props?.batchDetails?.date || "",
     batchTime: props?.batchDetails?.startTime || 0,
     participants: props?.batchDetails?.participants || [],
+    coins: props.coinsUsed ? props.coinsUsed : props.coinsAvailable || 0,
+    coinsUsed: props.coinsUsed && props.coinsAvailable ? props.totalAmount <= props.coinsAvailable ? props.totalAmount : props.coinsAvailable : 0,
+    orderType: props.orderType || "BATCH",
   };
 
   Mixpanel.track("pay_now_button_clicked_on_checkout_page", {
@@ -133,6 +140,17 @@ async function displayRazorpay(
   if (!orderResult?.orderId) {
     alert(`Could not place order!`);
     setLoading(false);
+    return;
+  }
+
+  if(orderResult.orderId == "COINS") {
+    setLoading(false);
+    navigate("/checkout/success", {
+      state: {
+        gymData: props.gymData,
+        batchDetails: props.batchDetails,
+      },
+    });
     return;
   }
 
@@ -272,19 +290,25 @@ const calculateFinalPrice = (
   discountType: string,
   offerPercentage: number,
   maxDiscount: number,
+  coinsAvailable: number,
+  coinsUsed: number,
 ): number => {
   if (!basePrice || !noOfGuests) return 0;
 
-  const totalPrice = basePrice * noOfGuests;
+  let totalPrice = basePrice * noOfGuests;
 
   if (discountType === "FLAT") {
-    return Math.floor((totalPrice * (100 - offerPercentage)) / 100);
+    totalPrice = Math.floor((totalPrice * (100 - offerPercentage)) / 100);
   }
 
   if (discountType === "PERCENTAGE") {
     const percentageDiscount = (totalPrice * offerPercentage) / 100;
     const discountAmount = Math.min(maxDiscount, percentageDiscount);
-    return Math.floor(totalPrice - discountAmount);
+    totalPrice = Math.floor(totalPrice - discountAmount);
+  }
+
+  if (coinsAvailable && coinsUsed && coinsUsed > 0) {
+    totalPrice = totalPrice - (totalPrice <= coinsAvailable ? totalPrice : coinsAvailable);
   }
 
   return totalPrice;
@@ -308,6 +332,8 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
     comingFrom,
     disabled,
     gymData,
+    coinsAvailable,
+    coinsUsed,
   } = props;
 
   const { mutate: _getPastAppBookings } = useMutation({
@@ -357,10 +383,12 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
         batchDetails.discountType || "",
         batchDetails.offerPercentage || 0,
         batchDetails.maxDiscount || 0,
+        coinsAvailable || 0,
+        coinsUsed || 0,
       );
       setDiscountedAmount(props.comingFrom == EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE && gymData?.gymId == 41 ? finalPrice + 500 : finalPrice);
     }
-  }, [showDiscount, batchDetails, totalGuests]);
+  }, [showDiscount, batchDetails, totalGuests, coinsAvailable, coinsUsed]);
 
   const discountText =
     gymData?.discountType === "FLAT"
@@ -529,33 +557,36 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
               paddingLeft: "24px",
             }}
           >
-            <Flex
-              flex={2}
-              vertical
-              justify="center"
-              align="left"
-              className={discountedAmount ? "discountedAmountWrap" : ""}
-            >
-              {showDiscount && (
-                <span>
-                  {Rs}
-                  {discountedAmount}
-                </span>
-              )}
-              &nbsp;&nbsp;
-              <span
-                style={{
-                  fontWeight: "bold",
-                  fontSize: "20px",
-                  textDecorationLine: showDiscount ? "line-through" : "",
-                  marginBottom: showDiscount ? "3px" : "",
-                }}
-                className={showDiscount ? "discountedAmount" : ""}
+            <div className="flex flex-col gap-2">
+              <Flex
+                flex={2}
+                vertical
+                justify="center"
+                align="left"
+                className={"discountedAmountWrap"}
               >
-                {Rs}
-                {props.totalAmount + (props.totalSavings || 0)}
-              </span>
-            </Flex>
+                {showDiscount && (
+                  <span>
+                    {Rs}
+                    {discountedAmount}
+                  </span>
+                )}
+                &nbsp;&nbsp;
+                <span
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "20px",
+                    textDecorationLine: showDiscount ? "line-through" : "",
+                    marginBottom: showDiscount ? "3px" : "",
+                  }}
+                  className={showDiscount ? "discountedAmount" : ""}
+                >
+                  {Rs}
+                  {!showDiscount ? props.totalAmount + (props.totalSavings || 0) - (coinsAvailable && coinsUsed && coinsUsed > 0 ? (props.totalAmount <= coinsAvailable ? props.totalAmount : coinsAvailable) : 0)
+                  : props.totalAmount + (props.totalSavings || 0)}
+                </span>
+              </Flex>
+            </div>
             <button
               id={
                 props.comingFrom ===
