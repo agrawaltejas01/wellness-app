@@ -571,7 +571,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                           <p className="text-sm font-sm">One Time Registration Fee</p>
                           <p className="text-sm font-sm">{Rs}500</p>
                         </div>}
-                    {coinsAvailable > 0 && <div className="flex flex-row justify-between px-4 pb-6">
+                    {coinsAvailable > 0 && <div className="flex flex-row justify-between px-4 pb-2">
                         <div className="flex flex-row items-center gap-2">
                             <Checkbox
                                 checked={coinsUsed > 0}
