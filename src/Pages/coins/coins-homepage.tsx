@@ -24,7 +24,7 @@ const CoinCapsule = ({ coins, loading }: { coins: number, loading: boolean }) =>
                 </div>}
                 {coins == 0 && 
                 <div className="flex flex-row gap-2 justify-between items-center">
-                    <p className="text-xs font-bold">Get upto 20% off on buying ZenfitX coins</p>
+                    <p className="text-xs font-bold">Get upto 25% off on buying ZenfitX coins</p>
                     <RightArrow />
                 </div>
                 }
