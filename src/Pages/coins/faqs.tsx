@@ -19,11 +19,11 @@ const Faqs: React.FC<RouteComponentProps> = () => {
         },
         {
             question: "How many coins do I get in each plan?",
-            answer: `1 Week Trial: 600 Coins for ₹570<br />1 Month Plan: 3000 Coins for ₹2550<br />3 Month Plan: 10,000 Coins for ₹8200<br />12 Month Plan: 30,000 Coins for ₹22,500`,
+            answer: `2 Month Trial Plan: 600 Coins for ₹570<br />2 Month Plan: 3000 Coins for ₹2550<br />6 Month Plan: 10,000 Coins for ₹8200<br />12 Month Plan: 30,000 Coins for ₹22,500`,
         },
         {
             question: "Do ZenfitX Coins expire?",
-            answer: "Yes, they’re valid only for the plan duration: <br />1 Week = 7 days <br />1 Month = 30 days <br />3 Months = 90 days <br />12 Months = 365 days"
+            answer: "Yes, they’re valid only for the plan duration: <br />2 Months = 60 days <br />6 Months = 180 days <br />12 Months = 365 days"
         },
         {
             question: "Can I use coins instead of paying every time?",
