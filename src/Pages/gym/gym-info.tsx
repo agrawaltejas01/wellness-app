@@ -28,7 +28,7 @@ import { Rs } from "../../constants/symbols";
 import { discount } from "../../constants/gym-discount";
 
 const maxChar = 250;
-const hideChooseActivityForGymIds = [40, 41];
+const hideChooseActivityForGymIds = [40, 41, 44];
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
