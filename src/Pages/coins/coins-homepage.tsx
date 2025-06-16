@@ -6,6 +6,7 @@ import Circle from "../../components/circle";
 import { Rs } from "../../constants/symbols";
 import {ReactComponent as RightArrow} from "../../images/utils/right-arrow.svg";
 import { navigate } from "@reach/router";
+import { Mixpanel } from "../../mixpanel/init";
 
 
 
@@ -61,6 +62,9 @@ const CoinsHomepage: React.FC = () => {
     return (    
         <div className="cursor-pointer" onClick={() => {
             navigate("/coins");
+            Mixpanel.track("clicked_coins_section_on_homepage", {
+                userId: userId,
+            });
         }}>
            <CoinCapsule coins={coins} loading={loading} />
         </div>

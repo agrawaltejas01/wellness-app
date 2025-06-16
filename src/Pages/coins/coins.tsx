@@ -14,6 +14,7 @@ import CoinsCheckout from "./coins-checkout";
 import { BottomUpModal } from "../profile/half-page-modal";
 import { toLetterCase } from "../../utils/string-operation";
 import Faqs from "./faqs";
+import { Mixpanel } from "../../mixpanel/init";
 // import ConfettiSystem from "../../components/confetti-system";
 
 function loadScript(src: string) {
@@ -185,6 +186,10 @@ const Coins: React.FC<RouteComponentProps> = () => {
                         <button className="bg-black text-white rounded-lg px-4 py-2" onClick={() => {
                             setCoinPackage(coinsPackage);
                             setShowCoinsCheckout(true);
+                            Mixpanel.track("clicked_buy_coins_button", {
+                                userId: userId,
+                                coinsPackage: coinsPackage,
+                            });
                             // handleBuyNow(coinsPackage.Id, setLoading);
                         }}>Buy Now</button>
                     </div>
