@@ -186,7 +186,7 @@ const Coins: React.FC<RouteComponentProps> = () => {
                         <button className="bg-black text-white rounded-lg px-4 py-2" onClick={() => {
                             setCoinPackage(coinsPackage);
                             setShowCoinsCheckout(true);
-                            Mixpanel.track("clicked_buy_coins_button", {
+                            Mixpanel.track("clicked_buy_now_button_on_coins_page", {
                                 userId: userId,
                                 coinsPackage: coinsPackage,
                             });
