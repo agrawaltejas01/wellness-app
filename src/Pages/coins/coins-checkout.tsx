@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import logo from "../../logo.svg";
 import { buyCoins } from "../../apis/coins/coins";
 import Loader from "../../components/Loader";
+import { Mixpanel } from "../../mixpanel/init";
 
 interface ICoinsCheckout extends RouteComponentProps {
     coinPackage: CoinsPackage;
@@ -52,9 +53,17 @@ const CoinsCheckout: React.FC<ICoinsCheckout> = ({coinPackage, setShowCoinsCheck
             mutationFn: (packageId: number) => buyCoins(packageId, userId),
             onSuccess: (result) => {
                 console.log(result);
+                Mixpanel.track("coins_purchased_success", {
+                    userId: userId,
+                    coinsPackage: coinPackage,
+                });
                 return result;
             },
             onError: (error) => {
+                Mixpanel.track("coins_purchased_failed", {
+                    userId: userId,
+                    coinsPackage: coinPackage,
+                });
                 errorToast("Error in buying coins");
             }
         });
@@ -134,6 +143,10 @@ const CoinsCheckout: React.FC<ICoinsCheckout> = ({coinPackage, setShowCoinsCheck
             <div className="flex flex-row justify-between font-bold text-sm mb-4 mx-4">
                 <button className="w-full bg-black font-bold text-white text-lg rounded-lg px-4 py-4" onClick={() => {
                     handleBuyNow(coinPackage.Id, setLoading);
+                    Mixpanel.track("clicked_buy_coins_button", {
+                        userId: userId,
+                        coinsPackage: coinPackage,
+                    });
                 }}>Buy</button>
             </div>
         </div>
