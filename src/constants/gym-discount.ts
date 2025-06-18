@@ -3,7 +3,7 @@ export const discount = {
     2: "FLAT 80% off on your first booking at this center",
     3: "",
     4: "FLAT 80% off on your first booking at this center",
-    5:"",
+    5: "",
     6: "50% off upto Rs.75 on your first booking at this center",
     7: "FLAT 80% off on your first booking at this center",
     8: "FLAT 80% off on your first booking at this center",
