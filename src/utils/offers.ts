@@ -63,14 +63,14 @@ export function shouldShowDiscount(
     return false;
   }
 
-  if(gym.offerPercentage === 0) {
-    return false;
-  }
+  // if(gym.offerPercentage === 0) {
+  //   return false;
+  // }
 
-  //Case 1: If gym is not offering any discount
-  if(gym.discountType === "NONE" || gym.discountType === "" || gym.offerType === EOfferType.BATCH_WITH_GUESTS){
-    return false;
-  }
+  // //Case 1: If gym is not offering any discount
+  // if(gym.discountType === "NONE" || gym.discountType === "" || gym.offerType === EOfferType.BATCH_WITH_GUESTS){
+  //   return false;
+  // }
   return true;
 
   // Check for conditions that definitely hide discount
