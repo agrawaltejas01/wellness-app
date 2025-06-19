@@ -41,5 +41,11 @@ export const discount = {
     41: "FLAT 5% off on your first booking at this center",
     42: "",
     43: "",
-    44: ""
+    44: "",
+    45: "",
+    46: "",
+    47: "",
+    48: "",
+    49: "",
+    50: ""
 }

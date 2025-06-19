@@ -44,7 +44,7 @@ export function shouldShowDiscount(
     return false;
   }
 
-  if(batch?.offerPercentage === 0 || gym.offerPercentage === 0) {
+  if(batch?.offerPercentage === 0) {
     return false;
   }
 
@@ -52,10 +52,6 @@ export function shouldShowDiscount(
     return false;
   }
 
-  //Case 1: If gym is not offering any discount
-  if(gym.discountType === "NONE" || gym.discountType === "" || gym.offerType === EOfferType.BATCH_WITH_GUESTS){
-    return false;
-  }
 
   // Case 2: If user is not logged in
   if(!userDetails){
@@ -64,6 +60,15 @@ export function shouldShowDiscount(
 
   // Case 3: If user has past booking
   if(hasPastBooking(gym.gymId, pastAppBookings) || !isFromApp){
+    return false;
+  }
+
+  if(gym.offerPercentage === 0) {
+    return false;
+  }
+
+  //Case 1: If gym is not offering any discount
+  if(gym.discountType === "NONE" || gym.discountType === "" || gym.offerType === EOfferType.BATCH_WITH_GUESTS){
     return false;
   }
   return true;
