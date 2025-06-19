@@ -127,21 +127,30 @@ function getListOfCenters(
       finalPrice = price;
     }
     console.log({price, showDiscount, finalPrice, maxDiscount, offerPercentage});
-    return showDiscount ? (
-      <div className="dCard">
-        <div className="dPrice">₹{Math.floor(finalPrice)}</div>
-        <div className="sPrice slash">₹{price}</div>
-        <div className="sPrice">onwards</div>
-      </div>
-    ) : (
-      <div className="dCard">
-        <div className="dPrice">
-          {Rs}
-          {price}
+    // return showDiscount ? (
+    //   <div className="dCard">
+    //     <div className="dPrice">₹{Math.floor(finalPrice)}</div>
+    //     <div className="sPrice slash">₹{price}</div>
+    //     <div className="sPrice">onwards</div>
+    //   </div>
+    // ) : (
+    //   <div className="dCard">
+    //     <div className="dPrice">
+    //       {Rs}
+    //       {price}
+    //     </div>
+    //     <div className="sPrice">onwards</div>
+    //   </div>
+    // );
+    return  (
+        <div className="dCard">
+          <div className="dPrice">
+            {Rs}
+            {price}
+          </div>
+          <div className="sPrice">onwards</div>
         </div>
-        <div className="sPrice">onwards</div>
-      </div>
-    );
+      );
   };
 
   const cardWidget = (gymCard: IGymCard, isFromApp: boolean, pastAppBookings: PastAppBookingObject) => {
