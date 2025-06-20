@@ -180,7 +180,7 @@ function getListOfCenters(
         <div
           // className="activityDetailWrapper"
           className={
-            showDiscount ? "activityDetailWrapper2" : "activityDetailWrapper"
+            showDiscount && discount?.[gymCard.gymId as keyof typeof discount]?.length > 0 ? "activityDetailWrapper2" : "activityDetailWrapper"
           }
         >
           <div className="activityDetail">
@@ -197,7 +197,7 @@ function getListOfCenters(
             </div>}
           </div>
 
-          {showDiscount && (
+          {showDiscount && discount?.[gymCard.gymId as keyof typeof discount]?.length > 0 && (
             <div className="discount">
               <div>
                 {discountIcon()}
