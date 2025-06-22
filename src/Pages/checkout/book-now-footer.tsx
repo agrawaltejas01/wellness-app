@@ -56,6 +56,7 @@ export interface IBookNowFooter {
   coinsAvailable?: number;
   coinsUsed?: number;
   orderType?: string;
+  equipmentRentalCharges?: number;
 }
 
 function loadScript(src: string) {
@@ -92,6 +93,7 @@ function createOrderPayload(props: IBookNowFooter, userDetails: IUser) {
     coins: props.coinsUsed ? props.coinsUsed : props.coinsAvailable || 0,
     coinsUsed: props.coinsUsed && props.coinsAvailable ? props.totalAmount <= props.coinsAvailable ? props.totalAmount : props.coinsAvailable : 0,
     orderType: props.orderType || "BATCH",
+    equipmentRentalCharges: props.equipmentRentalCharges || 0,
   };
 
   Mixpanel.track("pay_now_button_clicked_on_checkout_page", {
@@ -292,10 +294,11 @@ const calculateFinalPrice = (
   maxDiscount: number,
   coinsAvailable: number,
   coinsUsed: number,
+  equipmentRentalCharges: number,
 ): number => {
   if (!basePrice || !noOfGuests) return 0;
 
-  let totalPrice = basePrice * noOfGuests;
+  let totalPrice = basePrice * noOfGuests + equipmentRentalCharges;
 
   if (discountType === "FLAT") {
     totalPrice = Math.floor((totalPrice * (100 - offerPercentage)) / 100);
@@ -334,6 +337,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
     gymData,
     coinsAvailable,
     coinsUsed,
+    equipmentRentalCharges,
   } = props;
 
   const { mutate: _getPastAppBookings } = useMutation({
@@ -385,10 +389,11 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
         batchDetails.maxDiscount || 0,
         coinsAvailable || 0,
         coinsUsed || 0,
+        equipmentRentalCharges || 0
       );
       setDiscountedAmount(props.comingFrom == EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE && gymData?.gymId == 41 ? finalPrice + 500 : finalPrice);
     }
-  }, [showDiscount, batchDetails, totalGuests, coinsAvailable, coinsUsed]);
+  }, [showDiscount, batchDetails, totalGuests, coinsAvailable, coinsUsed, equipmentRentalCharges]);
 
   const discountText =
     gymData?.discountType === "FLAT"

@@ -98,6 +98,8 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
     const [kidJerseySize, setKidJerseySize] = useState<string>("");
     const [coinsAvailable, setCoinsAvailable] = useState<number>(0);
     const [coinsUsed, setCoinsUsed] = useState<number>(0);
+    const [equipmentCharges, setEquipmentCharges] = useState<number>(0);
+    const [isRentalChargesChecked, setIsRentalChargesChecked] = useState<boolean>(true);
 
 
     const [totalAmount, setTotalAmount] = useState(0);
@@ -291,6 +293,9 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
       }, [batchDetails, showDiscount]);
 
     useEffect(() => {
+        if(noOfGuests < (batchDetails?.slots || 0)) {
+          setIsRentalChargesChecked(true);
+        }
         if (
           batchDetails != undefined &&
           // (!userDetails || (userDetails && userDetails.noOfBookings < 1)) &&
@@ -304,7 +309,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
           //   batchDetails?.price || 0,
           //   50
           // );
-          let price = batchDetails?.price;
+          let price = batchDetails?.price + (isRentalChargesChecked ? (batchDetails?.equipmentRentalCharges || 0) : 0);
           let maxDiscount = batchDetails?.maxDiscount;
           let offerPercentage = batchDetails?.offerPercentage;
           let finalPrice = price * noOfGuests;
@@ -340,12 +345,14 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
         //     batchDetails.offerPercentage = (discount * 100) / (price * noOfGuests);
         //   }
         } else if (!showDiscount) {
-          let finalPrice = (batchDetails?.price as number) * noOfGuests;
+          let finalPrice = (batchDetails?.price as number + (isRentalChargesChecked ? (batchDetails?.equipmentRentalCharges || 0) : 0)) * noOfGuests;
           let discount = 0;
           setTotalAmount(finalPrice);
           setTotalSavings(discount);
+          setEquipmentCharges((batchDetails?.equipmentRentalCharges || 0) * noOfGuests);
         }
-    }, [showDiscount, batchDetails, pastAppBookings, noOfGuests]);
+        
+    }, [showDiscount, batchDetails, pastAppBookings, noOfGuests, isRentalChargesChecked]);
 
     // useEffect(() => {
     //         const skill = localStorage?.getItem(`skillLevel-${ACTIVITY_NAME_TO_ID_MAP[`${batchDetails?.activity}` as keyof typeof ACTIVITY_NAME_TO_ID_MAP]}`);
@@ -563,10 +570,24 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                     <div className="flex flex-row justify-between px-4 pt-4 pb-6">
                         {isCoplayerCardEnabled ? <p className="text-sm font-sm"> Spots ({noOfGuests})</p> : <p className="text-sm font-sm">Session Price</p>}
                         <div className="flex flex-row justify-between gap-2">
-                            {totalSavings > 0 && <p className="text-sm line-through ml-1 self-end text-gray">{Rs}{totalAmount + totalSavings} </p>}
-                            <p className="text-sm font-sm">{Rs}{totalAmount} </p>
+                            {totalSavings > 0 && <p className="text-sm line-through ml-1 self-end text-gray">{Rs}{totalAmount + totalSavings - (isRentalChargesChecked ? equipmentCharges : 0)} </p>}
+                            <p className="text-sm font-sm">{Rs}{totalAmount - (isRentalChargesChecked ? equipmentCharges : 0)} </p>
                         </div>
                     </div>
+                    {batchDetails?.equipmentRentalCharges != 0 && <div className="flex flex-row justify-between px-4 pb-6">
+                      <div className="flex flex-row items-center gap-2">
+                        {noOfGuests == batchDetails?.slots && <Checkbox
+                          checked={isRentalChargesChecked}
+                          onChange={() => {
+                            setIsRentalChargesChecked(!isRentalChargesChecked);
+                          }}
+                        />}
+                        <p className="text-sm font-sm">Shuttle Rent</p>
+                        </div>
+                        <div className="flex flex-row items-center gap-2">
+                          <p className="text-sm font-sm">{Rs}{equipmentCharges}</p>
+                        </div>
+                    </div>}
                     {gym?.gymId == 41 && <div className="flex flex-row justify-between px-4 pb-6">
                           <p className="text-sm font-sm">One Time Registration Fee</p>
                           <p className="text-sm font-sm">{Rs}500</p>
@@ -719,6 +740,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                 pastAppBookings={pastAppBookings}
                 coinsAvailable={coinsAvailable}
                 coinsUsed={coinsUsed}
+                equipmentRentalCharges={isRentalChargesChecked ? equipmentCharges : 0}
                 disabled={
                   (selectedRides.length !== noOfGuests && batchDetails?.isRideActivity) ||
                   (gym?.gymId == 41 && (!kidName.trim() || kidAge <= 0 || kidAge > 18 || !kidGender.trim() || !kidJerseySize.trim()))
