@@ -698,7 +698,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                     </select>
                 </div>
             </div>}
-            <div className="flex flex-row px-4 pt-4 mb-10">
+            <div className="flex flex-row px-4 pt-4 mb-15">
                 {offerStrip.current && <p className="text-xs text-center text-white rounded-lg p-2 bg-discountStrip w-full">{offerStrip.current}</p>}
             </div>
             {showEquipmentRentalInfo && 
