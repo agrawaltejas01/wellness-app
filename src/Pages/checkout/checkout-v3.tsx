@@ -607,7 +607,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                           <p className="text-sm font-sm">{Rs}{equipmentCharges}</p>
                         </div>
                     </div>}
-                    {gym?.gymId == 3 && <div className="flex flex-row justify-between px-4 pb-6">
+                    {gym?.gymId == 41 && <div className="flex flex-row justify-between px-4 pb-6">
                           <p className="text-sm font-sm">One Time Registration Fee</p>
                           <p className="text-sm font-sm">{Rs}500</p>
                         </div>}
@@ -630,7 +630,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                       </div>}
                 </div>
             </div>
-            {gym?.gymId == 3 && <div className="flex flex-col mt-4 mx-4 px-4 pt-4 rounded-xl bg-white shadow-gray mb-20">
+            {gym?.gymId == 41 && <div className="flex flex-col mt-4 mx-4 px-4 pt-4 rounded-xl bg-white shadow-gray mb-20">
                 <div className="flex flex-col justify-between w-full">
                     <p className="text-sm font-sm font-bold">Enter Kid's Details</p>
                 </div>
@@ -743,7 +743,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                 equipmentRentalCharges={isRentalChargesChecked ? equipmentCharges : 0}
                 disabled={
                   (selectedRides.length !== noOfGuests && batchDetails?.isRideActivity) ||
-                  (gym?.gymId == 3 && (!kidName.trim() || kidAge <= 0 || kidAge > 18 || !kidGender.trim()))
+                  (gym?.gymId == 41 && (!kidName.trim() || kidAge <= 0 || kidAge > 18 || !kidGender.trim()))
                 }
             />
         </div>
