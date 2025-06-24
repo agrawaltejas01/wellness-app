@@ -630,7 +630,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                       </div>}
                 </div>
             </div>
-            {gym?.gymId == 3 && <div className="flex flex-col mt-4 mx-4 px-4 pt-4 rounded-xl bg-white shadow-gray">
+            {gym?.gymId == 3 && <div className="flex flex-col mt-4 mx-4 px-4 pt-4 rounded-xl bg-white shadow-gray mb-20">
                 <div className="flex flex-col justify-between w-full">
                     <p className="text-sm font-sm font-bold">Enter Kid's Details</p>
                 </div>
