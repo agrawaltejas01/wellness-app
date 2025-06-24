@@ -472,7 +472,10 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
             participants: [],
           });
         }
-    
+        
+        if(batchDetails?.slots && batchDetails?.slots - noOfGuests == 1) {
+            setIsRentalChargesChecked(false);
+        }
         setNoOfGuests(noOfGuestIncremented);
         setBaseAmount(baseAmountAfterIncrement);
     
