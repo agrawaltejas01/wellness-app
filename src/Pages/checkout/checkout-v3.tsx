@@ -30,7 +30,10 @@ import { getCoins } from "../../apis/coins/coins";
 import { ReactComponent as ToggleButtonOff } from "../../images/utils/toggle-off.svg";
 import { ReactComponent as ToggleButtonOn } from "../../images/utils/toggle-on.svg";
 import { ReactComponent as Wallet } from "../../images/utils/wallet.svg";
+import info from "../../images/utils/info.svg";
 import Checkbox from "antd/es/checkbox/Checkbox";
+import RentInfo from "./rent-info";
+import { CenterModal } from "../profile/center-modal";
 // Function to convert 24-hour time to 12-hour format
 const convert24HourTo12Hour = (timeStr: string): { formattedTime: string; error: string | null } => {
     // Handle empty input
@@ -120,6 +123,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
     const [gotPastBookings, setGotPastAppBookings] = useState(false);
     const [selectedRides, setSelectedRides] = useState<number[]>([]);
     const offerStrip = useRef("");
+    const [showEquipmentRentalInfo, setShowEquipmentRentalInfo] = useState<boolean>(false);   
 
 
     const { mutate: _getActivityById } = useMutation({
@@ -582,7 +586,17 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                             setIsRentalChargesChecked(!isRentalChargesChecked);
                           }}
                         />}
-                        <p className="text-sm font-sm">Shuttle Rent</p>
+                        <div className="flex flex-col">
+                          <div className="flex flex-row items-center gap-2">
+                            <p className="text-sm">Shuttle Rental</p>
+                            <img src={info} alt="info" className="w-3 h-3" onClick={() => {
+                                setShowEquipmentRentalInfo(true);
+                              }} />
+                          </div>
+                          <div className="flex flex-row items-center gap-2">  
+                            <p className="text-xs font-light text-gray">(Mavis 350) {Rs}{batchDetails?.equipmentRentalCharges}/spot</p>
+                          </div>
+                        </div>
                         </div>
                         <div className="flex flex-row items-center gap-2">
                           <p className="text-sm font-sm">{Rs}{equipmentCharges}</p>
@@ -708,6 +722,13 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
             </div>}
             <div className="flex flex-row px-4 pt-4">
                 {offerStrip.current && <p className="text-xs text-center text-white rounded-lg p-2 bg-discountStrip w-full">{offerStrip.current}</p>}
+            </div>
+            <div className="flex flex-row px-4 pt-4">
+            {showEquipmentRentalInfo && 
+              <CenterModal isOpen={showEquipmentRentalInfo} onClose={() => {setShowEquipmentRentalInfo(false)}} title="Shuttle Rental">
+                <RentInfo />
+              </CenterModal>
+            }
             </div>
             {/* {coinsAvailable > 0 && <div className="flex flex-row px-4 items-center">
               <div className="flex flex-row justify-between w-full bg-white shadow-gray rounded-xl items-center">
