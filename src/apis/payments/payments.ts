@@ -22,6 +22,7 @@ export interface ICreateRzpOrder {
   coinsUsed?: number;
   coinsAvailable?: number;
   orderType: string;
+  equipmentRentalCharges?: number;
 }
 
 export async function createRzpOrder(data: ICreateRzpOrder) {
