@@ -7,6 +7,9 @@ import { IGymCard } from "../../types/gyms";
 import { getBookingsForHost } from "../../apis/bookings/host";
 import { useAtom } from "jotai/react";
 import { userDetailsAtom } from "../../atoms/atom";
+import SkillCapsule from "../../components/skill-capsule";
+
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 const BookingInfoHost: React.FC<RouteComponentProps> = () => {
     const [userDetails] = useAtom(userDetailsAtom);
@@ -17,6 +20,8 @@ const BookingInfoHost: React.FC<RouteComponentProps> = () => {
     const [startTime, setStartTime] = useState<string>("");
     const [endTime, setEndTime] = useState<string>("");
     const [gyms, setGyms] = useState<IGymCard[]>([]);
+    const [bookings, setBookings] = useState<any>([]);
+    const [selectedBooking, setSelectedBooking] = useState<string>("");
     const ACTIVITIES = [
         "BADMINTON",
         "PICKLEBALL",
@@ -43,6 +48,7 @@ const BookingInfoHost: React.FC<RouteComponentProps> = () => {
         },
         onSuccess: (result) => {
             console.log("bookings gotten - ", result);
+            setBookings(result.bookings);
         },
     });
 
@@ -50,8 +56,96 @@ const BookingInfoHost: React.FC<RouteComponentProps> = () => {
         _getGymsByActivities("ALL");
     }, []);
 
+    // Auto-refresh functionality - refresh bookings every 5 minutes
+    // useEffect(() => {
+    //     const refreshData = () => {
+    //         if (filterApplied && userDetails?.id) {
+    //             // If filters are applied, refresh with current filter values
+    //             _getBookingsForHost({
+    //                 userId: userDetails.id.toString(),
+    //                 gymId: centerName,
+    //                 activity,
+    //                 date,
+    //                 startTime,
+    //                 endTime
+    //             });
+    //         }
+    //     };
+
+    //     // Set up interval to refresh every 5 minutes (300000 milliseconds)
+    //     const interval = setInterval(refreshData, 300000);
+
+    //     // Cleanup interval on component unmount
+    //     return () => clearInterval(interval);
+    // }, [filterApplied, userDetails?.id, centerName, activity, date, startTime, endTime, _getBookingsForHost]);
+
     const handleFilter = () => {
+        setFilterApplied(true);
         _getBookingsForHost({userId: userDetails?.id?.toString() || "", gymId: centerName, activity, date, startTime, endTime});
+    }
+
+    const getBookingDate = (booking: string) => {   
+        const date = booking.split("_")[1];
+        const day = date.split("-")[2];
+        const month = months[parseInt(date.split("-")[1]) - 1];
+        return `${day} ${month}`;
+    }
+
+    const getBookingTime = (booking: string) => {
+        const time = parseInt(booking.split("_")[2]);
+        const hour = Math.floor(time / 100);
+        const minute = time % 100;
+        const ampm = hour < 12 ? "AM" : "PM";   
+        const hour12 = hour % 12 || 12;
+        return minute == 0 ? `${hour12} ${ampm}` : `${hour12}:${minute} ${ampm}`;
+    }
+
+    const handleBookingClick = (booking: string) => {
+        if(selectedBooking == booking) {
+            setSelectedBooking("");
+        } else {
+            setSelectedBooking(booking);
+        }
+    }
+
+    const handlePhoneClick = (phone: string) => {
+        window.open(`tel:${phone}`, '_blank');
+    }
+
+    const showBookings = () => {
+        const bookingsToShow = Object.keys(bookings);
+        return (
+            bookingsToShow.map((booking: any) => (
+
+                <div className="flex flex-col w-full" onClick={() => handleBookingClick(booking)}>
+                    <div key={booking} className={`flex flex-row py-2 px-4 gap-2 w-full justify-between rounded-t-lg bg-white border-2 border-black ${selectedBooking == booking ? "bg-blue-100" : ""}`}>
+                        <p className="text-sm font-bold">{getBookingDate(booking)}, {getBookingTime(booking)}</p>
+                        <p className="text-sm font-bold">{booking.split("_")[0]}</p>
+                        <p className="text-sm font-bold">{bookings[booking][0].equipmentRented > 0 ? "🏸" : "No Shuttle"}</p>
+                    </div>
+                    {selectedBooking == booking && (
+                    <div className="flex flex-col py-2 gap-2 w-full bg-white border-l-2 border-r-2 border-black">
+                        {bookings[booking].map((booking: any, index: number) => (
+                            <div key={index} className="flex flex-row py-2 px-2 gap-2 w-full justify-between rounded-lg bg-white">
+                                <div className="flex flex-col gap-2">
+                                    <p className="text-sm font-light px-2">{booking["name"]} </p>
+                                    <SkillCapsule
+                                        level={booking["skillLevel"]}
+                                        editable={false}
+                                    />
+                                </div>
+                                <div className="flex flex-col gap-2 items-end">
+                                    <p className="text-sm font-light"> <span className="text-sm font-light">💰</span> {booking["coins"].toLowerCase()} </p>
+                                    <p className="text-sm font-light" onClick={() => handlePhoneClick(booking["phone"])}> <span className="text-sm font-light">{booking["phone"]}</span> </p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    )} 
+                    <p className="text-xs font-light text-center rounded-b-lg border-l-2 border-r-2 border-b-2 border-black bg-blue-100 text-black">{selectedBooking == booking ? "Tap to hide details" : "Tap to view details"}</p>
+                </div>
+            ))
+        )
     }
 
     return (
@@ -81,6 +175,10 @@ const BookingInfoHost: React.FC<RouteComponentProps> = () => {
                     <input type="time" placeholder="End Time" className="text-sm font-bold bg-gray-100 text-center rounded-full px-2 py-2 w-1/2" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
                 </div>
                 <button className="text-sm font-bold bg-blue-100 rounded-full px-4 py-2" onClick={handleFilter}>Filter</button>
+            </div>
+            <hr className="w-full border-gray-300 my-2" />
+            <div className="flex flex-col py-2 px-4 gap-8 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                {showBookings()}
             </div>
         </div>
     )
