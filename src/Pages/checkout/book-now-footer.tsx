@@ -298,7 +298,7 @@ const calculateFinalPrice = (
 ): number => {
   if (!basePrice || !noOfGuests) return 0;
 
-  let totalPrice = basePrice * noOfGuests + equipmentRentalCharges;
+  let totalPrice = basePrice * noOfGuests;
 
   if (discountType === "FLAT") {
     totalPrice = Math.floor((totalPrice * (100 - offerPercentage)) / 100);
@@ -309,6 +309,8 @@ const calculateFinalPrice = (
     const discountAmount = Math.min(maxDiscount, percentageDiscount);
     totalPrice = Math.floor(totalPrice - discountAmount);
   }
+
+  totalPrice = totalPrice + equipmentRentalCharges;
 
   if (coinsAvailable && coinsUsed && coinsUsed > 0) {
     totalPrice = totalPrice - (totalPrice <= coinsAvailable ? totalPrice : coinsAvailable);

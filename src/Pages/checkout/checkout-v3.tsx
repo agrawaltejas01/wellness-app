@@ -313,7 +313,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
           //   batchDetails?.price || 0,
           //   50
           // );
-          let price = batchDetails?.price + (isRentalChargesChecked ? (batchDetails?.equipmentRentalCharges || 0) : 0);
+          let price = batchDetails?.price;
           let maxDiscount = batchDetails?.maxDiscount;
           let offerPercentage = batchDetails?.offerPercentage;
           let finalPrice = price * noOfGuests;
@@ -340,7 +340,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
           } else {
             finalPrice = Math.floor(finalPrice);
           }
-          let newTotalAmount = finalPrice;
+          let newTotalAmount = finalPrice + (isRentalChargesChecked ? (batchDetails?.equipmentRentalCharges || 0) * noOfGuests : 0);
           let discount = price * noOfGuests - finalPrice;
     
           setTotalAmount(newTotalAmount);
@@ -353,8 +353,8 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
           let discount = 0;
           setTotalAmount(finalPrice);
           setTotalSavings(discount);
-          setEquipmentCharges((batchDetails?.equipmentRentalCharges || 0) * noOfGuests);
         }
+        setEquipmentCharges(isRentalChargesChecked ? (batchDetails?.equipmentRentalCharges || 0) * noOfGuests : 0);
         
     }, [showDiscount, batchDetails, pastAppBookings, noOfGuests, isRentalChargesChecked]);
 
