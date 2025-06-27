@@ -123,7 +123,7 @@ const HomeBanner: React.FC = () => {
         </div>
 
       </div>
-      <div className="loginHead2 text-xs">
+      <div className="loginHead2">
       Welcome to ZenfitX!
           {/* EXPLORE & BOOK */}
       </div>
