@@ -115,7 +115,13 @@ const HomeBanner: React.FC = () => {
       <div className="loginHead1 justify-between">
         <span className="loginName">Hi {userDetails?.name.split(' ')[0]}</span>
         <div className="flex flex-row gap-3">
-          {coins > 0 && <div className="flex flex-row rounded-full gap-2 items-center border border-white p-1 bg-red-500 bg-opacity-50" onClick={()=>navigate('/coins')}>
+          {coins > 0 && <div className="flex flex-row rounded-full gap-2 items-center border border-white p-1 bg-red-500 bg-opacity-50" 
+              onClick={()=>{
+                navigate('/coins')
+                Mixpanel.track("clicked_coins_capsule_home", {
+                  user_id: userDetails?.id
+                });
+              }}>
             <img src={require('../../images/home/coin.jpg')} className="rounded-lg w-4 h-4"/>
             <p className="text-white text-sm font-bold">{coins}</p>
           </div>}
