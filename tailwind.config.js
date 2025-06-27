@@ -22,6 +22,7 @@ module.exports = {
       backgroundColor: {
         'discountStrip': 'rgba(26, 172, 109, 1)',
         'mint-green': 'rgba(173, 235, 179, 1)',
+        'coins': 'rgba(141, 255, 163, 1)'
       }
     },
   },
