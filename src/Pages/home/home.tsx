@@ -278,7 +278,6 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
             <HomeBanner />
           </Flex>
 
-          <CoinsHomepage />
 
           {showClassesNearYou ? (
             <Flex style={{ marginLeft: "16px" }} flex={3}>
