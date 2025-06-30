@@ -189,11 +189,11 @@ const BookingInfoHost: React.FC<RouteComponentProps> = () => {
                             <option key={activity} value={activity}>{activity}</option>
                         ))}
                     </select>
-                    <input type="date" placeholder="Date" className="text-sm font-bold bg-gray-100 text-center rounded-full px-2 py-2 w-1/2" value={date} onChange={(e) => setDate(e.target.value)} />
+                    <input type="text" placeholder="DD-MM-YYYY" onFocus={(e) => e.target.type = "date"} className="text-sm font-bold bg-gray-100 text-center rounded-full px-2 py-2 w-1/2" value={date} onChange={(e) => setDate(e.target.value)} />
                 </div>
                 <div className="flex flex-row items-center justify-between gap-2 w-full">
-                    <input type="time" placeholder="Start Time" className="text-sm font-bold bg-gray-100 text-center rounded-full px-2 py-2 w-1/2" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
-                    <input type="time" placeholder="End Time" className="text-sm font-bold bg-gray-100 text-center rounded-full px-2 py-2 w-1/2" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
+                    <input type="text" placeholder="--:--" onFocus={(e) => e.target.type = "time"} className="text-sm font-bold bg-gray-100 text-center rounded-full px-2 py-2 w-1/2" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
+                    <input type="text" placeholder="--:--" onFocus={(e) => e.target.type = "time"} className="text-sm font-bold bg-gray-100 text-center rounded-full px-2 py-2 w-1/2" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
                 </div>
                 <div className="flex flex-row items-center justify-between gap-2 w-full">
                     <button className="text-sm font-bold bg-blue-100 rounded-full px-4 py-2 w-1/2" onClick={handleFilter}>Filter</button>
