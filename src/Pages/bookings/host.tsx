@@ -183,17 +183,20 @@ const BookingInfoHost: React.FC<RouteComponentProps> = () => {
                     ))}
                 </select>
                 <div className="flex flex-row items-center justify-between gap-2 w-full">
-                    <select className="text-sm font-bold bg-gray-100 text-center rounded-full px-4 py-2 w-1/2" value={activity} onChange={(e) => setActivity(e.target.value)}>
+                    <select className="text-sm font-bold bg-gray-100 text-center rounded-full px-4 py-2 w-1/3" value={activity} onChange={(e) => setActivity(e.target.value)}>
                         <option value="" disabled>Select Activity</option>
                         {ACTIVITIES.map((activity) => (
                             <option key={activity} value={activity}>{activity}</option>
                         ))}
                     </select>
-                    <input type="text" placeholder="DD-MM-YYYY" onFocus={(e) => e.target.type = "date"} className="text-sm font-bold bg-gray-100 text-center rounded-full px-2 py-2 w-1/2" value={date} onChange={(e) => setDate(e.target.value)} />
+                    <label className="text-xs font-bold bg-gray-100 text-center rounded-full px-2 py-2 w-1/3">Date</label>
+                    <input type="date" placeholder="Date" className="text-sm font-bold bg-gray-100 text-center rounded-full px-2 py-2 w-1/3" value={date} onChange={(e) => setDate(e.target.value)} />
                 </div>
                 <div className="flex flex-row items-center justify-between gap-2 w-full">
-                    <input type="text" placeholder="--:--" onFocus={(e) => e.target.type = "time"} className="text-sm font-bold bg-gray-100 text-center rounded-full px-2 py-2 w-1/2" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
-                    <input type="text" placeholder="--:--" onFocus={(e) => e.target.type = "time"} className="text-sm font-bold bg-gray-100 text-center rounded-full px-2 py-2 w-1/2" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
+                    <label className="text-xs font-bold bg-gray-100 text-center rounded-full px-2 py-2 w-1/4">Start Time</label>
+                    <input type="time" placeholder="Start Time" className="text-sm font-bold bg-gray-100 text-center rounded-full px-2 py-2 w-1/4" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
+                    <label className="text-xs font-bold bg-gray-100 text-center rounded-full px-2 py-2 w-1/4">End Time</label>
+                    <input type="time" placeholder="End Time" className="text-sm font-bold bg-gray-100 text-center rounded-full px-2 py-2 w-1/4" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
                 </div>
                 <div className="flex flex-row items-center justify-between gap-2 w-full">
                     <button className="text-sm font-bold bg-blue-100 rounded-full px-4 py-2 w-1/2" onClick={handleFilter}>Filter</button>
