@@ -1,18 +1,15 @@
-import { RouteComponentProps } from "@reach/router";
+import { navigate, RouteComponentProps } from "@reach/router";
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { errorToast } from "../../components/Toast";
 import { getGymsByActivity } from "../../apis/gym/activities";
 import { IGymCard } from "../../types/gyms";
 import { getBookingsForHost } from "../../apis/bookings/host";
-import { useAtom } from "jotai/react";
-import { userDetailsAtom } from "../../atoms/atom";
 import SkillCapsule from "../../components/skill-capsule";
 
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 const BookingInfoHost: React.FC<RouteComponentProps> = () => {
-    const [userDetails] = useAtom(userDetailsAtom);
     const [filterApplied, setFilterApplied] = useState<boolean>(false);
     const [centerName, setCenterName] = useState<string>("");
     const [activity, setActivity] = useState<string>("");
@@ -28,6 +25,10 @@ const BookingInfoHost: React.FC<RouteComponentProps> = () => {
         "FOOTBALL"
     ]
 
+
+    const userId = window.localStorage["zenfitx-user-details"]
+          ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || null
+          : null;
 
     const { mutate: _getGymsByActivities } = useMutation({
         mutationFn: getGymsByActivity,
@@ -53,16 +54,20 @@ const BookingInfoHost: React.FC<RouteComponentProps> = () => {
     });
 
     useEffect(() => {
-        _getGymsByActivities("ALL");
+        if(!userId) {
+            navigate("/");
+        } else {    
+            _getGymsByActivities("ALL");
+        }
     }, []);
 
     // Auto-refresh functionality - refresh bookings every 5 minutes
     useEffect(() => {
         const refreshData = () => {
-            if (filterApplied && userDetails?.id) {
+            if (filterApplied && userId) {
                 // If filters are applied, refresh with current filter values
                 _getBookingsForHost({
-                    userId: userDetails.id.toString(),
+                    userId: userId.toString(),
                     gymId: centerName,
                     activity,
                     date,
@@ -77,18 +82,20 @@ const BookingInfoHost: React.FC<RouteComponentProps> = () => {
 
         // Cleanup interval on component unmount
         return () => clearInterval(interval);
-    }, [filterApplied, userDetails?.id, centerName, activity, date, startTime, endTime, _getBookingsForHost]);
+    }, [filterApplied, userId, centerName, activity, date, startTime, endTime, _getBookingsForHost]);
 
     const handleFilter = () => {
+        setBookings([]);
         setFilterApplied(true);
-        _getBookingsForHost({userId: userDetails?.id?.toString() || "", gymId: centerName, activity, date, startTime, endTime});
+        _getBookingsForHost({userId: userId?.toString() || "", gymId: centerName, activity, date, startTime, endTime});
     }
 
     const handleRefresh = () => {
-        if (filterApplied && userDetails?.id) {
+        if (filterApplied && userId) {
+            setBookings([]);
             // If filters are applied, refresh with current filter values
             _getBookingsForHost({
-                userId: userDetails.id.toString(),
+                userId: userId.toString(),
                 gymId: centerName,
                 activity,
                 date,
