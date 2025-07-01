@@ -5,6 +5,8 @@ module.exports = {
     extend: {
       fontFamily: {
         jakarta: ['"Plus Jakarta Sans"', "sans-serif"],
+        serif: ['"Playfair Display"', "serif"],
+        sans: ['"Helvetica"', "sans-serif"],
       },
       boxShadow: {
         'gray': '4px 0px 16px 0px rgba(0, 0, 0, 0.08)',

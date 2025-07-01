@@ -21,6 +21,7 @@ import BatchCheckoutBookingV2 from "./Pages/checkout/checkout-v2";
 import GoToApp from "./components/go-to-app";
 import Coins from "./Pages/coins/coins";
 import BookingInfoHost from "./Pages/bookings/host";
+import BookingInfoCenter from "./Pages/bookings/center";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -106,6 +107,7 @@ function App() {
           <PrivacyPolicy path="/privacy" />
           <Coins path="/coins" />
           <BookingInfoHost path="/booking-info-host" />
+          <BookingInfoCenter path="/booking-info-center" /> 
         </Router>
       </AppLayout>
     </QueryClientProvider>
