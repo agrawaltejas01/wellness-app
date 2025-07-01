@@ -22,7 +22,13 @@ const BookingInfoHost: React.FC<RouteComponentProps> = () => {
     const ACTIVITIES = [
         "BADMINTON",
         "PICKLEBALL",
-        "FOOTBALL"
+        "FOOTBALL",
+        "ONE MONTH PLAN",
+        "TWO MONTHS PLAN",
+        "THREE MONTHS PLAN",
+        "YOGA",
+        "ZUMBA",
+        "GYM"
     ]
 
 
@@ -54,6 +60,9 @@ const BookingInfoHost: React.FC<RouteComponentProps> = () => {
     });
 
     useEffect(() => {
+        setDate(new Date().toISOString().split("T")[0]);
+        setStartTime("06:00");
+        setEndTime("23:59");
         if(!userId) {
             navigate("/");
         } else {    
@@ -135,6 +144,15 @@ const BookingInfoHost: React.FC<RouteComponentProps> = () => {
 
     const showBookings = () => {
         const bookingsToShow = Object.keys(bookings);
+
+        if(bookingsToShow.length == 0) {
+            return (
+                <div className="flex flex-col w-full items-center justify-center">
+                    {filterApplied ? <p className="text-sm font-bold">No bookings found</p> : ""}
+                </div>
+            )
+        }
+
         return (
             bookingsToShow.map((booking: any) => (
 
@@ -183,14 +201,14 @@ const BookingInfoHost: React.FC<RouteComponentProps> = () => {
                     ))}
                 </select>
                 <div className="flex flex-row items-center justify-between gap-2 w-full">
-                    <select className="text-sm font-bold bg-gray-100 text-center rounded-full px-4 py-2 w-1/3" value={activity} onChange={(e) => setActivity(e.target.value)}>
-                        <option value="" disabled>Select Activity</option>
+                    <select className="text-sm font-bold bg-gray-100 text-center rounded-full px-4 py-2 w-1/2" value={activity} onChange={(e) => setActivity(e.target.value)}>
+                        <option value="" disabled>Activity</option>
                         {ACTIVITIES.map((activity) => (
                             <option key={activity} value={activity}>{activity}</option>
                         ))}
                     </select>
-                    <label className="text-xs font-bold bg-gray-100 text-center rounded-full px-2 py-2 w-1/3">Date</label>
-                    <input type="date" placeholder="Date" className="text-sm font-bold bg-gray-100 text-center rounded-full px-2 py-2 w-1/3" value={date} onChange={(e) => setDate(e.target.value)} />
+                    {/* <label className="text-xs font-bold bg-gray-100 text-center rounded-full px-2 py-2 w-1/3">Date</label> */}
+                    <input type="date" placeholder="Date" className="text-sm font-bold bg-gray-100 text-center rounded-full px-2 py-2 w-1/2" value={date} onChange={(e) => setDate(e.target.value)} />
                 </div>
                 <div className="flex flex-row items-center justify-between gap-2 w-full">
                     <label className="text-xs font-bold bg-gray-100 text-center rounded-full px-2 py-2 w-1/4">Start Time</label>
@@ -199,8 +217,8 @@ const BookingInfoHost: React.FC<RouteComponentProps> = () => {
                     <input type="time" placeholder="End Time" className="text-sm font-bold bg-gray-100 text-center rounded-full px-2 py-2 w-1/4" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
                 </div>
                 <div className="flex flex-row items-center justify-between gap-2 w-full">
-                    <button className="text-sm font-bold bg-blue-100 rounded-full px-4 py-2 w-1/2" onClick={handleFilter}>Filter</button>
-                    <button className="text-sm font-bold bg-green-100 rounded-full px-4 py-2 w-1/2" onClick={handleRefresh}>🔄 Refresh</button>
+                    <button className={`text-sm font-bold rounded-full px-4 py-2 w-4/5 ${centerName && activity && date ? "bg-blue-100" : "disabled"}`} onClick={handleFilter}>Submit</button>
+                    <button className={`text-sm font-bold rounded-full px-4 py-2 w-1/5 ${centerName && activity && date ? "bg-green-100" : "disabled"}`} onClick={handleRefresh}>🔄</button>
                 </div>
             </div>
             <hr className="w-full border-gray-300 my-2" />
