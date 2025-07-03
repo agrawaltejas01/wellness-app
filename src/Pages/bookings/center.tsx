@@ -152,7 +152,7 @@ const BookingInfoCenter: React.FC<RouteComponentProps> = () => {
         <div className="flex flex-col w-full h-screen overflow-hidden">
             {/* Header with refresh button - Fixed */}
             <div className="flex items-center justify-between mx-4 mt-4 mb-4 flex-shrink-0">
-                <h1 className="text-2xl font-bold font-sans">ZenfitX Bookings</h1>
+                <h1 className="text-2xl font-bold font-sans">Coolulu TurfPark Bookings</h1>
                 
                 <div className="flex items-center space-x-4">
                     {/* Last refreshed info */}
