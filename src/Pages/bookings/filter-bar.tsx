@@ -136,7 +136,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
                     {/* Current Filters Display (when collapsed) */}
                     {!isExpanded && (
                         <div className="mb-4 space-y-3">
-                            <div className="flex items-center justify-between">
+                            {/* <div className="flex items-center justify-between">
                                 <span className="text-xs font-medium text-gray-600 uppercase tracking-wide">Current Filters</span>
                                 <button 
                                     onClick={onClearAllFilters}
@@ -145,7 +145,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
                                 >
                                     Reset to Defaults
                                 </button>
-                            </div>
+                            </div> */}
                             <div className="flex flex-wrap gap-2">
                                 {currentFilters.map((filter: {type: string, label: string, value: string, isDefault: boolean}, index: number) => (
                                     <div
