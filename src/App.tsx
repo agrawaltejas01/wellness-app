@@ -20,6 +20,7 @@ import BatchCheckoutV2 from "./Pages/checkout/batch-checkout-v2";
 import BatchCheckoutBookingV2 from "./Pages/checkout/checkout-v2";
 import GoToApp from "./components/go-to-app";
 import Coins from "./Pages/coins/coins";
+import { Mixpanel } from "./mixpanel/init";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -27,6 +28,25 @@ const queryClient = new QueryClient();
 // Layout component that includes the GoToApp banner on all pages
 const AppLayout: React.FC<{ children: React.ReactNode}> = ({ children }) => {
   const [isAppBannerVisible, setIsAppBannerVisible] = useState(false);
+
+   // Mixpanel tracking for notification alerts
+   useEffect(() => {
+    window.addEventListener("message", (event) => {
+      const message = JSON.parse(event.data);
+      const type = message.type;
+      const timestamp = message.timestamp;
+      const data = message.data;
+      const source = message.source;
+
+      Mixpanel.track(`${type}`, {
+        message: message,
+        timestamp: timestamp,
+        data: data,
+        source: source
+      });
+    });
+
+  }, []);
   
   // When banner becomes visible, disable body scrolling
   useEffect(() => {
