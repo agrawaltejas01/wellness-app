@@ -29,11 +29,11 @@ const BookingInfoCenter: React.FC<RouteComponentProps> = () => {
     // Loading state for API calls
     const [isLoading, setIsLoading] = useState(false);
     const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
-    
+    const [isScrolled, setIsScrolled] = useState(false);
     // Define the booking interface to match API response
     interface Booking {
         id: number;
-        bookingId: string;
+        bookingId: string;  
         activity: string;
         court: string;
         date: string;
@@ -62,6 +62,10 @@ const BookingInfoCenter: React.FC<RouteComponentProps> = () => {
             setIsLoading(false);
         },  
     });
+
+    const handleScroll = (scrollTop: number) => {
+        setIsScrolled(scrollTop > 10);
+    }
 
     // Function to fetch bookings with current filters
     const fetchBookings = () => {
@@ -152,13 +156,14 @@ const BookingInfoCenter: React.FC<RouteComponentProps> = () => {
         <div className="flex flex-col w-full h-screen overflow-hidden">
             {/* Header with refresh button - Fixed */}
             <div className="flex items-center justify-between mx-4 mt-4 mb-4 flex-shrink-0">
-                <h1 className="text-2xl font-bold font-sans">Coolulu TurfPark Bookings</h1>
-                
-                <div className="flex items-center space-x-4">
-                    {/* Last refreshed info */}
-                    <div className="text-sm text-gray-500">
-                        Last updated: {formatLastRefreshed(lastRefreshed)}
+                <div className="flex flex-col items-start">
+                    <h1 className="text-xl font-bold font-sans">ZenfitX Bookings</h1>
+                    <div className="text-xs text-gray-500">
+                        Coolulu TurfPark
                     </div>
+                </div>
+                
+                <div className="flex flex-col items-end space-x-4">
                     
                     {/* Manual refresh button */}
                     <button
@@ -177,6 +182,10 @@ const BookingInfoCenter: React.FC<RouteComponentProps> = () => {
                         </svg>
                         {isLoading ? 'Refreshing...' : 'Refresh'}
                     </button>
+                    {/* Last refreshed info */}
+                    <div className="text-xs text-gray-500">
+                        Last updated: {formatLastRefreshed(lastRefreshed)}
+                    </div>
                 </div>
             </div>
             
@@ -184,7 +193,7 @@ const BookingInfoCenter: React.FC<RouteComponentProps> = () => {
             
             {/* Filter Bar - Fixed */}
             <div className="flex-shrink-0">
-                <FilterBar 
+                {!isScrolled && <FilterBar 
                     // Pass filter values
                     activity={filters.activity}
                     fromDate={filters.fromDate}
@@ -203,12 +212,12 @@ const BookingInfoCenter: React.FC<RouteComponentProps> = () => {
                     
                     // Pass loading state
                     isLoading={isLoading}
-                />
+                />}
             </div>
             
             {/* Scrollable Booking Results */}
             <div className="flex-1 overflow-hidden p-4 pt-0">
-                <BookingResultsCenter bookings={bookings} isLoading={isLoading} />
+                <BookingResultsCenter bookings={bookings} isLoading={isLoading} isScrolled={isScrolled} handleScrollParent={handleScroll} />
             </div>
         </div>
     )

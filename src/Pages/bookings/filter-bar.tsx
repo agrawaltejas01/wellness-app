@@ -19,6 +19,7 @@ interface FilterBarProps {
     
     // Optional loading state
     isLoading?: boolean;
+    hidden?: boolean;
 }
 
 const FilterBar: React.FC<FilterBarProps> = ({
@@ -37,7 +38,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
     isLoading = false
 }) => {
     // Only keep UI state in this component
-    const [isExpanded, setIsExpanded] = useState(true);
+    const [isExpanded, setIsExpanded] = useState(false);
 
     const toggleExpanded = () => {
         setIsExpanded(!isExpanded);
@@ -112,14 +113,14 @@ const FilterBar: React.FC<FilterBarProps> = ({
 
     return (
         <div className="flex flex-col w-full bg-gradient-to-br from-slate-50 to-gray-100">
-            <div className="p-4">
+            <div className="px-4 py-2">
                 <div className="bg-white rounded-lg shadow-md border border-gray-200/50 p-4">
                     {/* Clickable Header */}
                     <div 
                         className="flex items-center justify-between cursor-pointer mb-4 hover:bg-gray-50 -m-2 p-2 rounded-md transition-colors duration-200"
                         onClick={toggleExpanded}
                     >
-                        <h3 className="text-base font-semibold text-gray-900">Filter Bookings</h3>
+                        <h3 className="text-base font-semibold text-gray-900">Filters</h3>
                         <div className="flex items-center space-x-2">
                             <span className="text-xs text-gray-500">
                                 {isExpanded ? 'Hide' : 'Show'} Filters
@@ -260,7 +261,10 @@ const FilterBar: React.FC<FilterBarProps> = ({
                             {/* Action Buttons */}
                             <div className="flex gap-2 pt-3 border-t border-gray-200">
                                 <button 
-                                    onClick={onApplyFilters}
+                                    onClick={() => {
+                                        onApplyFilters();
+                                        setIsExpanded(false);
+                                    }}
                                     disabled={isLoading}
                                     className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium py-2 px-3 text-sm rounded-md transition-colors duration-200 focus:ring-1 focus:ring-blue-500 focus:ring-offset-1 disabled:cursor-not-allowed flex items-center justify-center"
                                 >

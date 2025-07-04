@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 
 // Define the booking interface based on API response
 interface Booking {
@@ -18,15 +18,68 @@ interface Booking {
 interface BookingResultsCenterProps {
     bookings: Booking[];
     isLoading: boolean;
+    isScrolled: boolean;
+    handleScrollParent: (scrollTop: number) => void;
 }
 
 type SortField = keyof Booking;
 type SortDirection = 'asc' | 'desc';
 
-const BookingResultsCenter: React.FC<BookingResultsCenterProps> = ({ bookings, isLoading }) => {
+const BookingResultsCenter: React.FC<BookingResultsCenterProps> = ({ bookings, isLoading, isScrolled, handleScrollParent }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [sortField, setSortField] = useState<SortField>('date');
     const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const throttleTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    // Handle scroll detection
+    // useEffect(() => {
+    //     const handleScroll = () => {
+    //         if (scrollContainerRef.current) {
+    //             const scrollTop = scrollContainerRef.current.scrollTop;
+    //             handleScrollParent(scrollTop);
+    //         }
+    //     };
+
+    //     const scrollContainer = scrollContainerRef.current;
+    //     if (scrollContainer) {
+    //         scrollContainer.addEventListener('scroll', handleScroll);
+    //         return () => scrollContainer.removeEventListener('scroll', handleScroll);
+    //     }
+    // }, [handleScrollParent]);
+
+    // Throttled scroll handler for better performance
+    const throttledScrollHandler = useCallback((scrollTop: number) => {
+        if (throttleTimeoutRef.current) {
+            clearTimeout(throttleTimeoutRef.current);
+        }
+        
+        throttleTimeoutRef.current = setTimeout(() => {
+            handleScrollParent(scrollTop);
+        }, 16); // ~60fps throttling
+    }, [handleScrollParent]);
+
+    // Handle scroll detection with proper dependency
+    useEffect(() => {
+        const handleScroll = () => {
+            if (scrollContainerRef.current) {
+                const scrollTop = scrollContainerRef.current.scrollTop;
+                throttledScrollHandler(scrollTop);
+            }
+        };
+
+        const scrollContainer = scrollContainerRef.current;
+        if (scrollContainer) {
+            scrollContainer.addEventListener('scroll', handleScroll, { passive: true });
+            return () => {
+                scrollContainer.removeEventListener('scroll', handleScroll);
+                // Clean up throttle timeout
+                if (throttleTimeoutRef.current) {
+                    clearTimeout(throttleTimeoutRef.current);
+                }
+            };
+        }
+    }, [throttledScrollHandler]); // Now includes the dependency
 
     // Format date for display
     const formatDate = (dateString: string) => {
@@ -194,31 +247,49 @@ const BookingResultsCenter: React.FC<BookingResultsCenterProps> = ({ bookings, i
     }
 
     return (
-        <div className="flex flex-col h-full">
+        <div className={`flex flex-col h-full transition-all duration-300 ${isScrolled ? 'mt-2' : ''}`}>
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 flex flex-col h-full overflow-hidden">
-                {/* Header - Fixed */}
-                <div className="px-6 py-4 border-b border-gray-200 flex-shrink-0">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                        <div>
-                            <h2 className="text-lg font-semibold text-gray-900">Booking Results</h2>
-                            <p className="text-sm text-gray-500 mt-1">
-                                {processedBookings.length} booking{processedBookings.length !== 1 ? 's' : ''} found
-                            </p>
+                {/* Header - Fixed with dynamic sizing */}
+                <div className={`border-b border-gray-200 flex-shrink-0 transition-all duration-300 ${
+                    isScrolled ? 'px-4 py-2' : 'px-6 py-4'
+                }`}>
+                    <div className={`flex items-center justify-between transition-all duration-300 ${
+                        isScrolled ? 'gap-2' : 'flex-col sm:flex-row sm:items-center sm:justify-between gap-4'
+                    }`}>
+                        <div className={`flex flex-row items-start transition-all duration-300 ${
+                            isScrolled ? 'flex-shrink-0' : ''
+                        }`}>
+                            <h2 className={`font-semibold text-gray-900 transition-all duration-300 ${
+                                isScrolled ? 'text-sm' : 'text-lg'
+                            }`}>
+                                {isScrolled ? 'Bookings' : 'Booking Results'}
+                            </h2>
+                            <h2 className={`text-gray-500 px-2 items-center justify-center transition-all duration-300 ${
+                                isScrolled ? 'text-xs' : 'text-sm mt-1'
+                            }`}>
+                                ({processedBookings.length})
+                            </h2>
                         </div>
                         
                         {/* Search */}
-                        <div className="relative max-w-md w-full sm:w-auto">
+                        <div className={`relative transition-all duration-300 ${
+                            isScrolled ? 'w-64' : 'max-w-md w-full sm:w-auto'
+                        }`}>
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className={`text-gray-400 transition-all duration-300 ${
+                                    isScrolled ? 'h-4 w-4' : 'h-5 w-5'
+                                }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                 </svg>
                             </div>
                             <input
                                 type="text"
-                                placeholder="Search bookings..."
+                                placeholder={isScrolled ? "Search..." : "Search bookings..."}
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                className={`block w-full pl-10 pr-3 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${
+                                    isScrolled ? 'py-1 text-sm' : 'py-2'
+                                }`}
                             />
                         </div>
                     </div>
@@ -239,7 +310,7 @@ const BookingResultsCenter: React.FC<BookingResultsCenterProps> = ({ bookings, i
                             </div>
                         </div>
                     ) : (
-                        <div className="h-full overflow-auto">
+                        <div ref={scrollContainerRef} className="h-full overflow-auto">
                             <table className="min-w-full divide-y divide-gray-200">
                                 {/* Fixed Table Header */}
                                 <thead className="bg-gray-50 sticky top-0 z-10">
@@ -308,7 +379,7 @@ const BookingResultsCenter: React.FC<BookingResultsCenterProps> = ({ bookings, i
                 </div>
 
                 {/* Fixed Footer */}
-                {processedBookings.length > 0 && (
+                {/* {processedBookings.length > 0 && (
                     <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 flex-shrink-0">
                         <div className="flex items-center justify-between text-sm text-gray-700">
                             <div>
@@ -319,7 +390,7 @@ const BookingResultsCenter: React.FC<BookingResultsCenterProps> = ({ bookings, i
                             </div>
                         </div>
                     </div>
-                )}
+                )} */}
             </div>
         </div>
     );
