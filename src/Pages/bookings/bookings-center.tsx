@@ -159,6 +159,50 @@ const BookingResultsCenter: React.FC<BookingResultsCenterProps> = ({ bookings, i
         );
     };
 
+    // Mobile booking card component
+    const BookingCard = ({ booking }: { booking: Booking }) => {
+        return (
+            <div className="bg-white border border-gray-200 rounded-lg p-4 space-y-3 hover:shadow-md transition-shadow">
+                <div className="flex flex-row justify-between items-start">
+                    <div className="flex flex-col">
+                        <h3 className="font-semibold text-gray-900 text-sm">{booking.name}</h3>
+                        <p className="text-xs text-gray-500">{booking.phone}</p>
+                    </div>
+                    <div className="flex flex-col">
+                        <StatusBadge status={booking.status} />
+                    </div>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div>
+                        <span className="text-gray-500">Activity:</span>
+                        <p className="font-medium text-gray-900">{booking.activity}</p>
+                    </div>
+                    <div>
+                        <span className="text-gray-500">Date:</span>
+                        <p className="font-medium text-gray-900">{formatDate(booking.date)}</p>
+                    </div>
+                    <div>
+                        <span className="text-gray-500">Time:</span>
+                        <p className="font-medium text-gray-900">{formatTime(booking.startTime)}</p>
+                    </div>
+                    <div>
+                        <span className="text-gray-500">Duration:</span>
+                        <p className="font-medium text-gray-900">{booking.duration} min</p>
+                    </div>
+                    <div>
+                        <span className="text-gray-500">Guests:</span>
+                        <p className="font-medium text-gray-900">{booking.noOfGuests}</p>
+                    </div>
+                    <div>
+                        <span className="text-gray-500">ID:</span>
+                        <p className="font-medium text-gray-900 font-mono text-xs">{booking.bookingId}</p>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
     // Handle sorting
     const handleSort = (field: SortField) => {
         if (field === sortField) {
@@ -232,11 +276,14 @@ const BookingResultsCenter: React.FC<BookingResultsCenterProps> = ({ bookings, i
                             </div>
                             <div className="space-y-4">
                                 {Array.from({ length: 8 }).map((_, i) => (
-                                    <div key={i} className="grid grid-cols-8 gap-4">
+                                    <div key={i} className="hidden md:grid grid-cols-8 gap-4">
                                         {Array.from({ length: 8 }).map((_, j) => (
                                             <div key={j} className="h-12 bg-gray-200 rounded"></div>
                                         ))}
                                     </div>
+                                ))}
+                                {Array.from({ length: 4 }).map((_, i) => (
+                                    <div key={i} className="md:hidden h-32 bg-gray-200 rounded"></div>
                                 ))}
                             </div>
                         </div>
@@ -295,7 +342,7 @@ const BookingResultsCenter: React.FC<BookingResultsCenterProps> = ({ bookings, i
                     </div>
                 </div>
 
-                {/* Scrollable Table Container */}
+                {/* Scrollable Content Container */}
                 <div className="flex-1 overflow-hidden">
                     {processedBookings.length === 0 ? (
                         <div className="flex items-center justify-center h-full">
@@ -311,86 +358,82 @@ const BookingResultsCenter: React.FC<BookingResultsCenterProps> = ({ bookings, i
                         </div>
                     ) : (
                         <div ref={scrollContainerRef} className="h-full overflow-auto">
-                            <table className="min-w-full divide-y divide-gray-200">
-                                {/* Fixed Table Header */}
-                                <thead className="bg-gray-50 sticky top-0 z-10">
-                                    <tr>
-                                        {[
-                                            { key: 'name' as SortField, label: 'Customer' },
-                                            { key: 'activity' as SortField, label: 'Activity' },
-                                            { key: 'date' as SortField, label: 'Date' },
-                                            { key: 'startTime' as SortField, label: 'Time' },
-                                            { key: 'duration' as SortField, label: 'Duration' },
-                                            { key: 'noOfGuests' as SortField, label: 'Guests' },
-                                            { key: 'status' as SortField, label: 'Status' },
-                                            { key: 'bookingId' as SortField, label: 'Booking ID' },
-                                        ].map((column) => (
-                                            <th
-                                                key={column.key}
-                                                onClick={() => handleSort(column.key)}
-                                                className="group px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors bg-gray-50"
-                                            >
-                                                <div className="flex items-center space-x-1">
-                                                    <span>{column.label}</span>
-                                                    <SortIcon field={column.key} />
-                                                </div>
-                                            </th>
-                                        ))}
-                                    </tr>
-                                </thead>
-                                
-                                {/* Scrollable Table Body */}
-                                <tbody className="bg-white divide-y divide-gray-200">
-                                    {processedBookings.map((booking) => (
-                                        <tr key={booking.id} className="hover:bg-gray-50 transition-colors">
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm font-semibold text-gray-900">{booking.name}</div>
-                                                <div className="text-sm text-gray-500">{booking.phone}</div>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="text-sm text-gray-900 max-w-xs truncate" title={booking.activity}>
-                                                    {booking.activity}
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm text-gray-900">{formatDate(booking.date)}</div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm text-gray-900">{formatTime(booking.startTime)}</div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm text-gray-900">{booking.duration} min</div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm text-gray-900">{booking.noOfGuests}</div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <StatusBadge status={booking.status} />
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm font-mono text-gray-900">{booking.bookingId}</div>
-                                            </td>
+                            {/* Mobile Card Layout */}
+                            <div className="md:hidden space-y-3 p-4">
+                                {processedBookings.map((booking) => (
+                                    <BookingCard key={booking.id} booking={booking} />
+                                ))}
+                            </div>
+
+                            {/* Desktop Table Layout */}
+                            <div className="hidden md:block">
+                                <table className="min-w-full divide-y divide-gray-200">
+                                    {/* Fixed Table Header */}
+                                    <thead className="bg-gray-50 sticky top-0 z-10">
+                                        <tr>
+                                            {[
+                                                { key: 'name' as SortField, label: 'Customer' },
+                                                { key: 'activity' as SortField, label: 'Activity' },
+                                                { key: 'date' as SortField, label: 'Date' },
+                                                { key: 'startTime' as SortField, label: 'Time' },
+                                                { key: 'duration' as SortField, label: 'Duration' },
+                                                { key: 'noOfGuests' as SortField, label: 'Guests' },
+                                                { key: 'status' as SortField, label: 'Status' },
+                                                { key: 'bookingId' as SortField, label: 'Booking ID' },
+                                            ].map((column) => (
+                                                <th
+                                                    key={column.key}
+                                                    onClick={() => handleSort(column.key)}
+                                                    className="group px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors bg-gray-50"
+                                                >
+                                                    <div className="flex items-center space-x-1">
+                                                        <span>{column.label}</span>
+                                                        <SortIcon field={column.key} />
+                                                    </div>
+                                                </th>
+                                            ))}
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    
+                                    {/* Scrollable Table Body */}
+                                    <tbody className="bg-white divide-y divide-gray-200">
+                                        {processedBookings.map((booking) => (
+                                            <tr key={booking.id} className="hover:bg-gray-50 transition-colors">
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="text-sm font-semibold text-gray-900">{booking.name}</div>
+                                                    <div className="text-sm text-gray-500">{booking.phone}</div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="text-sm text-gray-900 max-w-xs truncate" title={booking.activity}>
+                                                        {booking.activity}
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="text-sm text-gray-900">{formatDate(booking.date)}</div>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="text-sm text-gray-900">{formatTime(booking.startTime)}</div>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="text-sm text-gray-900">{booking.duration} min</div>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="text-sm text-gray-900">{booking.noOfGuests}</div>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <StatusBadge status={booking.status} />
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="text-sm font-mono text-gray-900">{booking.bookingId}</div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     )}
                 </div>
-
-                {/* Fixed Footer */}
-                {/* {processedBookings.length > 0 && (
-                    <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 flex-shrink-0">
-                        <div className="flex items-center justify-between text-sm text-gray-700">
-                            <div>
-                                Showing {processedBookings.length} of {bookings.length} bookings
-                            </div>
-                            <div className="flex items-center space-x-4">
-                                <span>Sort by: {sortField} ({sortDirection})</span>
-                            </div>
-                        </div>
-                    </div>
-                )} */}
             </div>
         </div>
     );
