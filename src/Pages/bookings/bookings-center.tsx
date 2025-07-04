@@ -359,14 +359,14 @@ const BookingResultsCenter: React.FC<BookingResultsCenterProps> = ({ bookings, i
                     ) : (
                         <div ref={scrollContainerRef} className="h-full overflow-auto">
                             {/* Mobile Card Layout */}
-                            <div className="md:hidden space-y-3 p-4">
+                            {/* <div className="md:hidden space-y-3 p-4">
                                 {processedBookings.map((booking) => (
                                     <BookingCard key={booking.id} booking={booking} />
                                 ))}
-                            </div>
+                            </div> */}
 
                             {/* Desktop Table Layout */}
-                            <div className="hidden md:block">
+                            <div className="">
                                 <table className="min-w-full divide-y divide-gray-200">
                                     {/* Fixed Table Header */}
                                     <thead className="bg-gray-50 sticky top-0 z-10">
