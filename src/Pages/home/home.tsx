@@ -179,6 +179,16 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     window.isFromApp = appFlag;
   }, [])
 
+  // Mixpanel tracking for notification alerts
+  useEffect(() => {
+    window.addEventListener("message", (event) => {
+      Mixpanel.track("notification_alert", {
+        message: event.data,  
+        source: window?.platformInfo?.platform
+      });
+    });
+  }, []);
+
   useEffect(() => {
     if(userDetails?.id) {
       window?.ReactNativeWebView?.postMessage("notification alert");
