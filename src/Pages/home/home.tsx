@@ -182,6 +182,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   useEffect(() => {
     if(userDetails?.id) {
       window?.ReactNativeWebView?.postMessage("notification alert");
+      window?.ReactNativeWebView?.postMessage("REQUEST_LOCATION");
       const notificationToken = window.localStorage["token"];
       if (notificationToken) {
         _saveNotificationToken({ userId: userDetails?.id as number, token: notificationToken });
