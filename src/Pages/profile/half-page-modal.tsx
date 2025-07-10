@@ -16,6 +16,7 @@ interface BottomUpModalProps {
   closeOnEscape?: boolean;
   borderRadius?: string;
   borderBottom?: boolean;
+  draggable?: boolean;
 }
 
 interface UseModalReturn {
@@ -40,9 +41,14 @@ const BottomUpModal: React.FC<BottomUpModalProps> = ({
   closeOnOverlayClick = true,
   closeOnEscape = true,
   borderRadius = '16px 16px 0 0',
-  borderBottom = false
+  borderBottom = false,
+  draggable = false
 }) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [startY, setStartY] = useState<number>(0);
+  const [currentHeight, setCurrentHeight] = useState<number>(0);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const modalRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -62,6 +68,55 @@ const BottomUpModal: React.FC<BottomUpModalProps> = ({
       document.body.style.overflow = 'unset';
     };
   }, [isOpen]);
+
+  const handleTouchStart = (e: React.TouchEvent | React.MouseEvent) => {
+    setIsDragging(true);
+    if ('touches' in e) {
+      setStartY(e.touches[0].clientY);
+    } else {
+      setStartY(e.clientY);
+    }
+    if (modalRef.current) {
+      setCurrentHeight(modalRef.current.getBoundingClientRect().height);
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent | React.MouseEvent) => {
+    if (!isDragging) return;
+    
+    const currentY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+    const deltaY = startY - currentY;
+    
+    if (modalRef.current) {
+      const newHeight = currentHeight + deltaY;
+      const maxPossibleHeight = window.innerHeight;
+      const minHeight = 200; // Minimum height the modal should maintain
+      
+      if (newHeight >= minHeight && newHeight <= maxPossibleHeight) {
+        modalRef.current.style.height = `${newHeight}px`;
+      }
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+  };
+
+  useEffect(() => {
+    if (isOpen && draggable) {
+      window.addEventListener('mousemove', (e: any) => handleTouchMove(e));
+      window.addEventListener('mouseup', handleTouchEnd);
+      window.addEventListener('touchmove', (e: any) => handleTouchMove(e));
+      window.addEventListener('touchend', handleTouchEnd);
+    }
+    
+    return () => {
+      window.removeEventListener('mousemove', (e: any) => handleTouchMove(e));
+      window.removeEventListener('mouseup', handleTouchEnd);
+      window.removeEventListener('touchmove', (e: any) => handleTouchMove(e));
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [isOpen, isDragging, draggable]);
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>): void => {
     if (closeOnOverlayClick && e.target === e.currentTarget) {
@@ -100,6 +155,7 @@ const BottomUpModal: React.FC<BottomUpModalProps> = ({
       aria-labelledby={title ? "modal-title" : undefined}
     >
       <div
+        ref={modalRef}
         className={`bg-white shadow-2xl transform transition-all duration-300 ease-out overflow-hidden ${className}`}
         style={{
           width: modalWidth,
@@ -111,9 +167,15 @@ const BottomUpModal: React.FC<BottomUpModalProps> = ({
         onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
       >
         {/* Drag handle indicator */}
-        <div className="flex justify-center pt-3 pb-1">
-          <div className="w-10 h-1 bg-gray-300 rounded-full"></div>
-        </div>
+        {draggable && (
+          <div 
+            className="flex justify-center pt-3 pb-1 cursor-grab active:cursor-grabbing"
+            onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => handleTouchStart(e)}
+            onTouchStart={(e: React.TouchEvent<HTMLDivElement>) => handleTouchStart(e)}
+          >
+            <div className="w-10 h-1 bg-gray-300 rounded-full"></div>
+          </div>
+        )}
 
         {/* Header with close button */}
         <div className={`flex flex-row justify-between px-6 py-4 ${borderBottom ? "border-b border-gray-200" : ""}`}>
@@ -144,7 +206,7 @@ const BottomUpModal: React.FC<BottomUpModalProps> = ({
         {/* Modal content with scrollable area */}
         <div 
           className="overflow-y-auto"
-          style={{ maxHeight: 'calc(90vh - 120px)' }}
+          style={{ maxHeight: 'calc(100% - 120px)' }}
         >
           <div className="">
             {children}

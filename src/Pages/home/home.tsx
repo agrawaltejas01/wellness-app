@@ -30,6 +30,7 @@ import ForceUpdatePopup from "../../components/ForceUpdatePopup";
 import GoToApp from "../../components/go-to-app";
 import { saveNotificationToken } from "../../apis/notifications/notifications";  
 import CoinsHomepage from "../coins/coins-homepage";
+import PlacesV2 from "./places";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -274,7 +275,6 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
           {/* {userDetails?.phone && <Flex flex={1}>
             <ProfileBanner />
           </Flex>} */}
-
           <Flex flex={3}>
             <HomeBanner />
           </Flex>
