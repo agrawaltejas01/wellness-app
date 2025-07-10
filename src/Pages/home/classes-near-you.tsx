@@ -88,11 +88,14 @@ function createUpperFlexTiles(isFromApp: boolean, pastAppBookings: PastAppBookin
       }}
     >
       <span>{trendingTile(isFromApp, pastAppBookings)}</span>
-      <span> {classTile("ride", isFromApp, pastAppBookings)} </span>
+      <span> {classTile("badmintonKids", isFromApp, pastAppBookings)} </span>
+      {/* <span> {classTile("ride", isFromApp, pastAppBookings)} </span> */}
       <span>{classTile("badminton", isFromApp, pastAppBookings)}</span>
-      <span>{classTile("strength", isFromApp, pastAppBookings)}</span>
-      <span>{classTile("swimming", isFromApp, pastAppBookings)}</span>
-      <span>{classTile("personaltraining", isFromApp, pastAppBookings)}</span>
+      {/* <span>{classTile("strength", isFromApp, pastAppBookings)}</span> */}
+      {/* <span>{classTile("swimming", isFromApp, pastAppBookings)}</span> */}
+      {/* <span>{classTile("personaltraining", isFromApp, pastAppBookings)}</span> */}
+      <span> {classTile("gymming", isFromApp, pastAppBookings)} </span>
+      <span> {classTile("boxing", isFromApp, pastAppBookings)} </span> 
     </Flex>
   );
 }
@@ -112,8 +115,8 @@ function createLowerFlexTiles(isFromApp: boolean, pastAppBookings: PastAppBookin
       <span> {classTile("football", isFromApp, pastAppBookings)} </span>
       <span> {classTile("gym", isFromApp, pastAppBookings)} </span>
       <span> {classTile("zumba", isFromApp, pastAppBookings)} </span>
-      <span> {classTile("boxing", isFromApp, pastAppBookings)} </span>
-      <span> {classTile("gymming", isFromApp, pastAppBookings)} </span>
+      {/* <span> {classTile("boxing", isFromApp, pastAppBookings)} </span>  */}
+      {/* <span> {classTile("gymming", isFromApp, pastAppBookings)} </span> */}
     </Flex>
   );
 }

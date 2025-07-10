@@ -95,6 +95,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
     const [activityId, setActivityId] = useState<number>(0);
     const [loading, setLoading] = useState<boolean>(true);
     const [count, setCount] = useState<number>(1);
+    const [kidJerseySize, setKidJerseySize] = useState<string>("");
     const [coinsAvailable, setCoinsAvailable] = useState<number>(0);
     const [coinsUsed, setCoinsUsed] = useState<number>(0);
     const [equipmentCharges, setEquipmentCharges] = useState<number>(0);
@@ -333,7 +334,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
               price * noOfGuests - (price * noOfGuests * offerPercentage) / 100
                 ? price * noOfGuests - maxDiscount
                 : price * noOfGuests - (price * noOfGuests * offerPercentage) / 100;
-            finalPrice = Math.floor(finalPrice);
+            finalPrice = Math.floor(finalPrice);  
             batchDetails.offerType = EOfferType.APP;
           } else if (batchDetails.discountType == "FLAT") {
             finalPrice =
@@ -343,7 +344,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
           } else {
             finalPrice = Math.floor(finalPrice);
           }
-          let newTotalAmount = finalPrice;
+          let newTotalAmount = finalPrice + (isRentalChargesChecked ? (batchDetails?.equipmentRentalCharges || 0) * noOfGuests : 0);
           let discount = price * noOfGuests - finalPrice;
     
           setTotalAmount(newTotalAmount);
@@ -358,6 +359,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
           setTotalSavings(discount);
           setEquipmentCharges((batchDetails?.equipmentRentalCharges || 0) * noOfGuests);
         }
+        setEquipmentCharges(isRentalChargesChecked ? (batchDetails?.equipmentRentalCharges || 0) * noOfGuests : 0);
         
     }, [showDiscount, batchDetails, pastAppBookings, noOfGuests, isRentalChargesChecked]);
 
@@ -416,6 +418,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
               participantName: "", // Empty string for participant name
               participantAge: 0,
               participantGender: "",
+              jerseySize: "",
               rideNumber: rideNumber, // Just the ride number
             }),
           );
@@ -525,8 +528,8 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                     <div className="flex flex-row font-jakarta font-bold text-sm">
                         <p className="text-sm font-bold"> { capitalizeFirstLetter(batchDetails?.activity)} | </p>
                         {/* <p className="dot"></p> */}
-                        <p className="text-sm pl-1"> { batchDetails?.date ? formatDate(batchDetails.date)["date suffix"] : "Date not available"} </p>
-                        <p className="dotBlack"></p>
+                        {!gym?.isOnlyWeekend && <p className="text-sm pl-1"> { batchDetails?.date ? formatDate(batchDetails.date)["date suffix"] : "Date not available"} </p>}
+                        {!gym?.isOnlyWeekend && <p className="dotBlack"></p>}
                         {batchDetails?.isDayPass ? <p className="text-sm pl-1">All Day</p> : 
                         <>
                             <p className="text-sm pl-1"> {formatTimeIntToAmPm(batchDetails?.startTime || 0)}</p>
@@ -545,7 +548,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                         {/* <p className="text-sm text-gray font-xs">No games yet</p> */}
                     </div>
                     <div className="flex flex-col" onClick={() => { navigate(`/checkout/batch/${batchId}/booking?edit=true`, {replace: true}) }}>
-                        {skillLevel != "" && (batchDetails?.slots && batchDetails?.slots <= 6) && <SkillCapsule level={skillLevel as SkillLevel} editable={true} />}
+                        {skillLevel != "" && (batchDetails?.slots && (batchDetails?.slots <= 6 || batchDetails?.activity?.toUpperCase() == "PICKLEBALL")) && <SkillCapsule level={skillLevel as SkillLevel} editable={true} />}
                     </div>
                 </div>
             </div>}
@@ -570,7 +573,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                 <div className="flex flex-col justify-between w-full bg-white shadow-gray rounded-xl">
                     <div className={`flex flex-row justify-between px-4 pt-4 ${totalSavings > 0 ? "" : "pb-2"}`}>
                         <p className="text-sm font-bold">To pay</p>
-                        <p className="text-sm font-bold">{Rs}{totalAmount}</p>
+                        <p className="text-sm font-bold">{Rs}{gym?.gymId == 41 ? totalAmount + 500 : totalAmount}</p>
                     </div>
                     <div className={`flex flex-row justify-between px-4 ${totalSavings > 0 ? "pt-2 pb-4" : " "}`}>
                         {totalSavings > 0 && <p className="text-xs text-gray font-sm">Total saved {Rs}{totalSavings}</p>}
@@ -604,7 +607,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                         </div>
                         </div>
                         <div className="flex flex-row items-center gap-2">
-                          <p className="text-sm font-sm">{Rs}{isRentalChargesChecked ? equipmentCharges : 0}</p>
+                          <p className="text-sm font-sm">{Rs}{equipmentCharges}</p>
                         </div>
                     </div>}
                     {gym?.gymId == 41 && <div className="flex flex-row justify-between px-4 pb-6">
@@ -630,7 +633,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                       </div>}
                 </div>
             </div>
-            {gym?.gymId == 41 && <div className="flex flex-col mt-4 mx-4 px-4 pt-4 rounded-xl bg-white shadow-gray mb-20">
+            {gym?.gymId == 41 && <div className="flex flex-col mt-4 mx-4 px-4 pt-4 rounded-xl bg-white shadow-gray">
                 <div className="flex flex-col justify-between w-full">
                     <p className="text-sm font-sm font-bold">Enter Kid's Details</p>
                 </div>
@@ -643,11 +646,12 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                         value={kidName} 
                         onChange={(e) => {
                             setKidName(e.target.value);
-                            if (e.target.value.trim()) {
+                            if (kidJerseySize.trim() && kidGender.trim() && kidAge >= 5 && kidAge <= 18) {
                                 const participant = {
                                     participantName: e.target.value,
                                     participantAge: kidAge,
                                     participantGender: kidGender,
+                                    jerseySize: kidJerseySize,
                                 };
                                 setParticipants([participant]);
                             }
@@ -664,17 +668,18 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                         onChange={(e) => {
                             const age = Number(e.target.value);
                             setKidAge(age);
-                            if (age > 0 && age <= 18) {
+                            if (kidJerseySize.trim() && kidGender.trim() && kidName.trim()) {
                                 const participant = {
                                     participantName: kidName,
                                     participantAge: age,
                                     participantGender: kidGender,
+                                    jerseySize: kidJerseySize,
                                 };
                                 setParticipants([participant]);
                             }
                         }}
                     />
-                    {(kidAge <= 0 || kidAge > 18) && <p className="text-xs text-red-500 mt-1 px-1">Age must be between 1 and 18</p>}
+                    {(kidAge < 5 || kidAge > 18) && <p className="text-xs text-red-500 mt-1 px-1">Age must be between 5 and 18</p>}
                 </div>
                 <div className="flex flex-col justify-between w-full mb-4">
                     <select
@@ -682,11 +687,12 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                         value={kidGender}
                         onChange={(e) => {
                             setKidGender(e.target.value);
-                            if (kidName.trim() && kidAge > 0 && kidAge <= 18) {
+                            if (kidJerseySize.trim() && kidName.trim() && kidAge >= 5 && kidAge <= 18) {
                                 const participant = {
                                     participantName: kidName,
                                     participantAge: kidAge,
                                     participantGender: e.target.value,
+                                    jerseySize: kidJerseySize,
                                 };
                                 setParticipants([participant]);
                             }
@@ -697,15 +703,41 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                         <option value="F">Female</option>
                     </select>
                 </div>
+                <div className="flex flex-col justify-between w-full mb-4">
+                    <select
+                        className={`w-full border-1 border-gray rounded-lg p-1`}
+                        value={kidJerseySize}
+                        onChange={(e) => {
+                            setKidJerseySize(e.target.value);
+                            if (kidGender.trim() && kidName.trim() && kidAge >= 5 && kidAge <= 18) {
+                                const participant = {
+                                    participantName: kidName,
+                                    participantAge: kidAge,
+                                    participantGender: kidGender,
+                                    jerseySize: e.target.value, 
+                                };
+                                setParticipants([participant]);
+                            }
+                        }}
+                    >
+                        <option value="" disabled>Select T-Shirt Size</option>
+                        <option value="S">Small</option>
+                        <option value="M">Medium</option>
+                        <option value="L">Large</option>
+                        <option value="XL">Extra Large</option>
+                    </select>
+                </div>
             </div>}
-            <div className="flex flex-row px-4 pt-4 mb-15">
+            <div className="flex flex-row px-4 pt-4">
                 {offerStrip.current && <p className="text-xs text-center text-white rounded-lg p-2 bg-discountStrip w-full">{offerStrip.current}</p>}
             </div>
+            <div className="flex flex-row px-4 pt-4">
             {showEquipmentRentalInfo && 
               <CenterModal isOpen={showEquipmentRentalInfo} onClose={() => {setShowEquipmentRentalInfo(false)}} title="Shuttle Rental">
                 <RentInfo />
               </CenterModal>
             }
+            </div>
             {/* {coinsAvailable > 0 && <div className="flex flex-row px-4 items-center">
               <div className="flex flex-row justify-between w-full bg-white shadow-gray rounded-xl items-center">
                 <div className="flex flex-row gap-4 items-center p-4">
@@ -724,15 +756,12 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                 </div>
               </div>
             </div>} */}
-            {/* <div className="flex flex-row px-4 pt-4 mb-10">
-                {offerStrip.current && <p className="text-xs text-center rounded-lg p-2 bg-gray-100 w-full">{offerStrip.current}</p>}
-            </div> */}
             <BookNowFooter
                 batchDetails={batchDetails}
                 gymData={gym}
                 batchId={Number(batchId)}
                 checkoutType={ECheckoutType.BATCH}
-                totalAmount={totalAmount || batchDetails?.price || 0}
+                totalAmount={gym?.gymId == 41 ? totalAmount + 500 : totalAmount || batchDetails?.price || 0}
                 comingFrom={EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE}
                 totalGuests={noOfGuests}
                 totalSavings={totalSavings}
@@ -743,7 +772,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                 equipmentRentalCharges={isRentalChargesChecked ? equipmentCharges : 0}
                 disabled={
                   (selectedRides.length !== noOfGuests && batchDetails?.isRideActivity) ||
-                  (gym?.gymId == 41 && (!kidName.trim() || kidAge <= 0 || kidAge > 18 || !kidGender.trim()))
+                  (gym?.gymId == 41 && (!kidName.trim() || kidAge <= 0 || kidAge > 18 || !kidGender.trim() || !kidJerseySize.trim()))
                 }
             />
         </div>

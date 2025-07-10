@@ -298,10 +298,10 @@ const calculateFinalPrice = (
 ): number => {
   if (!basePrice || !noOfGuests) return 0;
 
-  let totalPrice = basePrice * noOfGuests + equipmentRentalCharges;
+  let totalPrice = basePrice * noOfGuests;
 
   if (discountType === "FLAT") {
-    totalPrice =  Math.floor((totalPrice * (100 - offerPercentage)) / 100);
+    totalPrice = Math.floor((totalPrice * (100 - offerPercentage)) / 100);
   }
 
   if (discountType === "PERCENTAGE") {
@@ -309,6 +309,8 @@ const calculateFinalPrice = (
     const discountAmount = Math.min(maxDiscount, percentageDiscount);
     totalPrice = Math.floor(totalPrice - discountAmount);
   }
+
+  totalPrice = totalPrice + equipmentRentalCharges;
 
   if (coinsAvailable && coinsUsed && coinsUsed > 0) {
     totalPrice = totalPrice - (totalPrice <= coinsAvailable ? totalPrice : coinsAvailable);
@@ -391,7 +393,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
         coinsUsed || 0,
         equipmentRentalCharges || 0
       );
-      setDiscountedAmount(finalPrice);
+      setDiscountedAmount(props.comingFrom == EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE && gymData?.gymId == 41 ? finalPrice + 500 : finalPrice);
     }
   }, [showDiscount, batchDetails, totalGuests, coinsAvailable, coinsUsed, equipmentRentalCharges]);
 
@@ -562,6 +564,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
               paddingLeft: "24px",
             }}
           >
+            <div className="flex flex-col gap-2">
               <Flex
                 flex={2}
                 vertical
@@ -590,6 +593,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
                   : props.totalAmount + (props.totalSavings || 0)}
                 </span>
               </Flex>
+            </div>
             <button
               id={
                 props.comingFrom ===

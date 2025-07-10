@@ -173,7 +173,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
 
   useEffect(() => {
     if (gym?.gymId) {
-      if (gym.availableDates) {
+      if (gym.availableDates && gym.availableDates.length > 0) {
         const result = gym.availableDates.filter((dateString) => {
           const date = new Date(dateString);
           const today = new Date();
@@ -762,6 +762,30 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
             />
           </Flex>
         )}
+
+        {gym?.gymId == 41 && (
+          <Flex flex={1} style={{ paddingLeft: "24px" }}>
+            <ActivityTiles
+              activities={gym.activities}
+              activitySelected={selectedActivity}
+              onClickFunction={(activity: string) => {
+                Mixpanel.track("clicked_activity_pill_gym", {
+                  gymId: gym.gymId,
+                  activity,
+                });
+                setSelectedActivity(activity);
+                _getGymBatchesForDate({
+                  userId: userId,
+                  id: gym.gymId,
+                  activity: activity,
+                  date: "2025-07-10",
+                });
+              }}
+              reposition
+            />
+          </Flex>
+        )}
+        
 
         <Flex flex={3} style={{ marginTop: "10px" }}>
           {batches && batches.length

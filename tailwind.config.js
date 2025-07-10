@@ -5,6 +5,8 @@ module.exports = {
     extend: {
       fontFamily: {
         jakarta: ['"Plus Jakarta Sans"', "sans-serif"],
+        serif: ['"Playfair Display"', "serif"],
+        sans: ['"Helvetica"', "sans-serif"],
       },
       boxShadow: {
         'gray': '4px 0px 16px 0px rgba(0, 0, 0, 0.08)',
@@ -20,8 +22,9 @@ module.exports = {
         'activity-description': 'rgba(105, 105, 105, 1)' 
       },
       backgroundColor: {
-        'discountStrip': 'rgba(11, 156, 93, 1)',
+        'discountStrip': 'rgba(26, 172, 109, 1)',
         'mint-green': 'rgba(173, 235, 179, 1)',
+        'coins': 'rgba(141, 255, 163, 1)'
       }
     },
   },

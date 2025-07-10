@@ -28,6 +28,7 @@ import { Rs } from "../../constants/symbols";
 import { discount } from "../../constants/gym-discount";
 
 const maxChar = 250;
+const hideChooseActivityForGymIds = [40, 41, 44];
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -430,10 +431,10 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
             </>
           )}
         </div>
-        {gymData.gymId != 40 && <div className="gymPageheading">
+        {!hideChooseActivityForGymIds.includes(gymData?.gymId) && <div className="gymPageheading">
           <div>Choose Activity</div>
         </div>}
-        {gymData.gymId != 40 && <div className="activities">
+        {!hideChooseActivityForGymIds.includes(gymData?.gymId) && <div className="activities">
           {gymData?.activities?.map((activity: string) => {
             return (
               <span

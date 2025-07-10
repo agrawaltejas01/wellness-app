@@ -50,6 +50,7 @@ const Coins: React.FC<RouteComponentProps> = () => {
     const [showConfetti, setShowConfetti] = useState(false);
     const [showCoinsCheckout, setShowCoinsCheckout] = useState(false);
     const [coinPackage, setCoinPackage] = useState<CoinsPackage | null>(null);
+    const [showCoinsHomepage, setShowCoinsHomepage] = useState(false);
 
     const userId = window.localStorage["zenfitx-user-details"]
           ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || null
@@ -64,6 +65,9 @@ const Coins: React.FC<RouteComponentProps> = () => {
         },
         onError: (error) => {
             errorToast("Error in getting coins packages");
+        },
+        onSettled: () => {
+            setShowCoinsHomepage(true);
         }
     });
 
@@ -153,7 +157,7 @@ const Coins: React.FC<RouteComponentProps> = () => {
     
         }
 
-    if (loading) return <Loader />;
+    if (!showCoinsHomepage) return <Loader />;
 
     return (
 
@@ -163,7 +167,7 @@ const Coins: React.FC<RouteComponentProps> = () => {
                     <BackArrow className="cursor-pointer absolute left-4" onClick={() => {
                         navigate("/");
                     }} />
-                    <p className="text-xl font-bold">ZenfitX Coins (1 Coin = ₹1)</p>
+                    <p className="text-md font-bold">ZenfitX Coins (1 Coin = ₹1)</p>
                 </div>
                 <hr className="w-full mt-4"/>
             </div>

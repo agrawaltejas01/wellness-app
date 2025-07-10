@@ -127,21 +127,30 @@ function getListOfCenters(
       finalPrice = price;
     }
     console.log({price, showDiscount, finalPrice, maxDiscount, offerPercentage});
-    return showDiscount ? (
-      <div className="dCard">
-        <div className="dPrice">₹{Math.floor(finalPrice)}</div>
-        <div className="sPrice slash">₹{price}</div>
-        <div className="sPrice">onwards</div>
-      </div>
-    ) : (
-      <div className="dCard">
-        <div className="dPrice">
-          {Rs}
-          {price}
+    // return showDiscount ? (
+    //   <div className="dCard">
+    //     <div className="dPrice">₹{Math.floor(finalPrice)}</div>
+    //     <div className="sPrice slash">₹{price}</div>
+    //     <div className="sPrice">onwards</div>
+    //   </div>
+    // ) : (
+    //   <div className="dCard">
+    //     <div className="dPrice">
+    //       {Rs}
+    //       {price}
+    //     </div>
+    //     <div className="sPrice">onwards</div>
+    //   </div>
+    // );
+    return  (
+        <div className="dCard">
+          <div className="dPrice">
+            {Rs}
+            {price}
+          </div>
+          <div className="sPrice">onwards</div>
         </div>
-        <div className="sPrice">onwards</div>
-      </div>
-    );
+      );
   };
 
   const cardWidget = (gymCard: IGymCard, isFromApp: boolean, pastAppBookings: PastAppBookingObject) => {
@@ -171,7 +180,7 @@ function getListOfCenters(
         <div
           // className="activityDetailWrapper"
           className={
-            showDiscount ? "activityDetailWrapper2" : "activityDetailWrapper"
+            showDiscount && discount?.[gymCard.gymId as keyof typeof discount]?.length > 0 ? "activityDetailWrapper2" : "activityDetailWrapper"
           }
         >
           <div className="activityDetail">
@@ -179,7 +188,7 @@ function getListOfCenters(
               <span>{name}</span> {priceCard(minPrice, showDiscount, maxDiscount, offerPercentage, discountType)}
             </div>
             <div className="activity">
-              {concatAndUpperCaseActivities(activities?.slice(0, 8))}
+              {gymCard.gymId == 41 ? "Badminton Kids Coaching" : concatAndUpperCaseActivities(activities?.slice(0, 8))}
             </div>
             <div className="separator"></div>
             {area && <div className="location">
@@ -188,7 +197,7 @@ function getListOfCenters(
             </div>}
           </div>
 
-          {showDiscount && (
+          {showDiscount && discount?.[gymCard.gymId as keyof typeof discount]?.length > 0 && (
             <div className="discount">
               <div>
                 {discountIcon()}

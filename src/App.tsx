@@ -21,6 +21,8 @@ import BatchCheckoutBookingV2 from "./Pages/checkout/checkout-v2";
 import GoToApp from "./components/go-to-app";
 import Coins from "./Pages/coins/coins";
 import { Mixpanel } from "./mixpanel/init";
+import BookingInfoHost from "./Pages/bookings/host";
+import BookingInfoCenter from "./Pages/bookings/center";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -31,8 +33,8 @@ const AppLayout: React.FC<{ children: React.ReactNode}> = ({ children }) => {
 
    // Mixpanel tracking for notification alerts
    useEffect(() => {
-    window.addEventListener("message", (event) => {
-      const message = JSON.parse(event.data);
+    window.addEventListener("message", (event: any) => {
+      const message = event.data;
       const type = message.type;
       const timestamp = message.timestamp;
       const data = message.data;
@@ -124,6 +126,8 @@ function App() {
         <PlusPaymentSuccess path="/plus/success" />
           <PrivacyPolicy path="/privacy" />
           <Coins path="/coins" />
+          <BookingInfoHost path="/booking-info-host" />
+          <BookingInfoCenter path="/booking-info-center" /> 
         </Router>
       </AppLayout>
     </QueryClientProvider>

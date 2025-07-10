@@ -22,6 +22,7 @@ import Circle from "../../components/circle";
 import Loader from "../../components/Loader";
 import {ReactComponent as LocationIcon} from '../../images/utils/location-icon.svg';
 import { message } from "antd";
+import MoreInfo from "./more-info";
 
 interface IClassCheckout extends RouteComponentProps {
 }
@@ -185,8 +186,8 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
             <p className="text-xl font-normal font-jakarta pt-1">{activityName}</p>
             <p className="text-xs font-normal font-jakarta pt-1 inline-flex items-center gap-1"><LocationIcon />{location}</p>
             <div className="flex flex-row pt-1 pb-4 text-white font-jakarta text-2xl pt-3">
-              <p className="text-white">{batchDetails?.date ? formatDate(batchDetails.date)["date suffix"] : "Date not available"}</p>
-              <p className="dotWhite"></p>
+              {!gym?.isOnlyWeekend && <p className="text-white">{batchDetails?.date ? formatDate(batchDetails.date)["date suffix"] : "Date not available"}</p>}
+              {!gym?.isOnlyWeekend && <p className="dotWhite"></p>}
               {batchDetails?.isDayPass ? <p className="text-white">All Day</p> : 
               <>
                 <p className="text-white">{formatTimeIntToAmPm(batchDetails?.startTime || 0)}</p>
@@ -203,6 +204,7 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
           {batchDetails?.aboutTheActivity && <AboutTheActivity aboutTheActivity={batchDetails?.aboutTheActivity} />}
           {batchDetails?.whatToExpect && <WhatToExpect whatToExpect={batchDetails?.whatToExpect} />}
           {batchDetails?.whatToBring && <WhatToBring whatToBring={batchDetails?.whatToBring} />}
+          {batchDetails?.moreInfo && <MoreInfo moreInfo={batchDetails?.moreInfo} />}
           {gym && (
           <BookNowFooter
             checkoutType={ECheckoutType.BATCH}

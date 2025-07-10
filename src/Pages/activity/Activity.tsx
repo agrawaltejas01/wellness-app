@@ -24,7 +24,10 @@ interface PastAppBookingObject {
 interface IActivity extends RouteComponentProps {}
 
 const Activity: React.FC<IActivity> = ({}) => {
-const activity = window.location.pathname.split('/')[1]
+let activity = window.location.pathname.split('/')[1]
+if(activity == "badmintonKids") {
+  activity = "One Month Plan";
+}
 const [activities, setActivities] = useState<string[]>([]);
 const [gymCardsData, setGymCardsData] = useState<IGymCard[]>([]);
 const [selectedActivity,setSelectedActivity]=useState<string>(activity);
@@ -202,7 +205,7 @@ const exclusiveIcon = () => {
               <span>{name}</span> {priceCard(minPrice, showDiscount, maxDiscount, offerPercentage, discountType)}
             </div>
             <div className="activity">
-              {concatAndUpperCaseActivities(activities?.slice(0, 8))}
+              {gymCard.gymId == 41 ? "Badminton Kids Coaching" : concatAndUpperCaseActivities(activities?.slice(0, 8))}
             </div>
             <div className="separator"></div>
             {area && <div className="location">

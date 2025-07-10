@@ -79,7 +79,7 @@ export interface ParticipantDetail {
   participantAge: number;
   participantGender: string;
   // jerseyName?: string;
-  // jerseySize: string;
+  jerseySize: string;
 }
 
 export interface IGymDetails extends Omit<IGymCard, "medias"> {
