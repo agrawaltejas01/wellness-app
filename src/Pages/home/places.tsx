@@ -93,9 +93,9 @@ const Places = () => {
         // }
         // fetchPlaces();
         navigator.geolocation.getCurrentPosition((position: any) => {
+            sessionStorage.setItem('zenfitx-latitude', position.coords.latitude.toString());
+            sessionStorage.setItem('zenfitx-longitude', position.coords.longitude.toString());
             fetchPlace(position.coords.latitude, position.coords.longitude);
-            setLat(position.coords.latitude);
-            setLng(position.coords.longitude);
         }, (error: any) => {
             console.log(error);
         }, {
@@ -108,8 +108,8 @@ const Places = () => {
     const fetchPlaceDetails = async (place: any) => {
         const data = await _getPlaceDetails(place.place_id);
         setLocation(place.structured_formatting.main_text + ', ' + place.structured_formatting.secondary_text);
-        setLat(data.location.latitude);
-        setLng(data.location.longitude);
+        sessionStorage.setItem('zenfitx-latitude', data.location.latitude.toString());
+        sessionStorage.setItem('zenfitx-longitude', data.location.longitude.toString());
         sessionStorage.setItem('zenfitx-location', JSON.stringify({
             timestamp: Date.now(),
             address: place.structured_formatting.main_text + ', ' + place.structured_formatting.secondary_text
