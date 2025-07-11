@@ -94,6 +94,8 @@ const Places = () => {
         // fetchPlaces();
         navigator.geolocation.getCurrentPosition((position: any) => {
             fetchPlace(position.coords.latitude, position.coords.longitude);
+            setLat(position.coords.latitude);
+            setLng(position.coords.longitude);
         }, (error: any) => {
             console.log(error);
         }, {
@@ -103,10 +105,16 @@ const Places = () => {
         });
     }, [search]);
 
-    const fetchPlaceDetails = async (placeId: string) => {
-        const data = await _getPlaceDetails(placeId);
-        setLocation(data.postalAddress.addressLines.join(', '));
-        fetchPlace(data.location.latitude, data.location.longitude, true);
+    const fetchPlaceDetails = async (place: any) => {
+        const data = await _getPlaceDetails(place.place_id);
+        setLocation(place.structured_formatting.main_text + ', ' + place.structured_formatting.secondary_text);
+        setLat(data.location.latitude);
+        setLng(data.location.longitude);
+        sessionStorage.setItem('zenfitx-location', JSON.stringify({
+            timestamp: Date.now(),
+            address: place.structured_formatting.main_text + ', ' + place.structured_formatting.secondary_text
+        }));
+        // fetchPlace(data.location.latitude, data.location.longitude, true);
         setShowLocationModal(false);
     }
 
@@ -170,7 +178,7 @@ const Places = () => {
                                 <div>
                                 <div className="flex flex-col gap-2 px-2 mx-4 mb-1" key={index} onClick={() => {
                                     setSelectedPlaceId(place.place_id);
-                                    fetchPlaceDetails(place.place_id);
+                                    fetchPlaceDetails(place);
                                     setShowLocationModal(false);
                                 }}>
                                     <div className="flex flex-row gap-2 items-center">
