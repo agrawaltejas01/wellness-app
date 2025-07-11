@@ -5,11 +5,14 @@ import { BottomUpModal } from "../profile/half-page-modal";
 import {ReactComponent as SearchIcon} from "../../images/home/search.svg";
 import { useMutation } from "@tanstack/react-query";
 import { getLocation, searchLocation, getPlaceDetails } from "../../apis/location/location";
+import { Mixpanel } from "../../mixpanel/init";
 
 
 
 const Places = () => {
 
+    const userDetails = JSON.parse(window.localStorage["zenfitx-user-details"] || '{}');
+    const userId = userDetails.id;
 
     const [search, setSearch] = useState("");
     const [places, setPlaces] = useState<any[]>([]);
@@ -95,8 +98,19 @@ const Places = () => {
         navigator.geolocation.getCurrentPosition((position: any) => {
             sessionStorage.setItem('zenfitx-latitude', position.coords.latitude.toString());
             sessionStorage.setItem('zenfitx-longitude', position.coords.longitude.toString());
+            Mixpanel.track('current_location', {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                user_id: userId
+            });
             fetchPlace(position.coords.latitude, position.coords.longitude);
         }, (error: any) => {
+            if(sessionStorage.getItem('zenfitx-location')) {
+                const locationData = JSON.parse(sessionStorage.getItem('zenfitx-location') || '{}');
+                setLocation(locationData.address);
+            } else {
+                setLocation('Select location');
+            }
             console.log(error);
         }, {
             enableHighAccuracy: true,
@@ -114,6 +128,11 @@ const Places = () => {
             timestamp: Date.now(),
             address: place.structured_formatting.main_text + ', ' + place.structured_formatting.secondary_text
         }));
+        Mixpanel.track('location_changed', {
+            latitude: data.location.latitude,
+            longitude: data.location.longitude,
+            user_id: userId
+        });
         // fetchPlace(data.location.latitude, data.location.longitude, true);
         setShowLocationModal(false);
     }
