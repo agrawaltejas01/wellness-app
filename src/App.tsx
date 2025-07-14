@@ -22,6 +22,7 @@ import GoToApp from "./components/go-to-app";
 import Coins from "./Pages/coins/coins";
 import BookingInfoHost from "./Pages/bookings/host";
 import BookingInfoCenter from "./Pages/bookings/center";
+import FeedbackThankyou from "./Pages/home/feedback-thankyou";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -108,6 +109,7 @@ function App() {
           <Coins path="/coins" />
           <BookingInfoHost path="/booking-info-host" />
           <BookingInfoCenter path="/booking-info-center" /> 
+          <FeedbackThankyou path="/feedback-thankyou" />
         </Router>
       </AppLayout>
     </QueryClientProvider>
