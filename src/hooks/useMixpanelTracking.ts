@@ -5,12 +5,12 @@ export const useMixpanelTracking = () => {
   useEffect(() => {
     const handleMessage = (event: any) => {
       const message = event.data;
-      const type = message.type;
-      const timestamp = message.timestamp;
-      const data = message.data;
-      const source = message.source;
+      const type = JSON.parse(message).type;
+      const timestamp = JSON.parse(message).timestamp;
+      const data = JSON.parse(message).data;
+      const source = JSON.parse(message).source;
 
-      alert(type);
+      alert(type)
 
       Mixpanel.track(`${type}`, {
         message: message,
