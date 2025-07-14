@@ -20,9 +20,9 @@ import BatchCheckoutV2 from "./Pages/checkout/batch-checkout-v2";
 import BatchCheckoutBookingV2 from "./Pages/checkout/checkout-v2";
 import GoToApp from "./components/go-to-app";
 import Coins from "./Pages/coins/coins";
-import { Mixpanel } from "./mixpanel/init";
 import BookingInfoHost from "./Pages/bookings/host";
 import BookingInfoCenter from "./Pages/bookings/center";
+import { useMixpanelTracking } from "./hooks/useMixpanelTracking";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -31,24 +31,8 @@ const queryClient = new QueryClient();
 const AppLayout: React.FC<{ children: React.ReactNode}> = ({ children }) => {
   const [isAppBannerVisible, setIsAppBannerVisible] = useState(false);
 
-   // Mixpanel tracking for notification alerts
-   useEffect(() => {
-    window.addEventListener("message", (event: any) => {
-      const message = event.data;
-      const type = message.type;
-      const timestamp = message.timestamp;
-      const data = message.data;
-      const source = message.source;
-
-      Mixpanel.track(`${type}`, {
-        message: message,
-        timestamp: timestamp,
-        data: data,
-        source: source
-      });
-    });
-
-  }, []);
+  // Use the custom hook for Mixpanel tracking
+  useMixpanelTracking();
   
   // When banner becomes visible, disable body scrolling
   useEffect(() => {
