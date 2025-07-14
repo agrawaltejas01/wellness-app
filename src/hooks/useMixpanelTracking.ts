@@ -4,12 +4,13 @@ import { Mixpanel } from '../mixpanel/init';
 export const useMixpanelTracking = () => {
   useEffect(() => {
     const handleMessage = (event: any) => {
-     alert(event.data);
       const message = event.data;
       const type = message.type;
       const timestamp = message.timestamp;
       const data = message.data;
       const source = message.source;
+
+      alert(type);
 
       Mixpanel.track(`${type}`, {
         message: message,
