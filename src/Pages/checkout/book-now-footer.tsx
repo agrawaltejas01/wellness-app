@@ -382,6 +382,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   }, []);
 
   useEffect(() => {
+    const registrationFee = gymData?.gymId && pastAppBookings.hasOwnProperty(gymData.gymId) ? 0 : 500;
     if (showDiscount && batchDetails) {
       const finalPrice = calculateFinalPrice(
         batchDetails.price || 0,
@@ -393,9 +394,9 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
         coinsUsed || 0,
         equipmentRentalCharges || 0
       );
-      setDiscountedAmount(props.comingFrom == EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE && gymData?.gymId == 41 ? finalPrice + 500 : finalPrice);
+      setDiscountedAmount(props.comingFrom == EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE && gymData?.gymId == 41 ? finalPrice + registrationFee : finalPrice);
     }
-  }, [showDiscount, batchDetails, totalGuests, coinsAvailable, coinsUsed, equipmentRentalCharges]);
+  }, [showDiscount, batchDetails, totalGuests, coinsAvailable, coinsUsed, equipmentRentalCharges, pastAppBookings]);
 
   const discountText =
     gymData?.discountType === "FLAT"

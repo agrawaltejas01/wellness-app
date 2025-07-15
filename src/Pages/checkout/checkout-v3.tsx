@@ -568,7 +568,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                 <div className="flex flex-col justify-between w-full bg-white shadow-gray rounded-xl">
                     <div className={`flex flex-row justify-between px-4 pt-4 ${totalSavings > 0 ? "" : "pb-2"}`}>
                         <p className="text-sm font-bold">To pay</p>
-                        <p className="text-sm font-bold">{Rs}{gym?.gymId == 41 ? totalAmount + 500 : totalAmount}</p>
+                        <p className="text-sm font-bold">{Rs}{gym?.gymId == 41 ? totalAmount + (pastAppBookings[41] ? 0 : 500) : totalAmount}</p>
                     </div>
                     <div className={`flex flex-row justify-between px-4 ${totalSavings > 0 ? "pt-2 pb-4" : " "}`}>
                         {totalSavings > 0 && <p className="text-xs text-gray font-sm">Total saved {Rs}{totalSavings}</p>}
@@ -605,7 +605,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                           <p className="text-sm font-sm">{Rs}{equipmentCharges}</p>
                         </div>
                     </div>}
-                    {gym?.gymId == 41 && <div className="flex flex-row justify-between px-4 pb-6">
+                    {gym?.gymId == 41 && !pastAppBookings[41] && <div className="flex flex-row justify-between px-4 pb-6">
                           <p className="text-sm font-sm">One Time Registration Fee</p>
                           <p className="text-sm font-sm">{Rs}500</p>
                         </div>}
@@ -628,7 +628,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                       </div>}
                 </div>
             </div>
-            {gym?.gymId == 41 && <div className="flex flex-col mt-4 mx-4 px-4 pt-4 rounded-xl bg-white shadow-gray">
+            {gym?.gymId == 41 && !pastAppBookings[41] && <div className="flex flex-col mt-4 mx-4 px-4 pt-4 rounded-xl bg-white shadow-gray">
                 <div className="flex flex-col justify-between w-full">
                     <p className="text-sm font-sm font-bold">Enter Kid's Details</p>
                 </div>
@@ -756,7 +756,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                 gymData={gym}
                 batchId={Number(batchId)}
                 checkoutType={ECheckoutType.BATCH}
-                totalAmount={gym?.gymId == 41 ? totalAmount + 500 : totalAmount || batchDetails?.price || 0}
+                totalAmount={gym?.gymId == 41 ? totalAmount + (pastAppBookings[41] ? 0 : 500) : totalAmount || batchDetails?.price || 0}
                 comingFrom={EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE}
                 totalGuests={noOfGuests}
                 totalSavings={totalSavings}
@@ -767,7 +767,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                 equipmentRentalCharges={isRentalChargesChecked ? equipmentCharges : 0}
                 disabled={
                   (selectedRides.length !== noOfGuests && batchDetails?.isRideActivity) ||
-                  (gym?.gymId == 41 && (!kidName.trim() || kidAge <= 0 || kidAge > 18 || !kidGender.trim() || !kidJerseySize.trim()))
+                  (gym?.gymId == 41 && !pastAppBookings[41] && (!kidName.trim() || kidAge <= 0 || kidAge > 18 || !kidGender.trim() || !kidJerseySize.trim()))
                 }
             />
         </div>
