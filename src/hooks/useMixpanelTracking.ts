@@ -10,8 +10,6 @@ export const useMixpanelTracking = () => {
       const data = JSON.parse(message).data;
       const source = JSON.parse(message).source;
 
-      alert(type)
-
       Mixpanel.track(`${type}`, {
         message: message,
         timestamp: timestamp,
