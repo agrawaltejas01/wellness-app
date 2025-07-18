@@ -7,20 +7,20 @@ export const useMixpanelTracking = () => {
       const message = event.data;
 
       alert(message);
+      
+
+      const type = JSON.parse(message).type;
+      const timestamp = JSON.parse(message).timestamp;
+      const data = JSON.parse(message).data;
+      const source = JSON.parse(message).source;
+
+      Mixpanel.track(`${type}`, {
+        message: message,
+        timestamp: timestamp,
+        data: data,
+        source: source
+      });
     };
-
-    //   const type = JSON.parse(message).type;
-    //   const timestamp = JSON.parse(message).timestamp;
-    //   const data = JSON.parse(message).data;
-    //   const source = JSON.parse(message).source;
-
-    //   Mixpanel.track(`${type}`, {
-    //     message: message,
-    //     timestamp: timestamp,
-    //     data: data,
-    //     source: source
-    //   });
-    // };
 
     window.addEventListener("message", handleMessage);
 
