@@ -89,34 +89,28 @@ const Places = () => {
 
 
     useEffect(() => {
-        // const fetchPlaces = async () => {
-        //     const response = await fetch(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${search}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`);
-        //     const data = await response.json();
-        //     setPlaces(data.predictions);
-        // }
-        // fetchPlaces();
-        navigator.geolocation.getCurrentPosition((position: any) => {
-            sessionStorage.setItem('zenfitx-latitude', position.coords.latitude.toString());
-            sessionStorage.setItem('zenfitx-longitude', position.coords.longitude.toString());
-            Mixpanel.track('current_location', {
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
-                user_id: userId
-            });
-            fetchPlace(position.coords.latitude, position.coords.longitude);
-        }, (error: any) => {
-            if(sessionStorage.getItem('zenfitx-location')) {
-                const locationData = JSON.parse(sessionStorage.getItem('zenfitx-location') || '{}');
-                setLocation(locationData.address);
-            } else {
-                setLocation('Select location');
-            }
-            console.log(error);
-        }, {
-            enableHighAccuracy: true,
-            timeout: 5000,
-            maximumAge: 0
-        });
+        // navigator.geolocation.getCurrentPosition((position: any) => {
+        //     sessionStorage.setItem('zenfitx-latitude', position.coords.latitude.toString());
+        //     sessionStorage.setItem('zenfitx-longitude', position.coords.longitude.toString());
+        //     Mixpanel.track('current_location', {
+        //         latitude: position.coords.latitude,
+        //         longitude: position.coords.longitude,
+        //         user_id: userId
+        //     });
+        //     fetchPlace(position.coords.latitude, position.coords.longitude);
+        // }, (error: any) => {
+        //     if(sessionStorage.getItem('zenfitx-location')) {
+        //         const locationData = JSON.parse(sessionStorage.getItem('zenfitx-location') || '{}');
+        //         setLocation(locationData.address);
+        //     } else {
+        //         setLocation('Select location');
+        //     }
+        //     console.log(error);
+        // }, {
+        //     enableHighAccuracy: true,
+        //     timeout: 5000,
+        //     maximumAge: 0
+        // });
     }, [search]);
 
     const fetchPlaceDetails = async (place: any) => {
