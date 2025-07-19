@@ -181,7 +181,13 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   useEffect(() => {
     if(userDetails?.id) {
       window?.ReactNativeWebView?.postMessage("notification alert");
-      window?.ReactNativeWebView?.postMessage("request_location");
+
+      const sessionLocation = window.sessionStorage["zenfitx-location"];
+      if(!sessionLocation) {
+        window?.ReactNativeWebView?.postMessage("request_location");
+        window.sessionStorage.setItem("zenfitx-location", "true");
+      }
+
       const notificationToken = window.localStorage["token"];
       if (notificationToken) {
         _saveNotificationToken({ userId: userDetails?.id as number, token: notificationToken });
