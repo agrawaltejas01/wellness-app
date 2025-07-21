@@ -14,6 +14,7 @@ const Feedback: React.FC = () => {
     const [feedbackModal, setFeedbackModal] = useState(false);
     const [showRatingModal, setShowRatingModal] = useState(false);
     const [clickedStar, setClickedStar] = useState(false);
+    const [allFeedbackReasons, setAllFeedbackReasons] = useState<any>([]);
     const [feedbackReasons, setFeedbackReasons] = useState<any>(null);
     const [selectedReasons, setSelectedReasons] = useState<any>([false, false, false, false, false]);
     const [showOtherReasonModal, setShowOtherReasonModal] = useState(false);
@@ -47,10 +48,13 @@ const Feedback: React.FC = () => {
     const {mutate: _getFeedbackReasons} = useMutation({
         mutationFn: getFeedbackReasons,
         onSuccess: (data) => {
-            setFeedbackReasons(data.data.reasons);
+            setAllFeedbackReasons(data.data.reasons);
         },
         onError: (error) => {   
             console.log(error);
+        },
+        onSettled: () => {
+            setFeedbackReasons(allFeedbackReasons.filter((reason: any) => reason.rating == rating).sort((a: any, b: any) => a.reason_text.length - b.reason_text.length));
         }
     });
 
@@ -77,6 +81,10 @@ const Feedback: React.FC = () => {
         }
     }, [feedback]);
 
+    useEffect(() => {
+        setFeedbackReasons(allFeedbackReasons.filter((reason: any) => reason.rating == rating).sort((a: any, b: any) => a.reason_text.length - b.reason_text.length));
+    }, [rating]);
+
     // Initialize selectedReasons when feedbackReasons is loaded
     useEffect(() => {
         if (feedbackReasons && feedbackReasons.length > 0) {
@@ -100,7 +108,7 @@ const Feedback: React.FC = () => {
         // Get the reason IDs for selected reasons
         const selectedReasonIds = selectedReasons
             .map((isSelected: boolean, index: number) => isSelected ? feedbackReasons[index]?.id : 0)
-            // .filter((reasonId: number | null) => reasonId !== null);
+            .filter((reasonId: number | null) => reasonId !== 0);
 
         _submitFeedback({
             userId, 
@@ -171,20 +179,24 @@ const Feedback: React.FC = () => {
                             <div className="flex flex-col items-center justify-center">
                                 <p className="text-sm text-black pb-5 text-center font-bold">{message[rating as keyof typeof message]}</p>
                                 <div className="flex flex-col gap-2 grid grid-cols-2 w-full mb-4">
-                                    {rating < 5 && feedbackReasons.map((reason: any, index: number) => (
-                                        <p className={`text-xs font-semibold text-center rounded-full p-4 cursor-pointer ${selectedReasons[index] ? 'bg-black text-white' : 'text-black bg-gray-100'}`} key={index} onClick={() => handleReasonClick(index)}>{reason.reason_text}</p>
-                                    ))}     
+                                    {feedbackReasons.map((reason: any, index: number) => {
+                                        const isLastAndOdd = index === feedbackReasons.length - 1 && feedbackReasons.length % 2 === 1;
+                                        
+                                        return (
+                                            <p className={`text-xs font-semibold text-center rounded-full p-4 cursor-pointer ${selectedReasons[index] ? 'bg-black text-white' : 'text-black bg-gray-100'} ${isLastAndOdd ? 'col-span-2' : ''}`} key={index} onClick={() => handleReasonClick(index)}>{reason.reason_text}</p>
+                                        )
+                                    })}     
                                 </div>  
                             </div>
                         )}
-                        {rating < 5 && <div className={`text-sm font-semibold text-center rounded-full px-6 py-3 mb-4 cursor-pointer ${showOtherReasonModal ? 'bg-black text-white' : 'bg-gray-100 text-black'}`} 
+                        {<div className={`text-sm font-semibold text-center rounded-full px-6 py-3 mb-4 cursor-pointer ${showOtherReasonModal ? 'bg-black text-white' : 'bg-gray-100 text-black'}`} 
                         onClick={() => {
                             setShowOtherReasonModal(!showOtherReasonModal);
                             setOtherReason('');
                         }}>
                             <p className={`${showOtherReasonModal ? 'text-white' : 'text-black'}`}>Other</p>
                         </div>}
-                        { rating < 5 && showOtherReasonModal && (
+                        {showOtherReasonModal && (
                             <div className="flex flex-col items-center justify-center mb-4 w-full mx-4">
                                 <textarea className="w-full text-sm p-2 py-1 wrap border border-gray-300 rounded-md resize-y min-h-[100px]" placeholder="Feel free to share your thoughts" value={otherReason} onChange={(e) => setOtherReason(e.target.value)} rows={4} />
                             </div>
