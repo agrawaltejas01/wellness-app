@@ -18,13 +18,16 @@ const FeedbackThankyou: React.FC<IFeedbackThankyou> = () => {
         }, 1000);
         return () => clearInterval(interval);
     }, [countdown]);
+
     useEffect(() => {
         if (countdown === 0) {
             navigate('/'); // TODO: Change to home page
         }
     }, [countdown]);
+
     return (
         <div className="flex flex-col items-center justify-center h-screen"> 
+        <> 
             {success ? (
                 <>
                     <picture>
@@ -42,7 +45,9 @@ const FeedbackThankyou: React.FC<IFeedbackThankyou> = () => {
                     <p className="text-sm text-black">Please try again later.</p>
                 </>
             )}
-        </div>      
+        <div className="text-xs text-black fixed bottom-10 left-0 right-0 text-center">Redirecting to home page in {countdown} seconds...</div> 
+        </>
+        </div>
     )
 }
 
