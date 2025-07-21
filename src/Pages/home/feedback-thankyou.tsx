@@ -1,14 +1,17 @@
 import { navigate } from "@reach/router";
 import { useEffect, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
-
+import { useLocation } from "@reach/router";
 
 interface IFeedbackThankyou extends RouteComponentProps {
     success?: boolean;
 }
 
-const FeedbackThankyou: React.FC<IFeedbackThankyou> = ({success = false}) => {
+const FeedbackThankyou: React.FC<IFeedbackThankyou> = () => {
     const [countdown, setCountdown] = useState(3);
+    const location = useLocation();
+    const success = (location.state as any)?.success || false;
+
     useEffect(() => {
         const interval = setInterval(() => {
             setCountdown(countdown - 1);

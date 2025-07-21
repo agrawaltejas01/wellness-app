@@ -92,6 +92,10 @@ const Feedback: React.FC = () => {
 
     const handleSubmit = (submitStatus: string = status) => {
         setShowRatingModal(false);
+
+        if(submitStatus == 'OPTED_OUT' ){
+            return;
+        }
         
         // Get the reason IDs for selected reasons
         const selectedReasonIds = selectedReasons
@@ -118,7 +122,7 @@ const Feedback: React.FC = () => {
                 handleSubmit('OPTED_OUT');
             }}>×</p>
             <div className="flex flex-col items-center justify-center pt-2">
-                <p className="text-xs text-gray pb-1">Rate your game from </p>        
+                <p className="text-xs text-gray pb-1">Rate your game</p>        
                 <p className="text-sm text-gray-500 font-bold pb-2">{feedback?.gym_name} - {feedback?.activity.toLowerCase()}</p>
                 <div className="flex flex-row items-center justify-center gap-2">
                     {Array.from({length: 5}).map((_, index) => (
