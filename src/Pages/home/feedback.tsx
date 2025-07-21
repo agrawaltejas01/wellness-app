@@ -144,7 +144,7 @@ const Feedback: React.FC<FeedbackProps> = ({showFeedback = false}) => {
                 setFeedbackModal(false);
                 handleSubmit('OPTED_OUT');
             }}>×</p>
-            <div className="flex flex-col items-center justify-center pt-2">
+            <div className="flex flex-col items-center justify-center pt-2 mb-4">
                 <p className="text-xs text-gray pb-1">Rate your game</p>        
                 <p className="text-sm text-gray-500 font-bold pb-2">{feedback?.gym_name} - {feedback?.activity.toLowerCase()}</p>
                 <div className="flex flex-row items-center justify-center gap-2">
@@ -218,7 +218,7 @@ const Feedback: React.FC<FeedbackProps> = ({showFeedback = false}) => {
                                 <textarea className="w-full text-sm p-2 py-1 wrap border border-gray-300 rounded-md resize-y min-h-[100px]" placeholder="Feel free to share your thoughts" value={otherReason} onChange={(e) => setOtherReason(e.target.value)} rows={4} />
                             </div>
                         )}
-                        <div className={`w-full text-center rounded-md  ${rating > 0 ? 'bg-black text-white cursor-pointer' : 'bg-gray-200 text-black pointer-events-none'}`} onClick={() => {
+                        <div className={`w-full text-center rounded-md mb-4 ${rating > 0 ? 'bg-black text-white cursor-pointer' : 'bg-gray-200 text-black pointer-events-none'}`} onClick={() => {
                             handleSubmit('SUBMITTED');
                         }}> 
                             <p className="text-md font-bold py-3">Submit</p>
