@@ -6,13 +6,17 @@ import {ReactComponent as GoldenStar} from "../../images/feedback/golden-star.sv
 import { BottomUpModal } from "../profile/half-page-modal";
 import { navigate } from "@reach/router";
 
-const Feedback: React.FC = () => {
+interface FeedbackProps {
+    showFeedback?: boolean;
+}
+
+const Feedback: React.FC<FeedbackProps> = ({showFeedback = false}) => {
     const userDetails = JSON.parse(window.localStorage["zenfitx-user-details"] || '{}');
     const userId = userDetails.id;
     const [feedback, setFeedback] = useState<any>(null);
     const [rating, setRating] = useState(0);
     const [feedbackModal, setFeedbackModal] = useState(false);
-    const [showRatingModal, setShowRatingModal] = useState(false);
+    const [showRatingModal, setShowRatingModal] = useState(showFeedback);
     const [clickedStar, setClickedStar] = useState(false);
     const [allFeedbackReasons, setAllFeedbackReasons] = useState<any>([]);
     const [feedbackReasons, setFeedbackReasons] = useState<any>(null);
@@ -165,9 +169,10 @@ const Feedback: React.FC = () => {
                                             setClickedStar(true);
                                             setSelectedReasons(new Array(feedbackReasons?.length || 0).fill(false));
                                         }
-                                        if(rating == 5) {
-                                            setOtherReason('');
-                                        }}
+                                        // if(rating == 5) {
+                                        //     setOtherReason('');
+                                        // }
+                                    }
                                 } />
                             ))}
                             {Array.from({length: 5 - rating}).map((_, index) => (
@@ -189,7 +194,8 @@ const Feedback: React.FC = () => {
                                 </div>  
                             </div>
                         )}
-                        {<div className={`text-sm font-semibold text-center rounded-full px-6 py-3 mb-4 cursor-pointer ${showOtherReasonModal ? 'bg-black text-white' : 'bg-gray-100 text-black'}`} 
+                        
+                        {rating > 0 && <div className={`text-sm font-semibold text-center rounded-full px-6 py-3 mb-4 cursor-pointer ${showOtherReasonModal ? 'bg-black text-white' : 'bg-gray-100 text-black'}`} 
                         onClick={() => {
                             setShowOtherReasonModal(!showOtherReasonModal);
                             setOtherReason('');

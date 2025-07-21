@@ -64,6 +64,9 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     ? (locationStates as any).showClassesNearYouFilters
     : null;
 
+  const urlParams = new URLSearchParams(window.location.search);
+  const showFeedback = urlParams.get("showfeedback");
+
   activitySelected = activitySelectedFromFilters || activitySelected;
   showClassesNearYou = showClassesNearYouFilters == false ? false : true;
   const [activities, setActivities] = useState<string[]>([]);
@@ -304,7 +307,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
       </Flex>
       </div>
       <div className="flex flex-col fixed bottom-0 left-0 right-0 z-1000">
-            <Feedback />
+        <Feedback showFeedback={showFeedback === "true"} />
       </div>
       {/* </PullToRefresh> */}
     </>
