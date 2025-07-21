@@ -23,6 +23,7 @@ import Coins from "./Pages/coins/coins";
 import BookingInfoHost from "./Pages/bookings/host";
 import BookingInfoCenter from "./Pages/bookings/center";
 import FeedbackThankyou from "./Pages/home/feedback-thankyou";
+import { useMixpanelTracking } from "./hooks/useMixpanelTracking";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -32,7 +33,7 @@ const AppLayout: React.FC<{ children: React.ReactNode}> = ({ children }) => {
   const [isAppBannerVisible, setIsAppBannerVisible] = useState(false);
 
   // Use the custom hook for Mixpanel tracking
-  // useMixpanelTracking();
+  useMixpanelTracking();
   
   // When banner becomes visible, disable body scrolling
   useEffect(() => {

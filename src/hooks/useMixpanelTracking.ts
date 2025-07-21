@@ -6,9 +6,6 @@ export const useMixpanelTracking = () => {
     const handleMessage = (event: any) => {
       const message = event.data;
 
-      alert(message);
-      
-
       const type = JSON.parse(message).type;
       const timestamp = JSON.parse(message).timestamp;
       const data = JSON.parse(message).data;
