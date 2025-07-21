@@ -35,12 +35,23 @@ const Feedback: React.FC = () => {
     const {mutate: _getPendingFeedbacks} = useMutation({
         mutationFn: getPendingFeedbacks,
         onSuccess: (data) => {
-            setFeedback(data.data.feedbacks[0]);
-            if(data.data.feedbacks.length > 0) {
-                setFeedbackModal(true);
+            if(data.data.feedbacks?.length > 0) {
+                setFeedback(data.data.feedbacks[0]);
+                if(showFeedback) {
+                    setShowRatingModal(true);
+                } else {
+                    setFeedbackModal(true);
+                }
+            } else {
+                setShowRatingModal(false);
+                setFeedbackModal(false);
+                navigate('/', {replace: true});
             }
         },
-        onError: (error) => {   
+        onError: (error) => {  
+            setShowRatingModal(false);
+            setFeedbackModal(false);
+            navigate('/', {replace: true});
             console.log(error);
         }
     });
