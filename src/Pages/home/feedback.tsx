@@ -16,7 +16,7 @@ const Feedback: React.FC<FeedbackProps> = ({showFeedback = false}) => {
     const [feedback, setFeedback] = useState<any>(null);
     const [rating, setRating] = useState(0);
     const [feedbackModal, setFeedbackModal] = useState(false);
-    const [showRatingModal, setShowRatingModal] = useState(showFeedback);
+    const [showRatingModal, setShowRatingModal] = useState(false);
     const [clickedStar, setClickedStar] = useState(false);
     const [allFeedbackReasons, setAllFeedbackReasons] = useState<any>([]);
     const [feedbackReasons, setFeedbackReasons] = useState<any>(null);
@@ -39,12 +39,23 @@ const Feedback: React.FC<FeedbackProps> = ({showFeedback = false}) => {
     const {mutate: _getPendingFeedbacks} = useMutation({
         mutationFn: getPendingFeedbacks,
         onSuccess: (data) => {
-            setFeedback(data.data.feedbacks[0]);
-            if(data.data.feedbacks.length > 0) {
-                setFeedbackModal(true);
+            if(data.data.feedbacks?.length > 0) {
+                setFeedback(data.data.feedbacks[0]);
+                if(showFeedback) {
+                    setShowRatingModal(true);
+                } else {
+                    setFeedbackModal(true);
+                }
+            } else {
+                setShowRatingModal(false);
+                setFeedbackModal(false);
+                navigate('/', {replace: true});
             }
         },
-        onError: (error) => {   
+        onError: (error) => {  
+            setShowRatingModal(false);
+            setFeedbackModal(false);
+            navigate('/', {replace: true});
             console.log(error);
         }
     });
