@@ -13,7 +13,6 @@ import CoinsHomepage from "../coins/coins-homepage";
 import { getCoins } from "../../apis/coins/coins";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import Places from "./places";
 
 
 
@@ -113,9 +112,9 @@ const HomeBanner: React.FC = () => {
       </div>
     </div>}
     {userDetails && <div className="loginWrapper">
-      <div className="loginHead1 justify-between flex flex-row">
-        <Places />
-        <div className="flex flex-row gap-3 w-full justify-end">
+      <div className="loginHead1 justify-between">
+        <span className="loginName">Hi {userDetails?.name.split(' ')[0]}</span>
+        <div className="flex flex-row gap-3">
           {coins > 0 && <div className="flex flex-row rounded-full gap-2 items-center border border-white p-1 bg-red-500 bg-opacity-50" 
               onClick={()=>{
                 navigate('/coins')
@@ -130,9 +129,8 @@ const HomeBanner: React.FC = () => {
         </div>
 
       </div>
-      <div className="loginName">
-          Hi {userDetails?.name.split(' ')[0]}
-      {/* Welcome to ZenfitX! */}
+      <div className="loginHead2">
+      Welcome to ZenfitX!
           {/* EXPLORE & BOOK */}
       </div>
       <div className="loginHead3">

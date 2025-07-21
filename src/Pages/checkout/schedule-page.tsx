@@ -775,11 +775,11 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                 });
                 setSelectedActivity(activity);
                 _getGymBatchesForDate({
-                  userId: userId,
                   id: gym.gymId,
                   activity: activity,
-                  date: "2025-07-10",
-                });
+                  date: "2025-07-12",
+                  userId: userId,
+                }); 
               }}
               reposition
             />
