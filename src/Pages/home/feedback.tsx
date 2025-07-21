@@ -207,10 +207,10 @@ const Feedback: React.FC<FeedbackProps> = ({showFeedback = false}) => {
                                 <textarea className="w-full text-sm p-2 py-1 wrap border border-gray-300 rounded-md resize-y min-h-[100px]" placeholder="Feel free to share your thoughts" value={otherReason} onChange={(e) => setOtherReason(e.target.value)} rows={4} />
                             </div>
                         )}
-                        <div className="bg-black w-full text-center rounded-md cursor-pointer" onClick={() => {
+                        <div className={`w-full text-center rounded-md  ${rating > 0 ? 'bg-black text-white cursor-pointer' : 'bg-gray-200 text-black pointer-events-none'}`} onClick={() => {
                             handleSubmit('SUBMITTED');
                         }}> 
-                            <p className="text-white text-md font-bold py-3">Submit</p>
+                            <p className="text-md font-bold py-3">Submit</p>
                         </div>
                     </div>  
 
