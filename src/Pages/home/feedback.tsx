@@ -147,9 +147,9 @@ const Feedback: React.FC<FeedbackProps> = ({showFeedback = false}) => {
             <div className="flex flex-col items-center justify-center pt-2 mb-4">
                 <p className="text-xs text-gray pb-1">Rate your game</p>        
                 <p className="text-sm text-gray-500 font-bold pb-2">{feedback?.gym_name} - {feedback?.activity.toLowerCase()}</p>
-                <div className="flex flex-row items-center justify-center gap-2">
+                <div className="flex flex-row items-center justify-center gap-3">
                     {Array.from({length: 5}).map((_, index) => (
-                        rating >= index + 1 ? <GoldenStar className="w-5 h-5" /> : <EmptyStar className="w-5 h-5" onClick={() => {setRating(index + 1); setShowRatingModal(true); setFeedbackModal(false)}} />
+                        rating >= index + 1 ? <GoldenStar className="w-5 h-5" /> : <EmptyStar className="w-5 h-5" fill="#1aac6d" onClick={() => {setRating(index + 1); setShowRatingModal(true); setFeedbackModal(false)}} />
                     ))}
                     {/* {rating >= 1 ? <GoldenStar className="w-5 h-5" /> : <EmptyStar className="w-5 h-5" onClick={() => {setRating(1); setShowRatingModal(true); setFeedbackModal(false)}} />}
                     {rating >= 2 ? <GoldenStar className="w-5 h-5" /> : <EmptyStar className="w-5 h-5" onClick={() => {setRating(2); setShowRatingModal(true); setFeedbackModal(false)}} />}
