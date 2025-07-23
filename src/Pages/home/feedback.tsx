@@ -5,6 +5,7 @@ import {ReactComponent as EmptyStar} from "../../images/feedback/empty-star.svg"
 import {ReactComponent as GoldenStar} from "../../images/feedback/golden-star.svg";
 import { BottomUpModal } from "../profile/half-page-modal";
 import { navigate } from "@reach/router";
+import { Mixpanel } from "../../mixpanel/init";
 
 const Feedback: React.FC = () => {
     const userDetails = JSON.parse(window.localStorage["zenfitx-user-details"] || '{}');
@@ -37,7 +38,7 @@ const Feedback: React.FC = () => {
         onSuccess: (data) => {
             if(data.data.feedbacks?.length > 0) {
                 setFeedback(data.data.feedbacks[0]);
-                if(showFeedback) {
+                if(feedback) {
                     setShowRatingModal(true);
                 } else {
                     setFeedbackModal(true);
@@ -74,10 +75,26 @@ const Feedback: React.FC = () => {
     const {mutate: _submitFeedback} = useMutation({
         mutationFn: submitFeedback,
         onSuccess: (data) => {
-            navigate('/feedback-thankyou', {state: {success: true}});
+            Mixpanel.track("feedback_submitted_success", {
+                gym_id: feedback?.gym_id,
+                activity: feedback?.activity,
+                user_id: userId,
+                batch_id: feedback?.batch_id,
+                status: status
+            });
+            if(status == 'SUBMITTED') {
+                navigate('/feedback-thankyou', {state: {success: true}});
+            }
         },
         onError: (error) => {   
             console.log(error);
+            Mixpanel.track("feedback_submitted_failure", {
+                gym_id: feedback?.gym_id,
+                activity: feedback?.activity,
+                user_id: userId,
+                batch_id: feedback?.batch_id,
+                status: status
+            });
             navigate('/feedback-thankyou', {state: {success: false}});
         }
     });
@@ -137,7 +154,14 @@ const Feedback: React.FC = () => {
         {feedbackModal && (
         <div className="bg-white shadow-upper-shadow rounded-t-2xl pt-1 pb-4">
             <p className="absolute right-2 top-0 text-gray-400 cursor-pointer text-2xl font-bold" onClick={() => {
+                Mixpanel.track("cancel_clicked_feedback_home", {
+                    gym_id: feedback?.gym_id,
+                    activity: feedback?.activity,
+                    user_id: userId,
+                    batch_id: feedback?.batch_id,
+                });
                 setFeedbackModal(false);
+                setStatus('OPTED_OUT');
                 handleSubmit('OPTED_OUT');
             }}>×</p>
             <div className="flex flex-col items-center justify-center pt-2">
@@ -145,7 +169,14 @@ const Feedback: React.FC = () => {
                 <p className="text-sm text-gray-500 font-bold pb-2">{feedback?.gym_name} - {feedback?.activity.toLowerCase()}</p>
                 <div className="flex flex-row items-center justify-center gap-3">
                     {Array.from({length: 5}).map((_, index) => (
-                        rating >= index + 1 ? <GoldenStar className="w-5 h-5" /> : <EmptyStar className="w-5 h-5" fill="#1aac6d" onClick={() => {setRating(index + 1); setShowRatingModal(true); setFeedbackModal(false)}} />
+                        rating >= index + 1 ? <GoldenStar className="w-5 h-5" /> : <EmptyStar className="w-5 h-5" fill="#1aac6d" onClick={() => {
+                            Mixpanel.track("feedback_star_clicked_home", {
+                                gym_id: feedback?.gym_id,
+                                activity: feedback?.activity,
+                                user_id: userId,
+                                batch_id: feedback?.batch_id,
+                            });
+                            setRating(index + 1); setShowRatingModal(true); setFeedbackModal(false)}} />
                     ))}
                     {/* {rating >= 1 ? <GoldenStar className="w-5 h-5" /> : <EmptyStar className="w-5 h-5" onClick={() => {setRating(1); setShowRatingModal(true); setFeedbackModal(false)}} />}
                     {rating >= 2 ? <GoldenStar className="w-5 h-5" /> : <EmptyStar className="w-5 h-5" onClick={() => {setRating(2); setShowRatingModal(true); setFeedbackModal(false)}} />}
@@ -161,7 +192,14 @@ const Feedback: React.FC = () => {
                 title="Rate your Sesh"
                 isOpen={showRatingModal}
                 onClose={() => {
+                    Mixpanel.track("feedback_cancel_clicked", {
+                        gym_id: feedback?.gym_id,
+                        activity: feedback?.activity,
+                        user_id: userId,
+                        batch_id: feedback?.batch_id,
+                    });
                     setShowRatingModal(false);
+                    setStatus('OPTED_OUT');
                     handleSubmit('OPTED_OUT');
                 }}
                 children={
@@ -212,7 +250,14 @@ const Feedback: React.FC = () => {
                                 <textarea className="w-full text-sm p-2 py-1 wrap border border-gray-300 rounded-md resize-y min-h-[100px]" placeholder="Feel free to share your thoughts" value={otherReason} onChange={(e) => setOtherReason(e.target.value)} rows={4} />
                             </div>
                         )}
-                        <div className={`w-full text-center rounded-md  ${rating > 0 ? 'bg-black text-white cursor-pointer' : 'bg-gray-200 text-black pointer-events-none'}`} onClick={() => {
+                        <div className={`w-full text-center rounded-md mb-4 ${rating > 0 ? 'bg-black text-white cursor-pointer' : 'bg-gray-200 text-black pointer-events-none'}`} onClick={() => {
+                            Mixpanel.track("feedback_submit_clicked", {
+                                gym_id: feedback?.gym_id,
+                                activity: feedback?.activity,
+                                user_id: userId,
+                                batch_id: feedback?.batch_id,
+                            });
+                            setStatus('SUBMITTED');
                             handleSubmit('SUBMITTED');
                         }}> 
                             <p className="text-md font-bold py-3">Submit</p>
