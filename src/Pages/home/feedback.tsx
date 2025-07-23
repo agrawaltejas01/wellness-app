@@ -116,9 +116,9 @@ const Feedback: React.FC<FeedbackProps> = ({showFeedback = false}) => {
     const handleSubmit = (submitStatus: string = status) => {
         setShowRatingModal(false);
 
-        if(submitStatus == 'OPTED_OUT' ){
-            return;
-        }
+        // if(submitStatus == 'OPTED_OUT' ){
+        //     return;
+        // }
         
         // Get the reason IDs for selected reasons
         const selectedReasonIds = selectedReasons
