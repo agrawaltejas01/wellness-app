@@ -165,7 +165,7 @@ const Feedback: React.FC = () => {
                 handleSubmit('OPTED_OUT');
             }}>×</p>
             <div className="flex flex-col items-center justify-center pt-2">
-                <p className="text-xs text-gray pb-1">Rate your game</p>        
+                <p className="text-xs text-gray pb-1">Rate your sesh</p>        
                 <p className="text-sm text-gray-500 font-bold pb-2">{feedback?.gym_name} - {feedback?.activity.toLowerCase()}</p>
                 <div className="flex flex-row items-center justify-center gap-3">
                     {Array.from({length: 5}).map((_, index) => (
