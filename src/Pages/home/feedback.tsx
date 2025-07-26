@@ -110,7 +110,7 @@ const Feedback: React.FC = () => {
     }, [feedback]);
 
     useEffect(() => {
-        setFeedbackReasons(allFeedbackReasons.filter((reason: any) => reason.rating == rating).sort((a: any, b: any) => a.reason_text.length - b.reason_text.length));
+        setFeedbackReasons(allFeedbackReasons?.filter((reason: any) => reason.rating == rating).sort((a: any, b: any) => a.reason_text.length - b.reason_text.length));
     }, [rating]);
 
     // Initialize selectedReasons when feedbackReasons is loaded
