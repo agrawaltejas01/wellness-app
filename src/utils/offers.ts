@@ -1,5 +1,6 @@
 import { EOfferType, IBatch, IGymCard, IGymDetails } from "../types/gyms";
 import IUser from "../types/user";
+export const DISCOUNT_ALLOWED_BATCH_IDS = [38961,38962,38963,38964,38965,38966,38967,38968,38969,38970];
 
 interface PastAppBookingObject {
   [key: string]: boolean; // Changed to boolean since it's used as a boolean check
@@ -42,6 +43,13 @@ export function shouldShowDiscount(
   // If request is not from app, don't show discount
   if(!isFromApp) {
     return false;
+  }
+
+  if(batch?.id && DISCOUNT_ALLOWED_BATCH_IDS.includes(batch?.id)) {
+    return true;
+  }
+  if(batch?.batchId && DISCOUNT_ALLOWED_BATCH_IDS.includes(batch?.batchId)) {
+    return true;
   }
 
   if(batch?.offerPercentage === 0) {

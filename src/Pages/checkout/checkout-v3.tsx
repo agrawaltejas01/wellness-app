@@ -34,6 +34,8 @@ import info from "../../images/utils/info.svg";
 import Checkbox from "antd/es/checkbox/Checkbox";
 import RentInfo from "./rent-info";
 import { CenterModal } from "../profile/center-modal";
+import { DISCOUNT_ALLOWED_BATCH_IDS } from "../../utils/offers";
+
 // Function to convert 24-hour time to 12-hour format
 const convert24HourTo12Hour = (timeStr: string): { formattedTime: string; error: string | null } => {
     // Handle empty input
@@ -246,6 +248,10 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
         if (batchDetails) {
           if (!isFromApp) {
             setShowDiscount(false);
+          } else if (batchDetails.batchId && DISCOUNT_ALLOWED_BATCH_IDS.includes(batchDetails.batchId)) {
+            setShowDiscount(true);
+          } else if (batchDetails.id && DISCOUNT_ALLOWED_BATCH_IDS.includes(batchDetails.id)) {
+            setShowDiscount(true);
           } else if (batchDetails.offerPercentage === 0) {
             setShowDiscount(false);
           } else if (!userDetails) {
