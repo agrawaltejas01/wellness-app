@@ -1,4 +1,5 @@
 import { RouteComponentProps, useLocation } from "@reach/router";
+import ReelsVideoPlayer from "./a";
 
 interface IHighlights extends RouteComponentProps {}
 
@@ -23,22 +24,23 @@ const Highlights: React.FC<IHighlights> = () => {
 
 
   return (
-    <div className="flex flex-col gap-2 h-screen mx-auto pb-10">
-      <h1 className="text-2xl font-bold text-black px-4 py-4">Highlights</h1>
-      <video id="video" src={url} controls={true} muted autoPlay={true} loop={true} style={{
-        backgroundSize: "cover",
-        overflow: "hidden",
-        padding: "20px",
-      }} />
-      <div className="flex flex-row gap-2 justify-center mx-5">
-        <div className="rounded-lg bg-gray-300 text-black font-bold text-lg px-4 py-2 w-1/2 text-center cursor-pointer" onClick={handleShare}>
-            Share
-        </div>
-        <div className="rounded-lg bg-gray-300 text-black font-bold text-lg px-4 py-2 w-1/2 text-center cursor-pointer">
-            <a href={url} download="highlight.mp4" >Download</a>
-        </div>
-      </div>
-    </div>
+    // <div className="flex flex-col gap-2 h-screen mx-auto pb-10">
+    //   <h1 className="text-2xl font-bold text-black px-4 py-4">Highlights</h1>
+    //   <video id="video" src={url} controls={true} muted autoPlay={true} loop={true} style={{
+    //     backgroundSize: "cover",
+    //     overflow: "hidden",
+    //     padding: "20px",
+    //   }} />
+    //   <div className="flex flex-row gap-2 justify-center mx-5">
+    //     <div className="rounded-lg bg-gray-300 text-black font-bold text-lg px-4 py-2 w-1/2 text-center cursor-pointer" onClick={handleShare}>
+    //         Share
+    //     </div>
+    //     <div className="rounded-lg bg-gray-300 text-black font-bold text-lg px-4 py-2 w-1/2 text-center cursor-pointer">
+    //         <a href={url} download="highlight.mp4" >Download</a>
+    //     </div>
+    //   </div>
+    // </div>
+    <ReelsVideoPlayer src={url} username="John Doe" likes="1000" caption="This is a test caption" />
   );
 };
 
