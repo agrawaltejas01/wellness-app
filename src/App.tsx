@@ -24,6 +24,7 @@ import BookingInfoHost from "./Pages/bookings/host";
 import BookingInfoCenter from "./Pages/bookings/center";
 import FeedbackThankyou from "./Pages/home/feedback-thankyou";
 import { useMixpanelTracking } from "./hooks/useMixpanelTracking";
+import Highlights from "./Pages/highlights/highlights";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -114,6 +115,7 @@ function App() {
           <BookingInfoHost path="/booking-info-host" />
           <BookingInfoCenter path="/booking-info-center" /> 
           <FeedbackThankyou path="/feedback-thankyou" />
+          <Highlights path="/highlights" />
         </Router>
       </AppLayout>
     </QueryClientProvider>

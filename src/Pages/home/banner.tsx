@@ -13,6 +13,7 @@ import CoinsHomepage from "../coins/coins-homepage";
 import { getCoins } from "../../apis/coins/coins";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import Highlights from "./highlights";
 
 
 
@@ -133,12 +134,12 @@ const HomeBanner: React.FC = () => {
       Welcome to ZenfitX!
           {/* EXPLORE & BOOK */}
       </div>
-      <div className="loginHead3">
+      {/* <div className="loginHead3">
       Explore & book any fitness or wellness activity near you!
         {/* Try different fitness activities in your area with us! */}
-      </div>
+      {/* </div> */}
         
-      <div className="w-full mt-6">
+      <div className="w-full mt-2">
         <CoinsHomepage />
       </div>
     </div>}

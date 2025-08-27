@@ -31,6 +31,7 @@ import GoToApp from "../../components/go-to-app";
 import { saveNotificationToken } from "../../apis/notifications/notifications";  
 import CoinsHomepage from "../coins/coins-homepage";
 import Feedback from "./feedback";
+import Highlights from "./highlights";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -288,12 +289,20 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
             <HomeBanner />
           </Flex>
 
+          <div className="w-full mt-2 px-4">
+            <Highlights />
+          </div>
+
 
           {showClassesNearYou ? (
             <Flex style={{ marginLeft: "16px" }} flex={3}>
               <ClassesNearYou />
             </Flex>
           ) : null}
+        </div>
+        <div className="mx-4 mt-2 px-4 rounded-lg shadow-lg bg-white p-4 text-center">
+          <h1 className="text-sm font-bold text-black">Interested in getting game analytics?</h1>
+          <h1 className="text-sm font-bold text-black">Enquire Now!</h1>
         </div>
 
         <Flex flex={3} style={{ margin: "0 5%" }}>

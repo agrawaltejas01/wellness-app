@@ -87,15 +87,16 @@ function createUpperFlexTiles(isFromApp: boolean, pastAppBookings: PastAppBookin
         gap: "8px",
       }}
     >
-      <span>{trendingTile(isFromApp, pastAppBookings)}</span>
+      {/* <span>{trendingTile(isFromApp, pastAppBookings)}</span> */}
+      <span>{classTile("badminton", isFromApp, pastAppBookings)}</span>
+      <span>{classTile("pickleball", isFromApp, pastAppBookings)}</span>
       <span> {classTile("badmintonKids", isFromApp, pastAppBookings)} </span>
       {/* <span> {classTile("ride", isFromApp, pastAppBookings)} </span> */}
-      <span>{classTile("badminton", isFromApp, pastAppBookings)}</span>
       {/* <span>{classTile("strength", isFromApp, pastAppBookings)}</span> */}
       {/* <span>{classTile("swimming", isFromApp, pastAppBookings)}</span> */}
       {/* <span>{classTile("personaltraining", isFromApp, pastAppBookings)}</span> */}
-      <span> {classTile("gymming", isFromApp, pastAppBookings)} </span>
-      <span> {classTile("boxing", isFromApp, pastAppBookings)} </span> 
+      {/* <span> {classTile("gymming", isFromApp, pastAppBookings)} </span> */}
+      {/* <span> {classTile("boxing", isFromApp, pastAppBookings)} </span>  */}
     </Flex>
   );
 }
@@ -152,9 +153,9 @@ const ClassesNearYou: React.FC<IClassesNearYou> = () => {
             <Flex flex={1} wrap="nowrap">
               {createUpperFlexTiles(isFromApp, pastAppBookings)}
             </Flex>
-            <Flex flex={1} wrap="nowrap">
+            {/* <Flex flex={1} wrap="nowrap">
               {createLowerFlexTiles(isFromApp, pastAppBookings)}
-            </Flex>
+            </Flex> */}
           </div>
         </Flex>
       </Flex>
