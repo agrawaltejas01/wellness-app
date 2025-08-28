@@ -122,10 +122,10 @@ const CoinsCheckout: React.FC<ICoinsCheckout> = ({coinPackage, setShowCoinsCheck
     
     return (
         <div className="flex flex-col">
-            <div className="flex flex-row justify-between rounded-md bg-white text-black shadow-lg px-4 py-4 mt-4 mx-4">
+            {coinPackage.CoinValue < 10000 && <div className="flex flex-row justify-between rounded-md bg-white text-black shadow-lg px-4 py-4 mt-4 mx-4">
                 <div className="flex flex-row">Valid for</div>
                 <div className="flex flex-row font-bold">{coinPackage.ValidityDays} days</div>
-            </div>
+            </div>}
             <div className="flex flex-col rounded-md bg-white text-black shadow-lg px-4 py-4 mt-4 mx-4 mb-4"> 
                 <div className="flex flex-row justify-between font-bold text-sm">
                     <div className="flex flex-row">To Pay</div>
