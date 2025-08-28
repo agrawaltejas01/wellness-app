@@ -3,12 +3,10 @@ import React, { useRef, useState, useEffect } from 'react';
 // Define prop types
 interface ReelsVideoPlayerProps {
   src: string;
-  username: string;
-  likes: string;
   caption: string;
 }
 
-const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, username, likes, caption }) => {
+const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [isMuted, setIsMuted] = useState<boolean>(true);
@@ -41,6 +39,7 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, username, like
         setIsPlaying(true);
       };
 
+      // Handle pause state changes
       const handlePause = () => {
         setIsPlaying(false);
       };
@@ -79,20 +78,41 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, username, like
     setIsPlaying(!isPlaying);
   };
 
-  const toggleMute = (): void => {
-    if (videoRef.current) {
-      const video = videoRef.current;
-      video.muted = !isMuted;
-      setIsMuted(!isMuted);
-    }
-  };
-
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (videoRef.current) {
       const video = videoRef.current;
       const newTime = parseFloat(e.target.value);
       video.currentTime = newTime;
       setCurrentTime(newTime);
+    }
+  };
+
+  const handleShare = (): void => {
+    if (navigator.share) {
+      navigator.share({
+        title: 'Check out this video!',
+        url: src,
+      }).catch(error => {
+        console.error('Share failed:', error);
+      });
+    } else {
+      // Fallback: Copy URL to clipboard
+      navigator.clipboard.writeText(src).then(() => {
+        alert('Video URL copied to clipboard!');
+      }).catch(error => {
+        console.error('Clipboard copy failed:', error);
+      });
+    }
+  };
+
+  const handleDownload = (): void => {
+    if (videoRef.current) {
+      const link = document.createElement('a');
+      link.href = src;
+      link.download = 'video.mp4'; // Default filename
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
   };
 
@@ -120,7 +140,7 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, username, like
       {/* Custom Progress Bar */}
       <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-600">
         <div
-          className="h-full bg-white transition-all duration-100"
+          className="h-full bg-white transition-all duration-200 ease-linear"
           style={{ width: `${progress}%` }}
         />
       </div>
@@ -128,40 +148,28 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, username, like
       {/* Custom Controls Overlay */}
       <div className="absolute bottom-4 left-0 right-0 px-4">
         {/* Progress Seek Bar */}
-        <div className="mb-2">
+        {/* <div className="mb-2">
           <input
             type="range"
             min="0"
             max={duration}
             value={currentTime}
             onChange={handleSeek}
-            className="w-full h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer slider"
+            className="w-full h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer"
             style={{
               background: `linear-gradient(to right, white ${progress}%, #4b5563 ${progress}%)`
             }}
           />
-        </div>
+        </div> */}
 
         {/* Time Display */}
-        <div className="text-white text-xs mb-2 flex justify-between">
+        {/* <div className="text-white text-xs mb-2 flex justify-between">
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(duration)}</span>
-        </div>
+        </div> */}
 
-        {/* Overlay Controls and Info */}
-        <div className="absolute inset-0 flex flex-col justify-between p-4 text-white">
-          {/* Top: Username and Follow */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 rounded-full bg-gray-300 border-2 border-white" />
-              <span className="font-semibold">{username}</span>
-              <button className="text-sm font-semibold border border-white rounded px-2 py-1">
-                Follow
-              </button>
-            </div>
-          </div>
-
-          {/* Bottom: Controls and Info */}
+        {/* Caption and Interaction Buttons Overlay */}
+        <div className="absolute inset-0 flex flex-col justify-end p-4 text-white">
           <div className="flex justify-between items-end">
             {/* Left: Caption */}
             <div className="max-w-[70%]">
@@ -169,34 +177,26 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, username, like
             </div>
 
             {/* Right: Interaction Buttons */}
-            <div className="flex flex-col space-y-4 items-center">
-              <button className="flex flex-col items-center">
-                <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                </svg>
-                <span className="text-xs">{likes}</span>
-              </button>
-              <button className="flex flex-col items-center">
-                <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 3c4.97 0 9 4.03 9 9s-4.03 9-9 9-9-4.03-9-9 4.03-9 9-9m0-2C5.92 1 1 5.92 1 12s5.92 11 11 11 11-5.92 11-11S18.08 1 12 1zm0 16c-1.1 0-2-.9-2-2h4c0 1.1-.9 2-2 2zm0-3c-1.1 0-2-.9-2-2h4c0 1.1-.9 2-2 2zm0-3c-1.1 0-2-.9-2-2h4c0 1.1-.9 2-2 2z" />
-                </svg>
-                <span className="text-xs">Comment</span>
-              </button>
-              <button 
-                onClick={toggleMute} 
-                className="flex flex-col items-center relative z-10"
+            <div className="flex flex-col space-y-4 mb-8 items-center">
+              <button
+                onClick={handleShare}
+                className="flex flex-col items-center"
                 style={{ WebkitTapHighlightColor: 'transparent' }}
               >
-                {isMuted ? (
-                  <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0014 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77 0-4.28-2.99-7.86-7-8.77z" />
-                  </svg>
-                ) : (
-                  <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77 0-4.28-2.99-7.86-7-8.77z" />
-                  </svg>
-                )}
-                <span className="text-xs">{isMuted ? 'Unmute' : 'Mute'}</span>
+                <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z" />
+                </svg>
+                <span className="text-xs">Share</span>
+              </button>
+              <button
+                onClick={handleDownload}
+                className="flex flex-col items-center"
+                style={{ WebkitTapHighlightColor: 'transparent' }}
+              >
+                <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                </svg>
+                <span className="text-xs">Download</span>
               </button>
             </div>
           </div>

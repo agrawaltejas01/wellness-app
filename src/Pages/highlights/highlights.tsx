@@ -40,7 +40,7 @@ const Highlights: React.FC<IHighlights> = () => {
     //     </div>
     //   </div>
     // </div>
-    <ReelsVideoPlayer src={url} username="John Doe" likes="1000" caption="This is a test caption" />
+    <ReelsVideoPlayer src={url} caption="" />
   );
 };
 
