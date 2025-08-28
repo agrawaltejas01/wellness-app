@@ -300,7 +300,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
             </Flex>
           ) : null}
         </div>
-        <div className="mx-4 mt-2 px-4 rounded-lg shadow-lg bg-white p-4 text-center">
+        <div className="mx-4 mt-2 px-4 rounded-lg shadow-[0_0_15px_rgba(0,0,0,0.2)] bg-white p-4 text-center">
           <h1 className="text-sm font-bold text-black">Interested in getting game analytics?</h1>
           <h1 className="text-sm font-bold text-black">Enquire Now!</h1>
         </div>

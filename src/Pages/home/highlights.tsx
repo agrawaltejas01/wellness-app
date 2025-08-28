@@ -5,9 +5,9 @@ import { useState } from "react";
 
 const Highlights = () => {
   const navigate = useNavigate();
-  
+
   return (  
-    <div className="flex flex-row rounded-lg gap-2 bg-blue-200 px-4 py-2 justify-between shadow-lg cursor-pointer"
+    <div className="flex flex-row rounded-lg gap-2 bg-blue-200 px-4 py-2 justify-between shadow-[0_0_15px_rgba(0,0,0,0.2)] cursor-pointer"
      onClick={()=>{
       navigate('/highlights', {state: {url: "https://zfx-gyms.zenfitx.link/videos/prod/highlights/a.mp4"}});
      }}>
