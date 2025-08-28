@@ -155,7 +155,7 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
       </div>
 
       {/* Custom Controls Overlay */}
-      <div className="absolute bottom-4 left-0 right-0 px-4 flex flex-col items-center">
+      <div className="absolute bottom-4 left-0 right-0 px-4 flex flex-col items-center z-20">
         {/* Progress Seek Bar */}
         {/* <div className="w-full mb-2">
           <input
@@ -185,7 +185,7 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
           </div>
 
           {/* Right: Interaction Buttons */}
-          <div className="flex flex-col space-y-4 items-center">
+          <div className="flex flex-col space-y-4 items-center z-10">
             <button
               onClick={handleShare}
               className="flex flex-col items-center"
