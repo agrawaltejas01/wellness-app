@@ -78,12 +78,11 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
     setIsPlaying(!isPlaying);
   };
 
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const toggleMute = (): void => {
     if (videoRef.current) {
       const video = videoRef.current;
-      const newTime = parseFloat(e.target.value);
-      video.currentTime = newTime;
-      setCurrentTime(newTime);
+      video.muted = !isMuted;
+      setIsMuted(!isMuted);
     }
   };
 
@@ -113,6 +112,16 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+    }
+  };
+
+  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    if (videoRef.current) {
+      const video = videoRef.current;
+      const newTime = parseFloat(e.target.value);
+      video.currentTime = newTime;
+      setCurrentTime(newTime);
+      setProgress((newTime / video.duration) * 100);
     }
   };
 
@@ -146,9 +155,9 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
       </div>
 
       {/* Custom Controls Overlay */}
-      <div className="absolute bottom-4 left-0 right-0 px-4">
+      <div className="absolute bottom-4 left-0 right-0 px-4 flex flex-col items-center">
         {/* Progress Seek Bar */}
-        {/* <div className="mb-2">
+        {/* <div className="w-full mb-2">
           <input
             type="range"
             min="0"
@@ -163,44 +172,63 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
         </div> */}
 
         {/* Time Display */}
-        {/* <div className="text-white text-xs mb-2 flex justify-between">
+        {/* <div className="text-white text-xs mb-2 w-full flex justify-between">
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(duration)}</span>
         </div> */}
 
-        {/* Caption and Interaction Buttons Overlay */}
-        <div className="absolute inset-0 flex flex-col justify-end p-4 text-white">
-          <div className="flex justify-between items-end">
-            {/* Left: Caption */}
-            <div className="max-w-[70%]">
-              <p className="text-sm line-clamp-2">{caption}</p>
-            </div>
+        {/* Caption and Interaction Buttons */}
+        <div className="w-full flex justify-between items-end">
+          {/* Left: Caption */}
+          <div className="max-w-[70%]">
+            <p className="text-sm line-clamp-2">{caption}</p>
+          </div>
 
-            {/* Right: Interaction Buttons */}
-            <div className="flex flex-col space-y-4 mb-8 items-center">
-              <button
-                onClick={handleShare}
-                className="flex flex-col items-center"
-                style={{ WebkitTapHighlightColor: 'transparent' }}
-              >
-                <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z" />
+          {/* Right: Interaction Buttons */}
+          <div className="flex flex-col space-y-4 items-center">
+            <button
+              onClick={handleShare}
+              className="flex flex-col items-center"
+              style={{ WebkitTapHighlightColor: 'transparent' }}
+            >
+              <svg className="w-8 h-8" fill="white" viewBox="0 0 24 24">
+                <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z" />
+              </svg>
+              <span className="text-xs text-white">Share</span>
+            </button>
+            <button
+              onClick={handleDownload}
+              className="flex flex-col items-center"
+              style={{ WebkitTapHighlightColor: 'transparent' }}
+            >
+              <svg className="w-8 h-8" fill="white" viewBox="0 0 24 24">
+                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+              </svg>
+              <span className="text-xs text-white">Download</span>
+            </button>
+            <button
+              onClick={toggleMute}
+              className="flex flex-col items-center"
+              style={{ WebkitTapHighlightColor: 'transparent' }}
+            >
+              {isMuted ? (
+                <svg className="w-8 h-8" fill="white" viewBox="0 0 24 24">
+                  <path d="M3 9v6h4l5 5V4L7 9H3zm10 3l6-6-1.41-1.41L12 10.17 7.41 5.58 6 7l6 6-6 6 1.41 1.41L12 13.83l5.59 5.58L19 18l-6-6z" />
                 </svg>
-                <span className="text-xs">Share</span>
-              </button>
-              <button
-                onClick={handleDownload}
-                className="flex flex-col items-center"
-                style={{ WebkitTapHighlightColor: 'transparent' }}
-              >
-                <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+              ) : (
+                <svg className="w-8 h-8" fill="white" viewBox="0 0 24 24">
+                  <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77 0-4.28-2.99-7.86-7-8.77z" />
                 </svg>
-                <span className="text-xs">Download</span>
-              </button>
-            </div>
+              )}
+              <span className="text-xs text-white">{isMuted ? 'Unmute' : 'Mute'}</span>
+            </button>
           </div>
         </div>
+      </div>
+
+      {/* Highlight Text at Top-Left Corner */}
+      <div className="absolute top-4 left-4">
+        <span className="font-semibold text-lg text-white">Highlight</span>
       </div>
 
       {/* Play/Pause Button Overlay - Centered */}
