@@ -178,14 +178,14 @@ const Coins: React.FC<RouteComponentProps> = () => {
                 { coinsPackages && coinsPackages.map((coinsPackage: any) => (
                     <div className="flex flex-row rounded-lg bg-gray-100 text-black shadow-md px-8 py-4 mt-4 mx-4 items-center justify-between">
                         <div className="flex flex-col gap-2">
-                            <p className="text-md ">{coinsPackage.Name}</p>
+                            {coinsPackage.CoinValue < 10000 && <p className="text-md ">{coinsPackage.Name}</p>}
                             <p className="text-md">{coinsPackage.CoinValue} Coins</p>
                             <div className="flex flex-row gap-2">
                                 <p className="text-md line-through">₹{coinsPackage.CoinValue}</p>
                                 <p className="text-md font-bold">₹{coinsPackage.SellingPrice}</p>
                             </div>
                             <p className="text-md">{Math.floor(((coinsPackage.CoinValue - coinsPackage.SellingPrice) / coinsPackage.CoinValue) * 100)}% Off</p>
-                            <p className="text-md">Validity: {coinsPackage.ValidityDays} days</p>
+                            {coinsPackage.CoinValue < 10000 && <p className="text-md">Validity: {coinsPackage.ValidityDays} days</p>}
                         </div>
                         <button className="bg-black text-white rounded-lg px-4 py-2" onClick={() => {
                             setCoinPackage(coinsPackage);
