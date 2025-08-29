@@ -104,16 +104,34 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
     }
   };
 
-  const handleDownload = (): void => {
-    if (videoRef.current) {
-      const link = document.createElement('a');
-      link.href = src;
-      link.download = 'video.mp4'; // Default filename
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-  };
+    const handleDownload = async (): Promise<void> => {
+        if (videoRef.current) {
+          try {
+            const proxyURL = `${process.env.REACT_APP_BE_URL}/highlights/download?url=${encodeURIComponent(src)}`; // Adjust to your server URL if hosted remotely
+            const response = await fetch(proxyURL);
+            if (!response.ok) throw new Error('Network response was not ok');
+      
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'video.mp4'; // Default filename
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url); // Clean up
+          } catch (error) {
+            console.error('Download failed:', error);
+            // Fallback: Copy URL to clipboard with instructions
+            navigator.clipboard.writeText(src).then(() => {
+              alert('Download failed due to proxy or CDN restrictions. Video URL copied to clipboard. Please paste it into a browser or download manager to save the file manually.');
+            }).catch(clipboardError => {
+              console.error('Clipboard fallback failed:', clipboardError);
+              alert('Download failed. Please copy the video URL manually: ' + src);
+            });
+          }
+        }
+      };
 
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (videoRef.current) {
