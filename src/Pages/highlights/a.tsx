@@ -13,6 +13,9 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
   const [progress, setProgress] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
+  const [downloadStatus, setDownloadStatus] = useState('idle'); // idle, downloading, completed, error
+  const [statusMessage, setStatusMessage] = useState('');
+  const [fileName, setFileName] = useState("highlight.mp4");
 
   useEffect(() => {
     if (videoRef.current) {
@@ -104,6 +107,42 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
     }
   };
 
+
+  useEffect(() => {
+    // Listen for messages from React Native
+    const handleMessage = (event: MessageEvent) => {
+      try {
+        const data = JSON.parse(event.data);
+        
+        if (data.type === 'downloadStatus' && data.fileName === fileName) {
+          setDownloadStatus(data.status);
+          setStatusMessage(data.message || data.error || '');
+          
+          // Reset status after a delay for completed/error states
+          if (data.status === 'completed' || data.status === 'error') {
+            setTimeout(() => {
+              setDownloadStatus('idle');
+              setStatusMessage('');
+            }, 3000);
+          }
+        }
+      } catch (error) {
+        console.error('Error parsing message:', error);
+      }
+    };
+
+    // Check if running in WebView
+    if (window.ReactNativeWebView) {
+      window.addEventListener('message', handleMessage);
+      document.addEventListener('message', handleMessage as EventListener);
+    }
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+      document.removeEventListener('message', handleMessage as EventListener);
+    };
+  }, [fileName]);
+
     const handleDownload = async (): Promise<void> => {
         // if (videoRef.current) {
         //   try {
@@ -134,7 +173,7 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
         // Check if running in React Native WebView
     if (window.ReactNativeWebView) {
         // Send message to React Native
-        window.ReactNativeWebView.postMessage(JSON.stringify({
+        window?.ReactNativeWebView?.postMessage(JSON.stringify({
           type: 'downloadVideo',
           videoUrl: `${process.env.REACT_APP_BE_URL}/highlights/download?url=${encodeURIComponent(src)}`,
           fileName: "highlight.mp4",
@@ -151,7 +190,7 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = 'video.mp4'; // Default filename
+            link.download = 'highlight.mp4'; // Default filename
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -184,6 +223,19 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
+
+  const getButtonText = () => {
+    switch (downloadStatus) {
+      case 'downloading':
+        return 'Downloading...';
+      case 'completed':
+        return 'Downloaded!';
+      case 'error':
+        return 'Download Failed';
+      default:
+        return 'Download';
+    }
   };
 
   return (
@@ -259,7 +311,7 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
               <svg className="w-8 h-8" fill="white" viewBox="0 0 24 24">
                 <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
               </svg>
-              <span className="text-xs text-white">Download</span>
+              <span className="text-xs text-white">{getButtonText()}</span>
             </button>
             <button
               onClick={toggleMute}
