@@ -1,4 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { ReactComponent as BackButton } from '../../images/utils/back-button.svg';
+import { navigate } from '@reach/router';
 
 // Define prop types
 interface ReelsVideoPlayerProps {
@@ -117,6 +119,10 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
         if (data.type === 'downloadStatus' && data.fileName === fileName) {
           setDownloadStatus(data.status);
           setStatusMessage(data.message || data.error || '');
+
+          if(data.status === 'completed') {
+            alert('Download completed');
+          }
           
           // Reset status after a delay for completed/error states
           if (data.status === 'completed' || data.status === 'error') {
@@ -285,7 +291,7 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
             </button>
             <button
               onClick={handleDownload}
-              className="flex flex-col items-center"
+              className={`flex flex-col items-center ${downloadStatus !== 'idle' ? 'opacity-50 pointer-events-none' : ''}`}
               style={{ WebkitTapHighlightColor: 'transparent' }}
             >
               <svg className="w-8 h-8" fill="white" viewBox="0 0 24 24">
@@ -343,8 +349,8 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
       </div>
 
       {/* Highlight Text at Top-Left Corner */}
-      <div className="absolute top-4 left-4">
-        <span className="font-semibold text-lg text-white">Highlight</span>
+      <div className="absolute top-4 left-4" onClick={() => navigate('/', {replace: true})}>
+        <span className="font-semibold text-lg text-white"><BackButton /></span>
       </div>
 
       {/* Play/Pause Button Overlay - Centered */}
