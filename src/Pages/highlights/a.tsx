@@ -254,38 +254,18 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
       />
 
       {/* Custom Progress Bar */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-600">
+      {/* <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-600">
         <div
           className="h-full bg-white transition-all duration-200 ease-linear"
           style={{ width: `${progress}%` }}
         />
-      </div>
+      </div> */}
 
       {/* Custom Controls Overlay */}
-      <div className="absolute bottom-4 left-0 right-0 px-4 flex flex-col items-center z-20">
-        {/* Progress Seek Bar */}
-        {/* <div className="w-full mb-2">
-          <input
-            type="range"
-            min="0"
-            max={duration}
-            value={currentTime}
-            onChange={handleSeek}
-            className="w-full h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer"
-            style={{
-              background: `linear-gradient(to right, white ${progress}%, #4b5563 ${progress}%)`
-            }}
-          />
-        </div> */}
-
-        {/* Time Display */}
-        {/* <div className="text-white text-xs mb-2 w-full flex justify-between">
-          <span>{formatTime(currentTime)}</span>
-          <span>{formatTime(duration)}</span>
-        </div> */}
+      <div className="absolute bottom-10 left-0 right-0 px-4 flex flex-col items-center z-20">
 
         {/* Caption and Interaction Buttons */}
-        <div className="w-full flex justify-between items-end">
+        <div className="w-full flex justify-between items-end mb-2">
           {/* Left: Caption */}
           <div className="max-w-[70%]">
             <p className="text-sm line-clamp-2">{caption}</p>
@@ -331,6 +311,35 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
             </button>
           </div>
         </div>
+
+        {/* Progress Seek Bar */}
+        {/* <div className="w-full mb-2">
+          <input
+            type="range"
+            min="0"
+            max={duration}
+            value={currentTime}
+            onChange={handleSeek}
+            className="w-full h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer background-transparent"
+            style={{
+              background: `linear-gradient(to right, white ${progress}%, #4b5563 ${progress}%)`
+            }}
+          />
+        </div> */}
+
+        <div className="w-full h-1 bg-gray-600 mb-2 mt-2">
+            <div
+            className="h-full bg-white transition-all duration-200 ease-linear"
+            style={{ width: `${progress}%` }}
+            />
+      </div>
+
+        {/* Time Display */}
+        <div className="text-white text-xs mb-2 w-full flex justify-between">
+          <span className='font-bold'>{formatTime(currentTime)}</span>
+          <span className='font-bold'>{formatTime(duration)}</span>
+        </div>
+
       </div>
 
       {/* Highlight Text at Top-Left Corner */}
