@@ -129,7 +129,7 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
             setTimeout(() => {
               setDownloadStatus('idle');
               setStatusMessage('');
-            }, 3000);
+            }, 1000);
           }
         }
       } catch (error) {
