@@ -278,7 +278,7 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
           </div>
 
           {/* Right: Interaction Buttons */}
-          <div className="flex flex-col space-y-4 items-end z-10">
+          <div className="flex flex-col space-y-4 items-center z-10">
             <button
               onClick={handleShare}
               className="flex flex-col items-center"
@@ -289,7 +289,6 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
               </svg>
               <span className="text-xs text-white">Share</span>
             </button>
-            <div className='flex flex-col items-end'>
             <button
               onClick={handleDownload}
               className={`flex flex-col items-center ${downloadStatus !== 'idle' ? 'opacity-50 pointer-events-none' : ''}`}
@@ -298,9 +297,8 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
               <svg className="w-8 h-8" fill="white" viewBox="0 0 24 24">
                 <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
               </svg>
+              <span className="text-xs text-white">{getButtonText()}</span>
             </button>
-            <span className="text-xs text-white">{getButtonText()}</span>
-            </div>
             <button
               onClick={toggleMute}
               className="flex flex-col items-center"
