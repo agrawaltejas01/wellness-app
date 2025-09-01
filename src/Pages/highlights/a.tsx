@@ -349,7 +349,7 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
       </div>
 
       {/* Highlight Text at Top-Left Corner */}
-      <div className="absolute top-4 left-4" onClick={() => navigate('/', {replace: true})}>
+      <div className="absolute top-4 left-4 z-20" onClick={() => navigate('/', {replace: true})}>
         <span className="font-semibold text-lg text-white"><BackButton /></span>
       </div>
 
