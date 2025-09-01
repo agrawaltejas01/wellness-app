@@ -297,7 +297,7 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
               <svg className="w-8 h-8" fill="white" viewBox="0 0 24 24">
                 <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
               </svg>
-              <span className="text-xs text-white">{getButtonText()}</span>
+              <span className="text-xs text-white">Download</span>
             </button>
             <button
               onClick={toggleMute}
