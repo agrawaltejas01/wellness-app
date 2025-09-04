@@ -178,6 +178,11 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
         // }
         // Check if running in React Native WebView
     if (window.ReactNativeWebView) {
+
+        if(window.platformInfo?.platform === "ios" && window?.platformInfo?.appVersion && window?.platformInfo?.appVersion < '1.2.4') {
+            alert('Download failed. Please update the app to the latest version.');
+            return;
+        }
         // Send message to React Native
         window?.ReactNativeWebView?.postMessage(JSON.stringify({
           type: 'downloadVideo',
