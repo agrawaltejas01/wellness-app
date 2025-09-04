@@ -34,7 +34,7 @@ const AppLayout: React.FC<{ children: React.ReactNode}> = ({ children }) => {
   const [isAppBannerVisible, setIsAppBannerVisible] = useState(false);
 
   // Use the custom hook for Mixpanel tracking
-  useMixpanelTracking();
+  // useMixpanelTracking();
   
   // When banner becomes visible, disable body scrolling
   useEffect(() => {
