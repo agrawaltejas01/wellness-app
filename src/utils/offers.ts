@@ -1,6 +1,6 @@
 import { EOfferType, IBatch, IGymCard, IGymDetails } from "../types/gyms";
 import IUser from "../types/user";
-export const DISCOUNT_ALLOWED_BATCH_IDS = [38961,38962,38963,38964,38965,38966,38967,38968,38969,38970];
+export const DISCOUNT_ALLOWED_BATCH_IDS = [38961,38962,38963,38964,38965,38966,38967,38968,38969,38970,45067,45068];
 
 interface PastAppBookingObject {
   [key: string]: boolean; // Changed to boolean since it's used as a boolean check
