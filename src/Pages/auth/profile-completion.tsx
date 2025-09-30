@@ -163,7 +163,7 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
                      Object.keys(errors).length === 0;
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="sm:w-full min-h-screen bg-white flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between p-6">
         <div className="w-8"></div> {/* Spacer for center alignment */}
