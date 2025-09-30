@@ -170,7 +170,7 @@ const NewVerify: React.FC<INewVerifyProps> = ({
 
   const handleResendOtp = () => {
     if (canResend) {
-      resendOtp({ phone: phoneNumber as string });
+      resendOtp(phoneNumber as string);
     }
   };
 
