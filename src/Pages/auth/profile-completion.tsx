@@ -3,7 +3,7 @@ import { RouteComponentProps, navigate, useLocation } from "@reach/router";
 import { useMutation } from "@tanstack/react-query";
 import { useAtom } from "jotai/react";
 import { userDetailsAtom, afterLoginRedirectAtom } from "../../atoms/atom";
-import { addUser } from "../../apis/auth/login";
+import { updateUser } from "../../apis/auth/login";
 import { Mixpanel } from "../../mixpanel/init";
 import { setUserProfile, trackEvent } from "../../firebase/config";
 import IUser from "../../types/user";
@@ -30,8 +30,8 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const { mutate: updateUser } = useMutation({
-    mutationFn: addUser,
+  const { mutate: updateUserMutation } = useMutation({
+    mutationFn: updateUser,
     onError: (response: any) => {
       setIsLoading(false);
       Mixpanel.track("profile_completion_error", {
@@ -146,14 +146,15 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
     setIsLoading(true);
     
     const userPayload: IUser = {
+      id: userFromState?.id,
       name: formData.name.trim(),
       phone: formData.phone,
       gender: formData.gender as "M" | "F" | "O",
-      dob: new Date(formData.dob),
+      dob: new Date(formData.dob).toISOString().split('T')[0],
       noOfBookings: userFromState?.noOfBookings ?? 0,
     };
 
-    updateUser(userPayload);
+    updateUserMutation(userPayload);
   };
 
   const isFormValid = formData.name.trim() && 

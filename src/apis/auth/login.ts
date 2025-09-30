@@ -28,6 +28,11 @@ export async function addUser(userDetails: IUser) {
   return response.data;
 }
 
+export async function updateUser(userDetails: IUser) {
+  let response = await networkAdapter.put(`/users`, userDetails);
+  return response.data;
+}
+
 export async function checkUserPhoneAndSendOtplessMagicLink(phone: string) {
   let url = `/auth/user/otplessLink?phone=${phone}`;
 
