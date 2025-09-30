@@ -5,6 +5,7 @@ import { useAtom } from "jotai/react";
 import OtpInput from "react-otp-input";
 import {
   checkUserPhoneAndResendOtp,
+  checkUserPhoneAndSendOtp,
   verifyOtplessOtp,
 } from "../../apis/auth/login";
 import { errorToast } from "../../components/Toast";
@@ -47,6 +48,7 @@ const NewVerify: React.FC<INewVerifyProps> = ({
   const [afterLoginRedirectProps] = useAtom(afterLoginRedirectAtom);
 
   const [otp, setOtp] = useState("");
+  const [otpOrderId, setOtpOrderId] = useState(otpLessOrderId);
   const [isLoading, setIsLoading] = useState(false);
   const [wrongOtp, setWrongOtp] = useState(false);
   const [resendStatus, setResendStatus] = useState<"idle" | "success" | "error">("idle");
@@ -131,17 +133,18 @@ const NewVerify: React.FC<INewVerifyProps> = ({
   });
 
   const { mutate: resendOtp } = useMutation({
-    mutationFn: checkUserPhoneAndResendOtp,
+    mutationFn: checkUserPhoneAndSendOtp,
     onError: () => {
       setResendStatus("error");
       Mixpanel.track("login_otp_resend_error", {
         phone: phoneNumber,
       });
     },
-    onSuccess: () => {
+    onSuccess: (response) => {
       setResendStatus("success");
+      setOtpOrderId(response.orderId);
       setCanResend(false);
-      setCountdown(30); // Reset countdown
+      setCountdown(60); // Reset countdown
       Mixpanel.track("login_otp_resend_success", {
         phone: phoneNumber,
       });
@@ -160,14 +163,14 @@ const NewVerify: React.FC<INewVerifyProps> = ({
       verifyOtp({
         phone: phoneNumber as string,
         otp,
-        orderId: otpLessOrderId as string,
+        orderId: otpOrderId as string,
       });
     }
   };
 
   const handleResendOtp = () => {
     if (canResend) {
-      resendOtp(otpLessOrderId as string);
+      resendOtp({ phone: phoneNumber as string });
     }
   };
 
