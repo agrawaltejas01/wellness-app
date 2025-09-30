@@ -104,7 +104,7 @@ const NewVerify: React.FC<INewVerifyProps> = ({
     const user = res.user;
     const isProfileIncomplete = !user.name || !user.gender || !user.dob;
 
-    if (isNewUser || isProfileIncomplete) {
+    if (isProfileIncomplete) {
       navigate("/profile-completion", {
         replace: true,
         state: { 

@@ -12,7 +12,7 @@ interface IUser {
   phone: string;
   email?: string;
   gender?: "M" | "F" | "O";
-  dob?: Date;
+  dob?: string;
   addressLine1?: string;
   addressLine2?: string;
   noOfBookings: number;
