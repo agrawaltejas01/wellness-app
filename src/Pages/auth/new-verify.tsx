@@ -52,7 +52,7 @@ const NewVerify: React.FC<INewVerifyProps> = ({
   const [resendStatus, setResendStatus] = useState<"idle" | "success" | "error">("idle");
   const resendTimer = useRef<NodeJS.Timeout | null>(null);
   const [canResend, setCanResend] = useState(false);
-  const [countdown, setCountdown] = useState(30);
+  const [countdown, setCountdown] = useState(60);
 
   // Start resend timer with countdown
   useEffect(() => {
