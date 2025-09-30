@@ -53,7 +53,7 @@ const NewLogin: React.FC<INewLoginProps> = () => {
     if (phoneNumber.length === 10 && !submitClicked.current) {
       submitClicked.current = true;
       setIsLoading(true);
-      sendOtp({ phone: phoneNumber });
+      sendOtp(phoneNumber);
     }
   };
 
