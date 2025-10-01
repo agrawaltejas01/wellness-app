@@ -1,6 +1,6 @@
 import { navigate } from "@reach/router";
 import { RouteComponentProps } from "@reach/router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { getLeaderboard } from "../../apis/leaderboard/leaderboard";
 import { getRatings } from "../../apis/ratings/ratings";
 import { getGamesPlayed } from "../../apis/games/games";
@@ -58,11 +58,13 @@ const Leaderboard = (props: LeaderboardProps) => {
     const [leaderboardData, setLeaderboardData] = useState<LeaderboardPlayer[]>([]);
     const [userRating, setUserRating] = useState<UserRating | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
     const [isUserRatingLoading, setIsUserRatingLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(0);
     const [pageSize] = useState(10);
-    const [totalPages, setTotalPages] = useState(1);
     const [hasMoreData, setHasMoreData] = useState(true);
+    const observerRef = useRef<IntersectionObserver | null>(null);
+    const lastElementRef = useRef<HTMLDivElement | null>(null);
 
     const { mutate: _getLeaderboard } = useMutation({
         mutationFn: getLeaderboard,
@@ -71,13 +73,23 @@ const Leaderboard = (props: LeaderboardProps) => {
                 ...player,
                 rank: currentPage * pageSize + index + 1
             }));
-            setLeaderboardData(playersWithRanks);
+            
+            if (currentPage === 0) {
+                // First load - replace data
+                setLeaderboardData(playersWithRanks);
+            } else {
+                // Subsequent loads - append data
+                setLeaderboardData(prev => [...prev, ...playersWithRanks]);
+            }
+            
             setHasMoreData(result.leaderboard.length === pageSize);
             setIsLoading(false);
+            setIsLoadingMore(false);
         },
         onError: (error) => {
             errorToast("Error in getting leaderboard");
             setIsLoading(false);
+            setIsLoadingMore(false);
         }
     });
 
@@ -106,10 +118,46 @@ const Leaderboard = (props: LeaderboardProps) => {
         }
     });
 
+    const loadMoreData = useCallback(() => {
+        if (!isLoadingMore && hasMoreData) {
+            setIsLoadingMore(true);
+            setCurrentPage(prev => prev + 1);
+        }
+    }, [isLoadingMore, hasMoreData]);
+
+    const lastElementRefCallback = useCallback((node: HTMLDivElement) => {
+        if (isLoadingMore) return;
+        if (observerRef.current) observerRef.current.disconnect();
+        
+        observerRef.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting && hasMoreData) {
+                loadMoreData();
+            }
+        }, {
+            threshold: 1.0,
+            rootMargin: '100px'
+        });
+        
+        if (node) observerRef.current.observe(node);
+        lastElementRef.current = node;
+    }, [isLoadingMore, hasMoreData, loadMoreData]);
+
     useEffect(() => {
-        setIsLoading(true);
+        if (currentPage === 0) {
+            setIsLoading(true);
+        } else {
+            setIsLoadingMore(true);
+        }
         _getLeaderboard({activityId: 1, pageSize, pageNumber: currentPage});
     }, [currentPage, pageSize]);
+
+    useEffect(() => {
+        return () => {
+            if (observerRef.current) {
+                observerRef.current.disconnect();
+            }
+        };
+    }, []);
 
     useEffect(() => {
         if (userDetails?.id) {
@@ -119,17 +167,6 @@ const Leaderboard = (props: LeaderboardProps) => {
         }
     }, [userDetails]); 
 
-    const handlePreviousPage = () => {
-        if (currentPage > 0) {
-            setCurrentPage(currentPage - 1);
-        }
-    };
-
-    const handleNextPage = () => {
-        if (hasMoreData) {
-            setCurrentPage(currentPage + 1);
-        }
-    };
 
     const getRankStyle = (rank: number) => {
         if (rank === 1) return { bg: 'bg-yellow-100', border: 'border-yellow-400', text: 'text-yellow-800' };
@@ -291,9 +328,14 @@ const Leaderboard = (props: LeaderboardProps) => {
                         {leaderboardData.map((player, index) => {
                             const rankStyle = getRankStyle(player.rank || 0);
                             const circleProps = getCircleProps(player.rank || 0);
+                            const isLastElement = index === leaderboardData.length - 1;
                             
                             return (
-                                <div key={index} className={`p-4 hover:bg-gray-50 transition-colors ${rankStyle.bg}`}>
+                                <div 
+                                    key={`${player.user_id}-${player.rank}`} 
+                                    ref={isLastElement ? lastElementRefCallback : null}
+                                    className={`p-4 hover:bg-gray-50 transition-colors ${rankStyle.bg}`}
+                                >
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-3">
                                             <Circle 
@@ -338,41 +380,22 @@ const Leaderboard = (props: LeaderboardProps) => {
                 </div>
             </div> */}
 
-            {/* Pagination Controls */}
-            <div className="mx-4 mb-6">
-                <div className="bg-white rounded-lg shadow-sm p-4">
-                    <div className="flex justify-between items-center">
-                        <button 
-                            onClick={handlePreviousPage}
-                            disabled={currentPage === 0 || isLoading}
-                            className={`px-4 py-2 rounded-lg font-sans text-sm font-medium transition-colors ${
-                                currentPage === 0 || isLoading
-                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                    : 'bg-blue-500 text-white hover:bg-blue-600'
-                            }`}
-                        >
-                            Previous
-                        </button>
-                        
-                        <div className="flex items-center gap-2">
-                            <span className="text-sm font-sans text-gray-600">Page</span>
-                            <span className="text-sm font-bold font-sans text-gray-900">{currentPage + 1}</span>
-                        </div>
-                        
-                        <button 
-                            onClick={handleNextPage}
-                            disabled={!hasMoreData || isLoading}
-                            className={`px-4 py-2 rounded-lg font-sans text-sm font-medium transition-colors ${
-                                !hasMoreData || isLoading
-                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                    : 'bg-blue-500 text-white hover:bg-blue-600'
-                            }`}
-                        >
-                            Next
-                        </button>
+            {/* Infinite Scroll Loading Indicator */}
+            {isLoadingMore && (
+                <div className="mx-4 mb-6 flex justify-center py-4">
+                    <div className="flex items-center gap-2">
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
+                        <span className="text-sm font-sans text-gray-600">Loading more players...</span>
                     </div>
                 </div>
-            </div>
+            )}
+            
+            {/* End of Results Indicator */}
+            {!hasMoreData && leaderboardData.length > 0 && (
+                <div className="mx-4 mb-6 text-center py-4">
+                    <span className="text-sm font-sans text-gray-500">🏁 You've reached the end of the leaderboard!</span>
+                </div>
+            )}
 
             {/* Loading State */}
             {isLoading && (
