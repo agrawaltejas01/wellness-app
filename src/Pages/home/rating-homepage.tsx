@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import IUser from "../../types/user";
 import {ReactComponent as Growth} from "../../images/home/growth.svg"
 import { navigate } from "@reach/router";
+import { useMutation } from "@tanstack/react-query";
+import { getRatings } from "../../apis/ratings/ratings";
+import { getGamesPlayed } from "../../apis/games/games";
 
 
 const NoRating = () => {
@@ -60,14 +63,26 @@ const RatingHomepage: React.FC<{userDetails: IUser}> = ({userDetails}) => {
     const [rating, setRating] = useState(0);
     const [games, setGames] = useState(0);
 
-    useEffect(() => {
-        if(Math.random() > 0.5) {
-            setRating(Math.floor(Math.random() * 5) + 1);
-            setGames(Math.floor(Math.random() * 10) + 1);
-        } else {
-            setRating(0);
-            setGames(0);
+    const { mutate: _getRatings } = useMutation({
+        mutationFn: getRatings,
+        onSuccess: (result) => {
+            setRating(result.rating.rating);
         }
+    });
+
+    const { mutate: _getGamesPlayed } = useMutation({
+        mutationFn: getGamesPlayed,
+        onSuccess: (result) => {
+            setGames(result.gamesPlayedCount);
+        },
+        onError: (error) => {
+            console.log(error);
+        }
+    });
+
+    useEffect(() => {
+        _getRatings(userDetails?.id as number);
+        _getGamesPlayed(userDetails?.id as number);
     }, [userDetails]);
 
 
