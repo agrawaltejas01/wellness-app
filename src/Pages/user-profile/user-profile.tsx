@@ -20,6 +20,13 @@ interface UserStats {
   gamesPlayed: number;
 }
 
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+const formatDate = (date: string) => {
+  if (!date) return "Not provided";
+  return `${months[parseInt(date.split("-")[1]) - 1]} ${date.split("-")[2]}, ${date.split("-")[0]}`;
+}
+
 const UserProfile: React.FC<IUserProfile> = () => {
   const [userDetails] = useAtom(userDetailsAtom);
   const [isLoading, setIsLoading] = useState(true);
@@ -240,16 +247,16 @@ const UserProfile: React.FC<IUserProfile> = () => {
         </div>
 
         {/* Profile Information */}
-        {/* <div className="px-4 pb-6">
+        <div className="px-4 pb-6">
           <div className="bg-white rounded-2xl p-6 shadow-sm">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Profile Information</h3>
             <div className="space-y-4">
-              <div className="flex justify-between items-center">
+              {/* <div className="flex justify-between items-center">
                 <span className="text-gray-600">Email</span>
                 <span className="text-gray-900 font-medium">
                   {userDetails.email || "Not provided"}
                 </span>
-              </div>
+              </div> */}
               <div className="flex justify-between items-center">
                 <span className="text-gray-600">Gender</span>
                 <span className="text-gray-900 font-medium">
@@ -259,14 +266,20 @@ const UserProfile: React.FC<IUserProfile> = () => {
                 </span>
               </div>
               <div className="flex justify-between items-center">
+                <span className="text-gray-600">Date of Birth</span>
+                <span className="text-gray-900 font-medium">
+                  {formatDate(userDetails.dob?.split("T")[0] || "")}
+                </span>
+              </div>
+              {/* <div className="flex justify-between items-center">
                 <span className="text-gray-600">Total Bookings</span>
                 <span className="text-gray-900 font-medium">
                   {userDetails.noOfBookings || 0}
                 </span>
-              </div>
+              </div> */}
             </div>
           </div>
-        </div> */}
+        </div>
       </div>
     </>
   );
