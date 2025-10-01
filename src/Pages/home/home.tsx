@@ -32,6 +32,7 @@ import { saveNotificationToken } from "../../apis/notifications/notifications";
 import CoinsHomepage from "../coins/coins-homepage";
 import Feedback from "./feedback";
 import HomeBannerV2 from "./banner-v2";
+import LeaderboardHome from "./leaderboard-home";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -279,6 +280,8 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
           <Flex flex={3}>
             <HomeBannerV2 userDetails={userDetails as IUser} />
           </Flex>
+
+          <LeaderboardHome />
 
 
           {showClassesNearYou ? (
