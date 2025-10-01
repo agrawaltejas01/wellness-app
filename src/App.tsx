@@ -30,6 +30,7 @@ import FeedbackThankyou from "./Pages/home/feedback-thankyou";
 import { useMixpanelTracking } from "./hooks/useMixpanelTracking";
 import Highlights from "./Pages/highlights/highlights";
 import Leaderboard from "./Pages/leaderboard/leaderboard";
+import UserProfile from "./Pages/user-profile/user-profile";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -126,6 +127,7 @@ function App() {
           <FeedbackThankyou path="/feedback-thankyou" />
           <Highlights path="/highlights" />
           <Leaderboard path="/leaderboard" />
+          <UserProfile path="/user-profile" />
         </Router>
       </AppLayout>
     </QueryClientProvider>
