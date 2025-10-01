@@ -7,18 +7,18 @@ import { getRatings } from "../../apis/ratings/ratings";
 import { getGamesPlayed } from "../../apis/games/games";
 
 
-const NoRating = () => {
+const NoRating = ({games}: {games: number}) => {
     return (
         <div className="flex flex-col gap-2 items-center justify-center mt-2">
             <Growth />
             <div className="flex flex-row gap-2 rounded-full bg-white p-2">
                 <div className="flex flex-col text-black text-xs pl-4 pr-2 items-center">
-                    <div className="text-2xl">-</div>
+                    <div className="text-2xl">🔒</div>
                     <div className="font-extralight">Rating</div>
                 </div> 
                 <div className="border-r border-gray-300" />
                 <div className="flex flex-col text-black text-xs pr-4 pl-2 items-center">
-                    <div className="text-2xl">🔒</div>
+                    <div className="text-2xl">{games}</div>
                     <div className="font-extralight">Games</div>
                 </div>
             </div>
@@ -89,7 +89,7 @@ const RatingHomepage: React.FC<{userDetails: IUser}> = ({userDetails}) => {
 
     return (
         <div className="rounded-2xl p-2 border border-white" style={{'background': 'linear-gradient(to right, rgba(199, 255, 202, 1), rgba(238, 255, 183, 1))'}}>
-            {rating === 0 ? <NoRating /> : <Rating rating={rating} games={games} />}
+            {rating === 0 ? <NoRating games={games} /> : <Rating rating={rating} games={games} />}
         </div>
     )
 }
