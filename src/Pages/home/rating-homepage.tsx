@@ -5,6 +5,8 @@ import { navigate } from "@reach/router";
 import { useMutation } from "@tanstack/react-query";
 import { getRatings } from "../../apis/ratings/ratings";
 import { getGamesPlayed } from "../../apis/games/games";
+import {ReactComponent as Plus} from "../../images/utils/plus.svg"
+import {ReactComponent as PlusWhite} from "../../images/utils/plus-white.svg"
 
 
 const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boolean}) => {
@@ -31,7 +33,12 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
                 </div>
             </div>
             <div className="w-full">
-                <button className="rounded-full p-2 w-full items-center justify-center text-white"style={{'background': '#009605'}}  onClick={()=>navigate('/badminton')}>Book New Game</button>
+                <div className="rounded-full p-2 w-full items-center justify-center text-white"style={{'background': '#009605'}}  onClick={()=>navigate('/badminton')}>
+                    <div className="flex flex-row justify-center gap-1">
+                        <PlusWhite />
+                        Book New Game
+                    </div>
+                </div>
             </div>  
         </div>
     )
@@ -51,8 +58,13 @@ const Rating = ({rating, games, isLoadingRating, isLoadingGames}: {rating: numbe
                     <div className="font-extralight">Games</div>
                 </div>
             </div>
-            <div className="w-full">
-                <button className="rounded-full p-2 w-full items-center justify-center bg-white text-black border border-black border-dashed" onClick={()=>navigate('/badminton')}>Book New Game</button>
+            <div className="w-full" onClick={()=>navigate('/badminton')}>
+                <div className="rounded-full p-2 w-full items-center justify-center bg-white text-black border border-black border-dashed">
+                    <div className="flex flex-row justify-center gap-1">
+                        <Plus />
+                        Book New Game
+                    </div>
+                </div>
             </div>
         </div>
     )
