@@ -1,0 +1,96 @@
+.shareAndBack {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: black;
+}
+
+.shareAndBack .Btn {
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.shareAndBack .Btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.user-profile-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.profile-header {
+  background: linear-gradient(135deg, #000000 0%, #333333 100%);
+  color: white;
+  padding: 32px 16px 24px 16px;
+  text-align: center;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-stats {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-section {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 0 16px 16px 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.stat-item {
+  text-align: center;
+  flex: 1;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #666;
+}
+
+.about-me-text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #666;
+}
+
+.about-me-placeholder {
+  font-style: italic;
+  color: #999;
+}
+
+.profile-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.profile-detail-label {
+  color: #666;
+  font-weight: 500;
+}
+
+.profile-detail-value {
+  color: #333;
+}
