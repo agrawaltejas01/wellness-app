@@ -33,6 +33,7 @@ import CoinsHomepage from "../coins/coins-homepage";
 import Feedback from "./feedback";
 import Highlights from "./highlights";
 import HomeBannerV2 from "./banner-v2";
+import LeaderboardHome from "./leaderboard-home";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -290,6 +291,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
             <HomeBannerV2 userDetails={userDetails as IUser} />
           </Flex>
 
+          <LeaderboardHome />
           <div className="w-full mt-2 px-4">
             <Highlights />
           </div>
