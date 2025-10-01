@@ -22,7 +22,7 @@ const HomeBannerV2: React.FC<{userDetails: IUser}> = ({userDetails}) => {
       }, []);
 
   return (
-    <div style={{'width':'100%', 'backgroundColor':'black' }} className="p-4 flex flex-col justify-between">
+    <div style={{'width':'100%', 'backgroundColor':'black' }} className="p-6 flex flex-col justify-between">
         <div className="flex flex-row justify-between">
             <div style={{'color':'white'}} className="flex flex-row items-center gap-2">
                 <div
