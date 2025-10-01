@@ -1,4 +1,7 @@
 import { navigate } from "@reach/router";
+import { useMutation } from "@tanstack/react-query";
+import { getTop3Players } from "../../apis/leaderboard/leaderboard";
+import { useEffect, useState } from "react";
 
 interface CircleProps {
     radius: number;
@@ -27,28 +30,25 @@ const Circle = ({radius, borderColor, borderStyle, backgroundColor, character = 
     )
 }
 
-const LeaderboardHome = () => {
+const LeaderboardHome = ({activityId}: {activityId: number}) => {
 
-    const thisWeekChampions = [
-        {
-            name: "John Doe",
-            points: 100
+    const [thisWeekChampions, setThisWeekChampions] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const { mutate: _getTop3Players } = useMutation({
+        mutationFn: getTop3Players,
+        onSuccess: (result) => {
+            setThisWeekChampions(result.leaderboard);
+            setIsLoading(false);
         },
-        
-        {
-            name: "Jane Doe",
-            points: 90
-        },
-        {
-            name: "John Doe",
-            points: 100
-        },
-        {
-            name: "John Doe",
-            points: 100
-        },
-        
-    ]
+        onError: () => {
+            setIsLoading(false);
+        }
+    });
+
+    useEffect(() => {
+        _getTop3Players(activityId);
+    }, [activityId]);
 
     return (
         <div className="mx-4 mt-2 p-4 bg-white">
@@ -61,21 +61,40 @@ const LeaderboardHome = () => {
                     <span className="text-md font-sans font-bold">This Week's Champions</span>
                 </div>
                 <div className="flex flex-col gap-4">
-                    {thisWeekChampions.map((champion, index)=>(
-                        <div className="flex flex-row gap-2 justify-between items-center">
-                            <div className="flex flex-row gap-2 items-center">
-                            <Circle radius={16} borderColor={index > 1 ? 'white' : 'black'} borderStyle="solid" backgroundColor={index > 1 ? 'white' : 'black'} character={index+1} fontColor={index > 1 ? 'black' : 'white'} />
-                            <div className="flex flex-col">
-                                <span className="text-sm font-sans font-bold">{champion.name}</span>
-                                <span className="text-xs font-sans text-green-700">40 games</span>
+                    {isLoading ? (
+                        // Loading skeleton with pulse animation
+                        Array.from({ length: 3 }).map((_, index) => (
+                            <div key={index} className="flex flex-row gap-2 justify-between items-center animate-pulse">
+                                <div className="flex flex-row gap-2 items-center">
+                                    <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
+                                    <div className="flex flex-col gap-1">
+                                        <div className="h-4 bg-gray-300 rounded w-20"></div>
+                                        <div className="h-3 bg-gray-300 rounded w-16"></div>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col justify-end gap-1">
+                                    <div className="h-4 bg-gray-300 rounded w-12"></div>
+                                    <div className="h-3 bg-gray-300 rounded w-10"></div>
+                                </div>
                             </div>
+                        ))
+                    ) : (
+                        thisWeekChampions.map((champion, index)=>(
+                            <div key={index} className="flex flex-row gap-2 justify-between items-center">
+                                <div className="flex flex-row gap-2 items-center">
+                                <Circle radius={16} borderColor={index > 1 ? 'white' : 'black'} borderStyle="solid" backgroundColor={index > 1 ? 'white' : 'black'} character={index+1} fontColor={index > 1 ? 'black' : 'white'} />
+                                <div className="flex flex-col">
+                                    <span className="text-sm font-sans font-bold">{champion.name}</span>
+                                    <span className="text-xs font-sans text-green-700">{champion.gamesPlayedCount} games</span>
+                                </div>
+                                </div>
+                                <div className="flex flex-col justify-end">
+                                    <span className="text-sm font-sans font-bold text-right">{champion.rating}</span>
+                                    <span className="text-xs font-sans text-right text-green-700">Rating</span>
+                                </div>
                             </div>
-                            <div className="flex flex-col justify-end">
-                                <span className="text-sm font-sans font-bold text-right">{champion.points}</span>
-                                <span className="text-xs font-sans text-right text-green-700">Rating</span>
-                            </div>
-                        </div>
-                    ))}
+                        ))
+                    )}
                 </div>
             </div>
         </div>

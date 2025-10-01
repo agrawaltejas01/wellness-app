@@ -233,6 +233,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     }
   }, [userDetails]);
 
+
   function setCookie(name: string, value: string, days: number) {
     const date = new Date();
     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000); // Convert days to milliseconds
@@ -281,7 +282,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
             <HomeBannerV2 userDetails={userDetails as IUser} />
           </Flex>
 
-          <LeaderboardHome />
+          <LeaderboardHome activityId={1} />
 
 
           {showClassesNearYou ? (
