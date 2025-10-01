@@ -32,6 +32,7 @@ import { saveNotificationToken } from "../../apis/notifications/notifications";
 import CoinsHomepage from "../coins/coins-homepage";
 import Feedback from "./feedback";
 import Highlights from "./highlights";
+import HomeBannerV2 from "./banner-v2";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -286,7 +287,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
             <ProfileBanner />
           </Flex>} */}
           <Flex flex={3}>
-            <HomeBanner />
+            <HomeBannerV2 userDetails={userDetails as IUser} />
           </Flex>
 
           <div className="w-full mt-2 px-4">
