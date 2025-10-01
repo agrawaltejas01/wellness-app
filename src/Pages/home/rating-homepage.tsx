@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import IUser from "../../types/user";
 import {ReactComponent as Growth} from "../../images/home/growth.svg"
+import { navigate } from "@reach/router";
 
 
 const NoRating = () => {
@@ -27,7 +28,7 @@ const NoRating = () => {
                 </div>
             </div>
             <div className="flex flex-row rounded-full p-2 w-full items-center justify-center" style={{'background': '#009605'}}>
-                <span className="text-xs text-white px-2">Book New Game</span>
+                <button className="text-xs text-white px-2" onClick={()=>navigate('/badminton')}>Book New Game</button>
             </div>
         </div>
     )
@@ -48,7 +49,7 @@ const Rating = ({rating, games}: {rating: number, games: number}) => {
                 </div>
             </div>
             <div className="w-full">
-                <button className="rounded-full p-2 w-full items-center justify-center bg-white text-black border border-black border-dashed">Book New Game</button>
+                <button className="rounded-full p-2 w-full items-center justify-center bg-white text-black border border-black border-dashed" onClick={()=>navigate('/badminton')}>Book New Game</button>
             </div>
         </div>
     )
