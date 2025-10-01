@@ -7,6 +7,7 @@ import { getRatings } from "../../apis/ratings/ratings";
 import { getGamesPlayed } from "../../apis/games/games";
 import {ReactComponent as Plus} from "../../images/utils/plus.svg"
 import {ReactComponent as PlusWhite} from "../../images/utils/plus-white.svg"
+import {ReactComponent as InfoCircleOutlined} from "../../images/utils/info.svg"
 
 
 const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boolean}) => {
@@ -47,10 +48,15 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
 const Rating = ({rating, games, isLoadingRating, isLoadingGames}: {rating: number, games: number, isLoadingRating: boolean, isLoadingGames: boolean}) => {
     return (
         <div className="flex flex-col gap-4 items-center justify-center mt-4">
-            <div className="flex flex-row gap-4 ">
+            <div className="flex flex-row gap-4" onClick={()=>alert("Rating is based on your performance in the games you have played. It is not a reflection of your overall skill level.")}>
                 <div className={`flex flex-col text-black text-xs pl-4 pr-2 items-center ${isLoadingRating ? 'animate-pulse-slow' : ''}`}>
                     <div className="text-2xl">{isLoadingRating ? '...' : rating}</div>    
-                    <div className="font-extralight">Rating</div>
+                    <div className="flex flex-row gap-1">
+                        <InfoCircleOutlined className="w-4 h-4" />
+                    <div className="font-extralight">
+                        Rating
+                    </div>
+                    </div>
                 </div> 
                 <div className="border-r border-gray" />
                 <div className={`flex flex-col text-black text-xs pr-4 pl-2 items-center ${isLoadingGames ? 'animate-pulse-slow' : ''}`}>
