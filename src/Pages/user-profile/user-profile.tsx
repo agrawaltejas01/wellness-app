@@ -99,7 +99,7 @@ const UserProfile: React.FC<IUserProfile> = () => {
     <div className="bg-black p-4 sticky top-0 z-10">
       <button 
         onClick={() => navigate("/")}
-        className="text-white p-2 rounded-full hover:bg-gray-800 transition-colors"
+        className="text-white p-2 rounded-full"
       >
         <ArrowLeftOutlined className="text-lg" />
       </button>
