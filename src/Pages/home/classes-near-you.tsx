@@ -5,6 +5,7 @@ import { Mixpanel } from "../../mixpanel/init";
 import activityToSvgMap from "../../images/class-images/activity-map";
 import { toLetterCase } from "../../utils/string-operation";
 import { useEffect, useState } from "react";
+import "./style.css";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type

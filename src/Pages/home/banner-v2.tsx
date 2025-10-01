@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Mixpanel } from "../../mixpanel/init";
 import { navigate } from "@reach/router";
 import RatingHomepage from "./rating-homepage";
+import "./style.css";
 
 const HomeBannerV2: React.FC<{userDetails: IUser}> = ({userDetails}) => {
 
