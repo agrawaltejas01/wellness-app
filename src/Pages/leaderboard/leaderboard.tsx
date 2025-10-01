@@ -334,7 +334,7 @@ const Leaderboard = (props: LeaderboardProps) => {
                                 <div 
                                     key={`${player.user_id}-${player.rank}`} 
                                     ref={isLastElement ? lastElementRefCallback : null}
-                                    className={`p-4 hover:bg-gray-50 transition-colors ${rankStyle.bg}`}
+                                    className={`p-4 ${rankStyle.bg}`}
                                 >
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-3">
