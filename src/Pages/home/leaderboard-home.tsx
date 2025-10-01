@@ -85,7 +85,7 @@ const LeaderboardHome = ({activityId}: {activityId: number}) => {
                                 <Circle radius={16} borderColor={index > 1 ? 'white' : 'black'} borderStyle="solid" backgroundColor={index > 1 ? 'white' : 'black'} character={index+1} fontColor={index > 1 ? 'black' : 'white'} />
                                 <div className="flex flex-col">
                                     <span className="text-sm font-sans font-bold">{champion.name}</span>
-                                    <span className="text-xs font-sans text-green-700">{champion.gamesPlayedCount} games</span>
+                                    <span className="text-xs font-sans text-green-700">{champion.gamesPlayedCount} {champion.gamesPlayedCount > 1 ? 'games' : 'game'}</span>
                                 </div>
                                 </div>
                                 <div className="flex flex-col justify-end">
