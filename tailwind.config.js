@@ -25,6 +25,9 @@ module.exports = {
         'discountStrip': 'rgba(26, 172, 109, 1)',
         'mint-green': 'rgba(173, 235, 179, 1)',
         'coins': 'rgba(141, 255, 163, 1)'
+      },
+      animation: {
+        'pulse-slow': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       }
     },
   },

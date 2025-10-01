@@ -7,7 +7,7 @@ import { getRatings } from "../../apis/ratings/ratings";
 import { getGamesPlayed } from "../../apis/games/games";
 
 
-const NoRating = ({games}: {games: number}) => {
+const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boolean}) => {
     return (
         <div className="flex flex-col gap-2 items-center justify-center mt-2">
             <Growth />
@@ -17,8 +17,8 @@ const NoRating = ({games}: {games: number}) => {
                     <div className="font-extralight">Rating</div>
                 </div> 
                 <div className="border-r border-gray-300" />
-                <div className="flex flex-col text-black text-xs pr-4 pl-2 items-center">
-                    <div className="text-2xl">{games}</div>
+                <div className={`flex flex-col text-black text-xs pr-4 pl-2 items-center ${isLoadingGames ? 'animate-pulse-slow' : ''}`}>
+                    <div className="text-2xl">{isLoadingGames ? '...' : games}</div>
                     <div className="font-extralight">Games</div>
                 </div>
             </div>
@@ -37,17 +37,17 @@ const NoRating = ({games}: {games: number}) => {
     )
 }
 
-const Rating = ({rating, games}: {rating: number, games: number}) => {
+const Rating = ({rating, games, isLoadingRating, isLoadingGames}: {rating: number, games: number, isLoadingRating: boolean, isLoadingGames: boolean}) => {
     return (
         <div className="flex flex-col gap-4 items-center justify-center mt-4">
             <div className="flex flex-row gap-4 ">
-                <div className="flex flex-col text-black text-xs pl-4 pr-2 items-center">
-                    <div className="text-2xl">{rating}</div>    
+                <div className={`flex flex-col text-black text-xs pl-4 pr-2 items-center ${isLoadingRating ? 'animate-pulse-slow' : ''}`}>
+                    <div className="text-2xl">{isLoadingRating ? '...' : rating}</div>    
                     <div className="font-extralight">Rating</div>
                 </div> 
                 <div className="border-r border-gray" />
-                <div className="flex flex-col text-black text-xs pr-4 pl-2 items-center">
-                    <div className="text-2xl">{games}</div>
+                <div className={`flex flex-col text-black text-xs pr-4 pl-2 items-center ${isLoadingGames ? 'animate-pulse-slow' : ''}`}>
+                    <div className="text-2xl">{isLoadingGames ? '...' : games}</div>
                     <div className="font-extralight">Games</div>
                 </div>
             </div>
@@ -62,11 +62,17 @@ const RatingHomepage: React.FC<{userDetails: IUser}> = ({userDetails}) => {
 
     const [rating, setRating] = useState(0);
     const [games, setGames] = useState(0);
+    const [isLoadingRating, setIsLoadingRating] = useState(true);
+    const [isLoadingGames, setIsLoadingGames] = useState(true);
 
     const { mutate: _getRatings } = useMutation({
         mutationFn: getRatings,
         onSuccess: (result) => {
             setRating(result.rating.rating);
+            setIsLoadingRating(false);
+        },
+        onError: () => {
+            setIsLoadingRating(false);
         }
     });
 
@@ -74,9 +80,11 @@ const RatingHomepage: React.FC<{userDetails: IUser}> = ({userDetails}) => {
         mutationFn: getGamesPlayed,
         onSuccess: (result) => {
             setGames(result.gamesPlayedCount);
+            setIsLoadingGames(false);
         },
         onError: (error) => {
             console.log(error);
+            setIsLoadingGames(false);
         }
     });
 
@@ -87,9 +95,11 @@ const RatingHomepage: React.FC<{userDetails: IUser}> = ({userDetails}) => {
 
 
 
+    const isLoading = isLoadingRating || isLoadingGames;
+
     return (
-        <div className="rounded-2xl p-2 border border-white" style={{'background': 'linear-gradient(to right, rgba(199, 255, 202, 1), rgba(238, 255, 183, 1))'}}>
-            {rating === 0 ? <NoRating games={games} /> : <Rating rating={rating} games={games} />}
+        <div className={`rounded-2xl p-2 border border-white ${isLoading ? 'animate-pulse-slow' : ''}`} style={{'background': 'linear-gradient(to right, rgba(199, 255, 202, 1), rgba(238, 255, 183, 1))'}}>
+            {!isLoadingRating && rating === 0 ? <NoRating games={games} isLoadingGames={isLoadingGames} /> : <Rating rating={rating} games={games} isLoadingRating={isLoadingRating} isLoadingGames={isLoadingGames} />}
         </div>
     )
 }
