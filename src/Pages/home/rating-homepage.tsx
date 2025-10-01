@@ -27,9 +27,9 @@ const NoRating = () => {
                     <span className="font-extralight text-sm">Learn & improve your game with us</span>
                 </div>
             </div>
-            <div className="flex flex-row rounded-full p-2 w-full items-center justify-center" style={{'background': '#009605'}}>
-                <button className="text-xs text-white px-2" onClick={()=>navigate('/badminton')}>Book New Game</button>
-            </div>
+            <div className="w-full">
+                <button className="rounded-full p-2 w-full items-center justify-center text-white"style={{'background': '#009605'}}  onClick={()=>navigate('/badminton')}>Book New Game</button>
+            </div>  
         </div>
     )
 }
