@@ -64,7 +64,7 @@ const LeaderboardHome = () => {
                     {thisWeekChampions.map((champion, index)=>(
                         <div className="flex flex-row gap-2 justify-between items-center">
                             <div className="flex flex-row gap-2 items-center">
-                            <Circle radius={16} borderColor="white" borderStyle="solid" backgroundColor={index > 1 ? 'white' : 'black'} character={index+1} fontColor={index > 1 ? 'black' : 'white'} />
+                            <Circle radius={16} borderColor={index > 1 ? 'white' : 'black'} borderStyle="solid" backgroundColor={index > 1 ? 'white' : 'black'} character={index+1} fontColor={index > 1 ? 'black' : 'white'} />
                             <div className="flex flex-col">
                                 <span className="text-sm font-sans font-bold">{champion.name}</span>
                                 <span className="text-xs font-sans text-green-700">40 games</span>
