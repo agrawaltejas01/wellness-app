@@ -31,6 +31,7 @@ import GoToApp from "../../components/go-to-app";
 import { saveNotificationToken } from "../../apis/notifications/notifications";  
 import CoinsHomepage from "../coins/coins-homepage";
 import Feedback from "./feedback";
+import HomeBannerV2 from "./banner-v2";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -276,7 +277,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
           </Flex>} */}
 
           <Flex flex={3}>
-            <HomeBanner />
+            <HomeBannerV2 userDetails={userDetails as IUser} />
           </Flex>
 
 
