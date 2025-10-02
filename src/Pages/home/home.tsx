@@ -297,6 +297,10 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
             <Highlights />
           </div>
 
+          <div className="w-full mt-2 px-4">
+            <CoinsHomepage />
+          </div>
+
 
           {showClassesNearYou ? (
             <Flex style={{ marginLeft: "16px" }} flex={3}>
