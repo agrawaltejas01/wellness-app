@@ -32,7 +32,8 @@ const Highlights = () => {
   return (  
     videoHighlights && videoHighlights.length > 0 ?  (
 
-    <div className="flex flex-row rounded-lg gap-2 bg-blue-200 px-4 py-2 justify-between shadow-[0_0_15px_rgba(0,0,0,0.2)] cursor-pointer"
+    <div className="flex flex-row rounded-lg gap-2 px-4 py-2 justify-between shadow-[0_0_15px_rgba(0,0,0,0.2)] cursor-pointer"
+    style={{'background': 'linear-gradient(to right, rgba(199, 255, 202, 1), rgba(238, 255, 183, 1))'}}
      onClick={()=>{
       navigate('/highlights', {state: {url: videoHighlights}});
      }}>
