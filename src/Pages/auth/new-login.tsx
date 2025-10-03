@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { checkUserPhoneAndSendOtp } from "../../apis/auth/login";
 import { Mixpanel } from "../../mixpanel/init";
 import MetaPixel from "../../components/meta-pixel";
+import logo from "../../images/utils/zenfitx-logo.jpeg";
 
 interface INewLoginProps extends RouteComponentProps {}
 
@@ -92,7 +93,10 @@ const NewLogin: React.FC<INewLoginProps> = () => {
         <div className="max-w-md mx-auto w-full">
           {/* Title */}
           <div className="text-center mb-12">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <div className="flex flex-row justify-center">
+            <img src={logo} alt="ZenfitX" className="w-24 h-24 rounded-xl" />
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2 mt-20">
               Welcome to ZenfitX
             </h1>
             <p className="text-gray-600">
