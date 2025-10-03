@@ -178,7 +178,7 @@ const NewVerify: React.FC<INewVerifyProps> = ({
   const isButtonDisabled = otp.length !== 4 || isLoading;
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="bg-white flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between p-6">
         <button
@@ -208,10 +208,7 @@ const NewVerify: React.FC<INewVerifyProps> = ({
         <div className="max-w-md mx-auto w-full">
           {/* Title */}
           <div className="text-center mb-12">
-            <div className="flex flex-row justify-center">
-                <img src={logo} alt="ZenfitX" className="w-24 h-24 rounded-3xl" />
-            </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2 mt-20">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
               Enter OTP
             </h1>
             <p className="text-gray-600">
