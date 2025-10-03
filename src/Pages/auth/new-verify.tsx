@@ -16,6 +16,7 @@ import {
 } from "../../atoms/atom";
 import { Mixpanel } from "../../mixpanel/init";
 import { setUserProfile, trackEvent } from "../../firebase/config";
+import logo from "../../images/utils/zenfitx-logo.jpeg";
 
 interface INewVerifyProps extends RouteComponentProps {
   otpLessOrderId?: string;
@@ -207,7 +208,10 @@ const NewVerify: React.FC<INewVerifyProps> = ({
         <div className="max-w-md mx-auto w-full">
           {/* Title */}
           <div className="text-center mb-12">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <div className="flex flex-row justify-center">
+                <img src={logo} alt="ZenfitX" className="w-24 h-24 rounded-xl" />
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2 mt-20">
               Enter OTP
             </h1>
             <p className="text-gray-600">
@@ -230,7 +234,7 @@ const NewVerify: React.FC<INewVerifyProps> = ({
                   style={{ aspectRatio: '1/1' }}
                 />
               )}
-            //   inputType="number"
+              inputType="number"
               containerStyle="flex justify-center gap-3 mb-4"
             />
 
