@@ -61,7 +61,7 @@ const NewLogin: React.FC<INewLoginProps> = () => {
   const isButtonDisabled = phoneNumber.length !== 10 || isLoading;
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="bg-white flex flex-col">
       <MetaPixel />
       
       {/* Header */}
@@ -93,10 +93,7 @@ const NewLogin: React.FC<INewLoginProps> = () => {
         <div className="max-w-md mx-auto w-full">
           {/* Title */}
           <div className="text-center mb-12">
-            <div className="flex flex-row justify-center">
-            <img src={logo} alt="ZenfitX" className="w-24 h-24 rounded-3xl" />
-            </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2 mt-20">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
               Welcome to ZenfitX
             </h1>
             <p className="text-gray-600">
