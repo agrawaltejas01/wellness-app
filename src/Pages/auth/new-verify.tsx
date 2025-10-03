@@ -216,7 +216,7 @@ const NewVerify: React.FC<INewVerifyProps> = ({
             </h1>
             <p className="text-gray-600">
               We've sent a 4-digit code to{" "}
-              <span className="font-semibold">+91 {phoneNumber}</span>
+              <span className="font-semibold">+91{phoneNumber}</span>
             </p>
           </div>
 
