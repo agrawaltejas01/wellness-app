@@ -37,11 +37,11 @@ const Highlights = () => {
       navigate('/highlights', {state: {url: videoHighlights}});
      }}>
       <div className="flex flex-col gap-2 justify-center">
-        <h1 className="text-md font-bold text-black">Highlight of your last game is ready.</h1>
-        <h1 className="text-md font-bold text-black">Checkout now!</h1>
+        <h1 className="text-sm font-bold text-black">Highlight of your last game is ready.</h1>
+        <h1 className="text-sm font-bold text-black">Checkout now!</h1>
       </div>
     <div className="flex flex-row gap-2 justify-center">
-      <img src={highlights} alt="Highlights" style={{ width: "70px", height: "100px" }} />
+      <img src={highlights} alt="Highlights" style={{ width: "60px", height: "90px" }} />
       <div className="flex flex-col justify-center"> 
         <RightArrow />
       </div>
