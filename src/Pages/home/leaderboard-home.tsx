@@ -51,12 +51,12 @@ const LeaderboardHome = ({activityId}: {activityId: number}) => {
     }, [activityId]);
 
     return (
-        <div className="mx-4 mt-2 p-4 bg-white">
-            <div className="flex flex-row justify-between items-center">
+        <div className="mx-4 mt-2 p-1 bg-white">
+            <div className="flex flex-row justify-between items-center p-1">
                 <h1 className="text-xl font-bold font-sans">Leaderboard 🏆</h1>
                 <div className="flex flex-row gap-2 text-sm font-sans text-green-700" onClick={()=>navigate('/leaderboard')}>View All</div>
             </div>
-            <div className="flex flex-col gap-2 rounded-lg bg-gray-100 px-4 py-4 mt-4">
+            <div className="flex flex-col gap-2 rounded-lg bg-gray-100 px-4 py-4 mt-2" onClick={()=>navigate('/leaderboard')}>
                 <div className="flex flex-row gap-2">
                     <span className="text-md font-sans font-bold">This Week's Champions</span>
                 </div>
@@ -82,14 +82,14 @@ const LeaderboardHome = ({activityId}: {activityId: number}) => {
                         thisWeekChampions.map((champion, index)=>(
                             <div key={index} className="flex flex-row gap-2 justify-between items-center">
                                 <div className="flex flex-row gap-2 items-center">
-                                <Circle radius={16} borderColor={index > 1 ? 'white' : 'black'} borderStyle="solid" backgroundColor={index > 1 ? 'white' : 'black'} character={index+1} fontColor={index > 1 ? 'black' : 'white'} />
+                                <Circle radius={16} borderColor='white' borderStyle="solid" backgroundColor='white' character={index+1} fontColor='black' />
                                 <div className="flex flex-col">
                                     <span className="text-sm font-sans font-bold">{champion.name}</span>
                                     <span className="text-xs font-sans text-green-700">{champion.gamesPlayedCount} {champion.gamesPlayedCount > 1 ? 'games' : 'game'}</span>
                                 </div>
                                 </div>
                                 <div className="flex flex-col justify-end">
-                                    <span className="text-sm font-sans font-bold text-right">{champion.rating}</span>
+                                    <span className="text-sm font-sans font-bold text-right text-black">{champion.rating}</span>
                                     <span className="text-xs font-sans text-right text-green-700">Rating</span>
                                 </div>
                             </div>
