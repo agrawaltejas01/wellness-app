@@ -8,6 +8,8 @@ import { getGamesPlayed } from "../../apis/games/games";
 import {ReactComponent as Plus} from "../../images/utils/plus.svg"
 import {ReactComponent as PlusWhite} from "../../images/utils/plus-white.svg"
 import {ReactComponent as InfoCircleOutlined} from "../../images/utils/info.svg"
+import RatingInfo from "./rating-info";
+import { CenterModal } from "../profile/center-modal";
 
 
 const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boolean}) => {
@@ -46,13 +48,18 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
 }
 
 const Rating = ({rating, games, isLoadingRating, isLoadingGames}: {rating: number, games: number, isLoadingRating: boolean, isLoadingGames: boolean}) => {
+    const [isRatingInfoModalOpen, setIsRatingInfoModalOpen] = useState(false);
+
     return (
         <div className="flex flex-col gap-4 items-center justify-center mt-4">
-            <div className="flex flex-row gap-4" onClick={()=>alert("Rating is based on your performance in the games you have played. It is not a reflection of your overall skill level.")}>
+            <div className="flex flex-row gap-4">
                 <div className={`flex flex-col text-black text-xs pl-4 pr-2 items-center ${isLoadingRating ? 'animate-pulse-slow' : ''}`}>
-                    <div className="text-2xl">{isLoadingRating ? '...' : rating}</div>    
                     <div className="flex flex-row gap-1">
-                        <InfoCircleOutlined className="w-4 h-4" />
+                        <div className="text-2xl">{isLoadingRating ? '...' : rating/100}</div>
+                        <div className="text-md self-center">/10</div>
+                    </div>
+                    <div className="flex flex-row gap-1">
+                        <InfoCircleOutlined className="w-3 h-3 self-center" onClick={()=>setIsRatingInfoModalOpen(true)} />
                     <div className="font-extralight">
                         Rating
                     </div>
@@ -72,6 +79,12 @@ const Rating = ({rating, games, isLoadingRating, isLoadingGames}: {rating: numbe
                     </div>
                 </div>
             </div>
+            <CenterModal
+                isOpen={isRatingInfoModalOpen}
+                onClose={()=>setIsRatingInfoModalOpen(false)}
+                title="Rating Info"
+                children={<RatingInfo />}
+            />
         </div>
     )
 }
