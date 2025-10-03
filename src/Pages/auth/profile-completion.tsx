@@ -280,7 +280,7 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
                 // value={formData.dob}
                 onChange={handleInputChange}
                 max={new Date().toISOString().split('T')[0]} // Prevent future dates
-                className={`w-full px-3 py-4 border rounded-lg focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all text-lg ${
+                className={`block w-full px-3 py-4 border rounded-lg focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all text-lg ${
                   errors.dob ? "border-red-500" : "border-gray-300"
                 }`}
                 style={{
