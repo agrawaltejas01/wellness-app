@@ -209,7 +209,7 @@ const NewVerify: React.FC<INewVerifyProps> = ({
           {/* Title */}
           <div className="text-center mb-12">
             <div className="flex flex-row justify-center">
-                <img src={logo} alt="ZenfitX" className="w-24 h-24 rounded-xl" />
+                <img src={logo} alt="ZenfitX" className="w-24 h-24 rounded-3xl" />
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2 mt-20">
               Enter OTP
