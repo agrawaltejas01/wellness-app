@@ -124,11 +124,11 @@ const NewLogin: React.FC<INewLoginProps> = () => {
                   maxLength={10}
                 />
               </div>
-              {phoneNumber.length > 0 && phoneNumber.length < 10 && (
+              {/* {phoneNumber.length > 0 && phoneNumber.length < 10 && (
                 <p className="mt-1 text-sm text-red-600">
                   Please enter a valid 10-digit mobile number
                 </p>
-              )}
+              )} */}
             </div>
 
             <button

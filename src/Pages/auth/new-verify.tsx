@@ -182,7 +182,7 @@ const NewVerify: React.FC<INewVerifyProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between p-6">
         <button
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/login')}
           className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
         >
           <svg
