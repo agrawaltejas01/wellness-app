@@ -177,7 +177,7 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div className="bg-black h-2 rounded-full w-full transition-all duration-300"></div>
         </div>
-        <p className="text-sm text-gray-600 mt-2 text-center">Step 2 of 2</p>
+        {/* <p className="text-sm text-gray-600 mt-2 text-center">Step 2 of 2</p> */}
       </div>
 
       {/* Main Content */}
@@ -186,10 +186,10 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
           {/* Title */}
           <div className="text-center mb-8">
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              Tell us about yourself
+              Your game, Your profile.
             </h1>
             <p className="text-gray-600">
-              Help us personalize your fitness journey
+              Help us personalize your experience ⚡️
             </p>
           </div>
 

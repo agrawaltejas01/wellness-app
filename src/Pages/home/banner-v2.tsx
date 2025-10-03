@@ -10,7 +10,7 @@ import "./style.css";
 const HomeBannerV2: React.FC<{userDetails: IUser}> = ({userDetails}) => {
 
     const [coins, setCoins] = useState(0);
-
+    const [showProfileCompletion, setShowProfileCompletion] = useState(false);
     const { mutate: _getCoins } = useMutation({
         mutationFn: getCoins,
         onSuccess: (result) => {
@@ -22,10 +22,16 @@ const HomeBannerV2: React.FC<{userDetails: IUser}> = ({userDetails}) => {
         _getCoins(userDetails?.id as number);
       }, []);
 
+  useEffect(() => {
+    if (!userDetails?.name || !userDetails?.gender || !userDetails?.dob) {
+      setShowProfileCompletion(true);
+    }
+  }, [userDetails]);
+
   return (
     <div style={{'width':'100%', 'backgroundColor':'black' }} className="p-6 flex flex-col justify-between">
         <div className="flex flex-row justify-between">
-            <div style={{'color':'white'}} className="flex flex-row items-center gap-2" onClick={()=>navigate('/user-profile')}>
+            <div style={{'color':'white'}} className="flex flex-row items-center gap-2">
                 <div
                     style={{
                     width: `${20 * 2}px`,
@@ -37,6 +43,7 @@ const HomeBannerV2: React.FC<{userDetails: IUser}> = ({userDetails}) => {
                     alignItems: 'center',
                     padding: '2px'
                     }}
+                    onClick={()=>navigate('/user-profile')}
                 >
                 <div
                     style={{
@@ -55,9 +62,21 @@ const HomeBannerV2: React.FC<{userDetails: IUser}> = ({userDetails}) => {
                 >
                 {userDetails?.name.split(" ")[0].charAt(0)}
             </div>
+            
         </div>
             <div className="flex flex-col flex-start">
-                <div className="text-white text-sm font-bold flex-start"> {userDetails?.name.split(" ")[0]} </div>
+                <div className="text-white text-sm font-bold flex-start underline-offset-4 underline"> {userDetails?.name.split(" ")[0]} </div>
+                {showProfileCompletion && <div className="flex flex-row items-center gap-2" onClick={()=>navigate('/profile-completion' , {
+                  replace: true,
+                  state: { 
+                    user: userDetails,
+                    afterLoginRedirectProps: {
+                      afterLoginUrl: "/",
+                    },
+                  },
+                })}>
+                <div className="text-white text-sm">Complete your profile!</div>
+            </div>}
             </div>
             </div>
             <div className="flex flex-row gap-3 items-center">
