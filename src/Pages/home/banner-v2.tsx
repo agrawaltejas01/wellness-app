@@ -65,7 +65,7 @@ const HomeBannerV2: React.FC<{userDetails: IUser}> = ({userDetails}) => {
             
         </div>
             <div className="flex flex-col flex-start">
-                <div className="text-white text-sm font-bold flex-start underline-offset-4 underline"> {userDetails?.name.split(" ")[0]} </div>
+                <div className={`text-white text-sm font-bold flex-start ${showProfileCompletion ? "underline-offset-4 underline" : ""}`}> {userDetails?.name.split(" ")[0]} </div>
                 {showProfileCompletion && <div className="flex flex-row items-center gap-2" onClick={()=>navigate('/profile-completion' , {
                   replace: true,
                   state: { 
