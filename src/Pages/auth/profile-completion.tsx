@@ -161,7 +161,7 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
                      formData.phone.trim() && 
                      formData.gender && 
                      formData.dob &&
-                     Object.keys(errors).length === 0;
+                     errors && Object.values(errors).every(value => value === "");
 
   return (
     <div className="sm:w-full min-h-screen bg-white flex flex-col">
