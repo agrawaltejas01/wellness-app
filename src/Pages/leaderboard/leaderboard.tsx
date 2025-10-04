@@ -215,7 +215,7 @@ const Leaderboard = (props: LeaderboardProps) => {
                 <div className="flex justify-center items-end gap-3 mb-4">
                     {/* 2nd Place */}
                     {leaderboardData[1] && (
-                        <div className="flex flex-col items-center">
+                        <div className="flex flex-col items-center w-1/3">
                             <div className="bg-gray-100 rounded-lg p-2 mb-1 min-h-[50px] flex flex-col justify-end">
                                 <Circle 
                                     radius={16} 
@@ -235,7 +235,7 @@ const Leaderboard = (props: LeaderboardProps) => {
 
                     {/* 1st Place */}
                     {leaderboardData[0] && (
-                        <div className="flex flex-col items-center">
+                        <div className="flex flex-col items-center w-1/3">
                             <div className="bg-yellow-100 rounded-lg p-2 mb-1 min-h-[60px] flex flex-col justify-end">
                                 <Circle 
                                     radius={18} 
@@ -255,7 +255,7 @@ const Leaderboard = (props: LeaderboardProps) => {
 
                     {/* 3rd Place */}
                     {leaderboardData[2] && (
-                        <div className="flex flex-col items-center">
+                        <div className="flex flex-col items-center w-1/3">
                             <div className="bg-orange-100 rounded-lg p-2 mb-1 min-h-[40px] flex flex-col justify-end">
                                 <Circle 
                                     radius={14} 
