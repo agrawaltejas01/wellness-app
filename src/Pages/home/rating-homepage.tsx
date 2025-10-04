@@ -81,7 +81,7 @@ const Rating = ({rating, games, isLoadingRating, isLoadingGames}: {rating: numbe
                 </div>
             </div>
             <div className="w-full" onClick={()=>navigate('/badminton')}>
-                <div className="rounded-full p-2 w-full items-center justify-center bg-white text-black border border-black border-dashed">
+                <div className="rounded-full p-2 mt-2 w-full items-center justify-center bg-white text-black border border-black border-dashed">
                     <div className="flex flex-row justify-center gap-1 p-1">
                         <Plus />
                         <span className="font-light">Book New Game</span>

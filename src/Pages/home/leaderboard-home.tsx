@@ -53,7 +53,7 @@ const LeaderboardHome = ({activityId}: {activityId: number}) => {
     return (
         thisWeekChampions.length < 3 && !isLoading ? null : (
         <div className="mx-3 mb-4 mt-4 bg-white">
-            <div className="flex flex-row justify-between items-center p-2">
+            <div className="flex flex-row justify-between items-center p-2 mx-1">
                 <h1 className="text-xl font-bold">Leaderboard 🏆</h1>
                 <div className="flex flex-row gap-2 text-sm text-green-700" onClick={()=>navigate('/leaderboard')}>View All</div>
             </div>

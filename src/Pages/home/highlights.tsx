@@ -32,7 +32,7 @@ const Highlights = () => {
   return (  
     videoHighlights && videoHighlights.length > 0 ?  (
 
-    <div className="flex flex-row rounded-3xl gap-2 px-4 py-2 justify-between shadow-[0_0_15px_rgba(0,0,0,0.2)] cursor-pointer"
+    <div className="flex flex-row rounded-3xl gap-2 px-4 py-2 justify-between shadow-[0_0_15px_rgba(0,0,0,0.1)] cursor-pointer"
      onClick={()=>{
       navigate('/highlights', {state: {url: videoHighlights}});
      }}>

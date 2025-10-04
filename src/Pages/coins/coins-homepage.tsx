@@ -16,7 +16,7 @@ import {ReactComponent as RightArrow} from "../../images/home/right-arrow.svg"
 
 const CoinCapsule = () => {
     return (
-        <div className="flex flex-row rounded-3xl text-black shadow-[0_0_15px_rgba(0,0,0,0.2)] mt-2 gap-2 py-1 justify-between w-full">
+        <div className="flex flex-row rounded-3xl text-black shadow-[0_0_15px_rgba(0,0,0,0.1)] mt-2 gap-2 py-1 justify-between w-full">
             <div className="flex flex-row gap-2">   
                 <div className="flex flex-col p-2 px-4 items-center justify-center">       
                     <Coins />
