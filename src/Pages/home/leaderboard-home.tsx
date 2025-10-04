@@ -51,7 +51,7 @@ const LeaderboardHome = ({activityId}: {activityId: number}) => {
     }, [activityId]);
 
     return (
-        <div className="mx-4 mb-4 mt-2 p-1 bg-white">
+        <div className="mx-3 mb-4 mt-2 bg-white">
             <div className="flex flex-row justify-between items-center p-2">
                 <h1 className="text-xl font-bold font-sans">Leaderboard 🏆</h1>
                 <div className="flex flex-row gap-2 text-sm font-sans text-green-700" onClick={()=>navigate('/leaderboard')}>View All</div>

@@ -53,7 +53,7 @@ const Rating = ({rating, games, isLoadingRating, isLoadingGames}: {rating: numbe
     return (
         <div className="flex flex-col gap-4 items-center justify-center mt-4">
             <div className="flex flex-row gap-4">
-                <div className={`flex flex-col text-black text-xs pl-4 pr-2 items-center ${isLoadingRating ? 'animate-pulse-slow' : ''}`}>
+                <div className={`flex flex-col text-black text-xs pl-4 pr-2 items-center ${isLoadingRating ? 'animate-pulse-slow' : ''}`} onClick={()=>setIsRatingInfoModalOpen(true)}>
                     <div className="flex flex-row gap-1">
                         <div className="text-6xl">{isLoadingRating ? '...' : rating/100}</div>
                         {/* <div className="text-2xl self-center">/10</div> */}
@@ -62,7 +62,7 @@ const Rating = ({rating, games, isLoadingRating, isLoadingGames}: {rating: numbe
                     <div className="font-extralight">
                         Rating
                     </div>
-                        <InfoCircleOutlined className="w-3 h-3 self-center" onClick={()=>setIsRatingInfoModalOpen(true)} />
+                        <InfoCircleOutlined className="w-3 h-3 self-center" />
                     </div>
                 </div> 
                 <div className="border-r border-gray" />
