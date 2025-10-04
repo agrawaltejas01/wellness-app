@@ -13,11 +13,13 @@ import { CenterModal } from "../profile/center-modal";
 
 
 const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boolean}) => {
+    const [isRatingInfoModalOpen, setIsRatingInfoModalOpen] = useState(false);
+
     return (
         <div className="flex flex-col gap-2 items-center justify-center mt-2">
             <Growth />
             <div className="flex flex-row gap-2 rounded-full bg-white p-2">
-                <div className="flex flex-col text-black text-xs pl-4 pr-2 items-center">
+                <div className="flex flex-col text-black text-xs pl-4 pr-2 items-center" onClick={()=>setIsRatingInfoModalOpen(true)}>
                     <div className="text-2xl">🔒</div>
                     <div className="font-extralight">Rating</div>
                 </div> 
@@ -30,6 +32,7 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
             <div className="flex flex-col items-center"> 
                 <div className="flex flex-row" >
                     <span className="font-bold text-base">Unlock your Zen Rating now!</span>
+                    <InfoCircleOutlined className="w-4 h-4 self-center ml-1" onClick={()=>setIsRatingInfoModalOpen(true)}/>
                 </div>  
                 <div className="flex flex-row ">
                     <span className="font-extralight text-sm">Track, Improve & Play smartly with ZenVision AI</span>
@@ -43,6 +46,12 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
                     </div>
                 </div>
             </div>  
+            <CenterModal
+                isOpen={isRatingInfoModalOpen}
+                onClose={()=>setIsRatingInfoModalOpen(false)}
+                title="Rating - Quick Guide"
+                children={<RatingInfo />}
+            />
         </div>
     )
 }
