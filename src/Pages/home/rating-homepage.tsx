@@ -55,7 +55,7 @@ const Rating = ({rating, games, isLoadingRating, isLoadingGames}: {rating: numbe
             <div className="flex flex-row gap-4">
                 <div className={`flex flex-col text-black text-xs pl-4 pr-2 items-center ${isLoadingRating ? 'animate-pulse-slow' : ''}`} onClick={()=>setIsRatingInfoModalOpen(true)}>
                     <div className="flex flex-row gap-1">
-                        <div className="text-6xl">{isLoadingRating ? '...' : rating/100}</div>
+                        <div className="text-6xl">{isLoadingRating ? '...' : rating/100 + '.' + (rating%100).toString().padStart(2, '0') }</div>
                         {/* <div className="text-2xl self-center">/10</div> */}
                     </div>
                     <div className="flex flex-row gap-1">
