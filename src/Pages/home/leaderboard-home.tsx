@@ -51,6 +51,7 @@ const LeaderboardHome = ({activityId}: {activityId: number}) => {
     }, [activityId]);
 
     return (
+        thisWeekChampions.length < 4 && !isLoading ? null : (
         <div className="mx-3 mb-4 mt-2 bg-white">
             <div className="flex flex-row justify-between items-center p-2">
                 <h1 className="text-xl font-bold font-sans">Leaderboard 🏆</h1>
@@ -98,6 +99,7 @@ const LeaderboardHome = ({activityId}: {activityId: number}) => {
                 </div>
             </div>
         </div>
+        )
     )
 }
 
