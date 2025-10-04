@@ -82,7 +82,7 @@ const Rating = ({rating, games, isLoadingRating, isLoadingGames}: {rating: numbe
             <CenterModal
                 isOpen={isRatingInfoModalOpen}
                 onClose={()=>setIsRatingInfoModalOpen(false)}
-                title="Rating Info"
+                title="Rating - Quick Guide"
                 children={<RatingInfo />}
             />
         </div>
