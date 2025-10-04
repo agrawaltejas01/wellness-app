@@ -8,6 +8,9 @@ import { useMutation } from "@tanstack/react-query";
 import { errorToast } from "../../components/Toast";
 import { useAtom } from "jotai/react";
 import { userDetailsAtom } from "../../atoms/atom";
+import { InfoCircleOutlined } from "@ant-design/icons";
+import {CenterModal} from "../profile/center-modal";
+import LeaderboardInfo from "./leadboardinfo";
 
 interface LeaderboardPlayer {
     activity_id: number;
@@ -65,7 +68,8 @@ const Leaderboard = (props: LeaderboardProps) => {
     const [hasMoreData, setHasMoreData] = useState(true);
     const observerRef = useRef<IntersectionObserver | null>(null);
     const lastElementRef = useRef<HTMLDivElement | null>(null);
-
+    const [isLeaderboardInfoModalOpen, setIsLeaderboardInfoModalOpen] = useState(false);
+    
     const { mutate: _getLeaderboard } = useMutation({
         mutationFn: getLeaderboard,
         onSuccess: (result) => {
@@ -193,7 +197,7 @@ const Leaderboard = (props: LeaderboardProps) => {
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Header */}
-            <div className="bg-white shadow-sm">
+            <div className="flex flex-row justify-between bg-white shadow-sm">
                 <div className="flex items-center justify-between p-4">
                     <div className="flex items-center gap-3">
                         <button 
@@ -206,6 +210,9 @@ const Leaderboard = (props: LeaderboardProps) => {
                         </button>
                         <h1 className="text-2xl font-bold font-sans text-gray-900">Leaderboard 🏆</h1>
                     </div>
+                </div>
+                <div className="flex flex-row gap-1 pr-4" onClick={()=>setIsLeaderboardInfoModalOpen(true)}>
+                    <InfoCircleOutlined className="w-5 h-5 self-center" />
                 </div>
             </div>
 
@@ -405,6 +412,14 @@ const Leaderboard = (props: LeaderboardProps) => {
                         <span className="font-sans text-gray-700">Loading leaderboard...</span>
                     </div>
                 </div>
+            )}
+            {isLeaderboardInfoModalOpen && (
+                <CenterModal
+                    isOpen={isLeaderboardInfoModalOpen}
+                    onClose={()=>setIsLeaderboardInfoModalOpen(false)}
+                    title="Leaderboard - Quick Guide"
+                    children={<LeaderboardInfo />}
+                />
             )}
         </div>
     );
