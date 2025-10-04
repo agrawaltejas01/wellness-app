@@ -39,9 +39,9 @@ const Highlights = () => {
 
       <div className="flex flex-row gap-2 justify-center px-2">
       <img src={highlights} alt="Highlights" style={{ width: "50px", height: "75px" }} />
-        <div className="flex flex-col gap-2 px-6 justify-center">
-          <h1 className="text-xs font-bold italic text-black">Highlight's ready.</h1>
-          <h1 className="text-xs font-bold text-black">Checkout now!</h1>
+        <div className="flex flex-col gap-1 px-6 justify-center">
+          <h1 className="text-sm font-bold text-black">Your game highlight's ready.</h1>
+          <h1 className="text-xs text-black">Checkout now!</h1>
         </div>
       </div>
     <div className="flex flex-row gap-2 justify-center">

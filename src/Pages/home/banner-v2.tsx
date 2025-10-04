@@ -101,7 +101,7 @@ const HomeBannerV2: React.FC<{userDetails: IUser}> = ({userDetails}) => {
         
         {/* Rating component positioned to create exact half overlap */}
         <div 
-          className="px-6 pt-8"
+          className="px-6"
           style={{
             background: `linear-gradient(to bottom, black 0%, black 60%, transparent 60%, transparent 100%)`
           }}
