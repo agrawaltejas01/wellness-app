@@ -32,17 +32,20 @@ const Highlights = () => {
   return (  
     videoHighlights && videoHighlights.length > 0 ?  (
 
-    <div className="flex flex-row rounded-lg gap-2 px-4 py-2 justify-between shadow-[0_0_15px_rgba(0,0,0,0.2)] cursor-pointer"
-    style={{'background': 'linear-gradient(to right, rgba(199, 255, 202, 1), rgba(238, 255, 183, 1))'}}
+    <div className="flex flex-row rounded-3xl gap-2 px-4 py-2 justify-between shadow-[0_0_15px_rgba(0,0,0,0.2)] cursor-pointer"
      onClick={()=>{
       navigate('/highlights', {state: {url: videoHighlights}});
      }}>
-      <div className="flex flex-col gap-2 justify-center">
-        <h1 className="text-xs font-bold italic text-black">Highlight of your last game is ready.</h1>
-        <h1 className="text-xs font-bold text-black">Checkout now!</h1>
+
+      <div className="flex flex-row gap-2 justify-center px-2">
+      <img src={highlights} alt="Highlights" style={{ width: "50px", height: "75px" }} />
+        <div className="flex flex-col gap-2 px-6 justify-center">
+          <h1 className="text-xs font-bold italic text-black">Highlight's ready.</h1>
+          <h1 className="text-xs font-bold text-black">Checkout now!</h1>
+        </div>
       </div>
     <div className="flex flex-row gap-2 justify-center">
-      <img src={highlights} alt="Highlights" style={{ width: "50px", height: "75px" }} />
+      
       <div className="flex flex-col justify-center"> 
         <RightArrow />
       </div>
