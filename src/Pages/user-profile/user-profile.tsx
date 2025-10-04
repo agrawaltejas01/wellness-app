@@ -178,7 +178,7 @@ const UserProfile: React.FC<IUserProfile> = () => {
             <div className="grid grid-cols-2 gap-6">
               <div className="text-center">
                 <div className="text-3xl font-bold text-emerald-500 mb-1">
-                  {playerStats.rating/100 + '.' + (playerStats.rating%100).toString().padStart(2, '0')}
+                  {playerStats.rating/100}
                 </div>
                 <div className="text-sm text-gray-500">Rating</div>
               </div>

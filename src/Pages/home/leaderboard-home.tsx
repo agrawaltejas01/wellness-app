@@ -90,7 +90,7 @@ const LeaderboardHome = ({activityId}: {activityId: number}) => {
                                 </div>
                                 </div>
                                 <div className="flex flex-col justify-end">
-                                    <span className="text-sm font-bold text-right text-black">{champion.rating}</span>
+                                    <span className="text-sm font-bold text-right text-black">{champion.rating/100}</span>
                                     <span className="text-xs text-right text-green-700">Rating</span>
                                 </div>
                             </div>
