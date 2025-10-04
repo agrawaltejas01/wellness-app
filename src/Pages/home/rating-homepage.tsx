@@ -129,7 +129,7 @@ const RatingHomepage: React.FC<{userDetails: IUser}> = ({userDetails}) => {
     const isLoading = isLoadingRating || isLoadingGames;
 
     return (
-        <div className={`mx-4 rounded-3xl shadow-[0_0_15px_rgba(0,0,0,0.2)] p-2 border border-white bg-white ${isLoading ? 'animate-pulse-slow' : ''}`}>
+        <div className={`mx-4 rounded-3xl shadow-[0_0_15px_rgba(0,0,0,0.2)] p-2 ${isLoading ? 'animate-pulse-slow' : ''}`} style={{'background': 'linear-gradient(to right, rgba(199, 255, 202, 1), rgba(238, 255, 183, 1))'}}>
             {!isLoadingRating && rating === 0 ? <NoRating games={games} isLoadingGames={isLoadingGames} /> : <Rating rating={rating} games={games} isLoadingRating={isLoadingRating} isLoadingGames={isLoadingGames} />}
         </div>
     )
