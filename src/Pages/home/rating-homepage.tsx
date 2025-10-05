@@ -39,7 +39,7 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
                 </div>
             </div>
             <div className="w-full">
-                <div className="rounded-full p-2 w-full items-center justify-center text-black border border-black border-dashed"style={{'background': 'white'}}  onClick={()=>navigate('/badminton')}>
+                <div className="rounded-full mt-2 p-2 w-full items-center justify-center text-black"style={{'background': 'white'}}  onClick={()=>navigate('/badminton')}>
                     <div className="flex flex-row justify-center gap-1">
                         <Plus />
                         Book New Game
