@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { ReactComponent as BackButton } from '../../images/utils/back-button.svg';
 import { navigate } from '@reach/router';
-import { successToast } from '../../components/Toast';
+import { message } from 'antd';
 
 // Define prop types
 interface ReelsVideoPlayerProps {
@@ -122,7 +122,7 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
           setStatusMessage(data.message || data.error || '');
 
           if(data.status === 'completed') {
-            successToast('Download completed');
+            message.success('Download completed');
           }
           
           // Reset status after a delay for completed/error states
