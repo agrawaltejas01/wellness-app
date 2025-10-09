@@ -769,7 +769,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                 _getGymBatchesForDate({
                   id: gym.gymId,
                   activity: activity,
-                  date: "2025-10-09",
+                  date: "2025-10-10",
                 });
               }}
               reposition
