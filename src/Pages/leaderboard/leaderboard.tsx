@@ -208,7 +208,7 @@ const Leaderboard = (props: LeaderboardProps) => {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                             </svg>
                         </button>
-                        <h1 className="text-2xl font-bold font-sans text-gray-900">Leaderboard 🏆</h1>
+                        <h1 className="text-2xl font-bold  text-gray-900">Leaderboard 🏆</h1>
                     </div>
                 </div>
                 <div className="flex flex-row gap-1 pr-4" onClick={()=>setIsLeaderboardInfoModalOpen(true)}>
@@ -218,11 +218,11 @@ const Leaderboard = (props: LeaderboardProps) => {
 
             {/* Top 3 Podium */}
             <div className="bg-white mx-4 mt-4 rounded-lg shadow-sm p-4">
-                <h2 className="text-base font-bold font-sans text-gray-900 mb-3">Top Champions</h2>
+                <h2 className="text-base font-bold  text-gray-900 mb-3">Top Champions</h2>
                 <div className="flex justify-center items-end gap-3 mb-4">
                     {/* 2nd Place */}
                     {leaderboardData[1] && (
-                        <div className="flex flex-col items-center">
+                        <div className="flex flex-col items-center w-1/3">
                             <div className="bg-gray-100 rounded-lg p-2 mb-1 min-h-[50px] flex flex-col justify-end">
                                 <Circle 
                                     radius={16} 
@@ -234,15 +234,15 @@ const Leaderboard = (props: LeaderboardProps) => {
                                 />
                             </div>
                             <div className="text-center">
-                                <p className="font-bold text-xs font-sans">{leaderboardData[1].name}</p>
-                                <p className="text-xs text-green-700 font-sans">{leaderboardData[1].rating}</p>
+                                <p className="font-bold text-xs ">{leaderboardData[1].name}</p>
+                                <p className="text-xs text-green-700 ">{leaderboardData[1].rating/100}</p>
                             </div>
                         </div>
                     )}
 
                     {/* 1st Place */}
                     {leaderboardData[0] && (
-                        <div className="flex flex-col items-center">
+                        <div className="flex flex-col items-center w-1/3">
                             <div className="bg-yellow-100 rounded-lg p-2 mb-1 min-h-[60px] flex flex-col justify-end">
                                 <Circle 
                                     radius={18} 
@@ -254,15 +254,15 @@ const Leaderboard = (props: LeaderboardProps) => {
                                 />
                             </div>
                             <div className="text-center">
-                                <p className="font-bold text-xs font-sans">{leaderboardData[0].name}</p>
-                                <p className="text-xs text-green-700 font-sans">{leaderboardData[0].rating}</p>
+                                <p className="font-bold text-xs ">{leaderboardData[0].name}</p>
+                                <p className="text-xs text-green-700 ">{leaderboardData[0].rating/100}</p>
                             </div>
                         </div>
                     )}
 
                     {/* 3rd Place */}
                     {leaderboardData[2] && (
-                        <div className="flex flex-col items-center">
+                        <div className="flex flex-col items-center w-1/3">
                             <div className="bg-orange-100 rounded-lg p-2 mb-1 min-h-[40px] flex flex-col justify-end">
                                 <Circle 
                                     radius={14} 
@@ -274,8 +274,8 @@ const Leaderboard = (props: LeaderboardProps) => {
                                 />
                             </div>
                             <div className="text-center">
-                                <p className="font-bold text-xs font-sans">{leaderboardData[2].name}</p>
-                                <p className="text-xs text-green-700 font-sans">{leaderboardData[2].rating}</p>
+                                <p className="font-bold text-xs ">{leaderboardData[2].name}</p>
+                                <p className="text-xs text-green-700 ">{leaderboardData[2].rating/100}</p>
                             </div>
                         </div>
                     )}
@@ -285,11 +285,11 @@ const Leaderboard = (props: LeaderboardProps) => {
             {/* User's Own Rating */}
             {userDetails && (
                 <div className="bg-white mx-4 mt-4 rounded-lg shadow-sm p-3">
-                    <h2 className="text-sm font-bold font-sans text-gray-900 mb-2">Your Performance</h2>
+                    <h2 className="text-sm font-bold  text-gray-900 mb-2">Your Performance</h2>
                     {isUserRatingLoading ? (
                         <div className="flex items-center justify-center py-2">
                             <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-500"></div>
-                            <span className="ml-2 text-xs font-sans text-gray-600">Loading...</span>
+                            <span className="ml-2 text-xs  text-gray-600">Loading...</span>
                         </div>
                     ) : userRating ? (
                         <div>
@@ -300,18 +300,18 @@ const Leaderboard = (props: LeaderboardProps) => {
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                         </svg>
                                     </div>
-                                    <span className="font-bold text-xs font-sans text-gray-900">{userDetails.name}</span>
-                                    <span className="text-xs font-sans text-gray-500">•</span>
-                                    <span className="text-xs font-sans text-gray-600">{userRating.gamesPlayed} games</span>
+                                    <span className="font-bold text-xs  text-gray-900">{userDetails.name}</span>
+                                    <span className="text-xs  text-gray-500">•</span>
+                                    <span className="text-xs  text-gray-600">{userRating.gamesPlayed} games</span>
                                 </div>
                                 <div className="flex items-center gap-1">
-                                    <span className="text-sm font-bold font-sans text-blue-600">{userRating.rating}</span>
-                                    <span className="text-xs font-sans text-gray-600">Rating</span>
+                                    <span className="text-sm font-bold  text-blue-600">{userRating.rating/100}</span>
+                                    <span className="text-xs  text-gray-600">Rating</span>
                                 </div>
                             </div>
                             {userRating.gamesPlayed === 0 && (
                                 <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded text-center">
-                                    <p className="text-xs font-sans text-yellow-800">
+                                    <p className="text-xs  text-yellow-800">
                                         🎯 Play your first game to get ranked!
                                     </p>
                                 </div>
@@ -319,7 +319,7 @@ const Leaderboard = (props: LeaderboardProps) => {
                         </div>
                     ) : (
                         <div className="text-center py-2">
-                            <p className="text-xs font-sans text-gray-600">Unable to load rating data</p>
+                            <p className="text-xs  text-gray-600">Unable to load rating data</p>
                         </div>
                     )}
                 </div>
@@ -329,7 +329,7 @@ const Leaderboard = (props: LeaderboardProps) => {
             <div className="mx-4 mt-4 mb-6">
                 <div className="bg-white rounded-lg shadow-sm">
                     <div className="p-4 border-b border-gray-200">
-                        <h2 className="text-lg font-bold font-sans text-gray-900">All Rankings</h2>
+                        <h2 className="text-lg font-bold  text-gray-900">All Rankings</h2>
                     </div>
                     <div className="divide-y divide-gray-200">
                         {leaderboardData.map((player, index) => {
@@ -354,13 +354,13 @@ const Leaderboard = (props: LeaderboardProps) => {
                                                 fontColor={circleProps.fontColor}
                                             />
                                             <div className="flex flex-col">
-                                                <span className="text-sm font-bold font-sans text-gray-900">{player.name}</span>
-                                                <span className="text-xs font-sans text-green-700">{player.gamesPlayedCount} games</span>
+                                                <span className="text-sm font-bold  text-gray-900">{player.name}</span>
+                                                <span className="text-xs  text-green-700">{player.gamesPlayedCount} games</span>
                                             </div>
                                         </div>
                                         <div className="flex flex-col items-end">
-                                            <span className="text-sm font-bold font-sans text-gray-900">{player.rating}</span>
-                                            <span className="text-xs font-sans text-green-700">Rating</span>
+                                            <span className="text-sm font-bold  text-gray-900">{player.rating/100}</span>
+                                            <span className="text-xs  text-green-700">Rating</span>
                                         </div>
                                     </div>
                                 </div>
@@ -373,15 +373,15 @@ const Leaderboard = (props: LeaderboardProps) => {
             {/* Stats Section */}
             {/* <div className="mx-4 mb-6">
                 <div className="bg-white rounded-lg shadow-sm p-4">
-                    <h2 className="text-lg font-bold font-sans text-gray-900 mb-4">This Week's Stats</h2>
+                    <h2 className="text-lg font-bold  text-gray-900 mb-4">This Week's Stats</h2>
                     <div className="grid grid-cols-2 gap-4">
                         <div className="text-center p-3 bg-gray-50 rounded-lg">
-                            <p className="text-2xl font-bold font-sans text-gray-900">{leaderboardData.length}</p>
-                            <p className="text-xs font-sans text-gray-600">Active Players</p>
+                            <p className="text-2xl font-bold  text-gray-900">{leaderboardData.length}</p>
+                            <p className="text-xs  text-gray-600">Active Players</p>
                         </div>
                         <div className="text-center p-3 bg-gray-50 rounded-lg">
-                            <p className="text-2xl font-bold font-sans text-gray-900">{leaderboardData.reduce((sum, player) => sum + player.gamesPlayedCount, 0)}</p>
-                            <p className="text-xs font-sans text-gray-600">Total Games</p>
+                            <p className="text-2xl font-bold  text-gray-900">{leaderboardData.reduce((sum, player) => sum + player.gamesPlayedCount, 0)}</p>
+                            <p className="text-xs  text-gray-600">Total Games</p>
                         </div>
                     </div>
                 </div>
@@ -392,7 +392,7 @@ const Leaderboard = (props: LeaderboardProps) => {
                 <div className="mx-4 mb-6 flex justify-center py-4">
                     <div className="flex items-center gap-2">
                         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
-                        <span className="text-sm font-sans text-gray-600">Loading more players...</span>
+                        <span className="text-sm  text-gray-600">Loading more players...</span>
                     </div>
                 </div>
             )}
@@ -400,7 +400,7 @@ const Leaderboard = (props: LeaderboardProps) => {
             {/* End of Results Indicator */}
             {!hasMoreData && leaderboardData.length > 0 && (
                 <div className="mx-4 mb-6 text-center py-4">
-                    <span className="text-sm font-sans text-gray-500">🏁 You've reached the end of the leaderboard!</span>
+                    <span className="text-sm  text-gray-500">🏁 You've reached the end of the leaderboard!</span>
                 </div>
             )}
 
@@ -409,7 +409,7 @@ const Leaderboard = (props: LeaderboardProps) => {
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg p-6 flex items-center gap-3">
                         <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
-                        <span className="font-sans text-gray-700">Loading leaderboard...</span>
+                        <span className=" text-gray-700">Loading leaderboard...</span>
                     </div>
                 </div>
             )}
