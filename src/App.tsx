@@ -29,6 +29,7 @@ import BookingInfoCenter from "./Pages/bookings/center";
 import FeedbackThankyou from "./Pages/home/feedback-thankyou";
 import Leaderboard from "./Pages/leaderboard/leaderboard";
 import UserProfile from "./Pages/user-profile/user-profile";
+import Highlights from "./Pages/highlights/highlights";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -120,6 +121,7 @@ function App() {
           <BookingInfoHost path="/booking-info-host" />
           <BookingInfoCenter path="/booking-info-center" /> 
           <FeedbackThankyou path="/feedback-thankyou" />
+          <Highlights path="/highlights" />
           <Leaderboard path="/leaderboard" />
           <UserProfile path="/user-profile" />
         </Router>
