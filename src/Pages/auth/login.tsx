@@ -94,7 +94,7 @@ const Login: React.FC<ILoginProps> = () => {
     },
     onSettled: () => {
       // _checkUserPhoneAndSendOtplessMagicLink(input.phone);
-      _checkUserPhoneAndSendOtp({phone: input.phone, name: input.name});
+      _checkUserPhoneAndSendOtp(input.phone);
     },
   });
 
@@ -106,7 +106,7 @@ const Login: React.FC<ILoginProps> = () => {
     submitClicked.current = true;
 
     // _createUser({ name: input.name, phone: input.phone, noOfBookings: 0 });
-    _checkUserPhoneAndSendOtp({phone: input.phone, name: input.name});
+    _checkUserPhoneAndSendOtp(input.phone);
   }
 
   const buttonDisabled = () => {
