@@ -56,8 +56,8 @@ export async function verifyOtplessMagicLink({
   return response.data;
 }
 
-export async function checkUserPhoneAndSendOtp({phone, name}: {phone: string, name?: string}) {
-  let url = `/auth/user/otp?phone=${phone}&name=${name}`;
+export async function checkUserPhoneAndSendOtp(phone: string) {
+  let url = `/auth/user/otp?phone=${phone}`;
 
   let response = await networkAdapter.get(url);
   return response.data;
