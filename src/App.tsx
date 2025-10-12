@@ -30,6 +30,7 @@ import FeedbackThankyou from "./Pages/home/feedback-thankyou";
 import Leaderboard from "./Pages/leaderboard/leaderboard";
 import UserProfile from "./Pages/user-profile/user-profile";
 import Highlights from "./Pages/highlights/highlights";
+import GetStarted from "./Pages/home/get-started";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -104,6 +105,7 @@ function App() {
           <NewLogin path="/login" />
           <NewVerify path="/verify-otp" />
           <ProfileCompletion path="/profile-completion" />
+          <GetStarted path="/get-started" />
           {/* <AuthDemo path="/auth-demo" /> */}
 
         <Profile path="/profile" />
