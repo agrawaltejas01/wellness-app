@@ -34,6 +34,7 @@ import Feedback from "./feedback";
 import HomeBannerV2 from "./banner-v2";
 import LeaderboardHome from "./leaderboard-home";
 import Highlights from "./highlights";
+import ProfileCompletion from "../auth/profile-completion";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -265,6 +266,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   if(showUpdatePopup) return <ForceUpdatePopup />
   if (showOnBoarding()) return <Onboarding setOnboarding={setOnboarding} />;
   if (!activities.length || !gotPastBookings) return <Loader />;
+  if(!userDetails?.name || !userDetails?.gender || !userDetails?.dob) return <ProfileCompletion />;
 
   return (
     <>

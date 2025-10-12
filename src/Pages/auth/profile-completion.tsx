@@ -19,14 +19,14 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
     ? (locationStates as any).afterLoginRedirectProps 
     : null;
 
-  const [, setAccessTokenAtom] = useAtom(accessTokenAtom);
-  const [, setUserDetailsAtom] = useAtom(userDetailsAtom);
+  const [accessToken, setAccessTokenAtom] = useAtom(accessTokenAtom);
+  const [userDetails, setUserDetailsAtom] = useAtom(userDetailsAtom);
   const [afterLoginRedirect] = useAtom(afterLoginRedirectAtom);
 
   const [formData, setFormData] = useState({
-    name: userFromState?.name || "",
-    phone: userFromState?.phone || "",
-    gender: userFromState?.gender || "",
+    name: userFromState?.name || userDetails?.name || "",
+    phone: userFromState?.phone || userDetails?.phone || "",
+    gender: userFromState?.gender || userDetails?.gender || "",
     dob: "",
   });
 
@@ -163,7 +163,7 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
     setIsLoading(true);
     
     const userPayload: IUser = {
-      id: userFromState?.id,
+      id: userFromState?.id || userDetails?.id,
       name: formData.name.trim(),
       phone: formData.phone,
       gender: formData.gender as "M" | "F" | "O",
