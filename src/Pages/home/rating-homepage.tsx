@@ -10,16 +10,18 @@ import {ReactComponent as PlusWhite} from "../../images/utils/plus-white.svg"
 import {ReactComponent as InfoCircleOutlined} from "../../images/utils/info.svg"
 import RatingInfo from "./rating-info";
 import { CenterModal } from "../profile/center-modal";
+import { Mixpanel } from "../../mixpanel/init";
 
 
 const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boolean}) => {
     const [isRatingInfoModalOpen, setIsRatingInfoModalOpen] = useState(false);
+    const userDetails = JSON.parse(window.localStorage["zenfitx-user-details"] || '{}');
 
     return (
         <div className="flex flex-col gap-2 items-center justify-center mt-2">
             <Growth />
             <div className="flex flex-row gap-2 rounded-full bg-white p-2">
-                <div className="flex flex-col text-black text-xs pl-4 pr-2 items-center" onClick={()=>setIsRatingInfoModalOpen(true)}>
+                <div className="flex flex-col text-black text-xs pl-4 pr-2 items-center" onClick={() => {setIsRatingInfoModalOpen(true); Mixpanel.track("open_rating_info_modal", {user_id: userDetails.id})}}>
                     <div className="text-2xl">🔒</div>
                     <div className="font-extralight">Rating</div>
                 </div> 
@@ -58,11 +60,12 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
 
 const Rating = ({rating, games, isLoadingRating, isLoadingGames}: {rating: number, games: number, isLoadingRating: boolean, isLoadingGames: boolean}) => {
     const [isRatingInfoModalOpen, setIsRatingInfoModalOpen] = useState(false);
+    const userDetails = JSON.parse(window.localStorage["zenfitx-user-details"] || '{}');
 
     return (
         <div className="flex flex-col gap-4 items-center justify-center mt-4">
             <div className="flex flex-row gap-4">
-                <div className={`flex flex-col w-1/2 text-black text-xs pl-4 pr-2 items-center ${isLoadingRating ? 'animate-pulse-slow' : ''}`} onClick={()=>setIsRatingInfoModalOpen(true)}>
+                <div className={`flex flex-col w-1/2 text-black text-xs pl-4 pr-2 items-center ${isLoadingRating ? 'animate-pulse-slow' : ''}`} onClick={()=>{setIsRatingInfoModalOpen(true); Mixpanel.track("open_rating_info_modal", {user_id: userDetails.id})}}>
                     <div className="flex flex-row gap-1">
                         <div className="text-5xl">{isLoadingRating ? '...' : rating/100}</div>
                         <div className="text-2xl self-end">/10</div>
