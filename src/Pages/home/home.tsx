@@ -206,7 +206,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
       window.localStorage["zenfitx-user-details"] &&
       JSON.parse(window.localStorage["zenfitx-user-details"]);
 
-    if (!userDetails || (userDetails && userDetails.noOfBookings < 1)) {
+    if (!userDetails || (userDetails && userDetails.noOfBookings < 1) || !userDetails?.name || !userDetails?.gender || !userDetails?.dob) {
       _getUserDeatils();
     }
     _getAllActivities();
