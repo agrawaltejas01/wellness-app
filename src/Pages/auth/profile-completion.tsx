@@ -7,6 +7,8 @@ import { updateUser } from "../../apis/auth/login";
 import { Mixpanel } from "../../mixpanel/init";
 import { setUserProfile, trackEvent } from "../../firebase/config";
 import IUser from "../../types/user";
+import { getToken } from "../../apis/token/token";
+import { accessTokenAtom } from "../../atoms/atom";
 
 interface IProfileCompletionProps extends RouteComponentProps {}
 
@@ -17,6 +19,7 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
     ? (locationStates as any).afterLoginRedirectProps 
     : null;
 
+  const [, setAccessTokenAtom] = useAtom(accessTokenAtom);
   const [, setUserDetailsAtom] = useAtom(userDetailsAtom);
   const [afterLoginRedirect] = useAtom(afterLoginRedirectAtom);
 
@@ -76,12 +79,26 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
       });
 
       setIsLoading(false);
+
+      getTokenMutation(formData.phone);
       
       // Navigate to intended destination
       navigate(afterLoginRedirectProps?.afterLoginUrl || afterLoginRedirect?.afterLoginUrl || "/", {
         replace: true,
         state: { ...afterLoginRedirectProps, ...afterLoginRedirect },
       });
+    },
+  });
+
+  const { mutate: getTokenMutation } = useMutation({
+    mutationFn: getToken,
+    onSuccess: (response) => {
+      setAccessTokenAtom(response.token);
+    },
+    onError: (response) => {
+      setIsLoading(false);
+      localStorage.clear();
+      window.location.href = "/";
     },
   });
 
