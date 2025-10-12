@@ -193,7 +193,7 @@ const UserProfile: React.FC<IUserProfile> = () => {
         </div>
 
         {/* Bio Section */}
-        <div className="px-4 pb-4">
+        {/* <div className="px-4 pb-4">
           <div className="bg-white rounded-2xl p-6 shadow-sm">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold text-gray-900">About Me</h3>
@@ -244,7 +244,7 @@ const UserProfile: React.FC<IUserProfile> = () => {
               </p>
             )}
           </div>
-        </div>
+        </div> */}
 
         {/* Profile Information */}
         <div className="px-4 pb-6">

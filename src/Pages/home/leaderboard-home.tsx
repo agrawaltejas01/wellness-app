@@ -38,7 +38,7 @@ const LeaderboardHome = ({activityId}: {activityId: number}) => {
     const { mutate: _getTop3Players } = useMutation({
         mutationFn: getTop3Players,
         onSuccess: (result) => {
-            setThisWeekChampions(result.leaderboard);
+            setThisWeekChampions(result.leaderboard || []);
             setIsLoading(false);
         },
         onError: () => {
