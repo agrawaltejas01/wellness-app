@@ -23,7 +23,7 @@ const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
   if (showLoader) return <Loader />;
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="relative min-h-screen overflow-hidden">
       {/* Background Image with Overlay */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -34,7 +34,7 @@ const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
       />
       
       {/* Animated Background Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-900/40 via-transparent to-emerald-900/30 animate-pulse" />
+      {/* <div className="absolute inset-0 bg-gradient-to-br from-purple-900/40 via-transparent to-emerald-900/30 animate-pulse" /> */}
       
       {/* Content Container */}
       <div className="relative z-10 flex flex-col min-h-screen px-6 py-12">
