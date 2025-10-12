@@ -31,7 +31,7 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
             </div>
             <div className="flex flex-col items-center"> 
                 <div className="flex flex-row" >
-                    <span className="font-bold text-base">Unlock your Zen Rating now!</span>
+                    <span className="font-bold text-base">Unlock your Zen Rating!</span>
                     <InfoCircleOutlined className="w-4 h-4 self-center ml-1" onClick={()=>setIsRatingInfoModalOpen(true)}/>
                 </div>  
                 <div className="flex flex-row ">
