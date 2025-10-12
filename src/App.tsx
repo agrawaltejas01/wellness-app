@@ -11,6 +11,10 @@ import PlusCheckout from "./Pages/checkout/plus-checkout";
 import PlusPaymentSuccess from "./Pages/checkout/plus-payment-success";
 import Login from "./Pages/auth/login";
 import VerifyMagicLink from "./Pages/auth/verify";
+import NewLogin from "./Pages/auth/new-login";
+import NewVerify from "./Pages/auth/new-verify";
+import ProfileCompletion from "./Pages/auth/profile-completion";
+import AuthDemo from "./Pages/auth/auth-demo";
 import Profile from "./Pages/profile/Profle";
 import SchedulePage from "./Pages/checkout/schedule-page";
 import Activity from "./Pages/activity/Activity";
@@ -23,6 +27,9 @@ import Coins from "./Pages/coins/coins";
 import BookingInfoHost from "./Pages/bookings/host";
 import BookingInfoCenter from "./Pages/bookings/center";
 import FeedbackThankyou from "./Pages/home/feedback-thankyou";
+import Leaderboard from "./Pages/leaderboard/leaderboard";
+import UserProfile from "./Pages/user-profile/user-profile";
+import Highlights from "./Pages/highlights/highlights";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -92,8 +99,12 @@ function App() {
           {/* <LandingPage path="/" /> */}
           <Home path="/" />
           <Activity path="/:activity" />
-          <Login path="/login" />
+          {/* <Login path="/login" /> */}
           <VerifyMagicLink path="/verify" />
+          <NewLogin path="/login" />
+          <NewVerify path="/verify-otp" />
+          <ProfileCompletion path="/profile-completion" />
+          {/* <AuthDemo path="/auth-demo" /> */}
 
         <Profile path="/profile" />
         <Gym path="/gym/:gymId" />
@@ -110,6 +121,9 @@ function App() {
           <BookingInfoHost path="/booking-info-host" />
           <BookingInfoCenter path="/booking-info-center" /> 
           <FeedbackThankyou path="/feedback-thankyou" />
+          <Highlights path="/highlights" />
+          <Leaderboard path="/leaderboard" />
+          <UserProfile path="/user-profile" />
         </Router>
       </AppLayout>
     </QueryClientProvider>
