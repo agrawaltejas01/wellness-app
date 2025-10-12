@@ -9,9 +9,15 @@ interface Onboarding {
 
 const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
   const [showLoader, setShowLoader] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     Mixpanel.track("open_onboarding_page");
+    
+    // Preload the background image
+    const img = new Image();
+    img.onload = () => setImageLoaded(true);
+    img.src = 'https://zfx-gyms.zenfitx.link/images/onboarding/login.jpg';
   }, []);
 
   const handleGetStarted = () => {
@@ -21,6 +27,9 @@ const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
   };
 
   if (showLoader) return <Loader />;
+  
+  // Show loader until image is loaded
+  if (!imageLoaded) return <Loader />;
 
   return (
     <div className="relative min-h-screen overflow-hidden">

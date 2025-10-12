@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Mixpanel } from "../../mixpanel/init";
 import { navigate, RouteComponentProps } from "@reach/router";
 import Loader from "../../components/Loader";
 
 const GetStarted: React.FC<RouteComponentProps> = () => {
     const [showLoader, setShowLoader] = useState(false);
+    const [imageLoaded, setImageLoaded] = useState(false);
     const userDetails = JSON.parse(window.localStorage["zenfitx-user-details"] || '{}');
+
+  useEffect(() => {
+    // Preload the background image
+    const img = new Image();
+    img.onload = () => setImageLoaded(true);
+    img.src = 'https://zfx-gyms.zenfitx.link/images/onboarding/login.jpg';
+  }, []);
 
   const handleGetStarted = () => {
     setShowLoader(true);
@@ -14,6 +22,9 @@ const GetStarted: React.FC<RouteComponentProps> = () => {
   };
 
   if (showLoader) return <Loader />;
+  
+  // Show loader until image is loaded
+  if (!imageLoaded) return <Loader />;
 
   return (
     <div className="relative min-h-screen overflow-hidden">
