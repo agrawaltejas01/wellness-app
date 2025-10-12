@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Mixpanel } from "../../mixpanel/init";
 import Loader from "../../components/Loader";
 import { navigate } from "@reach/router";
-import getStarted from "../../images/home/get-started.jpg";
 
 interface Onboarding {
   setOnboarding: (val: boolean) => void;
@@ -29,7 +28,7 @@ const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url(${getStarted})`,
+          backgroundImage: `url('https://zfx-gyms.zenfitx.link/images/onboarding/login.jpg')`,
           filter: 'brightness(0.4) contrast(1.1)'
         }}
       />
