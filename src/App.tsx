@@ -75,17 +75,17 @@ const AppLayout: React.FC<{ children: React.ReactNode}> = ({ children }) => {
       </div>
       
       {/* App banner with overlay effect when visible */}
-      <GoToApp onVisibilityChange={setIsAppBannerVisible} />
+      {/* <GoToApp onVisibilityChange={setIsAppBannerVisible} /> */}
       
       {/* Improved overlay that both dims and prevents interaction */}
-      {isAppBannerVisible && (
+      {/* {isAppBannerVisible && (
         <div 
           className="app-overlay"
           aria-hidden="true"
           onClick={(e) => e.preventDefault()}
           onTouchMove={(e) => e.preventDefault()}
         />
-      )}
+      )} */}
     </>
   );
 };
