@@ -3,15 +3,13 @@ const LeaderboardInfo = () => {
         <div className="flex flex-col gap-2 text-xs mt-2">
             <ul>
             <li className="py-1">⏰ <span className="pl-2 font-bold"> Refresh:</span> updated <span className="font-bold">daily</span></li>
-            <li className="py-1">🎯 <span className="pl-2 font-bold"> What's rank: </span> your doubles' rating (1.00 - 10.00)</li>
-            <li className="py-1">🔍 <span className="pl-2 font-bold"> How it works:</span> we sort by current rating
+            <li className="py-1">🔍 <span className="pl-2 font-bold"> How it works:</span> Ranks are based on current rating.
                 <ul className="list-disc pl-6">    
-                    <li> <span className="font-bold">Tie?</span> the higher behind-the-scenes score edges it</li>
-                    <li> <span className="font-bold">Still tied?</span> the more reliable player ranks higher</li>
-                    <li> <span className="font-bold">Still tied?</span> the most recently active player ranks higher</li>
+                    <li> <span className="font-bold">Tie-breaker 1:</span> More games played</li>
+                    <li> <span className="font-bold">Tie-breaker 2:</span> Most recent activity</li>
                 </ul>
             </li>
-            <li className="py-1">🧑‍🤝‍🧑 <span className="pl-2 font-bold">Who appears:</span> anyone with a rating (after your first recorded match)</li>
+            <li className="py-1">🧑‍🤝‍🧑 <span className="pl-2 font-bold">Who appears:</span> Anyone with a rating (you’ll appear after your first recorded match)</li>
             </ul>
         </div>
     )
