@@ -2,6 +2,7 @@ import { navigate } from "@reach/router";
 import { useMutation } from "@tanstack/react-query";
 import { getTop3Players } from "../../apis/leaderboard/leaderboard";
 import { useEffect, useState } from "react";
+import { Mixpanel } from "../../mixpanel/init";
 
 interface CircleProps {
     radius: number;
@@ -35,11 +36,30 @@ const LeaderboardHome = ({activityId}: {activityId: number}) => {
     const [thisWeekChampions, setThisWeekChampions] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    const userDetails = JSON.parse(window.localStorage["zenfitx-user-details"] || '{}');
+    const userId = userDetails.id;
+
+    // Utility function to sort players by rating, then by games played (higher games = better rank)
+    const sortPlayersByRatingAndGames = (players: any[]) => {
+        return players.sort((a, b) => {
+            // First sort by rating (higher rating = better rank)
+            if (a.rating !== b.rating) {
+                return b.rating - a.rating;
+            }
+            // If ratings are equal, sort by games played (higher games = better rank)
+            return b.gamesPlayedCount - a.gamesPlayedCount;
+        });
+    };
+
     const { mutate: _getTop3Players } = useMutation({
         mutationFn: getTop3Players,
         onSuccess: (result) => {
-            // setThisWeekChampions(result.leaderboard || []);
-            setThisWeekChampions([]);
+            const players = result.leaderboard || [];
+            // const players: any[] = [];
+            // Sort the players by rating and games played
+            const sortedPlayers = sortPlayersByRatingAndGames([...players]);
+            setThisWeekChampions(sortedPlayers);
+            // setThisWeekChampions([]);
             setIsLoading(false);
         },
         onError: () => {
@@ -56,9 +76,9 @@ const LeaderboardHome = ({activityId}: {activityId: number}) => {
         <div className="mx-3 mb-4 mt-4 bg-white">
             <div className="flex flex-row justify-between items-center p-2 mx-1">
                 <h1 className="text-xl font-bold">Leaderboard 🏆</h1>
-                <div className="flex flex-row gap-2 text-sm text-green-700" onClick={()=>navigate('/leaderboard')}>View All</div>
+                <div className="flex flex-row gap-2 text-sm text-green-700" onClick={()=>{navigate('/leaderboard'); Mixpanel.track('view_all_leaderboard_home_clicked', {user_id: userId})}}>View All</div>
             </div>
-            <div className="flex flex-col gap-2 rounded-lg bg-gray-100 px-4 py-4 mt-2 mx-2" onClick={()=>navigate('/leaderboard')}>
+            <div className="flex flex-col gap-2 rounded-lg bg-gray-100 px-4 py-4 mt-2 mx-2" onClick={()=>{navigate('/leaderboard'); Mixpanel.track('leaderboard_home_clicked', {user_id: userId})}}>
                 <div className="flex flex-row gap-2">
                     <span className="text-md font-bold">This Week's Champions</span>
                 </div>

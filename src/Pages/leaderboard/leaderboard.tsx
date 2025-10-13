@@ -11,6 +11,7 @@ import { userDetailsAtom } from "../../atoms/atom";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import {CenterModal} from "../profile/center-modal";
 import LeaderboardInfo from "./leadboardinfo";
+import { Mixpanel } from "../../mixpanel/init";
 
 interface LeaderboardPlayer {
     activity_id: number;
@@ -70,10 +71,33 @@ const Leaderboard = (props: LeaderboardProps) => {
     const lastElementRef = useRef<HTMLDivElement | null>(null);
     const [isLeaderboardInfoModalOpen, setIsLeaderboardInfoModalOpen] = useState(false);
     
+    // Utility function to sort players by rating, then by games played (higher games = better rank)
+    const sortPlayersByRatingAndGames = (players: LeaderboardPlayer[]) => {
+        return players.sort((a, b) => {
+            // First sort by rating (higher rating = better rank)
+            if (a.rating !== b.rating) {
+                return b.rating - a.rating;
+            }
+            // If ratings are equal, sort by games played (higher games = better rank)
+            return b.gamesPlayedCount - a.gamesPlayedCount;
+        });
+    };
+
     const { mutate: _getLeaderboard } = useMutation({
         mutationFn: getLeaderboard,
         onSuccess: (result) => {
-            const playersWithRanks = result.leaderboard.map((player: LeaderboardPlayer, index: number) => ({
+            // Handle null or undefined response
+            if (!result || !result.leaderboard || !Array.isArray(result.leaderboard)) {
+                setHasMoreData(false);
+                setIsLoading(false);
+                setIsLoadingMore(false);
+                return;
+            }
+
+            // Sort only the new players by rating and games played
+            const sortedNewPlayers = sortPlayersByRatingAndGames([...result.leaderboard]);
+            
+            const playersWithRanks = sortedNewPlayers.map((player: LeaderboardPlayer, index: number) => ({
                 ...player,
                 rank: currentPage * pageSize + index + 1
             }));
@@ -82,16 +106,18 @@ const Leaderboard = (props: LeaderboardProps) => {
                 // First load - replace data
                 setLeaderboardData(playersWithRanks);
             } else {
-                // Subsequent loads - append data
+                // Subsequent loads - append data (new players are already sorted)
                 setLeaderboardData(prev => [...prev, ...playersWithRanks]);
             }
             
+            // If we received fewer items than pageSize, we've reached the end
             setHasMoreData(result.leaderboard.length === pageSize);
             setIsLoading(false);
             setIsLoadingMore(false);
         },
         onError: (error) => {
             errorToast("Error in getting leaderboard");
+            setHasMoreData(false); // Stop infinite loading on error
             setIsLoading(false);
             setIsLoadingMore(false);
         }
@@ -100,16 +126,32 @@ const Leaderboard = (props: LeaderboardProps) => {
     const { mutate: _getUserRating } = useMutation({
         mutationFn: getRatings,
         onSuccess: (result) => {
+            // Handle null or undefined response
+            if (!result || !result.rating) {
+                setUserRating(prev => ({ ...prev, rating: 0 } as UserRating));
+                return;
+            }
             setUserRating(prev => ({ ...prev, rating: result.rating.rating || 0 } as UserRating));
         },
         onError: (error) => {
             console.error("Error getting user rating:", error);
+            // Set default rating on error to prevent undefined state
+            setUserRating(prev => ({ ...prev, rating: 0 } as UserRating));
         }
     });
 
     const { mutate: _getUserGamesPlayed } = useMutation({
         mutationFn: getGamesPlayed,
         onSuccess: (result) => {
+            // Handle null or undefined response
+            if (!result) {
+                setUserRating(prev => ({ 
+                    rating: prev?.rating || 0, 
+                    gamesPlayed: 0 
+                }));
+                setIsUserRatingLoading(false);
+                return;
+            }
             setUserRating(prev => ({ 
                 rating: prev?.rating || 0, 
                 gamesPlayed: result.gamesPlayedCount || 0 
@@ -118,6 +160,11 @@ const Leaderboard = (props: LeaderboardProps) => {
         },
         onError: (error) => {
             console.error("Error getting user games played:", error);
+            // Set default games played on error
+            setUserRating(prev => ({ 
+                rating: prev?.rating || 0, 
+                gamesPlayed: 0 
+            }));
             setIsUserRatingLoading(false);
         }
     });
@@ -130,11 +177,11 @@ const Leaderboard = (props: LeaderboardProps) => {
     }, [isLoadingMore, hasMoreData]);
 
     const lastElementRefCallback = useCallback((node: HTMLDivElement) => {
-        if (isLoadingMore) return;
+        if (isLoadingMore || !hasMoreData) return;
         if (observerRef.current) observerRef.current.disconnect();
         
         observerRef.current = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting && hasMoreData) {
+            if (entries[0].isIntersecting && hasMoreData && !isLoadingMore) {
                 loadMoreData();
             }
         }, {
@@ -154,6 +201,13 @@ const Leaderboard = (props: LeaderboardProps) => {
         }
         _getLeaderboard({activityId: 1, pageSize, pageNumber: currentPage});
     }, [currentPage, pageSize]);
+
+    // Reset pagination state on component mount
+    useEffect(() => {
+        setCurrentPage(0);
+        setHasMoreData(true);
+        setLeaderboardData([]);
+    }, []);
 
     useEffect(() => {
         return () => {
@@ -211,7 +265,7 @@ const Leaderboard = (props: LeaderboardProps) => {
                         <h1 className="text-2xl font-bold  text-gray-900">Leaderboard 🏆</h1>
                     </div>
                 </div>
-                <div className="flex flex-row gap-1 pr-4" onClick={()=>setIsLeaderboardInfoModalOpen(true)}>
+                <div className="flex flex-row gap-1 pr-4" onClick={()=>{setIsLeaderboardInfoModalOpen(true); Mixpanel.track('leaderboard_info_modal_open', {user_id: userDetails?.id})}}>
                     <InfoCircleOutlined className="w-5 h-5 self-center" />
                 </div>
             </div>
@@ -305,7 +359,7 @@ const Leaderboard = (props: LeaderboardProps) => {
                                     <span className="text-xs  text-gray-600">{userRating.gamesPlayed} games</span>
                                 </div>
                                 <div className="flex items-center gap-1">
-                                    <span className="text-sm font-bold  text-blue-600">{userRating.rating/100}</span>
+                                    <span className="text-sm font-bold  text-blue-600">{ userRating.rating ? userRating.rating/100 : "-"}</span>
                                     <span className="text-xs  text-gray-600">Rating</span>
                                 </div>
                             </div>
