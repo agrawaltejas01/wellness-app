@@ -41,10 +41,10 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
                 </div>
             </div>
             <div className="w-full">
-                <div className="rounded-full mt-2 p-2 w-full items-center justify-center text-black"style={{'background': 'white'}}  onClick={()=>navigate('/badminton')}>
+                <div className="rounded-full mt-2 p-2 w-full items-center justify-center text-black"style={{'background': 'white'}}  onClick={()=>{navigate('/badminton'); Mixpanel.track('book_badminton_clicked', {user_id: userDetails.id})}}>
                     <div className="flex flex-row justify-center gap-1">
                         <Plus />
-                        Book New Game
+                        Book Badminton
                     </div>
                 </div>
             </div>  
@@ -83,11 +83,11 @@ const Rating = ({rating, games, isLoadingRating, isLoadingGames}: {rating: numbe
                     <div className="font-extralight">Games</div>
                 </div>
             </div>
-            <div className="w-full" onClick={()=>navigate('/badminton')}>
+            <div className="w-full" onClick={()=>{navigate('/badminton'); Mixpanel.track('book_badminton_clicked', {user_id: userDetails.id})}}>
                 <div className="rounded-full p-2 mt-2 w-full items-center justify-center bg-white text-black border border-black border-dashed">
                     <div className="flex flex-row justify-center gap-1 p-1">
                         <Plus />
-                        <span className="font-light">Book New Game</span>
+                        <span className="font-light">Book Badminton</span>
                     </div>
                 </div>
             </div>

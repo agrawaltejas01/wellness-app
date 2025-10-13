@@ -47,7 +47,7 @@ const HomeBannerV2: React.FC<{userDetails: IUser}> = ({userDetails}) => {
                       alignItems: 'center',
                       padding: '2px'
                       }}
-                      onClick={()=>navigate('/user-profile')}
+                      onClick={()=>{navigate('/user-profile'); Mixpanel.track('user_profile_clicked', {user_id: userDetails?.id})}}
                   >
                   <div
                       style={{
