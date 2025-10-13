@@ -80,7 +80,7 @@ const LeaderboardHome = ({activityId}: {activityId: number}) => {
             </div>
             <div className="flex flex-col gap-2 rounded-lg bg-gray-100 px-4 py-4 mt-2 mx-2" onClick={()=>{navigate('/leaderboard'); Mixpanel.track('leaderboard_home_clicked', {user_id: userId})}}>
                 <div className="flex flex-row gap-2">
-                    <span className="text-md font-bold">This Week's Champions</span>
+                    <span className="text-md font-bold">Today's Champions</span>
                 </div>
                 <div className="flex flex-col gap-4">
                     {isLoading ? (

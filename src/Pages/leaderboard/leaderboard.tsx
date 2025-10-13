@@ -12,6 +12,7 @@ import { InfoCircleOutlined } from "@ant-design/icons";
 import {CenterModal} from "../profile/center-modal";
 import LeaderboardInfo from "./leadboardinfo";
 import { Mixpanel } from "../../mixpanel/init";
+import UserRatingInfo from "../home/rating-info";
 
 interface LeaderboardPlayer {
     activity_id: number;
@@ -70,7 +71,7 @@ const Leaderboard = (props: LeaderboardProps) => {
     const observerRef = useRef<IntersectionObserver | null>(null);
     const lastElementRef = useRef<HTMLDivElement | null>(null);
     const [isLeaderboardInfoModalOpen, setIsLeaderboardInfoModalOpen] = useState(false);
-    
+    const [isUserRatingInfoModalOpen, setIsUserRatingInfoModalOpen] = useState(false);
     // Utility function to sort players by rating, then by games played (higher games = better rank)
     const sortPlayersByRatingAndGames = (players: LeaderboardPlayer[]) => {
         return players.sort((a, b) => {
@@ -225,6 +226,10 @@ const Leaderboard = (props: LeaderboardProps) => {
         }
     }, [userDetails]); 
 
+    useEffect(() => {
+        Mixpanel.track('leaderboard_page_viewed', {user_id: userDetails?.id});
+    }, [userDetails]);
+
 
     const getRankStyle = (rank: number) => {
         if (rank === 1) return { bg: 'bg-yellow-100', border: 'border-yellow-400', text: 'text-yellow-800' };
@@ -262,7 +267,10 @@ const Leaderboard = (props: LeaderboardProps) => {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                             </svg>
                         </button>
+                        <div className="flex flex-col">
                         <h1 className="text-2xl font-bold  text-gray-900">Leaderboard 🏆</h1>
+                        <span className="text-xs text-gray-500 font-normal">Last updated: Oct 13th, 4 PM</span>
+                        </div>
                     </div>
                 </div>
                 <div className="flex flex-row gap-1 pr-4" onClick={()=>{setIsLeaderboardInfoModalOpen(true); Mixpanel.track('leaderboard_info_modal_open', {user_id: userDetails?.id})}}>
@@ -339,7 +347,10 @@ const Leaderboard = (props: LeaderboardProps) => {
             {/* User's Own Rating */}
             {userDetails && (
                 <div className="bg-white mx-4 mt-4 rounded-lg shadow-sm p-3">
-                    <h2 className="text-sm font-bold  text-gray-900 mb-2">Your Performance</h2>
+                    <div className="flex flex-row gap-2 mb-2">
+                    <h2 className="text-sm font-bold  text-gray-900">Your Performance</h2>
+                    <InfoCircleOutlined className="w-3 h-3 self-center" onClick={()=>{setIsUserRatingInfoModalOpen(true); Mixpanel.track('user_rating_info_modal_open', {user_id: userDetails?.id})}} />
+                    </div>
                     {isUserRatingLoading ? (
                         <div className="flex items-center justify-center py-2">
                             <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-500"></div>
@@ -473,6 +484,14 @@ const Leaderboard = (props: LeaderboardProps) => {
                     onClose={()=>setIsLeaderboardInfoModalOpen(false)}
                     title="Leaderboard - Quick Guide"
                     children={<LeaderboardInfo />}
+                />
+            )}
+            {isUserRatingInfoModalOpen && (
+                <CenterModal
+                    isOpen={isUserRatingInfoModalOpen}
+                    onClose={()=>setIsUserRatingInfoModalOpen(false)}
+                    title="User Rating - Quick Guide"
+                    children={<UserRatingInfo />}
                 />
             )}
         </div>
