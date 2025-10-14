@@ -269,7 +269,7 @@ const Leaderboard = (props: LeaderboardProps) => {
                         </button>
                         <div className="flex flex-col">
                         <h1 className="text-2xl font-bold  text-gray-900">Leaderboard 🏆</h1>
-                        <span className="text-xs text-gray-500 font-normal">Last updated: Oct 13th, 4 PM</span>
+                        <span className="text-xs text-gray-500 font-normal">Last updated: Oct 14th, 4 PM</span>
                         </div>
                     </div>
                 </div>
