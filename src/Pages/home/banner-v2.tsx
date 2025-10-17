@@ -9,6 +9,7 @@ import "./style.css";
 
 const HomeBannerV2: React.FC<{userDetails: IUser}> = ({userDetails}) => {
 
+    const accessToken = window.localStorage["zenfitx-access-token"] || "";
     const [coins, setCoins] = useState(0);
     const [showProfileCompletion, setShowProfileCompletion] = useState(false);
     const { mutate: _getCoins } = useMutation({
@@ -27,6 +28,20 @@ const HomeBannerV2: React.FC<{userDetails: IUser}> = ({userDetails}) => {
       setShowProfileCompletion(true);
     }
   }, [userDetails]);
+
+  const handleUserProfileClick = () => {
+    const uploadUrl = 'https://api.zenfitx.com/api/v1/user/profile/selfie';
+    const uploadMethod = 'POST';
+    const uploadHeaders = { Authorization: 'Bearer ' + accessToken };
+    const uploadFieldName = 'selfie';
+    window?.ReactNativeWebView?.postMessage(JSON.stringify({
+      type: 'takeSelfie',
+      uploadUrl,
+      uploadMethod,
+      uploadHeaders,
+      uploadFieldName
+    }));
+  }
 
   return (
     <div style={{'width':'100%'}} className="relative">
@@ -47,7 +62,7 @@ const HomeBannerV2: React.FC<{userDetails: IUser}> = ({userDetails}) => {
                       alignItems: 'center',
                       padding: '2px'
                       }}
-                      onClick={()=>navigate('/user-profile')}
+                      onClick={()=> handleUserProfileClick() }
                   >
                   <div
                       style={{
