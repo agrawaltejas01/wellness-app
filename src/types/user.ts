@@ -17,6 +17,7 @@ interface IUser {
   addressLine2?: string;
   noOfBookings: number;
   offerType?: string;
+  profilePictureThumbnail?: string;
 }
 
 export interface IBookings {

@@ -34,6 +34,7 @@ const UserProfile: React.FC<IUserProfile> = () => {
   const [userBio, setUserBio] = useState("");
   const [bioInput, setBioInput] = useState("");
   const [playerStats, setPlayerStats] = useState<UserStats>({ rating: 0, gamesPlayed: 0 });
+  const [profilePicture, setProfilePicture] = useState<string>("");
 
   // Fetch user rating data
   const { mutate: fetchRating } = useMutation({
@@ -68,7 +69,9 @@ const UserProfile: React.FC<IUserProfile> = () => {
       // Load user statistics
       fetchRating(userDetails.id);
       fetchGamesCount(userDetails.id);
-      
+      if (userDetails?.profilePictureThumbnail) {
+        setProfilePicture(userDetails.profilePictureThumbnail);
+      }
       // Analytics tracking
       Mixpanel.track("user_profile_viewed", {
         user_id: userDetails.id,
@@ -135,7 +138,7 @@ const UserProfile: React.FC<IUserProfile> = () => {
               fontFamily: 'Plus Jakarta Sans'
             }}
           >
-            {userDetails?.name?.charAt(0)?.toUpperCase() || "U"}
+            {profilePicture ? <img src={profilePicture} className="rounded-full w-full h-full p-0.5" /> : userDetails?.name?.charAt(0)?.toUpperCase() || "U"}
           </div>
         </div>
       </div>
