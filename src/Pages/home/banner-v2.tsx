@@ -12,6 +12,7 @@ const HomeBannerV2: React.FC<{userDetails: IUser}> = ({userDetails}) => {
     const accessToken = window.localStorage["zenfitx-access-token"] || "";
     const [coins, setCoins] = useState(0);
     const [showProfileCompletion, setShowProfileCompletion] = useState(false);
+    const [profilePicture, setProfilePicture] = useState<string>("");
     const { mutate: _getCoins } = useMutation({
         mutationFn: getCoins,
         onSuccess: (result) => {
@@ -27,20 +28,25 @@ const HomeBannerV2: React.FC<{userDetails: IUser}> = ({userDetails}) => {
     if (!userDetails?.name || !userDetails?.gender || !userDetails?.dob) {
       setShowProfileCompletion(true);
     }
+    if (userDetails?.profilePictureThumbnail) {
+      setProfilePicture(userDetails.profilePictureThumbnail);
+    }
   }, [userDetails]);
 
   const handleUserProfileClick = () => {
-    const uploadUrl = 'https://api.zenfitx.com/api/v1/user/profile/selfie';
-    const uploadMethod = 'POST';
-    const uploadHeaders = { Authorization: 'Bearer ' + accessToken };
-    const uploadFieldName = 'selfie';
-    window?.ReactNativeWebView?.postMessage(JSON.stringify({
-      type: 'takeSelfie',
-      uploadUrl,
-      uploadMethod,
-      uploadHeaders,
-      uploadFieldName
-    }));
+    Mixpanel.track('user_profile_clicked', {user_id: userDetails?.id})
+    navigate('/user-profile')
+    // const uploadUrl = 'https://api.zenfitx.com/api/v1/user/profile/selfie';
+    // const uploadMethod = 'POST';
+    // const uploadHeaders = { Authorization: 'Bearer ' + accessToken };
+    // const uploadFieldName = 'selfie';
+    // window?.ReactNativeWebView?.postMessage(JSON.stringify({
+    //   type: 'takeSelfie',
+    //   uploadUrl,
+    //   uploadMethod,
+    //   uploadHeaders,
+    //   uploadFieldName
+    // }));
   }
 
   return (
@@ -79,7 +85,7 @@ const HomeBannerV2: React.FC<{userDetails: IUser}> = ({userDetails}) => {
                           color: 'white'
                       }}
                   >
-                  {userDetails?.name.split(" ")[0].charAt(0)}
+                  {profilePicture ? <img src={profilePicture} className="rounded-full w-full h-full p-0.5" /> : userDetails?.name.split(" ")[0].charAt(0)}
               </div>
               
           </div>
