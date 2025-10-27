@@ -116,6 +116,24 @@ const UserProfile: React.FC<IUserProfile> = () => {
     </div>
   );
 
+  const handleEditProfilePicture = () => {
+    if (window.ReactNativeWebView) {
+      const uploadUrl = 'https://api.zenfitx.com/api/v1/user/profile/selfie';
+      const uploadMethod = 'POST';
+      const uploadHeaders = { Authorization: 'Bearer ' + window.localStorage["zenfitx-access-token"] };
+      const uploadFieldName = 'selfie';
+      window?.ReactNativeWebView?.postMessage(JSON.stringify({
+        type: 'takeSelfie',
+        uploadUrl,
+        uploadMethod,
+        uploadHeaders,
+        uploadFieldName
+      }));
+    } else {
+      message.info('Profile picture editing is available in the app');
+    }
+  };
+
   const UserAvatar = () => {
     const size = 80;
     return (
@@ -170,6 +188,7 @@ const UserProfile: React.FC<IUserProfile> = () => {
         <div className="bg-black text-white py-8 px-4">
           <div className="text-center">
             <UserAvatar />
+            <span className="text-white text-sm font-bold text-green-500" onClick={()=>{handleEditProfilePicture()}}>Edit</span>
             <h1 className="text-2xl font-bold mt-4 mb-1">{userDetails.name}</h1>
             <p className="text-gray-300 text-sm">{userDetails.phone}</p>
           </div>
