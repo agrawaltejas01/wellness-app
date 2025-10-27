@@ -118,10 +118,10 @@ const UserProfile: React.FC<IUserProfile> = () => {
 
   const handleEditProfilePicture = () => {
     if (window.ReactNativeWebView) {
-      const uploadUrl = 'https://api.zenfitx.com/api/v1/user/profile/selfie';
+      const uploadUrl = process.env.REACT_APP_BE_URL + '/users/profile-picture';
       const uploadMethod = 'POST';
       const uploadHeaders = { Authorization: 'Bearer ' + window.localStorage["zenfitx-access-token"] };
-      const uploadFieldName = 'selfie';
+      const uploadFieldName = 'profilePicture';
       window?.ReactNativeWebView?.postMessage(JSON.stringify({
         type: 'takeSelfie',
         uploadUrl,
