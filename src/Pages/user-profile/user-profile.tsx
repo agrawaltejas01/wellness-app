@@ -188,7 +188,7 @@ const UserProfile: React.FC<IUserProfile> = () => {
         <div className="bg-black text-white py-8 px-4">
           <div className="text-center">
             <UserAvatar />
-            <span className="text-white text-sm font-bold text-green-500" onClick={()=>{handleEditProfilePicture()}}>Edit</span>
+            <span className="text-sm font-bold text-green-500" onClick={()=>{handleEditProfilePicture()}}>Edit</span>
             <h1 className="text-2xl font-bold mt-4 mb-1">{userDetails.name}</h1>
             <p className="text-gray-300 text-sm">{userDetails.phone}</p>
           </div>
