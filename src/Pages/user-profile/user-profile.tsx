@@ -82,6 +82,56 @@ const UserProfile: React.FC<IUserProfile> = () => {
     }
   }, [userDetails]);
 
+  // Handle selfie upload result from React Native
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      try {
+        const data = JSON.parse(event.data);
+        
+        if (data.type === 'selfieResult') {
+          if (data.success && data.uploaded) {
+            message.success("Profile picture updated successfully!");
+            
+            // Update profile picture from response if available
+            if (data.body?.profilePictureThumbnail) {
+              setProfilePicture(data.body.profilePictureThumbnail);
+            }
+
+            // Track analytics
+            Mixpanel.track("profile_picture_updated", {
+              user_id: userDetails?.id,
+              status: data.status
+            });
+            
+            // Optionally reload user details to get the updated picture
+            // You might want to trigger a refresh of userDetailsAtom here
+          } else {
+            message.error("Failed to update profile picture. Please try again.");
+            
+            Mixpanel.track("profile_picture_update_failed", {
+              user_id: userDetails?.id,
+              status: data.status
+            });
+          }
+          navigate('/', { replace: true });
+        }
+      } catch (error) {
+        console.error("Error handling message from React Native:", error);
+      }
+    };
+
+    // Listen for messages from React Native WebView
+    if (window.ReactNativeWebView) {
+      window.addEventListener('message', handleMessage);
+      document.addEventListener('message', handleMessage as any);
+    }
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+      document.removeEventListener('message', handleMessage as any);
+    };
+  }, [userDetails]);
+
   const startEditing = () => {
     setBioInput(userBio);
     setEditMode(true);
