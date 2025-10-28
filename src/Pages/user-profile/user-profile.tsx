@@ -12,6 +12,7 @@ import { Mixpanel } from "../../mixpanel/init";
 import MetaPixel from "../../components/meta-pixel";
 import Loader from "../../components/Loader";
 import IUser from "../../types/user";
+import "./user-profile.css";
 
 interface IUserProfile extends RouteComponentProps {}
 
@@ -36,7 +37,9 @@ const UserProfile: React.FC<IUserProfile> = () => {
   const [playerStats, setPlayerStats] = useState<UserStats>({ rating: 0, gamesPlayed: 0 });
   const [profilePicture, setProfilePicture] = useState<string>("");
   const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [showPhotoOptions, setShowPhotoOptions] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
 
   // Fetch user rating data
   const { mutate: fetchRating } = useMutation({
@@ -257,25 +260,94 @@ const UserProfile: React.FC<IUserProfile> = () => {
     }
   };
 
+  const handleTakePhoto = () => {
+    setShowPhotoOptions(false);
+    cameraInputRef.current?.click();
+  };
+
+  const handleChooseFromGallery = () => {
+    setShowPhotoOptions(false);
+    fileInputRef.current?.click();
+  };
+
   const handleEditProfilePicture = () => {
-    // if (window.ReactNativeWebView) {
-    //   const uploadUrl = process.env.REACT_APP_BE_URL + '/users/profile-picture';
-    //   const uploadMethod = 'POST';
-    //   let token = window.localStorage["zenfitx-access-token"];
-    //   token = JSON.parse(token as string);
-    //   const uploadHeaders = { 'x-wellness-jwt': token };
-    //   const uploadFieldName = 'profilePicture';
-    //   window?.ReactNativeWebView?.postMessage(JSON.stringify({
-    //     type: 'takeSelfie',
-    //     uploadUrl,
-    //     uploadMethod,
-    //     uploadHeaders,
-    //     uploadFieldName
-    //   }));
-    // } else {
-      // Trigger file input for web browsers
-      fileInputRef.current?.click();
-    // }
+    setShowPhotoOptions(true);
+  };
+
+  const PhotoOptionsMenu = () => {
+    if (!showPhotoOptions) return null;
+
+    return (
+      <>
+        {/* iOS-style Backdrop */}
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-40 z-40 ios-backdrop"
+          onClick={() => setShowPhotoOptions(false)}
+        />
+        
+        {/* iOS-style Action Sheet */}
+        <div className="fixed bottom-0 left-0 right-0 z-50 animate-slide-up" style={{ padding: '0 8px 8px 8px' }}>
+          {/* Main Actions Container */}
+          <div className="bg-white bg-opacity-95 backdrop-blur-xl overflow-hidden ios-action-sheet" style={{ borderRadius: '13px', marginBottom: '8px' }}>
+            {/* Title */}
+            {/* <div className="px-4 border-b border-gray-200" style={{ paddingTop: '13px', paddingBottom: '13px' }}>
+              <p className="text-center text-gray-500 font-normal" style={{ fontSize: '13px', letterSpacing: '-0.08px' }}>
+                Update Profile Picture
+              </p>
+            </div> */}
+            
+            {/* Take Photo Option */}
+            <button
+              onClick={handleTakePhoto}
+              className="w-full px-4 text-center border-b border-gray-200 active:bg-gray-100 transition-colors ios-action-button"
+              style={{ 
+                WebkitTapHighlightColor: 'transparent',
+                color: '#007AFF',
+                fontSize: '20px',
+                paddingTop: '16px',
+                paddingBottom: '16px',
+                fontWeight: '400'
+              }}
+            >
+              Take Photo
+            </button>
+            
+            {/* Choose from Gallery Option */}
+            <button
+              onClick={handleChooseFromGallery}
+              className="w-full px-4 text-center active:bg-gray-100 transition-colors ios-action-button"
+              style={{ 
+                WebkitTapHighlightColor: 'transparent',
+                color: '#007AFF',
+                fontSize: '20px',
+                paddingTop: '16px',
+                paddingBottom: '16px',
+                fontWeight: '400'
+              }}
+            >
+              Choose Photo
+            </button>
+          </div>
+          
+          {/* Cancel Button - Separated */}
+          <button
+            onClick={() => setShowPhotoOptions(false)}
+            className="w-full px-4 bg-white bg-opacity-95 backdrop-blur-xl text-center active:bg-gray-100 transition-colors ios-cancel-button"
+            style={{ 
+              WebkitTapHighlightColor: 'transparent',
+              color: '#007AFF',
+              fontSize: '20px',
+              paddingTop: '16px',
+              paddingBottom: '16px',
+              fontWeight: '600',
+              borderRadius: '13px'
+            }}
+          >
+            Cancel
+          </button>
+        </div>
+      </>
+    );
   };
 
   const UserAvatar = () => {
@@ -328,17 +400,30 @@ const UserProfile: React.FC<IUserProfile> = () => {
       <div className="min-h-screen bg-gray-50">
         <NavigationHeader />
         
+        {/* Hidden file inputs */}
+        <input
+          ref={cameraInputRef}
+          type="file"
+          accept="image/jpeg,image/jpg,image/png,image/webp"
+          capture="environment"
+          onChange={handleFileInputChange}
+          style={{ display: 'none' }}
+        />
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/jpeg,image/jpg,image/png,image/webp"
+          onChange={handleFileInputChange}
+          style={{ display: 'none' }}
+        />
+        
+        {/* Photo Options Menu */}
+        <PhotoOptionsMenu />
+        
         {/* Profile Hero Section */}
         <div className="bg-black text-white py-8 px-4">
           <div className="text-center">
             <UserAvatar />
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/jpeg,image/jpg,image/png,image/webp"
-              onChange={handleFileInputChange}
-              style={{ display: 'none' }}
-            />
             <span 
               className={`text-sm font-bold ${isUploadingImage ? 'text-gray-500' : 'text-green-500 cursor-pointer'}`} 
               onClick={() => {
