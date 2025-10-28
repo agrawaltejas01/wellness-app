@@ -271,26 +271,6 @@ const UserProfile: React.FC<IUserProfile> = () => {
   };
 
   const handleEditProfilePicture = () => {
-<<<<<<< Updated upstream
-    if (window.ReactNativeWebView) {
-      const uploadUrl = process.env.REACT_APP_BE_URL + '/users/profile-picture';
-      const uploadMethod = 'POST';
-      let token = window.localStorage["zenfitx-access-token"];
-      token = JSON.parse(token as string);
-      const uploadHeaders = { 'x-wellness-jwt': token };
-      const uploadFieldName = 'profilePicture';
-      window?.ReactNativeWebView?.postMessage(JSON.stringify({
-        type: 'takeSelfie',
-        uploadUrl,
-        uploadMethod,
-        uploadHeaders,
-        uploadFieldName
-      }));
-    } else {
-      // Trigger file input for web browsers
-      fileInputRef.current?.click();
-    }
-=======
     setShowPhotoOptions(true);
   };
 
@@ -310,11 +290,11 @@ const UserProfile: React.FC<IUserProfile> = () => {
           {/* Main Actions Container */}
           <div className="bg-white bg-opacity-95 backdrop-blur-xl overflow-hidden ios-action-sheet" style={{ borderRadius: '13px', marginBottom: '8px' }}>
             {/* Title */}
-            <div className="px-4 border-b border-gray-200" style={{ paddingTop: '13px', paddingBottom: '13px' }}>
+            {/* <div className="px-4 border-b border-gray-200" style={{ paddingTop: '13px', paddingBottom: '13px' }}>
               <p className="text-center text-gray-500 font-normal" style={{ fontSize: '13px', letterSpacing: '-0.08px' }}>
                 Update Profile Picture
               </p>
-            </div>
+            </div> */}
             
             {/* Take Photo Option */}
             <button
@@ -368,7 +348,6 @@ const UserProfile: React.FC<IUserProfile> = () => {
         </div>
       </>
     );
->>>>>>> Stashed changes
   };
 
   const UserAvatar = () => {
