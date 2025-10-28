@@ -258,24 +258,24 @@ const UserProfile: React.FC<IUserProfile> = () => {
   };
 
   const handleEditProfilePicture = () => {
-    if (window.ReactNativeWebView) {
-      const uploadUrl = process.env.REACT_APP_BE_URL + '/users/profile-picture';
-      const uploadMethod = 'POST';
-      let token = window.localStorage["zenfitx-access-token"];
-      token = JSON.parse(token as string);
-      const uploadHeaders = { 'x-wellness-jwt': token };
-      const uploadFieldName = 'profilePicture';
-      window?.ReactNativeWebView?.postMessage(JSON.stringify({
-        type: 'takeSelfie',
-        uploadUrl,
-        uploadMethod,
-        uploadHeaders,
-        uploadFieldName
-      }));
-    } else {
+    // if (window.ReactNativeWebView) {
+    //   const uploadUrl = process.env.REACT_APP_BE_URL + '/users/profile-picture';
+    //   const uploadMethod = 'POST';
+    //   let token = window.localStorage["zenfitx-access-token"];
+    //   token = JSON.parse(token as string);
+    //   const uploadHeaders = { 'x-wellness-jwt': token };
+    //   const uploadFieldName = 'profilePicture';
+    //   window?.ReactNativeWebView?.postMessage(JSON.stringify({
+    //     type: 'takeSelfie',
+    //     uploadUrl,
+    //     uploadMethod,
+    //     uploadHeaders,
+    //     uploadFieldName
+    //   }));
+    // } else {
       // Trigger file input for web browsers
       fileInputRef.current?.click();
-    }
+    // }
   };
 
   const UserAvatar = () => {
