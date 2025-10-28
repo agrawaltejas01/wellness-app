@@ -9,7 +9,10 @@ import "./style.css";
 
 const HomeBannerV2: React.FC<{userDetails: IUser}> = ({userDetails}) => {
 
-    const accessToken = window.localStorage["zenfitx-access-token"] || "";
+    let accessToken = window.localStorage["zenfitx-access-token"] || "";
+    if (accessToken) {
+      accessToken = JSON.parse(accessToken as string);
+    }
     const [coins, setCoins] = useState(0);
     const [showProfileCompletion, setShowProfileCompletion] = useState(false);
     const [profilePicture, setProfilePicture] = useState<string>("");
