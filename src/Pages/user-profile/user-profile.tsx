@@ -3,7 +3,7 @@ import { Button, Input, message } from "antd";
 import { EditOutlined, SaveOutlined, CloseOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import { useAtom } from "jotai/react";
 import { userDetailsAtom } from "../../atoms/atom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { getRatings } from "../../apis/ratings/ratings";
 import { getGamesPlayed } from "../../apis/games/games";
@@ -28,13 +28,15 @@ const formatDate = (date: string) => {
 }
 
 const UserProfile: React.FC<IUserProfile> = () => {
-  const [userDetails] = useAtom(userDetailsAtom);
+  const [userDetails, setUserDetails] = useAtom(userDetailsAtom);
   const [isLoading, setIsLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [userBio, setUserBio] = useState("");
   const [bioInput, setBioInput] = useState("");
   const [playerStats, setPlayerStats] = useState<UserStats>({ rating: 0, gamesPlayed: 0 });
   const [profilePicture, setProfilePicture] = useState<string>("");
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Fetch user rating data
   const { mutate: fetchRating } = useMutation({
@@ -166,13 +168,101 @@ const UserProfile: React.FC<IUserProfile> = () => {
     </div>
   );
 
+  const handleFileUpload = async (file: File) => {
+    if (!file) return;
+
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      message.error('Please upload a valid image file (JPEG, PNG, or WebP)');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      message.error('File size should not exceed 5MB');
+      return;
+    }
+
+    setIsUploadingImage(true);
+    
+    try {
+      const uploadUrl = process.env.REACT_APP_BE_URL + '/users/profile-picture';
+      let token = window.localStorage["zenfitx-access-token"];
+      token = JSON.parse(token as string);
+
+      const formData = new FormData();
+      formData.append('profilePicture', file);
+
+      const response = await fetch(uploadUrl, {
+        method: 'POST',
+        headers: {
+          'x-wellness-jwt': token
+        },
+        body: formData
+      });
+
+      const data = await response.json();
+      if (response.ok && data?.profilePictureThumbnail) {
+        setProfilePicture(data.profilePictureThumbnail);
+        message.success('Profile picture updated successfully!');
+        
+        // Update userDetails atom with new profile picture
+        if (userDetails) {
+          setUserDetails({
+            ...userDetails,
+            profilePictureThumbnail: data.profilePictureThumbnail
+          });
+        }
+
+        Mixpanel.track("profile_picture_updated", {
+          user_id: userDetails?.id,
+          status: 'success',
+          method: 'web_upload'
+        });
+        navigate('/', { replace: true });
+      } else {
+        message.error(data.message || 'Failed to update profile picture. Please try again.');
+        
+        Mixpanel.track("profile_picture_update_failed", {
+          user_id: userDetails?.id,
+          status: 'error',
+          method: 'web_upload'
+        });
+      }
+    } catch (error) {
+      console.error('Error uploading profile picture:', error);
+      message.error('Failed to update profile picture. Please try again.');
+      
+      Mixpanel.track("profile_picture_update_failed", {
+        user_id: userDetails?.id,
+        status: 'error',
+        error: String(error),
+        method: 'web_upload'
+      });
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
+
+  const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      handleFileUpload(file);
+    }
+    // Reset input value to allow selecting the same file again
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   const handleEditProfilePicture = () => {
     if (window.ReactNativeWebView) {
       const uploadUrl = process.env.REACT_APP_BE_URL + '/users/profile-picture';
       const uploadMethod = 'POST';
       let token = window.localStorage["zenfitx-access-token"];
       token = JSON.parse(token as string);
-      // const uploadHeaders = { Authorization: 'Bearer ' + token };
       const uploadHeaders = { 'x-wellness-jwt': token };
       const uploadFieldName = 'profilePicture';
       window?.ReactNativeWebView?.postMessage(JSON.stringify({
@@ -183,7 +273,8 @@ const UserProfile: React.FC<IUserProfile> = () => {
         uploadFieldName
       }));
     } else {
-      message.info('Profile picture editing is available in the app');
+      // Trigger file input for web browsers
+      fileInputRef.current?.click();
     }
   };
 
@@ -241,7 +332,23 @@ const UserProfile: React.FC<IUserProfile> = () => {
         <div className="bg-black text-white py-8 px-4">
           <div className="text-center">
             <UserAvatar />
-            <span className="text-sm font-bold text-green-500" onClick={()=>{handleEditProfilePicture()}}>Edit</span>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/jpg,image/png,image/webp"
+              onChange={handleFileInputChange}
+              style={{ display: 'none' }}
+            />
+            <span 
+              className={`text-sm font-bold ${isUploadingImage ? 'text-gray-500' : 'text-green-500 cursor-pointer'}`} 
+              onClick={() => {
+                if (!isUploadingImage) {
+                  handleEditProfilePicture();
+                }
+              }}
+            >
+              {isUploadingImage ? 'Uploading...' : 'Edit'}
+            </span>
             <h1 className="text-2xl font-bold mt-4 mb-1">{userDetails.name}</h1>
             <p className="text-gray-300 text-sm">{userDetails.phone}</p>
           </div>
