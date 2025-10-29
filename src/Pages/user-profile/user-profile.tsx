@@ -267,7 +267,10 @@ const UserProfile: React.FC<IUserProfile> = () => {
 
   const handleChooseFromGallery = () => {
     setShowPhotoOptions(false);
-    fileInputRef.current?.click();
+    // fileInputRef.current?.click();
+    window?.ReactNativeWebView?.postMessage(JSON.stringify({
+      type: 'takeselfie',
+    }));
   };
 
   const handleEditProfilePicture = () => {
