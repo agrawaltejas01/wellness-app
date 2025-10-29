@@ -268,8 +268,14 @@ const UserProfile: React.FC<IUserProfile> = () => {
   const handleChooseFromGallery = () => {
     setShowPhotoOptions(false);
     // fileInputRef.current?.click();
+    let token = window.localStorage["zenfitx-access-token"];
+    token = JSON.parse(token as string);
     window?.ReactNativeWebView?.postMessage(JSON.stringify({
-      type: 'takeselfie',
+      type: 'takeSelfie',
+      uploadUrl: process.env.REACT_APP_BE_URL + '/users/profile-picture',
+      uploadMethod: 'POST',
+      uploadHeaders: { 'x-wellness-jwt': token },
+      uploadFieldName: 'profilePicture',
     }));
   };
 
