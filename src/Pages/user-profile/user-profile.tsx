@@ -92,6 +92,7 @@ const UserProfile: React.FC<IUserProfile> = () => {
     const handleMessage = (event: MessageEvent) => {
       try {
         const data = JSON.parse(event.data);
+        alert(JSON.stringify(data));
         
         if (data.type === 'selfieResult') {
           if (data.success && data.uploaded) {
