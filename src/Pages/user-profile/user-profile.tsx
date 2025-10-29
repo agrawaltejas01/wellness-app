@@ -92,7 +92,6 @@ const UserProfile: React.FC<IUserProfile> = () => {
     const handleMessage = (event: MessageEvent) => {
       try {
         const data = JSON.parse(event.data);
-        alert(JSON.stringify(data));
         
         if (data.type === 'selfieResult') {
           if (data.success && data.uploaded) {
@@ -112,6 +111,9 @@ const UserProfile: React.FC<IUserProfile> = () => {
             // Optionally reload user details to get the updated picture
             // You might want to trigger a refresh of userDetailsAtom here
           } else {
+            if(data?.cancelled){
+              return;
+            }
             message.error("Failed to update profile picture. Please try again.");
             
             Mixpanel.track("profile_picture_update_failed", {
