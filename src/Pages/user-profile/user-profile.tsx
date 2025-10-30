@@ -492,7 +492,7 @@ const UserProfile: React.FC<IUserProfile> = () => {
         <PhotoOptionsMenu />
         
         {/* Profile Hero Section */}
-        <div className="bg-black text-white py-8 px-4">
+        <div className="bg-black text-white pb-4 px-4">
           <div className="text-center">
             <UserAvatar />
             <span 
