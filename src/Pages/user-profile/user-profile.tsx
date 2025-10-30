@@ -111,6 +111,9 @@ const UserProfile: React.FC<IUserProfile> = () => {
             // Optionally reload user details to get the updated picture
             // You might want to trigger a refresh of userDetailsAtom here
           } else {
+            if(data?.cancelled){
+              return;
+            }
             message.error("Failed to update profile picture. Please try again.");
             
             Mixpanel.track("profile_picture_update_failed", {
@@ -171,6 +174,57 @@ const UserProfile: React.FC<IUserProfile> = () => {
     </div>
   );
 
+  // Helper function to fix image orientation
+  const fixImageOrientation = async (file: File): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          // Create canvas with image dimensions
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          
+          if (!ctx) {
+            reject(new Error('Failed to get canvas context'));
+            return;
+          }
+
+          // Set canvas dimensions to image dimensions
+          canvas.width = img.width;
+          canvas.height = img.height;
+
+          // Draw image onto canvas (this respects orientation in modern browsers)
+          ctx.drawImage(img, 0, 0);
+
+          // Convert canvas to blob
+          canvas.toBlob((blob) => {
+            if (blob) {
+              resolve(blob);
+            } else {
+              reject(new Error('Failed to create blob from canvas'));
+            }
+          }, file.type || 'image/jpeg', 0.95);
+        };
+
+        img.onerror = () => {
+          reject(new Error('Failed to load image'));
+        };
+
+        if (e.target?.result) {
+          img.src = e.target.result as string;
+        }
+      };
+
+      reader.onerror = () => {
+        reject(new Error('Failed to read file'));
+      };
+
+      reader.readAsDataURL(file);
+    });
+  };
+
   const handleFileUpload = async (file: File) => {
     if (!file) return;
 
@@ -191,12 +245,16 @@ const UserProfile: React.FC<IUserProfile> = () => {
     setIsUploadingImage(true);
     
     try {
+      // Fix image orientation before uploading
+      const correctedImageBlob = await fixImageOrientation(file);
+      
       const uploadUrl = process.env.REACT_APP_BE_URL + '/users/profile-picture';
       let token = window.localStorage["zenfitx-access-token"];
       token = JSON.parse(token as string);
 
       const formData = new FormData();
-      formData.append('profilePicture', file);
+      // Use the corrected image blob with the original filename
+      formData.append('profilePicture', correctedImageBlob, file.name);
 
       const response = await fetch(uploadUrl, {
         method: 'POST',
@@ -267,7 +325,16 @@ const UserProfile: React.FC<IUserProfile> = () => {
 
   const handleChooseFromGallery = () => {
     setShowPhotoOptions(false);
-    fileInputRef.current?.click();
+    // fileInputRef.current?.click();
+    let token = window.localStorage["zenfitx-access-token"];
+    token = JSON.parse(token as string);
+    window?.ReactNativeWebView?.postMessage(JSON.stringify({
+      type: 'takeSelfie',
+      uploadUrl: process.env.REACT_APP_BE_URL + '/users/profile-picture',
+      uploadMethod: 'POST',
+      uploadHeaders: { 'x-wellness-jwt': token },
+      uploadFieldName: 'profilePicture',
+    }));
   };
 
   const handleEditProfilePicture = () => {
@@ -351,9 +418,13 @@ const UserProfile: React.FC<IUserProfile> = () => {
   };
 
   const UserAvatar = () => {
-    const size = 80;
+    const size = 120;
     return (
-      <div className="flex justify-center items-center w-full">
+      <div className="flex justify-center items-center w-full" onClick={() => {
+            if (!isUploadingImage) {
+              handleEditProfilePicture();
+            }
+          }}>
         <div
           className="rounded-full flex items-center justify-center mx-auto"
           style={{
@@ -421,7 +492,7 @@ const UserProfile: React.FC<IUserProfile> = () => {
         <PhotoOptionsMenu />
         
         {/* Profile Hero Section */}
-        <div className="bg-black text-white py-8 px-4">
+        <div className="bg-black text-white pb-4 px-4">
           <div className="text-center">
             <UserAvatar />
             <span 
