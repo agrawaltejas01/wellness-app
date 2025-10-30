@@ -418,9 +418,13 @@ const UserProfile: React.FC<IUserProfile> = () => {
   };
 
   const UserAvatar = () => {
-    const size = 80;
+    const size = 120;
     return (
-      <div className="flex justify-center items-center w-full">
+      <div className="flex justify-center items-center w-full" onClick={() => {
+            if (!isUploadingImage) {
+              handleEditProfilePicture();
+            }
+          }}>
         <div
           className="rounded-full flex items-center justify-center mx-auto"
           style={{
