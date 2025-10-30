@@ -174,6 +174,57 @@ const UserProfile: React.FC<IUserProfile> = () => {
     </div>
   );
 
+  // Helper function to fix image orientation
+  const fixImageOrientation = async (file: File): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          // Create canvas with image dimensions
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          
+          if (!ctx) {
+            reject(new Error('Failed to get canvas context'));
+            return;
+          }
+
+          // Set canvas dimensions to image dimensions
+          canvas.width = img.width;
+          canvas.height = img.height;
+
+          // Draw image onto canvas (this respects orientation in modern browsers)
+          ctx.drawImage(img, 0, 0);
+
+          // Convert canvas to blob
+          canvas.toBlob((blob) => {
+            if (blob) {
+              resolve(blob);
+            } else {
+              reject(new Error('Failed to create blob from canvas'));
+            }
+          }, file.type || 'image/jpeg', 0.95);
+        };
+
+        img.onerror = () => {
+          reject(new Error('Failed to load image'));
+        };
+
+        if (e.target?.result) {
+          img.src = e.target.result as string;
+        }
+      };
+
+      reader.onerror = () => {
+        reject(new Error('Failed to read file'));
+      };
+
+      reader.readAsDataURL(file);
+    });
+  };
+
   const handleFileUpload = async (file: File) => {
     if (!file) return;
 
@@ -194,12 +245,16 @@ const UserProfile: React.FC<IUserProfile> = () => {
     setIsUploadingImage(true);
     
     try {
+      // Fix image orientation before uploading
+      const correctedImageBlob = await fixImageOrientation(file);
+      
       const uploadUrl = process.env.REACT_APP_BE_URL + '/users/profile-picture';
       let token = window.localStorage["zenfitx-access-token"];
       token = JSON.parse(token as string);
 
       const formData = new FormData();
-      formData.append('profilePicture', file);
+      // Use the corrected image blob with the original filename
+      formData.append('profilePicture', correctedImageBlob, file.name);
 
       const response = await fetch(uploadUrl, {
         method: 'POST',
