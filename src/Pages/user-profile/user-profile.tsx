@@ -503,7 +503,7 @@ const UserProfile: React.FC<IUserProfile> = () => {
                 }
               }}
             >
-              {isUploadingImage ? 'Uploading...' : 'Edit'}
+              {isUploadingImage ? 'Uploading...' : 'Upload'}
             </span>
             <h1 className="text-2xl font-bold mt-4 mb-1">{userDetails.name}</h1>
             <p className="text-gray-300 text-sm">{userDetails.phone}</p>
