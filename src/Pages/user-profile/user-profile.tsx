@@ -40,6 +40,9 @@ const UserProfile: React.FC<IUserProfile> = () => {
   const [showPhotoOptions, setShowPhotoOptions] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
+  const [appVersion, setAppVersion] = useState<string>("");
+  const [isFromApp, setIsFromApp] = useState<boolean>(false);
+  const [platform, setPlatform] = useState<string>("");
 
   // Fetch user rating data
   const { mutate: fetchRating } = useMutation({
@@ -64,6 +67,12 @@ const UserProfile: React.FC<IUserProfile> = () => {
       setIsLoading(false);
     },
   });
+
+  useEffect(() => {
+    setAppVersion(window.platformInfo?.appVersion || "");
+    setPlatform(window.platformInfo?.platform || "");
+    setIsFromApp(window?.isFromApp || false);
+  }, []);
 
   useEffect(() => {
     if (userDetails?.id) {
@@ -335,9 +344,17 @@ const UserProfile: React.FC<IUserProfile> = () => {
       uploadHeaders: { 'x-wellness-jwt': token },
       uploadFieldName: 'profilePicture',
     }));
+
+    if(!window.ReactNativeWebView) {
+      fileInputRef.current?.click();
+    }
   };
 
   const handleEditProfilePicture = () => {
+    if(isFromApp && appVersion < '1.2.5') {
+      message.error("Please update the app to the latest version to edit your profile picture.");
+      return;
+    }
     setShowPhotoOptions(true);
   };
 
@@ -364,7 +381,7 @@ const UserProfile: React.FC<IUserProfile> = () => {
             </div> */}
             
             {/* Take Photo Option */}
-            <button
+            {isFromApp && platform === "ios" && <button
               onClick={handleTakePhoto}
               className="w-full px-4 text-center border-b border-gray-200 active:bg-gray-100 transition-colors ios-action-button"
               style={{ 
@@ -377,7 +394,7 @@ const UserProfile: React.FC<IUserProfile> = () => {
               }}
             >
               Take Photo
-            </button>
+            </button>}
             
             {/* Choose from Gallery Option */}
             <button
