@@ -3,7 +3,7 @@ import { Button, Input, message } from "antd";
 import { EditOutlined, SaveOutlined, CloseOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import { useAtom } from "jotai/react";
 import { userDetailsAtom } from "../../atoms/atom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { getRatings } from "../../apis/ratings/ratings";
 import { getGamesPlayed } from "../../apis/games/games";
@@ -12,6 +12,7 @@ import { Mixpanel } from "../../mixpanel/init";
 import MetaPixel from "../../components/meta-pixel";
 import Loader from "../../components/Loader";
 import IUser from "../../types/user";
+import "./user-profile.css";
 
 interface IUserProfile extends RouteComponentProps {}
 
@@ -28,12 +29,20 @@ const formatDate = (date: string) => {
 }
 
 const UserProfile: React.FC<IUserProfile> = () => {
-  const [userDetails] = useAtom(userDetailsAtom);
+  const [userDetails, setUserDetails] = useAtom(userDetailsAtom);
   const [isLoading, setIsLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [userBio, setUserBio] = useState("");
   const [bioInput, setBioInput] = useState("");
   const [playerStats, setPlayerStats] = useState<UserStats>({ rating: 0, gamesPlayed: 0 });
+  const [profilePicture, setProfilePicture] = useState<string>("");
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [showPhotoOptions, setShowPhotoOptions] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
+  const [appVersion, setAppVersion] = useState<string>("");
+  const [isFromApp, setIsFromApp] = useState<boolean>(false);
+  const [platform, setPlatform] = useState<string>("");
 
   // Fetch user rating data
   const { mutate: fetchRating } = useMutation({
@@ -60,6 +69,12 @@ const UserProfile: React.FC<IUserProfile> = () => {
   });
 
   useEffect(() => {
+    setAppVersion(window.platformInfo?.appVersion || "");
+    setPlatform(window.platformInfo?.platform || "");
+    setIsFromApp(window?.isFromApp || false);
+  }, []);
+
+  useEffect(() => {
     if (userDetails?.id) {
       // Initialize user bio from storage
       const storedBio = localStorage.getItem(`user_bio_${userDetails.id}`) || "Tell us about yourself...";
@@ -68,7 +83,9 @@ const UserProfile: React.FC<IUserProfile> = () => {
       // Load user statistics
       fetchRating(userDetails.id);
       fetchGamesCount(userDetails.id);
-      
+      if (userDetails?.profilePictureThumbnail) {
+        setProfilePicture(userDetails.profilePictureThumbnail);
+      }
       // Analytics tracking
       Mixpanel.track("user_profile_viewed", {
         user_id: userDetails.id,
@@ -77,6 +94,59 @@ const UserProfile: React.FC<IUserProfile> = () => {
     } else {
       setIsLoading(false);
     }
+  }, [userDetails]);
+
+  // Handle selfie upload result from React Native
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      try {
+        const data = JSON.parse(event.data);
+        
+        if (data.type === 'selfieResult') {
+          if (data.success && data.uploaded) {
+            message.success("Profile picture updated successfully!");
+            
+            // Update profile picture from response if available
+            if (data.body?.profilePictureThumbnail) {
+              setProfilePicture(data.body.profilePictureThumbnail);
+            }
+
+            // Track analytics
+            Mixpanel.track("profile_picture_updated", {
+              user_id: userDetails?.id,
+              status: data.status
+            });
+            
+            // Optionally reload user details to get the updated picture
+            // You might want to trigger a refresh of userDetailsAtom here
+          } else {
+            if(data?.cancelled){
+              return;
+            }
+            message.error("Failed to update profile picture. Please try again.");
+            
+            Mixpanel.track("profile_picture_update_failed", {
+              user_id: userDetails?.id,
+              status: data.status
+            });
+          }
+          navigate('/', { replace: true });
+        }
+      } catch (error) {
+        console.error("Error handling message from React Native:", error);
+      }
+    };
+
+    // Listen for messages from React Native WebView
+    if (window.ReactNativeWebView) {
+      window.addEventListener('message', handleMessage);
+      document.addEventListener('message', handleMessage as any);
+    }
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+      document.removeEventListener('message', handleMessage as any);
+    };
   }, [userDetails]);
 
   const startEditing = () => {
@@ -113,10 +183,265 @@ const UserProfile: React.FC<IUserProfile> = () => {
     </div>
   );
 
-  const UserAvatar = () => {
-    const size = 80;
+  // Helper function to fix image orientation
+  const fixImageOrientation = async (file: File): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          // Create canvas with image dimensions
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          
+          if (!ctx) {
+            reject(new Error('Failed to get canvas context'));
+            return;
+          }
+
+          // Set canvas dimensions to image dimensions
+          canvas.width = img.width;
+          canvas.height = img.height;
+
+          // Draw image onto canvas (this respects orientation in modern browsers)
+          ctx.drawImage(img, 0, 0);
+
+          // Convert canvas to blob
+          canvas.toBlob((blob) => {
+            if (blob) {
+              resolve(blob);
+            } else {
+              reject(new Error('Failed to create blob from canvas'));
+            }
+          }, file.type || 'image/jpeg', 0.95);
+        };
+
+        img.onerror = () => {
+          reject(new Error('Failed to load image'));
+        };
+
+        if (e.target?.result) {
+          img.src = e.target.result as string;
+        }
+      };
+
+      reader.onerror = () => {
+        reject(new Error('Failed to read file'));
+      };
+
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleFileUpload = async (file: File) => {
+    if (!file) return;
+
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      message.error('Please upload a valid image file (JPEG, PNG, or WebP)');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      message.error('File size should not exceed 5MB');
+      return;
+    }
+
+    setIsUploadingImage(true);
+    
+    try {
+      // Fix image orientation before uploading
+      const correctedImageBlob = await fixImageOrientation(file);
+      
+      const uploadUrl = process.env.REACT_APP_BE_URL + '/users/profile-picture';
+      let token = window.localStorage["zenfitx-access-token"];
+      token = JSON.parse(token as string);
+
+      const formData = new FormData();
+      // Use the corrected image blob with the original filename
+      formData.append('profilePicture', correctedImageBlob, file.name);
+
+      const response = await fetch(uploadUrl, {
+        method: 'POST',
+        headers: {
+          'x-wellness-jwt': token
+        },
+        body: formData
+      });
+
+      const data = await response.json();
+      if (response.ok && data?.profilePictureThumbnail) {
+        setProfilePicture(data.profilePictureThumbnail);
+        message.success('Profile picture updated successfully!');
+        
+        // Update userDetails atom with new profile picture
+        if (userDetails) {
+          setUserDetails({
+            ...userDetails,
+            profilePictureThumbnail: data.profilePictureThumbnail
+          });
+        }
+
+        Mixpanel.track("profile_picture_updated", {
+          user_id: userDetails?.id,
+          status: 'success',
+          method: 'web_upload'
+        });
+        navigate('/', { replace: true });
+      } else {
+        message.error(data.message || 'Failed to update profile picture. Please try again.');
+        
+        Mixpanel.track("profile_picture_update_failed", {
+          user_id: userDetails?.id,
+          status: 'error',
+          method: 'web_upload'
+        });
+      }
+    } catch (error) {
+      console.error('Error uploading profile picture:', error);
+      message.error('Failed to update profile picture. Please try again.');
+      
+      Mixpanel.track("profile_picture_update_failed", {
+        user_id: userDetails?.id,
+        status: 'error',
+        error: String(error),
+        method: 'web_upload'
+      });
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
+
+  const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      handleFileUpload(file);
+    }
+    // Reset input value to allow selecting the same file again
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const handleTakePhoto = () => {
+    setShowPhotoOptions(false);
+    cameraInputRef.current?.click();
+  };
+
+  const handleChooseFromGallery = () => {
+    setShowPhotoOptions(false);
+    // fileInputRef.current?.click();
+    let token = window.localStorage["zenfitx-access-token"];
+    token = JSON.parse(token as string);
+    window?.ReactNativeWebView?.postMessage(JSON.stringify({
+      type: 'takeSelfie',
+      uploadUrl: process.env.REACT_APP_BE_URL + '/users/profile-picture',
+      uploadMethod: 'POST',
+      uploadHeaders: { 'x-wellness-jwt': token },
+      uploadFieldName: 'profilePicture',
+    }));
+
+    if(!window.ReactNativeWebView) {
+      fileInputRef.current?.click();
+    }
+  };
+
+  const handleEditProfilePicture = () => {
+    if(isFromApp && appVersion < '1.2.5') {
+      message.error("Please update the app to the latest version to edit your profile picture.");
+      return;
+    }
+    setShowPhotoOptions(true);
+  };
+
+  const PhotoOptionsMenu = () => {
+    if (!showPhotoOptions) return null;
+
     return (
-      <div className="flex justify-center items-center w-full">
+      <>
+        {/* iOS-style Backdrop */}
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-40 z-40 ios-backdrop"
+          onClick={() => setShowPhotoOptions(false)}
+        />
+        
+        {/* iOS-style Action Sheet */}
+        <div className="fixed bottom-0 left-0 right-0 z-50 animate-slide-up" style={{ padding: '0 8px 8px 8px' }}>
+          {/* Main Actions Container */}
+          <div className="bg-white bg-opacity-95 backdrop-blur-xl overflow-hidden ios-action-sheet" style={{ borderRadius: '13px', marginBottom: '8px' }}>
+            {/* Title */}
+            {/* <div className="px-4 border-b border-gray-200" style={{ paddingTop: '13px', paddingBottom: '13px' }}>
+              <p className="text-center text-gray-500 font-normal" style={{ fontSize: '13px', letterSpacing: '-0.08px' }}>
+                Update Profile Picture
+              </p>
+            </div> */}
+            
+            {/* Take Photo Option */}
+            {isFromApp && platform === "ios" && <button
+              onClick={handleTakePhoto}
+              className="w-full px-4 text-center border-b border-gray-200 active:bg-gray-100 transition-colors ios-action-button"
+              style={{ 
+                WebkitTapHighlightColor: 'transparent',
+                color: '#007AFF',
+                fontSize: '20px',
+                paddingTop: '16px',
+                paddingBottom: '16px',
+                fontWeight: '400'
+              }}
+            >
+              Take Photo
+            </button>}
+            
+            {/* Choose from Gallery Option */}
+            <button
+              onClick={handleChooseFromGallery}
+              className="w-full px-4 text-center active:bg-gray-100 transition-colors ios-action-button"
+              style={{ 
+                WebkitTapHighlightColor: 'transparent',
+                color: '#007AFF',
+                fontSize: '20px',
+                paddingTop: '16px',
+                paddingBottom: '16px',
+                fontWeight: '400'
+              }}
+            >
+              Choose Photo
+            </button>
+          </div>
+          
+          {/* Cancel Button - Separated */}
+          <button
+            onClick={() => setShowPhotoOptions(false)}
+            className="w-full px-4 bg-white bg-opacity-95 backdrop-blur-xl text-center active:bg-gray-100 transition-colors ios-cancel-button"
+            style={{ 
+              WebkitTapHighlightColor: 'transparent',
+              color: '#007AFF',
+              fontSize: '20px',
+              paddingTop: '16px',
+              paddingBottom: '16px',
+              fontWeight: '600',
+              borderRadius: '13px'
+            }}
+          >
+            Cancel
+          </button>
+        </div>
+      </>
+    );
+  };
+
+  const UserAvatar = () => {
+    const size = 120;
+    return (
+      <div className="flex justify-center items-center w-full" onClick={() => {
+            if (!isUploadingImage) {
+              handleEditProfilePicture();
+            }
+          }}>
         <div
           className="rounded-full flex items-center justify-center mx-auto"
           style={{
@@ -135,7 +460,7 @@ const UserProfile: React.FC<IUserProfile> = () => {
               fontFamily: 'Plus Jakarta Sans'
             }}
           >
-            {userDetails?.name?.charAt(0)?.toUpperCase() || "U"}
+            {profilePicture ? <img src={profilePicture} className="rounded-full w-full h-full p-0.5" /> : userDetails?.name?.charAt(0)?.toUpperCase() || "U"}
           </div>
         </div>
       </div>
@@ -163,10 +488,40 @@ const UserProfile: React.FC<IUserProfile> = () => {
       <div className="min-h-screen bg-gray-50">
         <NavigationHeader />
         
+        {/* Hidden file inputs */}
+        <input
+          ref={cameraInputRef}
+          type="file"
+          accept="image/jpeg,image/jpg,image/png,image/webp"
+          capture="environment"
+          onChange={handleFileInputChange}
+          style={{ display: 'none' }}
+        />
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/jpeg,image/jpg,image/png,image/webp"
+          onChange={handleFileInputChange}
+          style={{ display: 'none' }}
+        />
+        
+        {/* Photo Options Menu */}
+        <PhotoOptionsMenu />
+        
         {/* Profile Hero Section */}
-        <div className="bg-black text-white py-8 px-4">
+        <div className="bg-black text-white pb-4 px-4">
           <div className="text-center">
             <UserAvatar />
+            <span 
+              className={`text-sm font-bold ${isUploadingImage ? 'text-gray-500' : 'text-green-500 cursor-pointer'}`} 
+              onClick={() => {
+                if (!isUploadingImage) {
+                  handleEditProfilePicture();
+                }
+              }}
+            >
+              {isUploadingImage ? 'Uploading...' : 'Edit'}
+            </span>
             <h1 className="text-2xl font-bold mt-4 mb-1">{userDetails.name}</h1>
             <p className="text-gray-300 text-sm">{userDetails.phone}</p>
           </div>
