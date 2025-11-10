@@ -40,9 +40,7 @@ export function shouldShowDiscount(
   pastAppBookings: PastAppBookingObject,
   batch: IBatch | null
 ): boolean {
-  return false;
   // If request is not from app, don't show discount
-  /*
   if(!isFromApp) {
     return false;
   }
@@ -96,7 +94,6 @@ export function shouldShowDiscount(
 
   // Show discount for new users or if no disqualifying conditions met
   // return !userDetails || true;
-  */
 }
 
 /**
