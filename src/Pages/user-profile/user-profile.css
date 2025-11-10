@@ -1,11 +1,11 @@
-.shareAndBack {
+.shareAndBackUserProfile {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   background-color: black;
 }
 
-.shareAndBack .Btn {
+.shareAndBackUserProfile .BtnUserProfile {
   cursor: pointer;
   padding: 8px;
   border-radius: 50%;
@@ -15,7 +15,7 @@
   transition: background-color 0.2s;
 }
 
-.shareAndBack .Btn:hover {
+.shareAndBackUserProfile .BtnUserProfile:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
