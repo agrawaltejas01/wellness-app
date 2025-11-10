@@ -777,7 +777,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                 _getGymBatchesForDate({
                   id: gym.gymId,
                   activity: activity,
-                  date: "2025-11-11",
+                  date: "2025-11-12",
                   userId: userId,
                 }); 
               }}
