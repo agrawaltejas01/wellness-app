@@ -1,20 +1,20 @@
 import "./App.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Router } from "@reach/router";
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 
 import Home from "./Pages/home/home";
 import Gym from "./Pages/gym/gym";
-import BatchCheckout from "./Pages/checkout/batch-checkout";
+// import BatchCheckout from "./Pages/checkout/batch-checkout";
 import BatchPaymentSuccess from "./Pages/checkout/payment-success";
 import PlusCheckout from "./Pages/checkout/plus-checkout";
 import PlusPaymentSuccess from "./Pages/checkout/plus-payment-success";
-import Login from "./Pages/auth/login";
+// import Login from "./Pages/auth/login";
 import VerifyMagicLink from "./Pages/auth/verify";
 import NewLogin from "./Pages/auth/new-login";
 import NewVerify from "./Pages/auth/new-verify";
 import ProfileCompletion from "./Pages/auth/profile-completion";
-import AuthDemo from "./Pages/auth/auth-demo";
+// import AuthDemo from "./Pages/auth/auth-demo";
 import Profile from "./Pages/profile/Profle";
 import SchedulePage from "./Pages/checkout/schedule-page";
 import Activity from "./Pages/activity/Activity";
@@ -22,7 +22,7 @@ import Activity from "./Pages/activity/Activity";
 import PrivacyPolicy from "./Pages/privacy/privacy";
 import BatchCheckoutV2 from "./Pages/checkout/batch-checkout-v2";
 import BatchCheckoutBookingV2 from "./Pages/checkout/checkout-v2";
-import GoToApp from "./components/go-to-app";
+// import GoToApp from "./components/go-to-app";
 import Coins from "./Pages/coins/coins";
 import BookingInfoHost from "./Pages/bookings/host";
 import BookingInfoCenter from "./Pages/bookings/center";
@@ -37,41 +37,41 @@ const queryClient = new QueryClient();
 
 // Layout component that includes the GoToApp banner on all pages
 const AppLayout: React.FC<{ children: React.ReactNode}> = ({ children }) => {
-  const [isAppBannerVisible, setIsAppBannerVisible] = useState(false);
+  // const [isAppBannerVisible, setIsAppBannerVisible] = useState(false);
   
   // When banner becomes visible, disable body scrolling
-  useEffect(() => {
-    if (isAppBannerVisible) {
-      // Disable scrolling on body
-      document.body.style.overflow = 'hidden';
-      // Save the current scroll position
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-      document.body.style.top = `-${window.scrollY}px`;
-    } else {
-      // Re-enable scrolling
-      const scrollY = document.body.style.top;
-      document.body.style.position = '';
-      document.body.style.overflow = '';
-      document.body.style.width = '';
-      document.body.style.top = '';
-      // Restore scroll position
-      window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
-    }
+  // useEffect(() => {
+  //   if (isAppBannerVisible) {
+  //     // Disable scrolling on body
+  //     document.body.style.overflow = 'hidden';
+  //     // Save the current scroll position
+  //     document.body.style.position = 'fixed';
+  //     document.body.style.width = '100%';
+  //     document.body.style.top = `-${window.scrollY}px`;
+  //   } else {
+  //     // Re-enable scrolling
+  //     const scrollY = document.body.style.top;
+  //     document.body.style.position = '';
+  //     document.body.style.overflow = '';
+  //     document.body.style.width = '';
+  //     document.body.style.top = '';
+  //     // Restore scroll position
+  //     window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
+  //   }
     
-    return () => {
-      // Cleanup when component unmounts
-      document.body.style.position = '';
-      document.body.style.overflow = '';
-      document.body.style.width = '';
-      document.body.style.top = '';
-    };
-  }, [isAppBannerVisible]);
+  //   return () => {
+  //     // Cleanup when component unmounts
+  //     document.body.style.position = '';
+  //     document.body.style.overflow = '';
+  //     document.body.style.width = '';
+  //     document.body.style.top = '';
+  //   };
+  // }, [isAppBannerVisible]);
   
   return (
     <>
       {/* Main content with conditional dimming */}
-      <div className={isAppBannerVisible ? "" : ""}>
+      <div className="">
         {children}
       </div>
       
