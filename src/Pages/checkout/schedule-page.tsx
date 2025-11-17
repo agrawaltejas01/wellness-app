@@ -373,10 +373,9 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                   ) : null}
                   {batch.isRated ? (
                     <Flex flex={1}>
-                      {batch.isRated && batch.rating ? <RatingBadge rating={batch.rating ?? 0} /> : null}
-                      {!batch.isRated ? <span className="text-xs text-gray-500 font-bold">(Open)</span> : null}
+                      {batch.rating ? <RatingBadge rating={batch.rating ?? 0} /> : null}
                     </Flex>
-                  ) : null}
+                  ) : <span className="text-sm text-gray-500 font-bold">(Open)</span>}
                   {!batch.isDayPass ? (
                     <Flex
                       style={{ color: colors.secondary, marginTop: "4px" }}
