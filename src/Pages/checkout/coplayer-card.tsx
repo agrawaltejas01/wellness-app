@@ -6,6 +6,7 @@ import SkillCapsule from "../../components/skill-capsule";
 import { getCoplayers } from "../../apis/gym/activities";
 import { useMutation } from "@tanstack/react-query";
 import { errorToast } from "../../components/Toast";
+import RatingBadge from "../../utils/rating-badge";
 
 const CoplayerCard = ( {players, loading, spotsLeft, spotsTotal}: {players: any[], loading: boolean, spotsLeft: number, spotsTotal: number} ) => {
 
@@ -48,7 +49,7 @@ const CoplayerCard = ( {players, loading, spotsLeft, spotsTotal}: {players: any[
                     </div>
                     <hr className="border-1 border-separate border-dashed mx-4 border-gray border-spacing-16" />
                     <div className="flex items-center pt-3 px-4 pb-4 justify-between">
-                        {players[index].level && players[index].level !== 'UNKNOWN' ? <h1> <SkillCapsule level={players[index].level} /> </h1> : <h1> </h1>}
+                        {players[index].rating && players[index].rating !== 0 ? <RatingBadge rating={players[index].rating} playerRating={true} /> : <h1> </h1>}
                         <div className="flex-col items-center justify-center">
                             <h1 className="text-sm text-black font-bold text-right"> {players[index].gamesPlayed > 0 ? `${players[index].gamesPlayed - 1} ${players[index].gamesPlayed > 2 ? "Games" : "Game"}` : "No Games"} </h1>
                             <h1 className="text-sm text-gray-500 text-right"> Played on ZenfitX </h1>

@@ -8,14 +8,14 @@ const getBackgroundColor = (rating: number) => {
     return { backgroundColor: 'rgba(0, 0, 0, 0.15)', fontColor: 'black' };
 }
 
-export const RatingBadge: React.FC<{ rating: number }> = ({ rating }) => {
+export const RatingBadge: React.FC<{ rating: number, playerRating?: boolean }> = ({ rating, playerRating = false }) => {
     return (
         <div className="flex flex-row gap-1 items-center rounded-3xl p-1" style={{backgroundColor: getBackgroundColor(rating).backgroundColor}}>
             <div className="px-2 rounded-3xl text-white text-xs" style={{backgroundColor: getBackgroundColor(rating).fontColor}}>
                 {rating ? 'ZBR' : ''}
             </div>
             <div className="text-xs text-black">
-                {rating ? `${(rating / 100)}+`: ''}
+                {rating ? `${(rating / 100)}${playerRating ? '' : '+'}`: ''}
             </div>
         </div>
     )
