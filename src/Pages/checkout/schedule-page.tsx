@@ -31,6 +31,7 @@ import { ReactComponent as Banner } from "../../images/home/banner.svg";
 import "./style.css";
 import { shouldShowDiscount } from "../../utils/offers";
 import MetaPixel from "../../components/meta-pixel";
+import { RatingBadge } from "../../utils/rating-badge";
 
 const COUPLE_BATCH_IDS = [25992, 25993, 25994, 25740, 25744];
 const SLOTS_REMAINING_VISIBLE_GYM_IDS = [6, 22, 24, 25, 27, 28, 29, 31, 32, 34, 35, 3];
@@ -348,6 +349,12 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                   </div>
                   {batch.trainer ? (
                     <Flex flex={1}>By {batch.trainer}</Flex>
+                  ) : null}
+                  {batch.isRated ? (
+                    <Flex flex={1}>
+                      {batch.isRated && batch.rating ? <RatingBadge rating={batch.rating ?? 0} /> : null}
+                      {!batch.isRated ? <span className="text-xs text-gray-500 font-bold">(Open)</span> : null}
+                    </Flex>
                   ) : null}
                   {!batch.isDayPass ? (
                     <Flex

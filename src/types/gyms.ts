@@ -68,6 +68,8 @@ export interface IBatch {
     availableRides: number[];
   };
   equipmentRentalCharges?: number;
+  isRated?: boolean;
+  rating?: number;
 
   venueAddressLine1?: string;
   venueAddressLine2?: string;
