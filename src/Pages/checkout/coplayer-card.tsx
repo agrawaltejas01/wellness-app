@@ -49,7 +49,7 @@ const CoplayerCard = ( {players, loading, spotsLeft, spotsTotal}: {players: any[
                     </div>
                     <hr className="border-1 border-separate border-dashed mx-4 border-gray border-spacing-16" />
                     <div className="flex items-center pt-3 px-4 pb-4 justify-between">
-                        {players[index].rating && players[index].rating !== 0 ? <RatingBadge rating={players[index].rating} playerRating={true} /> : <h1> </h1>}
+                        {players[index].rating && players[index].rating !== 0 ? <RatingBadge rating={players[index].rating} playerRating={true} /> : <h1 className="text-xs text-gray-500 bg-gray-100 rounded-full px-2 py-1"> Not rated yet </h1>}
                         <div className="flex-col items-center justify-center">
                             <h1 className="text-sm text-black font-bold text-right"> {players[index].gamesPlayed > 0 ? `${players[index].gamesPlayed - 1} ${players[index].gamesPlayed > 2 ? "Games" : "Game"}` : "No Games"} </h1>
                             <h1 className="text-sm text-gray-500 text-right"> Played on ZenfitX </h1>

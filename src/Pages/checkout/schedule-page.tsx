@@ -32,6 +32,9 @@ import "./style.css";
 import { shouldShowDiscount } from "../../utils/offers";
 import MetaPixel from "../../components/meta-pixel";
 import { RatingBadge } from "../../utils/rating-badge";
+import { getRatings } from "../../apis/ratings/ratings";
+import { BottomUpModal } from "../profile/half-page-modal";
+import { CenterModal } from "../profile/center-modal";
 
 const COUPLE_BATCH_IDS = [25992, 25993, 25994, 25740, 25744];
 const SLOTS_REMAINING_VISIBLE_GYM_IDS = [6, 22, 24, 25, 27, 28, 29, 31, 32, 34, 35, 3];
@@ -79,7 +82,8 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   const [userDetails] = useAtom(userDetailsAtom);
   const [isFromApp, setIsFromApp] = useState(false);
   const [pastAppBookings, setPastAppBookings] = useState({});
-
+  const [ratings, setRatings] = useState<number>(0);
+  const [showRatingModal, setShowRatingModal] = useState<boolean>(false);
   const urlParams = new URLSearchParams(window.location.search);
   const dateFromURL = urlParams.get("date");
 
@@ -150,6 +154,22 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
       errorToast("Error in getting batches");
     },
   });
+
+  const { mutate: _getRatings } = useMutation({
+    mutationFn: getRatings,
+    onSuccess: (result) => {
+      setRatings(result.rating.rating);
+    },
+    onError: (error) => {
+      errorToast("Error in getting ratings");
+    },
+  });
+
+  useEffect(() => {
+    if(userDetails) {
+      _getRatings(userDetails.id as number);
+    }
+  }, [userDetails]);
 
   useEffect(() => {
     Mixpanel.track("open_schedule_page", { gymId });
@@ -294,15 +314,22 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
               batchDetails: batch,
               gym,
             });
-            navigate(`/checkout/batch/${batch.batchId}`, {
-              state: {
-                batchId: batch.batchId.toString(),
-                batchDetails: batch,
-                gym,
-                isFromApp,
-                pastAppBookings,
-              },
-            });
+            if(batch.isRated && ratings < (batch?.rating ?? 0)) {
+              setShowRatingModal(true);
+            } else if(batch.isRated && ratings == 0) {
+              setShowRatingModal(true);
+            } 
+            else {
+              navigate(`/checkout/batch/${batch.batchId}`, {
+                state: {
+                  batchId: batch.batchId.toString(),
+                  batchDetails: batch,
+                  gym,
+                  isFromApp,
+                  pastAppBookings,
+                },
+              });
+            }
           }}
         >
           <Flex flex="auto" vertical={true}>
@@ -802,6 +829,27 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
       </div>
       {/* </PullToRefresh> */}
       {/* </SwipeHandler> */}
+      {showRatingModal && (
+        <CenterModal
+          isOpen={showRatingModal}
+          onClose={() => setShowRatingModal(false)}
+          title="Oops!"
+          subtitle=""
+          children={<div className="flex flex-col items-center justify-center mt-2 text-sm">
+            {ratings > 0 ? 
+              <div className="flex flex-col">
+                <span>This might be a tough match for your ZBR.</span>
+                <span>Join an open match or the one in your range!</span>
+                <span> Keep improving! 💪</span>
+              </div> : null}
+            {ratings == 0 ? 
+            <div className="flex flex-col">
+              <span>No ZenfitX rating yet.</span>
+              <span>Join an open match to earn your ZBR — welcome aboard! 🚀</span>
+            </div> : null}
+          </div>}
+        />
+      )}
     </>
   );
 };
