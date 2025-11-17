@@ -61,42 +61,42 @@ const BatchCheckoutBookingV2: React.FC<IClassCheckout> = () => {
         _getActivityById(batchId);
     }, [batchId]);
 
-    useEffect(() => {
-        const userId = window.localStorage["zenfitx-user-details"]
-                        ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || null
-                        : null;
+    // useEffect(() => {
+    //     const userId = window.localStorage["zenfitx-user-details"]
+    //                     ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || null
+    //                     : null;
 
-        // const userId = 59;
+    //     // const userId = 59;
 
-        const localSkillLevel = localStorage.getItem(`skillLevel-${ACTIVITY_NAME_TO_ID_MAP[`${batchDetails?.activity}` as keyof typeof ACTIVITY_NAME_TO_ID_MAP]}`);
-        if(localSkillLevel != null) {
-            setSkillLevel(localSkillLevel);
-        }
+    //     const localSkillLevel = localStorage.getItem(`skillLevel-${ACTIVITY_NAME_TO_ID_MAP[`${batchDetails?.activity}` as keyof typeof ACTIVITY_NAME_TO_ID_MAP]}`);
+    //     if(localSkillLevel != null) {
+    //         setSkillLevel(localSkillLevel);
+    //     }
 
-        if(userId == null) {
-            setShowSkillInput(false);
-            setLoading(false);
-        } else {
-            if(batchDetails?.activity.toUpperCase() == "FOOTBALL" || (batchDetails?.slots && (batchDetails?.slots > 6 && batchDetails?.activity?.toUpperCase() != "PICKLEBALL"))) {
-                setShowSkillInput(false);
-            } else if(!COPLAYER_CARD_ENABLED.includes(batchDetails?.activity.toUpperCase() || "")) {
-                setShowSkillInput(false);
-            } else if(userId && batchId) {
-                _getUserSkillLevel({userId, batchId: Number(batchId)});
-                console.log(`skillLevel: ${skillLevel}`);
+    //     if(userId == null) {
+    //         setShowSkillInput(false);
+    //         setLoading(false);
+    //     } else {
+    //         if(batchDetails?.activity.toUpperCase() == "FOOTBALL" || (batchDetails?.slots && (batchDetails?.slots > 6 && batchDetails?.activity?.toUpperCase() != "PICKLEBALL"))) {
+    //             setShowSkillInput(false);
+    //         } else if(!COPLAYER_CARD_ENABLED.includes(batchDetails?.activity.toUpperCase() || "")) {
+    //             setShowSkillInput(false);
+    //         } else if(userId && batchId) {
+    //             _getUserSkillLevel({userId, batchId: Number(batchId)});
+    //             console.log(`skillLevel: ${skillLevel}`);
                 
-            } else if(skillLevel) {
-                setShowSkillInput(false);
-            } 
+    //         } else if(skillLevel) {
+    //             setShowSkillInput(false);
+    //         } 
             
-            if(queryParams.get('edit') == 'true') {
-                setShowSkillInput(true);
-            } else if(queryParams.get('edit') == 'false') {
-                setShowSkillInput(false);
-            }
-            setLoading(false);
-        }
-    }, [batchDetails, location.search]);
+    //         if(queryParams.get('edit') == 'true') {
+    //             setShowSkillInput(true);
+    //         } else if(queryParams.get('edit') == 'false') {
+    //             setShowSkillInput(false);
+    //         }
+    //         setLoading(false);
+    //     }
+    // }, [batchDetails, location.search]);
 
     useEffect(() => {
         if(batchDetails) {
@@ -105,32 +105,31 @@ const BatchCheckoutBookingV2: React.FC<IClassCheckout> = () => {
     }, [batchDetails, skillLevel]);
 
 
-    if(loading) {
-        return <Loader />
-    }
+    // if(loading) {
+    //     return <Loader />
+    // }
 
-    if(showSkillInput) {
+    // if(showSkillInput) {
 
-        const userId = window.localStorage["zenfitx-user-details"]
-                        ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || null
-                        : null;
-        return (    
-            <div className="flex flex-col">
-                <div className="flex flex-col blur-sm fixed top-0 left-0 right-0 bottom-0 pointer-events-none">
-                <CheckoutV3 skillLevel={skillLevel}/>
-                </div>
-                <div className="flex flex-col z-10">
-                    <SkillLevelInput userId={userId} activityId={ACTIVITY_NAME_TO_ID_MAP[`${batchDetails?.activity}` as keyof typeof ACTIVITY_NAME_TO_ID_MAP]} batchId={Number(batchId)} />
-                </div>
-            </div>
-        )
-    } else { 
-        return (
-            <div>
-                <CheckoutV3 skillLevel={skillLevel} />
-            </div>
-        )
-    }
+    //     const userId = window.localStorage["zenfitx-user-details"]
+    //                     ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || null
+    //                     : null;
+    //     return (    
+    //         <div className="flex flex-col">
+    //             <div className="flex flex-col blur-sm fixed top-0 left-0 right-0 bottom-0 pointer-events-none">
+    //             <CheckoutV3 skillLevel={skillLevel}/>
+    //             </div>
+    //             <div className="flex flex-col z-10">
+    //                 <SkillLevelInput userId={userId} activityId={ACTIVITY_NAME_TO_ID_MAP[`${batchDetails?.activity}` as keyof typeof ACTIVITY_NAME_TO_ID_MAP]} batchId={Number(batchId)} />
+    //             </div>
+    //         </div>
+    //     )
+    // } else { 
+    return (
+        <div>
+            <CheckoutV3 skillLevel={skillLevel} />
+        </div>
+    )
 }
 
 export default BatchCheckoutBookingV2;
