@@ -375,7 +375,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                     <Flex flex={1}>
                       {batch.rating ? <RatingBadge rating={batch.rating ?? 0} /> : null}
                     </Flex>
-                  ) : <span className="text-sm text-gray-500 font-bold">(Open)</span>}
+                  ) : <Flex flex={1}><h1 className="rounded-full text-xs bg-gray-200 text-black py-1 px-2">Open</h1></Flex>}
                   {!batch.isDayPass ? (
                     <Flex
                       style={{ color: colors.secondary, marginTop: "4px" }}
