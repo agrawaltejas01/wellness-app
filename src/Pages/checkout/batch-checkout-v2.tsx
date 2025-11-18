@@ -49,6 +49,7 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
     const [pastAppBookings, setPastAppBookings] = useState({});
     const { COPLAYER_CARD_ENABLED } = require("../../constants/activities");
     const [isShareButtonClicked, setIsShareButtonClicked] = useState(false);
+    const [alreadyBookedRatedGame, setAlreadyBookedRatedGame] = useState(false);  // To check if the user has already booked a rated game
 
     const batchId = window.location.pathname.split("/")[3];
 
@@ -96,6 +97,12 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
                         rating: player.rating,
                         noOfBookings: player.noOfGuests, 
                         gamesPlayed: player.activityBookCount})));
+            const userId = window.localStorage["zenfitx-user-details"]
+                                  ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || "0"
+                                  : "0";
+            if(result.some((player: any) => player.userId === userId && batchDetails?.isRated)) {
+                setAlreadyBookedRatedGame(true);
+            }
         },
         onError: (error) => {
             errorToast("Error in getting coplayers");
@@ -206,7 +213,7 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
           {batchDetails?.whatToExpect && <WhatToExpect whatToExpect={batchDetails?.whatToExpect} />}
           {batchDetails?.whatToBring && <WhatToBring whatToBring={batchDetails?.whatToBring} />}
           {batchDetails?.moreInfo && <MoreInfo moreInfo={batchDetails?.moreInfo} />}
-          {gym && (
+          {gym && !alreadyBookedRatedGame && (
           <BookNowFooter
             checkoutType={ECheckoutType.BATCH}
             batchDetails={batchDetails}
@@ -217,6 +224,11 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
             comingFrom={EBookNowComingFromPage.BATCH_CHECKOUT_PAGE}
             forceBookNowCta={true}
           />
+        )}
+        {alreadyBookedRatedGame && (
+          <div className="flex items-center justify-center fixed bottom-0 left-0 right-0 bg-red-500 py-2">
+            <h1 className="text-sm font-bold text-white">You have already joined this game!</h1>
+          </div> 
         )}
         </div>
       </div>
