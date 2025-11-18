@@ -20,11 +20,12 @@ export const RatingBadge: React.FC<{ rating: number, playerRating?: boolean }> =
         </div>
         :
         <div className="flex flex-row gap-1 items-center rounded-md p-1" style={{ backgroundColor: getBackgroundColor(rating).backgroundColor }}>
-            {rating ? (<div className="text-sm text-white font-bold rounded-md px-1 py-1" style={{backgroundColor: getBackgroundColor(rating).fontColor}}>
+            {rating ? (<div className="text-sm text-white font-bold rounded-md px-1" style={{backgroundColor: getBackgroundColor(rating).fontColor}}>
                 ⭐️ {(rating / 100)}+
-            </div>) : null}
+            </div>) : <div className="text-sm rounded-md" style={{ backgroundColor: 'rgba(0, 0, 0, 0.15)', color: '#4B5563' }}>
+                <span className="px-1 rounded-md text-white font-bold">Open</span></div>}
             <div className="text-sm">
-                {rating ? 'ZBR Required' : 'Open for all levels'}
+                {rating ? 'ZBR Required' : 'All levels'}
             </div>
         </div>
     )
