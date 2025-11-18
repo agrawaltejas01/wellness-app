@@ -74,6 +74,9 @@ const Rating = ({rating, games, isLoadingRating, isLoadingGames}: {rating: numbe
                     <div className="font-extralight">
                         Rating
                     </div>
+                    <div className="font-extralight">
+                        (ZBR)
+                    </div>
                         <InfoCircleOutlined className="w-3 h-3 self-center" />
                     </div>
                 </div> 
