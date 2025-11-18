@@ -11,11 +11,11 @@ const getBackgroundColor = (rating: number) => {
 export const RatingBadge: React.FC<{ rating: number, playerRating?: boolean }> = ({ rating, playerRating = false }) => {
     return (
          playerRating ? <div className="flex flex-row gap-1 items-center rounded-md p-1" style={{backgroundColor: getBackgroundColor(rating).backgroundColor}}>
-            <div className="px-2 rounded-md text-white text-sm" style={{backgroundColor: getBackgroundColor(rating).fontColor}}>
-                {rating ? 'ZBR' : 'ZBR'}
+            <div className="px-2 rounded-md text-white text-sm font-bold" style={{backgroundColor: getBackgroundColor(rating).fontColor}}>
+                {rating ? `⭐️ ${(rating / 100)}${playerRating ? '' : '+'}`: 'Open'}
             </div>
             <div className="text-sm text-black">
-                {rating ? `${(rating / 100)}${playerRating ? '' : '+'}`: 'Open'}
+                {rating ? 'ZBR' : 'ZBR'}
             </div>
         </div>
         :
