@@ -44,12 +44,12 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
     const [spotsLeft, setSpotsLeft] = useState<number>(0);
     const [spotsTotal, setSpotsTotal] = useState<number>(0);
     const [players, setPlayers] = useState<IPlayer[]>([]);
-    const [gotCoplayers, setGotCoplayers] = useState<boolean>(false);
+    const [gotCoplayers, setGotCoplayers] = useState<boolean>(false); 
     const [isFromApp, setIsFromApp] = useState(false);
     const [pastAppBookings, setPastAppBookings] = useState({});
     const { COPLAYER_CARD_ENABLED } = require("../../constants/activities");
     const [isShareButtonClicked, setIsShareButtonClicked] = useState(false);
-    const [alreadyBookedRatedGame, setAlreadyBookedRatedGame] = useState(false);  // To check if the user has already booked a rated game
+    const [alreadyBookedRatedGame, setAlreadyBookedRatedGame] = useState(false);  // To check if the user has already booked a rated game  // To check if the players have been fetched
 
     const batchId = window.location.pathname.split("/")[3];
 
@@ -102,10 +102,13 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
                                   : "0";
             if(result.some((player: any) => player.userId === userId && batchDetails?.isRated)) {
                 setAlreadyBookedRatedGame(true);
-            }
+            } 
         },
         onError: (error) => {
             errorToast("Error in getting coplayers");
+        },
+        onSettled: () => {
+            setGotCoplayers(true);
         },
     });
     
@@ -117,7 +120,6 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
                                   : "0";
         _getActivityById({id: batchId.toString(), userId: userId.toString()});
         _getCoplayers(batchId);
-        setGotCoplayers(true);
         // setPlayers([{name: "Pratik", level: "Beginner", noOfBookings: 1, gamesPlayed: 0}, {name: "Nikita", level: "Amateur", noOfBookings: 2, gamesPlayed: 5}, {name: "Whiskey", level: "Intermediate", noOfBookings: 3, gamesPlayed: 23}]);
     }, []);
 
@@ -213,7 +215,7 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
           {batchDetails?.whatToExpect && <WhatToExpect whatToExpect={batchDetails?.whatToExpect} />}
           {batchDetails?.whatToBring && <WhatToBring whatToBring={batchDetails?.whatToBring} />}
           {batchDetails?.moreInfo && <MoreInfo moreInfo={batchDetails?.moreInfo} />}
-          {gym && !alreadyBookedRatedGame && (
+          {gym && !alreadyBookedRatedGame && gotCoplayers && (
           <BookNowFooter
             checkoutType={ECheckoutType.BATCH}
             batchDetails={batchDetails}
@@ -225,7 +227,7 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
             forceBookNowCta={true}
           />
         )}
-        {alreadyBookedRatedGame && (
+        {alreadyBookedRatedGame && gotCoplayers && (
           <div className="flex items-center justify-center fixed bottom-0 left-0 right-0 bg-red-500 py-2">
             <h1 className="text-sm font-bold text-white">You have already joined this game!</h1>
           </div> 
