@@ -7,11 +7,13 @@ import { getCoplayers } from "../../apis/gym/activities";
 import { useMutation } from "@tanstack/react-query";
 import { errorToast } from "../../components/Toast";
 import RatingBadge from "../../utils/rating-badge";
+import { InfoCircleOutlined } from "@ant-design/icons";
+import { CenterModal } from "../profile/center-modal";
 
 const CoplayerCard = ( {players, loading, spotsLeft, spotsTotal}: {players: any[], loading: boolean, spotsLeft: number, spotsTotal: number} ) => {
 
     const userId = window.localStorage["zenfitx-user-details"] ? JSON.parse(window.localStorage["zenfitx-user-details"]).id : null;
-
+    const [showZBRInfoModal, setShowZBRInfoModal] = useState(false);
     if(loading) {
         return (
            <PlayersLoadingComponent />
@@ -29,8 +31,28 @@ const CoplayerCard = ( {players, loading, spotsLeft, spotsTotal}: {players: any[
             <div className="flex-col items-center justify-between shadow-gray rounded-xl mx-4 my-3 ">
                 <div className="flex-col items-center justify-between px-4">
                 <h1 className="text-sm font-semibold pt-3"> Players ({spotsTotal - spotsLeft})</h1>
-                <h1 className="text-xs font-normal text-#626262 pt-1 pb-2">Levels are marked by the players</h1>
+                <div className="flex flex-row gap-1">
+                    <h1 className="text-xs font-normal text-#626262 pt-1 pb-1">ZBR is a verified rating assigned by ZenVision AI</h1>
+                    <InfoCircleOutlined className="w-3 h-3 self-center" onClick={()=>{setShowZBRInfoModal(true)}} />
+                </div>
             </div>
+            {showZBRInfoModal && (
+                <CenterModal
+                    isOpen={showZBRInfoModal}
+                    onClose={() => setShowZBRInfoModal(false)}
+                    title="ZBR Games"
+                    subtitle=""
+                    showCloseButton={false}
+                    children={<div className="flex flex-col mt-2 text-xs gap-1">
+                      <span>🎯 ZBR: your verified badminton rating, assigned after your first recorded match using ZenVision AI
+                      </span>
+                      <span>⭐ ZBR Games: Join only if you meet the minimum ZBR needed
+                      </span>
+                      <span>⚪ Open Games: Anyone can join (ZBR or no ZBR)</span>
+                      <span>🆕 New players: You can play only Open games first → after 1st game a verified ZBR is assigned based on your game level </span>
+                    </div>}
+                />
+            )}
             {Array.from({length: players.length}).map((_, index) => (
                 <div key={index} className="flex-col items-center justify-center">
                     <div className="flex items-center justify-between pt-4 pb-3">
