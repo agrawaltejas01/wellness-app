@@ -33,7 +33,6 @@ import { shouldShowDiscount } from "../../utils/offers";
 import MetaPixel from "../../components/meta-pixel";
 import { RatingBadge } from "../../utils/rating-badge";
 import { getRatings } from "../../apis/ratings/ratings";
-import { BottomUpModal } from "../profile/half-page-modal";
 import { CenterModal } from "../profile/center-modal";
 
 const COUPLE_BATCH_IDS = [25992, 25993, 25994, 25740, 25744];
@@ -84,6 +83,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   const [pastAppBookings, setPastAppBookings] = useState({});
   const [ratings, setRatings] = useState<number>(0);
   const [showRatingModal, setShowRatingModal] = useState<boolean>(false);
+  const [showHowItWorksModal, setShowHowItWorksModal] = useState<boolean>(false);
   const urlParams = new URLSearchParams(window.location.search);
   const dateFromURL = urlParams.get("date");
 
@@ -756,8 +756,13 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           <Banner />
           <div className="dateTileWrap">
             <div className="detailWrap">
-              <div className="backBtn" onClick={() => goToGymPage()}>
-                {backBtn()}
+              <div className="flex items-center justify-between">
+                <div className="backBtn" onClick={() => goToGymPage()}>
+                  {backBtn()}
+                </div>
+                <div className="text-sm cursor-pointer underline text-green-500" onClick={() => setShowHowItWorksModal(true)}>
+                  ZBR Games?
+                </div>
               </div>
               <div className="gymNames" style={{ fontSize: gym?.name?.length > 30 ? "15px" : "20px" }} >{gym?.name}</div>
               {gym?.area && (
@@ -846,6 +851,24 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
               <span>No ZenfitX rating yet.</span>
               <span>Join an open match to earn your ZBR — welcome aboard! 🚀</span>
             </div> : null}
+          </div>}
+        />
+      )}
+      {showHowItWorksModal && (
+        <CenterModal
+          isOpen={showHowItWorksModal}
+          onClose={() => setShowHowItWorksModal(false)}
+          title="ZBR Games"
+          subtitle=""
+          showCloseButton={false}
+          children={<div className="flex flex-col mt-2 text-sm px-4 gap-1">
+            <span className="rounded-md px-2 py-1 bg-gray-100">1. Join an open match</span>
+            <span className="rounded-md px-2 py-1 bg-gray-100">2. Play the game</span>
+            <span className="rounded-md px-2 py-1 bg-gray-100">3. Earn your ZBR</span>
+            <span className="rounded-md px-2 py-1 bg-gray-100">4. Improve your skills</span>
+            <span className="rounded-md px-2 py-1 bg-gray-100">5. Challenge yourself</span>
+            <span className="rounded-md px-2 py-1 bg-gray-100">6. Improve your skills</span>
+            <span className="rounded-md px-2 py-1 bg-gray-100">7. Challenge yourself</span>
           </div>}
         />
       )}
