@@ -861,14 +861,13 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           title="ZBR Games"
           subtitle=""
           showCloseButton={false}
-          children={<div className="flex flex-col mt-2 text-sm px-4 gap-1">
-            <span className="rounded-md px-2 py-1 bg-gray-100">1. Join an open match</span>
-            <span className="rounded-md px-2 py-1 bg-gray-100">2. Play the game</span>
-            <span className="rounded-md px-2 py-1 bg-gray-100">3. Earn your ZBR</span>
-            <span className="rounded-md px-2 py-1 bg-gray-100">4. Improve your skills</span>
-            <span className="rounded-md px-2 py-1 bg-gray-100">5. Challenge yourself</span>
-            <span className="rounded-md px-2 py-1 bg-gray-100">6. Improve your skills</span>
-            <span className="rounded-md px-2 py-1 bg-gray-100">7. Challenge yourself</span>
+          children={<div className="flex flex-col mt-2 text-xs gap-1">
+            <span>🎯 ZBR: your verified badminton rating, assigned after your first recorded match using ZenVision AI
+            </span>
+            <span>⭐ ZBR Games: Join only if you meet the minimum ZBR needed
+            </span>
+            <span>⚪ Open Games: Anyone can join (ZBR or no ZBR)</span>
+            <span>🆕 New players: You can play only Open games first → after 1st game a verified ZBR is assigned based on your game level </span>
           </div>}
         />
       )}
