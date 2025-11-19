@@ -51,7 +51,8 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
             <CenterModal
                 isOpen={isRatingInfoModalOpen}
                 onClose={()=>setIsRatingInfoModalOpen(false)}
-                title="Rating - Quick Guide"
+                title="Rating (ZBR) - Quick Guide"
+                subtitle="ZenfitX Badminton Rating"
                 children={<RatingInfo />}
             />
         </div>
@@ -97,7 +98,8 @@ const Rating = ({rating, games, isLoadingRating, isLoadingGames}: {rating: numbe
             <CenterModal
                 isOpen={isRatingInfoModalOpen}
                 onClose={()=>setIsRatingInfoModalOpen(false)}
-                title="Rating - Quick Guide"
+                title="Rating (ZBR) - Quick Guide"
+                subtitle="ZenfitX Badminton Rating"
                 children={<RatingInfo />}
             />
         </div>

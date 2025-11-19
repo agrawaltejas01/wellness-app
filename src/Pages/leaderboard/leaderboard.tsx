@@ -490,7 +490,8 @@ const Leaderboard = (props: LeaderboardProps) => {
                 <CenterModal
                     isOpen={isUserRatingInfoModalOpen}
                     onClose={()=>setIsUserRatingInfoModalOpen(false)}
-                    title="User Rating - Quick Guide"
+                    title="User Rating (ZBR) - Quick Guide"
+                    subtitle="ZenfitX Badminton Rating"
                     children={<UserRatingInfo />}
                 />
             )}
