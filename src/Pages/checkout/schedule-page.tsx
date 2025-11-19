@@ -31,6 +31,9 @@ import { ReactComponent as Banner } from "../../images/home/banner.svg";
 import "./style.css";
 import { shouldShowDiscount } from "../../utils/offers";
 import MetaPixel from "../../components/meta-pixel";
+import { RatingBadge } from "../../utils/rating-badge";
+import { getRatings } from "../../apis/ratings/ratings";
+import { CenterModal } from "../profile/center-modal";
 
 const COUPLE_BATCH_IDS = [25992, 25993, 25994, 25740, 25744, 36127];
 const SLOTS_REMAINING_VISIBLE_GYM_IDS = [6, 22, 24, 25, 27, 28, 29, 31, 32, 34, 35, 40, 42];
@@ -78,7 +81,9 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   const [userDetails] = useAtom(userDetailsAtom);
   const [isFromApp, setIsFromApp] = useState(false);
   const [pastAppBookings, setPastAppBookings] = useState({});
-
+  const [ratings, setRatings] = useState<number>(0);
+  const [showRatingModal, setShowRatingModal] = useState<boolean>(false);
+  const [showHowItWorksModal, setShowHowItWorksModal] = useState<boolean>(false);
   const urlParams = new URLSearchParams(window.location.search);
   const dateFromURL = urlParams.get("date");
 
@@ -145,6 +150,22 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
       errorToast("Error in getting batches");
     },
   });
+
+  const { mutate: _getRatings } = useMutation({
+    mutationFn: getRatings,
+    onSuccess: (result) => {
+      setRatings(result.rating.rating);
+    },
+    onError: (error) => {
+      errorToast("Error in getting ratings");
+    },
+  });
+
+  useEffect(() => {
+    if(userDetails) {
+      _getRatings(userDetails.id as number);
+    }
+  }, [userDetails]);
 
   useEffect(() => {
     Mixpanel.track("open_schedule_page", { gymId });
@@ -287,15 +308,22 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
               batchDetails: batch,
               gym,
             });
-            navigate(`/checkout/batch/${batch.batchId}`, {
-              state: {
-                batchId: batch.batchId.toString(),
-                batchDetails: batch,
-                gym,
-                isFromApp,
-                pastAppBookings,
-              },
-            });
+            if(batch.isRated && ratings < (batch?.rating ?? 0)) {
+              setShowRatingModal(true);
+            } else if(batch.isRated && ratings == 0) {
+              setShowRatingModal(true);
+            } 
+            else {
+              navigate(`/checkout/batch/${batch.batchId}`, {
+                state: {
+                  batchId: batch.batchId.toString(),
+                  batchDetails: batch,
+                  gym,
+                  isFromApp,
+                  pastAppBookings,
+                },
+              });
+            }
           }}
         >
           <Flex flex="auto" vertical={true}>
@@ -343,6 +371,11 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                   {batch.trainer ? (
                     <Flex flex={1}>By {batch.trainer}</Flex>
                   ) : null}
+                  {batch.isRated ? (
+                    <Flex flex={1} style={{ marginTop: "6px"}}>
+                      {batch.rating ? <RatingBadge rating={batch.rating ?? 0} /> : null}
+                    </Flex>
+                  ) : <Flex flex={1} style={{ marginTop: "6px"}}> <RatingBadge rating={0} /></Flex>}
                   {!batch.isDayPass ? (
                     <Flex
                       style={{ color: colors.secondary, marginTop: "4px" }}
@@ -716,8 +749,13 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           <Banner />
           <div className="dateTileWrap">
             <div className="detailWrap">
-              <div className="backBtn" onClick={() => goToGymPage()}>
-                {backBtn()}
+              <div className="flex items-center justify-between">
+                <div className="backBtn" onClick={() => goToGymPage()}>
+                  {backBtn()}
+                </div>
+                <div className="text-sm cursor-pointer underline text-green-500" onClick={() => setShowHowItWorksModal(true)}>
+                  ZBR Games?
+                </div>
               </div>
               <div className="gymNames" style={{ fontSize: gym?.name?.length > 30 ? "15px" : "20px" }} >{gym?.name}</div>
               {gym?.area && (
@@ -786,6 +824,44 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
       </div>
       {/* </PullToRefresh> */}
       {/* </SwipeHandler> */}
+      {showRatingModal && (
+        <CenterModal
+          isOpen={showRatingModal}
+          onClose={() => setShowRatingModal(false)}
+          title="Oops!"
+          subtitle=""
+          children={<div className="flex flex-col items-center justify-center mt-2 text-sm">
+            {ratings > 0 ? 
+              <div className="flex flex-col">
+                <span>This might be a tough match for your ZBR.</span>
+                <span>Join an open match or the one in your range!</span>
+                <span> Keep improving! 💪</span>
+              </div> : null}
+            {ratings == 0 ? 
+            <div className="flex flex-col">
+              <span>No ZenfitX rating yet.</span>
+              <span>Join an open match to earn your ZBR — welcome aboard! 🚀</span>
+            </div> : null}
+          </div>}
+        />
+      )}
+      {showHowItWorksModal && (
+        <CenterModal
+          isOpen={showHowItWorksModal}
+          onClose={() => setShowHowItWorksModal(false)}
+          title="ZBR Games"
+          subtitle=""
+          showCloseButton={false}
+          children={<div className="flex flex-col mt-2 text-xs gap-1">
+            <span>🎯 ZBR: your verified badminton rating, assigned after your first recorded match using ZenVision AI
+            </span>
+            <span>⭐ ZBR Games: Join only if you meet the minimum ZBR needed
+            </span>
+            <span>⚪ Open Games: Anyone can join (ZBR or no ZBR)</span>
+            <span>🆕 New players: You can play only Open games first → after 1st game a verified ZBR is assigned based on your game level </span>
+          </div>}
+        />
+      )}
     </>
   );
 };

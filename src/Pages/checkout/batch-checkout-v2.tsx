@@ -44,11 +44,12 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
     const [spotsLeft, setSpotsLeft] = useState<number>(0);
     const [spotsTotal, setSpotsTotal] = useState<number>(0);
     const [players, setPlayers] = useState<IPlayer[]>([]);
-    const [gotCoplayers, setGotCoplayers] = useState<boolean>(false);
+    const [gotCoplayers, setGotCoplayers] = useState<boolean>(false); 
     const [isFromApp, setIsFromApp] = useState(false);
     const [pastAppBookings, setPastAppBookings] = useState({});
     const { COPLAYER_CARD_ENABLED } = require("../../constants/activities");
     const [isShareButtonClicked, setIsShareButtonClicked] = useState(false);
+    const [alreadyBookedRatedGame, setAlreadyBookedRatedGame] = useState(false);  // To check if the user has already booked a rated game  // To check if the players have been fetched
 
     const batchId = window.location.pathname.split("/")[3];
 
@@ -93,11 +94,21 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
             setPlayers(result.map((player: any) => ({name: player.name,
                         userId: player.userId, 
                         level: player.skillLevel, 
+                        rating: player.rating,
                         noOfBookings: player.noOfGuests, 
                         gamesPlayed: player.activityBookCount})));
+            const userId = window.localStorage["zenfitx-user-details"]
+                                  ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || "0"
+                                  : "0";
+            if(result.some((player: any) => player.userId === userId && batchDetails?.isRated)) {
+                setAlreadyBookedRatedGame(true);
+            } 
         },
         onError: (error) => {
             errorToast("Error in getting coplayers");
+        },
+        onSettled: () => {
+            setGotCoplayers(true);
         },
     });
     
@@ -106,7 +117,6 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
     useEffect(() => {
         _getActivityById(batchId);
         _getCoplayers(batchId);
-        setGotCoplayers(true);
         // setPlayers([{name: "Pratik", level: "Beginner", noOfBookings: 1, gamesPlayed: 0}, {name: "Nikita", level: "Amateur", noOfBookings: 2, gamesPlayed: 5}, {name: "Whiskey", level: "Intermediate", noOfBookings: 3, gamesPlayed: 23}]);
     }, []);
 
@@ -133,6 +143,13 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
       });
     };
 
+    const handleBookNowClick = () => {
+      if(alreadyBookedRatedGame) {
+        message.error("You have already joined this game!");
+        return false;
+      }
+      return true;
+    };
 
     useEffect(() => {
       const shareButton = document.getElementById("share-button");
@@ -212,6 +229,7 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
             totalAmount={batchDetails?.price as number}
             comingFrom={EBookNowComingFromPage.BATCH_CHECKOUT_PAGE}
             forceBookNowCta={true}
+            onBeforeAction={handleBookNowClick}
           />
         )}
         </div>

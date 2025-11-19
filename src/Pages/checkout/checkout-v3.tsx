@@ -35,6 +35,7 @@ import Checkbox from "antd/es/checkbox/Checkbox";
 import RentInfo from "./rent-info";
 import { CenterModal } from "../profile/center-modal";
 import { DISCOUNT_ALLOWED_BATCH_IDS } from "../../utils/offers";
+import RatingBadge from "../../utils/rating-badge";
 
 // Function to convert 24-hour time to 12-hour format
 const convert24HourTo12Hour = (timeStr: string): { formattedTime: string; error: string | null } => {
@@ -542,17 +543,6 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                     <p className="text-xs font-normal text-activity-name-checkout-page pt-1">{batchDetails?.activityName} at {gym?.name}</p>
                 </div>
             </div>
-            {isCoplayerCardEnabled && <div className="flex flex-row px-4 pt-4">
-                 <div className="flex flex-row justify-between w-full bg-white shadow-gray rounded-xl p-4 items-center">
-                    <div className="flex flex-col">
-                        <p className="text-sm font-bold font-sm">You</p>
-                        {/* <p className="text-sm text-gray font-xs">No games yet</p> */}
-                    </div>
-                    <div className="flex flex-col" onClick={() => { navigate(`/checkout/batch/${batchId}/booking?edit=true`, {replace: true}) }}>
-                        {skillLevel != "" && (batchDetails?.slots && (batchDetails?.slots <= 6 || batchDetails?.activity?.toUpperCase() == "PICKLEBALL")) && <SkillCapsule level={skillLevel as SkillLevel} editable={true} />}
-                    </div>
-                </div>
-            </div>}
             {isCoplayerCardEnabled && <div className="flex flex-row px-4 pt-4">
                 <div className="flex flex-col justify-between w-full bg-white shadow-gray rounded-xl">
                     <SpotsLeftCheckout spotsLeft={spotsLeft} spotsTotal={spotsTotal} noOfGuests={noOfGuests} />
