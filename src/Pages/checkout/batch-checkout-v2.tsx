@@ -143,6 +143,13 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
       });
     };
 
+    const handleBookNowClick = () => {
+      if(alreadyBookedRatedGame) {
+        message.error("You have already joined this game!");
+        return false;
+      }
+      return true;
+    };
 
     useEffect(() => {
       const shareButton = document.getElementById("share-button");
@@ -212,7 +219,7 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
           {batchDetails?.whatToExpect && <WhatToExpect whatToExpect={batchDetails?.whatToExpect} />}
           {batchDetails?.whatToBring && <WhatToBring whatToBring={batchDetails?.whatToBring} />}
           {batchDetails?.moreInfo && <MoreInfo moreInfo={batchDetails?.moreInfo} />}
-          {gym && !alreadyBookedRatedGame && gotCoplayers && (
+          {gym && (
           <BookNowFooter
             checkoutType={ECheckoutType.BATCH}
             batchDetails={batchDetails}
@@ -222,12 +229,8 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
             totalAmount={batchDetails?.price as number}
             comingFrom={EBookNowComingFromPage.BATCH_CHECKOUT_PAGE}
             forceBookNowCta={true}
+            onBeforeAction={handleBookNowClick}
           />
-        )}
-        {alreadyBookedRatedGame && gotCoplayers && (
-          <div className="flex items-center justify-center fixed bottom-0 left-0 right-0 bg-red-500 py-2">
-            <h1 className="text-sm font-bold text-white">You have already joined this game!</h1>
-          </div> 
         )}
         </div>
       </div>
