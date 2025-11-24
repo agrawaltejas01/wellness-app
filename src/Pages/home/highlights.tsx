@@ -41,8 +41,8 @@ const Highlights = () => {
       const userHighlight = videoHighlights.find((highlight: any) => highlight.user_id == userId);
       // const userHighlight = videoHighlights[0].user_highlights[0];
       if(userHighlight) {
-        setShowSelectHighlightsModal(true);
-        // navigate("/highlights", {state: {url: userHighlight.highlight_link}});
+        // setShowSelectHighlightsModal(true);
+        navigate("/highlights", {state: {url: userHighlight.highlight_link}});
       } else {
         setShowSelectHighlightsModal(true);
       } 
