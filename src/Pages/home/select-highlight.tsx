@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 const SelectHighlight = ({highlights}: {highlights: any[]}) => {
     
     const [selectedHighlightId, setSelectedHighlightId] = useState<string | null>(null);
+    const [selectedHighlight, setSelectedHighlight] = useState<any>(null);
     const filteredHighlights = highlights.filter((highlight: any) => highlight.user_id != null);
     const sortedHighlights = filteredHighlights.sort((a: any, b: any) => a.player_id - b.player_id);
     const userDetails = JSON.parse(window.localStorage["zenfitx-user-details"] || '{}');
@@ -18,7 +19,7 @@ const SelectHighlight = ({highlights}: {highlights: any[]}) => {
     const {mutate: _addUserHighlight} = useMutation({
         mutationFn: ({userId, highlightId}: {userId: string, highlightId: string}) => addUserHighlight(userId, highlightId),
         onSuccess: (result) => {
-            navigate("/highlights", {state: {url: result.highlight_link}});
+            navigate("/highlights", {state: {url: selectedHighlight.highlight_link}});
         },
         onError: (error) => {
             console.log(error);
@@ -28,9 +29,7 @@ const SelectHighlight = ({highlights}: {highlights: any[]}) => {
     const handleContinue = () => {
         if (selectedHighlightId) {
             const selectedHighlight = sortedHighlights.find((highlight: any) => highlight.id === selectedHighlightId);
-            console.log("Selected highlight:", selectedHighlight);
-            // Add navigation or callback logic here
-            // navigate("/highlights", {state: {url: selectedHighlight.highlight_link}});
+            setSelectedHighlight(selectedHighlight);
             _addUserHighlight({userId, highlightId: selectedHighlightId});
         }
     }
