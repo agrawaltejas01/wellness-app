@@ -523,8 +523,8 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
     if (!gym || !batchDetails || !gotPastBookings) return <Loader />;
 
     return (
-        <div className="flex flex-col">
-            <div className="flex flex-row items-center pl-4 py-3">
+        <div className="checkout-v3-container flex flex-col">
+            <div className="checkout-v3-header flex flex-row items-center py-3">
                 <BackButtonCheckout onClick={() => navigate(`/checkout/batch/${batchId}`)} />
                 <div className="flex flex-col font-jakarta ml-4">
                     <div className="flex flex-row font-jakarta font-bold text-sm">
@@ -543,6 +543,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                     <p className="text-xs font-normal text-activity-name-checkout-page pt-1">{batchDetails?.activityName} at {gym?.name}</p>
                 </div>
             </div>
+            <div className="checkout-v3-content">
             {isCoplayerCardEnabled && <div className="flex flex-row px-4 pt-4">
                 <div className="flex flex-col justify-between w-full bg-white shadow-gray rounded-xl">
                     <SpotsLeftCheckout spotsLeft={spotsLeft} spotsTotal={spotsTotal} noOfGuests={noOfGuests} />
@@ -747,6 +748,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                 </div>
               </div>
             </div>} */}
+            </div>
             <BookNowFooter
                 batchDetails={batchDetails}
                 gymData={gym}

@@ -8,8 +8,8 @@ const WhatToExpect = ({whatToExpect}: {whatToExpect: string}) => {
    }, [whatToExpect]);
 
     return (
-        <div className="flex flex-col justify-center px-8 pt-3">
-            <h1 className="text-sm font-bold">What to expect</h1>
+        <div className="what-to-expect-section flex flex-col justify-center px-8 pt-3">
+            <h1 className="text-sm font-bold what-to-expect-title">What to expect</h1>
             <ul className="list-disc text-sm font-normal mt-2 pl-2"> 
                 {whatToExpectList && whatToExpectList.map((item, index) => (
                     <li key={index} className="text-sm text-activity-description">{item}</li>

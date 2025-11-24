@@ -2,16 +2,19 @@ import { ReactComponent as Yoga } from "./yoga.svg";
 import { ReactComponent as Pilate } from "./pilate.svg";
 import { ReactComponent as Swimming } from "./swimming.svg";
 import { ReactComponent as Badminton } from "./badminton.svg";
+import { ReactComponent as BadmintonIcon } from "./badminton-icon.svg";
 import { ReactComponent as Hiit } from "./hiit.svg";
 import { ReactComponent as Pt } from "./pt.svg";
 import { ReactComponent as Strength } from "./strength.svg";
 import { ReactComponent as Boxing } from "./boxing.svg";
 import { ReactComponent as Zumba } from "./zumba.svg";
 import { ReactComponent as Gym } from "./gym.svg";
+import { ReactComponent as FitnessIcon } from "./fitness-icon.svg";
 import { ReactComponent as Cricket } from "./cricket.svg";
 import { ReactComponent as Dance } from "./dance.svg";
 import { ReactComponent as Football } from "./football.svg";
 import { ReactComponent as Pickleball } from "./pickleball.svg";
+import { ReactComponent as PickleballIcon } from "./pickleball-icon.svg";
 import { ReactComponent as GymDayPass } from "./gymdaypass.svg";
 import { ReactComponent as Ride } from "./ride.svg"
 import BadmintonKidsImg from "./badminton-coaching.png"
@@ -35,6 +38,11 @@ const activityToSvgMap = (activity: string): JSX.Element => {
     </span>
   );
   const badminton = (
+    <span>
+      <BadmintonIcon />
+    </span>
+  );
+  const badmintonOld = (
     <span>
       <Badminton />
     </span>
@@ -71,6 +79,11 @@ const activityToSvgMap = (activity: string): JSX.Element => {
   );
   const gym = (
     <span>
+      <FitnessIcon />
+    </span>
+  );
+  const gymOld = (
+    <span>
       <Gym />
     </span>
   );
@@ -85,6 +98,11 @@ const activityToSvgMap = (activity: string): JSX.Element => {
     </span>
   );
   const pickleball = (
+    <span>
+      <PickleballIcon />
+    </span>
+  );
+  const pickleballOld = (
     <span>
       <Pickleball />
     </span>
@@ -127,6 +145,8 @@ const activityToSvgMap = (activity: string): JSX.Element => {
     zumba: zumba,
     "kick boxing": boxing,
     gymming: gym,
+    gym: gym,
+    fitness: gym,
     cricket: cricket,
     dance: dance,
     pickleball: pickleball,

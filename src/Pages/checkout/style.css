@@ -1,3 +1,29 @@
+.schedule-page-container {
+    width: 100%;
+}
+
+.schedule-content-wrapper {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+@media (min-width: 1024px) {
+    .schedule-content-wrapper {
+        max-width: 1200px;
+        padding: 0 24px;
+    }
+}
+
+.date-tiles-container {
+    margin: 0px 8px 0px 0px;
+}
+
+@media (min-width: 1024px) {
+    .date-tiles-container {
+        margin: 0;
+    }
+}
+
 .dateTileWrap {
     position: absolute;
     color: #FFF;
@@ -18,8 +44,12 @@
     flex-direction: column;
     padding:0px 16px;
     margin-bottom:24px;
+}
 
-
+@media (min-width: 1024px) {
+    .detailWrap {
+        padding: 0;
+    }
 }
 
 .gymNames{
@@ -33,6 +63,13 @@ letter-spacing: 0.3px;
 margin:8px 0px;
 }
 
+@media (min-width: 1024px) {
+    .gymNames {
+        font-size: 28px !important;
+        margin: 12px 0px;
+    }
+}
+
 .locationName{
     color: #FFF;
 font-family: "Plus Jakarta Sans";
@@ -44,7 +81,17 @@ text-transform: capitalize;
 display: flex;
 align-items: flex-start;
 gap:4px;
+}
 
+@media (min-width: 1024px) {
+    .locationName {
+        font-size: 16px;
+    }
+    
+    .locationName svg {
+        width: 18px;
+        height: 18px;
+    }
 }
 .backBtn{
     color:'#fff';
@@ -192,6 +239,14 @@ transform: translate(-20px,0px);
     position: sticky;
     top: 0px;
     z-index: 10;
+}
+
+@media (min-width: 1024px) {
+    .stickyWrap svg {
+        width: 100%;
+        height: auto;
+        max-height: 250px;
+    }
 }
 
 .checkWrapper{
@@ -426,4 +481,373 @@ line-height: 135%;
 letter-spacing: 0.18px;
 text-decoration-line: line-through;
     
+}
+
+/* Schedule Page Batch Cards - Laptop Responsive */
+.schedule-batches-section {
+    padding-bottom: 40px;
+}
+
+.activity-tiles-wrapper {
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+.batches-list-wrapper {
+    margin-top: 10px;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+@media (min-width: 1024px) {
+    .schedule-batches-section {
+        padding-top: 20px;
+    }
+    
+    .activity-tiles-wrapper {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    
+    .batches-list-wrapper {
+        padding-left: 0;
+        padding-right: 0;
+        margin-top: 20px;
+    }
+    
+    .schedule-page-container .ant-card {
+        margin-bottom: 16px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+    }
+    
+    .schedule-page-container .ant-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        transform: translateY(-2px);
+    }
+    
+    .schedule-page-container .ant-card .ant-card-body {
+        padding: 20px;
+    }
+}
+
+/* Batch Checkout Page - Laptop Responsive */
+.batch-checkout-container {
+    width: 100%;
+}
+
+.batch-hero-section {
+    position: relative;
+    min-height: 300px;
+}
+
+.batch-hero-wrapper {
+    width: 100%;
+}
+
+.batch-content-wrapper {
+    width: 100%;
+}
+
+.batch-content-inner {
+    width: 100%;
+}
+
+@media (min-width: 1024px) {
+    .batch-checkout-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .batch-hero-section {
+        width: 100%;
+        min-height: 400px;
+        border-radius: 0 0 24px 24px;
+        overflow: hidden;
+    }
+    
+    .batch-hero-wrapper {
+        width: 100%;
+        padding: 0 10%;
+    }
+    
+    .batch-hero-content {
+        padding: 32px 0 !important;
+    }
+    
+    .batch-activity-type {
+        font-size: 18px !important;
+        padding-top: 24px !important;
+    }
+    
+    .batch-activity-name {
+        font-size: 36px !important;
+        font-weight: 600 !important;
+        padding-top: 8px !important;
+    }
+    
+    .batch-location {
+        font-size: 18px !important;
+        padding-top: 12px !important;
+    }
+    
+    .batch-location svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .batch-timing-info {
+        font-size: 20px !important;
+        padding-top: 16px !important;
+        padding-bottom: 32px !important;
+    }
+    
+    .batch-timing-info p {
+        font-size: 20px !important;
+    }
+    
+    .batch-content-wrapper {
+        width: 100%;
+        padding: 0 10%;
+    }
+    
+    .batch-content-inner {
+        padding-top: 24px;
+    }
+    
+    .batch-content-inner > div {
+        margin-bottom: 24px;
+        border-radius: 16px;
+        background: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        padding: 40px 48px;
+    }
+    
+    /* Spots Left Section */
+    .spots-left-section {
+        padding: 24px 32px !important;
+    }
+    
+    .spots-left-text {
+        font-size: 20px !important;
+    }
+    
+    /* Coplayer Card Section */
+    .coplayer-card-section {
+        margin: 0 0 24px 0 !important;
+    }
+    
+    .coplayer-card-title {
+        font-size: 18px !important;
+        padding-top: 24px !important;
+    }
+    
+    .coplayer-zbr-text {
+        font-size: 14px !important;
+    }
+    
+    .coplayer-card-section .flex.items-center.justify-between {
+        padding: 20px 32px;
+    }
+    
+    .coplayer-card-section h1.text-sm {
+        font-size: 16px;
+    }
+    
+    /* About Activity Section */
+    .about-activity-section {
+        padding: 24px 32px !important;
+    }
+    
+    .about-activity-title {
+        font-size: 18px !important;
+        margin-bottom: 8px;
+    }
+    
+    .about-activity-section ul li {
+        font-size: 16px !important;
+        line-height: 1.6;
+        margin-bottom: 8px;
+    }
+    
+    /* What to Expect Section */
+    .what-to-expect-section {
+        padding: 24px 32px !important;
+    }
+    
+    .what-to-expect-title {
+        font-size: 18px !important;
+        margin-bottom: 8px;
+    }
+    
+    .what-to-expect-section ul li {
+        font-size: 16px !important;
+        line-height: 1.6;
+        margin-bottom: 8px;
+    }
+    
+    /* What to Bring Section */
+    .what-to-bring-section {
+        padding: 24px 32px !important;
+    }
+    
+    .what-to-bring-title {
+        font-size: 18px !important;
+        margin-bottom: 8px;
+    }
+    
+    .what-to-bring-section ul li {
+        font-size: 16px !important;
+        line-height: 1.6;
+        margin-bottom: 8px;
+    }
+    
+    /* More Info Section */
+    .more-info-section {
+        padding: 24px 32px !important;
+    }
+    
+    .more-info-title {
+        font-size: 18px !important;
+        margin-bottom: 8px;
+    }
+    
+    .more-info-section ul li {
+        font-size: 16px !important;
+        line-height: 1.6;
+        margin-bottom: 8px;
+    }
+    
+    /* Book Now Footer - Laptop Responsive */
+    .book-now-footer-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: stretch;
+    }
+    
+    .book-now-footer-content {
+        width: 100%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        padding: 0 10%;
+    }
+    
+    .book-now-footer-content > .discountLine {
+        position: absolute;
+        bottom: 100%;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    /* Override the inner div padding on laptop */
+    .book-now-footer-content > div[style*="paddingRight"],
+    .book-now-footer-content .ant-flex[style*="paddingRight"] {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    
+    .book-now-footer-wrapper button {
+        padding: 18px 56px !important;
+        font-size: 20px !important;
+        white-space: nowrap;
+        border-radius: 12px !important;
+    }
+    
+    .book-now-footer-wrapper .discountedAmountWrap {
+        font-size: 28px !important;
+    }
+    
+    .book-now-footer-wrapper .discountedAmountWrap span {
+        font-size: 28px !important;
+    }
+    
+    /* Checkout V3 Page - Laptop Responsive */
+    .checkout-v3-container {
+        width: 100%;
+        background: #f5f5f5;
+        min-height: 100vh;
+    }
+    
+    .checkout-v3-header {
+        background: white;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        padding: 24px 10%;
+    }
+    
+    .checkout-v3-content {
+        max-width: 100%;
+        width: 100%;
+        margin: 0 auto;
+        padding: 32px 10% 120px;
+    }
+    
+    /* Remove padding from inner elements on laptop */
+    .checkout-v3-content > .flex {
+        width: 100%;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-bottom: 24px;
+    }
+    
+    /* Make cards wider and more spacious */
+    .checkout-v3-content .shadow-gray {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 40px 48px !important;
+        font-size: 18px;
+    }
+    
+    .checkout-v3-content .bg-white {
+        width: 100% !important;
+    }
+    
+    /* Increase text sizes */
+    .checkout-v3-content .text-sm {
+        font-size: 18px;
+    }
+    
+    .checkout-v3-content .text-xs {
+        font-size: 16px;
+    }
+    
+    .checkout-v3-content .font-bold {
+        font-size: 20px;
+    }
+    
+    /* Increase header text */
+    .checkout-v3-header .text-sm {
+        font-size: 20px;
+    }
+    
+    .checkout-v3-header .text-xs {
+        font-size: 18px;
+    }
+    
+    /* Better spacing for sections */
+    .checkout-v3-content > .flex {
+        margin-bottom: 24px;
+    }
+    
+    /* Larger inputs */
+    .checkout-v3-content input,
+    .checkout-v3-content select {
+        padding: 16px;
+        font-size: 18px;
+    }
+    
+    /* Center and space out the increment/decrement buttons */
+    .checkout-v3-content .flex.justify-between {
+        padding: 24px 0;
+    }
+    
+    /* Make the w-full cards actually full width */
+    .checkout-v3-content .w-full {
+        width: 100% !important;
+    }
 }

@@ -13,6 +13,7 @@ import {CenterModal} from "../profile/center-modal";
 import LeaderboardInfo from "./leadboardinfo";
 import { Mixpanel } from "../../mixpanel/init";
 import UserRatingInfo from "../home/rating-info";
+import "./leaderboard.css";
 
 interface LeaderboardPlayer {
     activity_id: number;
@@ -254,10 +255,10 @@ const Leaderboard = (props: LeaderboardProps) => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="leaderboard-container">
             {/* Header */}
-            <div className="flex flex-row justify-between bg-white shadow-sm">
-                <div className="flex items-center justify-between p-4">
+            <div className="leaderboard-header">
+                <div className="leaderboard-header-content">
                     <div className="flex items-center gap-3">
                         <button 
                             onClick={() => navigate('/')}
@@ -268,24 +269,28 @@ const Leaderboard = (props: LeaderboardProps) => {
                             </svg>
                         </button>
                         <div className="flex flex-col">
-                        <h1 className="text-2xl font-bold  text-gray-900">Leaderboard 🏆</h1>
-                        <span className="text-xs text-gray-500 font-normal">Last updated: Nov 19th, 12 PM</span>
+                            <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">Leaderboard 🏆</h1>
+                            <span className="text-xs lg:text-sm text-gray-500 font-normal">Last updated: Nov 19th, 12 PM</span>
                         </div>
                     </div>
-                </div>
-                <div className="flex flex-row gap-1 pr-4" onClick={()=>{setIsLeaderboardInfoModalOpen(true); Mixpanel.track('leaderboard_info_modal_open', {user_id: userDetails?.id})}}>
-                    <InfoCircleOutlined className="w-5 h-5 self-center" />
+                    <button 
+                        className="flex items-center gap-1 cursor-pointer" 
+                        onClick={()=>{setIsLeaderboardInfoModalOpen(true); Mixpanel.track('leaderboard_info_modal_open', {user_id: userDetails?.id})}}
+                    >
+                        <InfoCircleOutlined className="w-5 h-5 lg:w-6 lg:h-6" />
+                    </button>
                 </div>
             </div>
 
-            {/* Top 3 Podium */}
-            <div className="bg-white mx-4 mt-4 rounded-lg shadow-sm p-4">
-                <h2 className="text-base font-bold  text-gray-900 mb-3">Top Champions</h2>
-                <div className="flex justify-center items-end gap-3 mb-4">
+            <div className="leaderboard-content">
+                {/* Top 3 Podium */}
+                <div className="top-champions-card">
+                    <h2 className="champions-title text-base lg:text-xl font-bold text-gray-900 mb-3 lg:mb-6">Top Champions</h2>
+                    <div className="podium-wrapper flex justify-center items-end gap-3 lg:gap-6 mb-4">
                     {/* 2nd Place */}
                     {leaderboardData[1] && (
                         <div className="flex flex-col items-center w-1/3">
-                            <div className="bg-gray-100 rounded-lg p-2 mb-1 min-h-[50px] flex flex-col justify-end">
+                            <div className="champion-card second bg-gray-100 rounded-lg p-2 lg:p-3 mb-1 min-h-[50px] lg:min-h-[70px] flex flex-col justify-end">
                                 <Circle 
                                     radius={16} 
                                     borderColor="#9ca3af" 
@@ -296,8 +301,8 @@ const Leaderboard = (props: LeaderboardProps) => {
                                 />
                             </div>
                             <div className="text-center">
-                                <p className="font-bold text-xs ">{leaderboardData[1].name}</p>
-                                <p className="text-xs text-green-700 ">{leaderboardData[1].rating/100}</p>
+                                <p className="champion-name font-bold text-xs lg:text-base">{leaderboardData[1].name}</p>
+                                <p className="champion-rating text-xs lg:text-sm text-green-700">{leaderboardData[1].rating/100}</p>
                             </div>
                         </div>
                     )}
@@ -305,7 +310,7 @@ const Leaderboard = (props: LeaderboardProps) => {
                     {/* 1st Place */}
                     {leaderboardData[0] && (
                         <div className="flex flex-col items-center w-1/3">
-                            <div className="bg-yellow-100 rounded-lg p-2 mb-1 min-h-[60px] flex flex-col justify-end">
+                            <div className="champion-card first bg-yellow-100 rounded-lg p-2 lg:p-4 mb-1 min-h-[60px] lg:min-h-[100px] flex flex-col justify-end">
                                 <Circle 
                                     radius={18} 
                                     borderColor="#fbbf24" 
@@ -316,8 +321,8 @@ const Leaderboard = (props: LeaderboardProps) => {
                                 />
                             </div>
                             <div className="text-center">
-                                <p className="font-bold text-xs ">{leaderboardData[0].name}</p>
-                                <p className="text-xs text-green-700 ">{leaderboardData[0].rating/100}</p>
+                                <p className="champion-name font-bold text-xs lg:text-base">{leaderboardData[0].name}</p>
+                                <p className="champion-rating text-xs lg:text-sm text-green-700">{leaderboardData[0].rating/100}</p>
                             </div>
                         </div>
                     )}
@@ -325,7 +330,7 @@ const Leaderboard = (props: LeaderboardProps) => {
                     {/* 3rd Place */}
                     {leaderboardData[2] && (
                         <div className="flex flex-col items-center w-1/3">
-                            <div className="bg-orange-100 rounded-lg p-2 mb-1 min-h-[40px] flex flex-col justify-end">
+                            <div className="champion-card third bg-orange-100 rounded-lg p-2 mb-1 min-h-[40px] lg:min-h-[60px] flex flex-col justify-end">
                                 <Circle 
                                     radius={14} 
                                     borderColor="#fb923c" 
@@ -336,65 +341,64 @@ const Leaderboard = (props: LeaderboardProps) => {
                                 />
                             </div>
                             <div className="text-center">
-                                <p className="font-bold text-xs ">{leaderboardData[2].name}</p>
-                                <p className="text-xs text-green-700 ">{leaderboardData[2].rating/100}</p>
+                                <p className="champion-name font-bold text-xs lg:text-base">{leaderboardData[2].name}</p>
+                                <p className="champion-rating text-xs lg:text-sm text-green-700">{leaderboardData[2].rating/100}</p>
                             </div>
                         </div>
                     )}
-                </div>
-            </div>
-
-            {/* User's Own Rating */}
-            {userDetails && (
-                <div className="bg-white mx-4 mt-4 rounded-lg shadow-sm p-3">
-                    <div className="flex flex-row gap-2 mb-2">
-                    <h2 className="text-sm font-bold  text-gray-900">Your Performance</h2>
-                    <InfoCircleOutlined className="w-3 h-3 self-center" onClick={()=>{setIsUserRatingInfoModalOpen(true); Mixpanel.track('user_rating_info_modal_open', {user_id: userDetails?.id})}} />
                     </div>
-                    {isUserRatingLoading ? (
-                        <div className="flex items-center justify-center py-2">
-                            <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-500"></div>
-                            <span className="ml-2 text-xs  text-gray-600">Loading...</span>
-                        </div>
-                    ) : userRating ? (
-                        <div>
-                            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 border border-blue-200 flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <div className="bg-blue-500 rounded-full p-1">
-                                        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                        </svg>
-                                    </div>
-                                    <span className="font-bold text-xs  text-gray-900">{userDetails.name}</span>
-                                    <span className="text-xs  text-gray-500">•</span>
-                                    <span className="text-xs  text-gray-600">{userRating.gamesPlayed} games</span>
-                                </div>
-                                <div className="flex items-center gap-1">
-                                    <span className="text-sm font-bold  text-blue-600">{ userRating.rating ? userRating.rating/100 : "-"}</span>
-                                    <span className="text-xs  text-gray-600">Rating</span>
-                                </div>
-                            </div>
-                            {userRating.gamesPlayed === 0 && (
-                                <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded text-center">
-                                    <p className="text-xs  text-yellow-800">
-                                        🎯 Play your first game to get ranked!
-                                    </p>
-                                </div>
-                            )}
-                        </div>
-                    ) : (
-                        <div className="text-center py-2">
-                            <p className="text-xs  text-gray-600">Unable to load rating data</p>
-                        </div>
-                    )}
                 </div>
-            )}
 
-            {/* Full Rankings */}
-            <div className="mx-4 mt-4 mb-6">
-                <div className="bg-white rounded-lg shadow-sm">
-                    <div className="p-4 border-b border-gray-200">
-                        <h2 className="text-lg font-bold  text-gray-900">All Rankings</h2>
+                {/* User's Own Rating */}
+                {userDetails && (
+                    <div className="user-performance-card">
+                        <div className="flex flex-row gap-2 mb-2">
+                            <h2 className="user-performance-title text-sm lg:text-lg font-bold text-gray-900">Your Performance</h2>
+                            <InfoCircleOutlined className="w-3 h-3 lg:w-4 lg:h-4 self-center cursor-pointer" onClick={()=>{setIsUserRatingInfoModalOpen(true); Mixpanel.track('user_rating_info_modal_open', {user_id: userDetails?.id})}} />
+                        </div>
+                        {isUserRatingLoading ? (
+                            <div className="flex items-center justify-center py-2">
+                                <div className="animate-spin rounded-full h-3 w-3 lg:h-4 lg:w-4 border-b-2 border-blue-500"></div>
+                                <span className="ml-2 text-xs lg:text-sm text-gray-600">Loading...</span>
+                            </div>
+                        ) : userRating ? (
+                            <div>
+                                <div className="user-performance-content bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 lg:p-4 border border-blue-200 flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <div className="bg-blue-500 rounded-full p-1 lg:p-2">
+                                            <svg className="w-3 h-3 lg:w-5 lg:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                            </svg>
+                                        </div>
+                                        <span className="font-bold text-xs lg:text-base text-gray-900">{userDetails.name}</span>
+                                        <span className="text-xs lg:text-sm text-gray-500">•</span>
+                                        <span className="text-xs lg:text-sm text-gray-600">{userRating.gamesPlayed} games</span>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                        <span className="text-sm lg:text-lg font-bold text-blue-600">{ userRating.rating ? userRating.rating/100 : "-"}</span>
+                                        <span className="text-xs lg:text-sm text-gray-600">Rating</span>
+                                    </div>
+                                </div>
+                                {userRating.gamesPlayed === 0 && (
+                                    <div className="mt-2 p-2 lg:p-3 bg-yellow-50 border border-yellow-200 rounded text-center">
+                                        <p className="text-xs lg:text-sm text-yellow-800">
+                                            🎯 Play your first game to get ranked!
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <div className="text-center py-2">
+                                <p className="text-xs lg:text-sm text-gray-600">Unable to load rating data</p>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {/* Full Rankings */}
+                <div className="all-rankings-card">
+                    <div className="rankings-header p-4 lg:p-6 border-b border-gray-200">
+                        <h2 className="rankings-title text-lg lg:text-xl font-bold text-gray-900">All Rankings</h2>
                     </div>
                     <div className="divide-y divide-gray-200">
                         {leaderboardData.map((player, index) => {
@@ -406,10 +410,10 @@ const Leaderboard = (props: LeaderboardProps) => {
                                 <div 
                                     key={`${player.user_id}-${player.rank}`} 
                                     ref={isLastElement ? lastElementRefCallback : null}
-                                    className={`p-4 ${rankStyle.bg}`}
+                                    className={`ranking-item p-4 lg:p-6 ${rankStyle.bg}`}
                                 >
                                     <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-3">
+                                        <div className="flex items-center gap-3 lg:gap-4">
                                             <Circle 
                                                 radius={16} 
                                                 borderColor={circleProps.borderColor}
@@ -419,13 +423,13 @@ const Leaderboard = (props: LeaderboardProps) => {
                                                 fontColor={circleProps.fontColor}
                                             />
                                             <div className="flex flex-col">
-                                                <span className="text-sm font-bold  text-gray-900">{player.name}</span>
-                                                <span className="text-xs  text-green-700">{player.gamesPlayedCount} games</span>
+                                                <span className="ranking-player-name text-sm lg:text-base font-bold text-gray-900">{player.name}</span>
+                                                <span className="ranking-player-games text-xs lg:text-sm text-green-700">{player.gamesPlayedCount} games</span>
                                             </div>
                                         </div>
                                         <div className="flex flex-col items-end">
-                                            <span className="text-sm font-bold  text-gray-900">{player.rating/100}</span>
-                                            <span className="text-xs  text-green-700">Rating</span>
+                                            <span className="ranking-rating-value text-sm lg:text-lg font-bold text-gray-900">{player.rating/100}</span>
+                                            <span className="ranking-rating-label text-xs lg:text-sm text-green-700">Rating</span>
                                         </div>
                                     </div>
                                 </div>
@@ -433,7 +437,6 @@ const Leaderboard = (props: LeaderboardProps) => {
                         })}
                     </div>
                 </div>
-            </div>
 
             {/* Stats Section */}
             {/* <div className="mx-4 mb-6">
@@ -452,29 +455,30 @@ const Leaderboard = (props: LeaderboardProps) => {
                 </div>
             </div> */}
 
-            {/* Infinite Scroll Loading Indicator */}
-            {isLoadingMore && (
-                <div className="mx-4 mb-6 flex justify-center py-4">
-                    <div className="flex items-center gap-2">
-                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
-                        <span className="text-sm  text-gray-600">Loading more players...</span>
+                {/* Infinite Scroll Loading Indicator */}
+                {isLoadingMore && (
+                    <div className="flex justify-center py-4 lg:py-6">
+                        <div className="flex items-center gap-2">
+                            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
+                            <span className="text-sm lg:text-base text-gray-600">Loading more players...</span>
+                        </div>
                     </div>
-                </div>
-            )}
-            
-            {/* End of Results Indicator */}
-            {!hasMoreData && leaderboardData.length > 0 && (
-                <div className="mx-4 mb-6 text-center py-4">
-                    <span className="text-sm  text-gray-500">🏁 You've reached the end of the leaderboard!</span>
-                </div>
-            )}
+                )}
+                
+                {/* End of Results Indicator */}
+                {!hasMoreData && leaderboardData.length > 0 && (
+                    <div className="text-center py-4 lg:py-6">
+                        <span className="text-sm lg:text-base text-gray-500">🏁 You've reached the end of the leaderboard!</span>
+                    </div>
+                )}
+            </div>
 
             {/* Loading State */}
             {isLoading && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-lg p-6 flex items-center gap-3">
-                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
-                        <span className=" text-gray-700">Loading leaderboard...</span>
+                    <div className="bg-white rounded-lg p-6 lg:p-8 flex items-center gap-3">
+                        <div className="animate-spin rounded-full h-6 w-6 lg:h-8 lg:w-8 border-b-2 border-blue-500"></div>
+                        <span className="text-sm lg:text-base text-gray-700">Loading leaderboard...</span>
                     </div>
                 </div>
             )}

@@ -51,19 +51,25 @@ const Faqs: React.FC<RouteComponentProps> = () => {
         }
     ];
     return (
-        <div className="flex flex-col w-full mt-12 px-4 mb-12"> 
-            <h3 className="text-md font-bold text-center">FAQs</h3>
-            <div className="flex flex-col w-full">
-                {faqs.map((faq) => (
-                    <div className="flex flex-col mt-4 px-4">
-                        <div className="flex flex-row justify-between" onClick={() => {
-                            open === faq.question ? setOpen(null) : setOpen(faq.question);
-                        }}>
-                            <p className="text-sm font-bold text-left">{faq.question}</p>
-                            <ArrowDown className={`w-4 h-4 ${open === faq.question ? "rotate-180" : ""}`} />
-                        </div>
-                        {open === faq.question && <p className="text-sm font-light text-left py-2" dangerouslySetInnerHTML={{ __html: faq.answer }}></p>}
-                        <hr className="border-gray-100 mt-2 " />
+        <div className="coins-faqs-section"> 
+            <h3 className="text-lg lg:text-xl font-bold mb-6">FAQs</h3>
+            <div className="faqs-container">
+                {faqs.map((faq, index) => (
+                    <div key={index} className="faq-item">
+                        <button 
+                            className="faq-question"
+                            onClick={() => {
+                                open === faq.question ? setOpen(null) : setOpen(faq.question);
+                            }}
+                        >
+                            <span className="text-sm lg:text-base font-medium text-left flex-1">{faq.question}</span>
+                            <ArrowDown className={`w-4 h-4 lg:w-5 lg:h-5 transition-transform ${open === faq.question ? "rotate-180" : ""}`} />
+                        </button>
+                        {open === faq.question && (
+                            <div className="faq-answer">
+                                <p className="text-sm lg:text-base text-gray-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: faq.answer }}></p>
+                            </div>
+                        )}
                     </div>
                 ))}
             </div>
