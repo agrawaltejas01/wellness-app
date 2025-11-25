@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { ReactComponent as BackButton } from '../../images/utils/back-button.svg';
 import { navigate } from '@reach/router';
 import { message } from 'antd';
+import { Mixpanel } from '../../mixpanel/init';
 
 // Define prop types
 interface ReelsVideoPlayerProps {
@@ -19,6 +20,9 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
   const [downloadStatus, setDownloadStatus] = useState('idle'); // idle, downloading, completed, error
   const [statusMessage, setStatusMessage] = useState('');
   const [fileName, setFileName] = useState("highlight.mp4");
+
+  const userDetails = JSON.parse(window.localStorage["zenfitx-user-details"] || '{}');
+  const userId = userDetails?.id;
 
   useEffect(() => {
     if (videoRef.current) {
@@ -151,6 +155,9 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
   }, [fileName]);
 
     const handleDownload = async (): Promise<void> => {
+      Mixpanel.track("clicked_download_on_highlights_page", {
+        userId: userId,
+      });
         // if (videoRef.current) {
         //   try {
         //     const proxyURL = `${process.env.REACT_APP_BE_URL}/highlights/download?url=${encodeURIComponent(src)}`; // Adjust to your server URL if hosted remotely

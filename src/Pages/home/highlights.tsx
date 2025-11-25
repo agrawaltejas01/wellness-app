@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { getHighlights } from "../../apis/highlights/highlights";
 import { BottomUpModal } from "../profile/half-page-modal";
 import SelectHighlight from "./select-highlight";
+import { Mixpanel } from "../../mixpanel/init";
 
 const Highlights = () => {
   const navigate = useNavigate();
@@ -37,6 +38,11 @@ const Highlights = () => {
   }, []);
 
   const handleNavigate = () => {
+    
+    Mixpanel.track("clicked_highlights_on_home_page", {
+      userId: userId,
+    });
+
     if(videoHighlights && videoHighlights.length > 0) {
       const userHighlight = videoHighlights.find((highlight: any) => highlight.user_id == userId);
       // const userHighlight = videoHighlights[0].user_highlights[0];
