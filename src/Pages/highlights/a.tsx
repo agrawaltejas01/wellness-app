@@ -89,6 +89,9 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
   };
 
   const toggleMute = (): void => {
+    Mixpanel.track("clicked_mute_on_highlights_page", {
+      userId: userId,
+    });
     if (videoRef.current) {
       const video = videoRef.current;
       video.muted = !isMuted;
@@ -97,6 +100,10 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
   };
 
   const handleShare = (): void => {
+
+    Mixpanel.track("clicked_share_on_highlights_page", {
+      userId: userId,
+    });
     if (navigator.share) {
       navigator.share({
         title: 'Check out this video!',
