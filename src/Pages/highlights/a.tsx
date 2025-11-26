@@ -25,6 +25,12 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
   const userId = userDetails?.id;
 
   useEffect(() => {
+    Mixpanel.track("viewed_highlight_video_page", {
+      userId: userId,
+    });
+  }, []);
+
+  useEffect(() => {
     if (videoRef.current) {
       const video = videoRef.current;
       

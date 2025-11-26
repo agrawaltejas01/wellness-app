@@ -2,6 +2,7 @@ import { navigate } from "@reach/router";
 import { useState } from "react";
 import { addUserHighlight } from "../../apis/highlights/highlights";
 import { useMutation } from "@tanstack/react-query";
+import { Mixpanel } from "../../mixpanel/init";
 
 const SelectHighlight = ({highlights}: {highlights: any[]}) => {
     
@@ -28,6 +29,12 @@ const SelectHighlight = ({highlights}: {highlights: any[]}) => {
     
     const handleContinue = () => {
         if (selectedHighlightId) {
+
+            Mixpanel.track("selected_highlight", {
+                userId: userId,
+                highlightId: selectedHighlightId,
+            });
+
             const selectedHighlight = sortedHighlights.find((highlight: any) => highlight.id === selectedHighlightId);
             setSelectedHighlight(selectedHighlight);
             _addUserHighlight({userId, highlightId: selectedHighlightId});
