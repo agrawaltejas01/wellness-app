@@ -4,7 +4,7 @@ import { addUserHighlight } from "../../apis/highlights/highlights";
 import { useMutation } from "@tanstack/react-query";
 import { Mixpanel } from "../../mixpanel/init";
 
-const SelectHighlight = ({highlights}: {highlights: any[]}) => {
+const SelectHighlight = ({highlights, setShowStatsModal, setShowSelectHighlightsModal}: {highlights: any[], setShowStatsModal: (show: boolean) => void, setShowSelectHighlightsModal: (show: boolean) => void}) => {
     
     const [selectedHighlightId, setSelectedHighlightId] = useState<string | null>(null);
     const [selectedHighlight, setSelectedHighlight] = useState<any>(null);
@@ -20,7 +20,8 @@ const SelectHighlight = ({highlights}: {highlights: any[]}) => {
     const {mutate: _addUserHighlight} = useMutation({
         mutationFn: ({userId, highlightId}: {userId: string, highlightId: string}) => addUserHighlight(userId, highlightId),
         onSuccess: (result) => {
-            navigate("/highlights", {state: {url: selectedHighlight.highlight_link}});
+            setShowStatsModal(true);
+            setShowSelectHighlightsModal(false);
         },
         onError: (error) => {
             console.log(error);

@@ -7,6 +7,7 @@ import { getHighlights } from "../../apis/highlights/highlights";
 import { BottomUpModal } from "../profile/half-page-modal";
 import SelectHighlight from "./select-highlight";
 import { Mixpanel } from "../../mixpanel/init";
+import Stats from "../highlights/stats";
 
 const Highlights = () => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const Highlights = () => {
   const [stateUrl, setStateUrl] = useState<string>("");
   const userId = userDetails.id;
   const [showSelectHighlightsModal, setShowSelectHighlightsModal] = useState(false);
+  const [showStatsModal, setShowStatsModal] = useState(false);
   const {mutate: _getHighlights} = useMutation({
     mutationFn: getHighlights,
     onSuccess: (result) => {
@@ -48,7 +50,8 @@ const Highlights = () => {
       // const userHighlight = videoHighlights[0].user_highlights[0];
       if(userHighlight) {
         // setShowSelectHighlightsModal(true);
-        navigate("/highlights", {state: {url: userHighlight.highlight_link}});
+        // navigate("/highlights", {state: {url: userHighlight.highlight_link}});
+        setShowStatsModal(true);
       } else {
         setShowSelectHighlightsModal(true);
       } 
@@ -81,8 +84,16 @@ const Highlights = () => {
       showCloseButton={false}
     >
       <div className="flex flex-col gap-2">
-          <SelectHighlight highlights={videoHighlights} />
+          <SelectHighlight highlights={videoHighlights} setShowStatsModal={setShowStatsModal} setShowSelectHighlightsModal={setShowSelectHighlightsModal} />
       </div>
+    </BottomUpModal>)}
+    {showStatsModal && (<BottomUpModal
+      isOpen={showStatsModal}
+      onClose={() => setShowStatsModal(false)}
+      title=""
+      showCloseButton={false}
+    >
+      <Stats StatsProps={videoHighlights.find((highlight: any) => highlight.user_id == userId)} />
     </BottomUpModal>)}
     </> : <></>
   );
