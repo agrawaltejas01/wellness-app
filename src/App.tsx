@@ -28,9 +28,11 @@ import BookingInfoHost from "./Pages/bookings/host";
 import BookingInfoCenter from "./Pages/bookings/center";
 import FeedbackThankyou from "./Pages/home/feedback-thankyou";
 import { useMixpanelTracking } from "./hooks/useMixpanelTracking";
-import Highlights from "./Pages/highlights/highlights";
 import Leaderboard from "./Pages/leaderboard/leaderboard";
 import UserProfile from "./Pages/user-profile/user-profile";
+import Highlights from "./Pages/highlights/highlights";
+import Stats from "./Pages/highlights/stats";
+import HeatMap from "./Pages/highlights/heat-map";    
 
 // Create a client
 const queryClient = new QueryClient();
@@ -126,6 +128,8 @@ function App() {
           <BookingInfoCenter path="/booking-info-center" /> 
           <FeedbackThankyou path="/feedback-thankyou" />
           <Highlights path="/highlights" />
+          <Stats path="/stats" />
+          <HeatMap path="/heat-map" />
           <Leaderboard path="/leaderboard" />
           <UserProfile path="/user-profile" />
         </Router>

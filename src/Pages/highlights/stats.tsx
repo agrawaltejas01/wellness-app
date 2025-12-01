@@ -1,32 +1,38 @@
-import { navigate } from "@reach/router";
+import { navigate, RouteComponentProps, useLocation } from "@reach/router";
 import ReelsVideoPlayer from "./a";
+import { useState } from "react";
+import { BottomUpModal } from "../profile/half-page-modal";
+import { ReactComponent as BackButtonCheckout } from '../../images/utils/back-button-checkout.svg';
 
-interface StatsProps {
-  highlight_id: string;
-  player_id: number;
-  highlight_link: string;
-  rally_link: string;
-  heat_map_link: string;
-}
+interface IStats extends RouteComponentProps {}
 
-const Stats = ({ StatsProps }: { StatsProps: StatsProps }) => {
+const Stats: React.FC<IStats> = () => {
+
+  const {highlight_link, rally_link, heatmap_link} = useLocation().state as {highlight_link: string, rally_link: string, heatmap_link: string};
+
   const handleHighlightClick = () => {
-    navigate("/highlights", { state: { url: StatsProps.highlight_link } });
+    navigate("/highlights", { state: { url: highlight_link } });
   };
 
   const handleRallyClick = () => {
-    navigate("/highlights", { state: { url: StatsProps.rally_link } });
+    // navigate("/highlights", { state: { url: StatsProps.rally_link } });
+    navigate("/highlights", { state: { url: rally_link } });
   };
 
   const handleHeatMapClick = () => {
-    navigate("/highlights", { state: { url: StatsProps.heat_map_link } });
+    // navigate("/highlights", { state: { url: StatsProps.heat_map_link } });
+    // navigate("/highlights", { state: { url: heat_map_link } });
+    navigate("/heat-map", { state: { heatmap_link: heatmap_link } });
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      <div className="w-full max-w-4xl mx-auto mt-4 px-4">
+        <BackButtonCheckout onClick={() => navigate(-1)} className="cursor-pointer" />
+      </div>
       <div className="flex flex-col gap-6 px-6 pt-8 pb-24 max-w-2xl mx-auto">
         {/* Player Badge */}
-        <div className="flex items-center justify-center gap-3 animate-fadeIn">
+        {/* <div className="flex items-center justify-center gap-3 animate-fadeIn">
           <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-6 py-3 rounded-2xl shadow-lg border border-emerald-200/50">
             <svg
               className="w-6 h-6 text-emerald-600"
@@ -46,7 +52,7 @@ const Stats = ({ StatsProps }: { StatsProps: StatsProps }) => {
               {StatsProps.player_id}
             </span>
           </div>
-        </div>
+        </div> */}
 
         {/* Title */}
         <div className="text-center space-y-2 animate-fadeIn" style={{ animationDelay: "100ms" }}>
@@ -54,7 +60,7 @@ const Stats = ({ StatsProps }: { StatsProps: StatsProps }) => {
             Your Match Recap
           </h1>
           <p className="text-slate-500 text-sm">
-            Auto Curated by ZenVision AI
+            Auto Curated by <span className="font-bold bg-emerald-500/20 px-2 py-1 rounded-lg" style={{ color: 'rgb(17, 19, 11)' }}>ZenVision AI</span>
           </p>
         </div>
 
@@ -106,7 +112,7 @@ const Stats = ({ StatsProps }: { StatsProps: StatsProps }) => {
 
           {/* Top Rallies Card */}
           <div
-            onClick={() => alert(StatsProps.rally_link)}
+            onClick={handleRallyClick}
             className="group relative overflow-hidden bg-gradient-to-br from-rose-500 to-pink-600 rounded-3xl p-6 cursor-pointer transform transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl active:scale-[0.98] animate-fadeIn"
             style={{ animationDelay: "300ms" }}
           >
@@ -144,7 +150,7 @@ const Stats = ({ StatsProps }: { StatsProps: StatsProps }) => {
 
           {/* Heatmap Card */}
           <div
-            onClick={() => alert(StatsProps.heat_map_link)}
+            onClick={handleHeatMapClick}
             className="group relative overflow-hidden bg-gradient-to-br from-amber-500 to-orange-600 rounded-3xl p-6 cursor-pointer transform transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl active:scale-[0.98] animate-fadeIn"
             style={{ animationDelay: "400ms" }}
           >
