@@ -266,7 +266,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
 
   if(showUpdatePopup) return <ForceUpdatePopup />
   if (showOnBoarding()) return <Onboarding setOnboarding={setOnboarding} />;
-  if (!gotPastBookings) return <Loader />;
+  if (!activities.length || !gotPastBookings) return <Loader />;
   if(!userDetails?.name || !userDetails?.gender || !userDetails?.dob) return <GetStarted />;
 
   return (
