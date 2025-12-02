@@ -4,11 +4,11 @@ import { addUserHighlight } from "../../apis/highlights/highlights";
 import { useMutation } from "@tanstack/react-query";
 import { Mixpanel } from "../../mixpanel/init";
 
-const SelectHighlight = ({highlights}: {highlights: any[]}) => {
+const SelectHighlight = ({highlights, setFinalSelectedHighlight, matchId, batchId, setShowStatsModal, setShowSelectHighlightsModal}: {highlights: any[], setFinalSelectedHighlight: (highlight: any) => void, matchId: number, batchId: number, setShowStatsModal: (show: boolean) => void, setShowSelectHighlightsModal: (show: boolean) => void}) => {
     
     const [selectedHighlightId, setSelectedHighlightId] = useState<string | null>(null);
     const [selectedHighlight, setSelectedHighlight] = useState<any>(null);
-    const filteredHighlights = highlights.filter((highlight: any) => highlight.user_id != null);
+    const filteredHighlights = highlights.filter((highlight: any) => highlight.match_id == matchId && highlight.batch_id == batchId);
     const sortedHighlights = filteredHighlights.sort((a: any, b: any) => a.player_id - b.player_id);
     const userDetails = JSON.parse(window.localStorage["zenfitx-user-details"] || '{}');
     const userId = userDetails.id;
@@ -20,7 +20,8 @@ const SelectHighlight = ({highlights}: {highlights: any[]}) => {
     const {mutate: _addUserHighlight} = useMutation({
         mutationFn: ({userId, highlightId}: {userId: string, highlightId: string}) => addUserHighlight(userId, highlightId),
         onSuccess: (result) => {
-            navigate("/highlights", {state: {url: selectedHighlight.highlight_link}});
+            // setShowStatsModal(true);
+            setShowSelectHighlightsModal(false);
         },
         onError: (error) => {
             console.log(error);
@@ -36,8 +37,11 @@ const SelectHighlight = ({highlights}: {highlights: any[]}) => {
             });
 
             const selectedHighlight = sortedHighlights.find((highlight: any) => highlight.id === selectedHighlightId);
-            setSelectedHighlight(selectedHighlight);
-            _addUserHighlight({userId, highlightId: selectedHighlightId});
+            setFinalSelectedHighlight(selectedHighlight);
+            // setShowStatsModal(true);
+            setShowSelectHighlightsModal(false);
+            navigate("/stats", { state: { highlight_link: selectedHighlight?.highlight_link, rally_link: selectedHighlight?.rally_link, heatmap_link: selectedHighlight?.heatmap_link } });
+            // _addUserHighlight({userId, highlightId: selectedHighlightId});
         }
     }
     
