@@ -21,7 +21,7 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
     : null;
 
   const [, setAccessTokenAtom] = useAtom(accessTokenAtom);
-  const [, setUserDetailsAtom] = useAtom(userDetailsAtom);
+  const [userDetails, setUserDetailsAtom] = useAtom(userDetailsAtom);
   const [afterLoginRedirect] = useAtom(afterLoginRedirectAtom);
 
   const [currentStep, setCurrentStep] = useState(1);
