@@ -23,6 +23,7 @@ interface LeaderboardPlayer {
     rating: number;
     user_id: number;
     rank?: number;
+    lastGamePlayedDate?: string;
 }
 
 interface UserRating {
@@ -515,8 +516,23 @@ const Leaderboard = (props: LeaderboardProps) => {
                                                 </div>
                                             </div>
                                             <div className="flex flex-col">
-                                                <span className="ranking-player-name text-sm lg:text-base font-bold text-gray-900">{player.name}</span>
-                                                <span className="ranking-player-games text-xs lg:text-sm text-green-700">{player.gamesPlayedCount} games</span>
+                                                <span className="text-sm font-bold  text-gray-900">{player.name}</span>
+                                                <span className="text-xs text-green-700">{player.gamesPlayedCount} games</span>
+                                                <span className="text-green-700" style={{fontSize: '11px'}}>
+                                                    {player.lastGamePlayedDate
+                                                        ? (() => {
+                                                            const lastPlayed = new Date(player.lastGamePlayedDate);
+                                                            const today = new Date();
+                                                            // Reset both dates to midnight to ignore time
+                                                            lastPlayed.setHours(0,0,0,0);
+                                                            today.setHours(0,0,0,0);
+                                                            const diffTime = today.getTime() - lastPlayed.getTime();
+                                                            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                                                            return `Last played ${diffDays == 0 ? ' today' : diffDays == 1 ? ' yesterday' : diffDays + ' days ago'}`;
+                                                        })()
+                                                        : ''
+                                                    }
+                                                </span>
                                             </div>
                                         </div>
                                         <div className="flex flex-col items-end">
