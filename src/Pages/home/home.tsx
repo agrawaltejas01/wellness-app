@@ -420,8 +420,15 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
             </div>
           </div>
         ) : (
-          /* Game Highlights Section - Only show for available activities */
-          <GameHighlights />
+          <>
+
+            {/* Leaderboard Section */}
+            <LeaderboardHome activityId={1} />
+
+            {/* Game Highlights Section - Only show for available activities */}
+            <GameHighlights />
+            
+          </>
         )}
       </div>
       

@@ -19,6 +19,7 @@ interface LeaderboardPlayer {
     activity_id: number;
     gamesPlayedCount: number;
     name: string;
+    profile_picture: string;
     rating: number;
     user_id: number;
     rank?: number;
@@ -254,6 +255,30 @@ const Leaderboard = (props: LeaderboardProps) => {
         };
     };
 
+    // Get player initials
+    const getInitials = (name: string) => {
+        return name.charAt(0).toUpperCase();
+    };
+
+    // Get podium colors based on rank
+    const getPodiumColor = (rank: number) => {
+        if (rank === 0) return 'bg-gradient-to-b from-green-300 to-green-400'; // 1st place - green
+        if (rank === 1) return 'bg-gradient-to-b from-amber-300 to-amber-400'; // 2nd place - brownish/tan
+        return 'bg-gradient-to-b from-yellow-200 to-yellow-300'; // 3rd place - light yellow
+    };
+
+    const getPodiumHeight = (rank: number) => {
+        if (rank === 0) return 'h-32 sm:h-36 lg:h-44'; // 1st place tallest
+        if (rank === 1) return 'h-24 sm:h-28 lg:h-32'; // 2nd place
+        return 'h-20 sm:h-24 lg:h-28'; // 3rd place
+    };
+
+    const getAvatarColor = (rank: number) => {
+        if (rank === 0) return 'bg-gradient-to-br from-purple-500 to-purple-600'; // 1st
+        if (rank === 1) return 'bg-gradient-to-br from-amber-600 to-amber-700'; // 2nd
+        return 'bg-gradient-to-br from-purple-500 to-purple-600'; // 3rd
+    };
+
     return (
         <div className="leaderboard-container">
             {/* Header */}
@@ -284,70 +309,101 @@ const Leaderboard = (props: LeaderboardProps) => {
 
             <div className="leaderboard-content">
                 {/* Top 3 Podium */}
-                <div className="top-champions-card">
-                    <h2 className="champions-title text-base lg:text-xl font-bold text-gray-900 mb-3 lg:mb-6">Top Champions</h2>
-                    <div className="podium-wrapper flex justify-center items-end gap-3 lg:gap-6 mb-4">
-                    {/* 2nd Place */}
-                    {leaderboardData[1] && (
-                        <div className="flex flex-col items-center w-1/3">
-                            <div className="champion-card second bg-gray-100 rounded-lg p-2 lg:p-3 mb-1 min-h-[50px] lg:min-h-[70px] flex flex-col justify-end">
-                                <Circle 
-                                    radius={16} 
-                                    borderColor="#9ca3af" 
-                                    borderStyle="solid" 
-                                    backgroundColor="#9ca3af" 
-                                    character="2" 
-                                    fontColor="white" 
-                                />
-                            </div>
-                            <div className="text-center">
-                                <p className="champion-name font-bold text-xs lg:text-base">{leaderboardData[1].name}</p>
-                                <p className="champion-rating text-xs lg:text-sm text-green-700">{leaderboardData[1].rating/100}</p>
-                            </div>
-                        </div>
-                    )}
+                {leaderboardData.length >= 3 && (
+                    <div className="top-champions-card mb-6">
+                        <h2 className="champions-title text-base lg:text-xl font-bold text-gray-900 mb-6 lg:mb-8">Top Champions</h2>
+                        <div className="flex justify-center items-end gap-2 sm:gap-3 lg:gap-4 mb-6 px-2 mt-10 sm:mt-12 lg:mt-16">
+                            {/* Arrange in 2-1-3 order */}
+                            {[leaderboardData[1], leaderboardData[0], leaderboardData[2]].map((player, displayIndex) => {
+                                const actualRank = displayIndex === 0 ? 1 : displayIndex === 1 ? 0 : 2;
+                                const rankNumber = actualRank + 1;
+                                
+                                return (
+                                    <div key={player.user_id} className="flex-1 flex flex-col items-center">
+                                        {/* Rank badge */}
+                                        <div className={`relative mb-2 sm:mb-3 fade-in-delay-${displayIndex + 1}`}>
+                                            {/* Rank number behind avatar */}
+                                            <div 
+                                                className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full z-0 text-4xl sm:text-5xl lg:text-6xl"
+                                                style={{
+                                                    lineHeight: '1',
+                                                    fontFamily: '"Hedvig Letters Serif", serif',
+                                                    fontWeight: '600',
+                                                    color: 'rgba(156, 163, 175, 0.4)',
+                                                    pointerEvents: 'none'
+                                                }}
+                                            >
+                                                {rankNumber}
+                                            </div>
+                                            
+                                            {/* Verified checkmark badge */}
+                                            <div 
+                                                className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 z-20"
+                                            >
+                                                {/* Green circle with checkmark */}
+                                                <div 
+                                                    className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-green-500 flex items-center justify-center shadow-md"
+                                                >
+                                                    <svg 
+                                                        className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" 
+                                                        fill="none" 
+                                                        stroke="currentColor" 
+                                                        strokeWidth="3"
+                                                        viewBox="0 0 24 24"
+                                                    >
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            
+                                            {/* Avatar circle */}
+                                            <div 
+                                                className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center relative z-10"
+                                            >
+                                                <div 
+                                                    className={`${getAvatarColor(actualRank)} w-full h-full rounded-full flex items-center justify-center shadow-lg overflow-hidden`}
+                                                >
+                                                    {player.profile_picture ? (
+                                                        <img 
+                                                            src={player.profile_picture} 
+                                                            alt={player.name}
+                                                            className="w-full h-full rounded-full object-cover"
+                                                        />
+                                                    ) : (
+                                                        <span className="text-white font-bold text-xl sm:text-2xl lg:text-3xl" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+                                                            {getInitials(player.name)}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
 
-                    {/* 1st Place */}
-                    {leaderboardData[0] && (
-                        <div className="flex flex-col items-center w-1/3">
-                            <div className="champion-card first bg-yellow-100 rounded-lg p-2 lg:p-4 mb-1 min-h-[60px] lg:min-h-[100px] flex flex-col justify-end">
-                                <Circle 
-                                    radius={18} 
-                                    borderColor="#fbbf24" 
-                                    borderStyle="solid" 
-                                    backgroundColor="#fbbf24" 
-                                    character="1" 
-                                    fontColor="white" 
-                                />
-                            </div>
-                            <div className="text-center">
-                                <p className="champion-name font-bold text-xs lg:text-base">{leaderboardData[0].name}</p>
-                                <p className="champion-rating text-xs lg:text-sm text-green-700">{leaderboardData[0].rating/100}</p>
-                            </div>
-                        </div>
-                    )}
+                                        {/* Player info */}
+                                        <div className="text-center mb-2 px-1">
+                                            <p 
+                                                className="font-bold text-sm sm:text-base lg:text-lg text-gray-800 truncate max-w-full"
+                                                style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+                                            >
+                                                {player.name}
+                                            </p>
+                                            <p 
+                                                className="text-xs sm:text-sm text-gray-500"
+                                                style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+                                            >
+                                                {(player.rating / 100).toFixed(0)} zen score
+                                            </p>
+                                        </div>
 
-                    {/* 3rd Place */}
-                    {leaderboardData[2] && (
-                        <div className="flex flex-col items-center w-1/3">
-                            <div className="champion-card third bg-orange-100 rounded-lg p-2 mb-1 min-h-[40px] lg:min-h-[60px] flex flex-col justify-end">
-                                <Circle 
-                                    radius={14} 
-                                    borderColor="#fb923c" 
-                                    borderStyle="solid" 
-                                    backgroundColor="#fb923c" 
-                                    character="3" 
-                                    fontColor="white" 
-                                />
-                            </div>
-                            <div className="text-center">
-                                <p className="champion-name font-bold text-xs lg:text-base">{leaderboardData[2].name}</p>
-                                <p className="champion-rating text-xs lg:text-sm text-green-700">{leaderboardData[2].rating/100}</p>
-                            </div>
+                                        {/* Podium bar */}
+                                        <div 
+                                            className={`${getPodiumColor(actualRank)} ${getPodiumHeight(actualRank)} w-full rounded-t-xl transition-all duration-300 hover:scale-105`}
+                                        ></div>
+                                    </div>
+                                );
+                            })}
                         </div>
-                    )}
                     </div>
-                </div>
+                )}
 
                 {/* User's Own Rating */}
                 {userDetails && (
@@ -414,14 +470,50 @@ const Leaderboard = (props: LeaderboardProps) => {
                                 >
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-3 lg:gap-4">
-                                            <Circle 
-                                                radius={16} 
-                                                borderColor={circleProps.borderColor}
-                                                borderStyle="solid" 
-                                                backgroundColor={circleProps.backgroundColor}
-                                                character={player.rank || 0} 
-                                                fontColor={circleProps.fontColor}
-                                            />
+                                            <div className="flex items-center gap-2">
+                                                <span 
+                                                    className="text-sm lg:text-base font-bold"
+                                                    style={{ 
+                                                        color: circleProps.fontColor,
+                                                        minWidth: '24px',
+                                                        textAlign: 'center'
+                                                    }}
+                                                >
+                                                    {player.rank || 0}
+                                                </span>
+                                                <div 
+                                                    style={{
+                                                        width: '32px',
+                                                        height: '32px',
+                                                        borderRadius: '50%',
+                                                        border: `1px solid ${circleProps.borderColor}`,
+                                                        backgroundColor: circleProps.backgroundColor,
+                                                        display: 'flex',
+                                                        justifyContent: 'center',
+                                                        alignItems: 'center',
+                                                        overflow: 'hidden'
+                                                    }}
+                                                >
+                                                    {player.profile_picture ? (
+                                                        <img 
+                                                            src={player.profile_picture} 
+                                                            alt={player.name}
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    ) : (
+                                                        <span 
+                                                            style={{
+                                                                fontSize: '14px',
+                                                                fontWeight: 'bold',
+                                                                fontFamily: 'Plus Jakarta Sans',
+                                                                color: circleProps.fontColor
+                                                            }}
+                                                        >
+                                                            {getInitials(player.name)}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
                                             <div className="flex flex-col">
                                                 <span className="ranking-player-name text-sm lg:text-base font-bold text-gray-900">{player.name}</span>
                                                 <span className="ranking-player-games text-xs lg:text-sm text-green-700">{player.gamesPlayedCount} games</span>

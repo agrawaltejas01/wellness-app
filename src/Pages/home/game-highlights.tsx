@@ -60,9 +60,12 @@ const GameHighlights: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Heading with decorative lines */}
         <div className="flex items-center justify-center mb-6 sm:mb-8">
-          <div className="flex-1 h-px bg-gray-300 max-w-[80px] sm:max-w-[120px]"></div>
+          <div 
+            className="flex-1 h-0.5 max-w-[120px] sm:max-w-[180px]"
+            style={{ background: 'linear-gradient(to left, #e6e6e6, #ffffff)' }}
+          ></div>
           <h2
-            className="px-4 sm:px-6 text-lg sm:text-xl md:text-2xl font-bold text-center"
+            className="px-4 sm:px-6 text-sm sm:text-base font-bold text-center"
             style={{
               fontFamily: "Plus Jakarta Sans, sans-serif",
               letterSpacing: "2px",
@@ -71,7 +74,10 @@ const GameHighlights: React.FC = () => {
           >
             GAME HIGHLIGHTS
           </h2>
-          <div className="flex-1 h-px bg-gray-300 max-w-[80px] sm:max-w-[120px]"></div>
+          <div 
+            className="flex-1 h-0.5 max-w-[120px] sm:max-w-[180px]"
+            style={{ background: 'linear-gradient(to right, #e6e6e6, #ffffff)' }}
+          ></div>
         </div>
 
         {/* Horizontal scrolling cards */}
