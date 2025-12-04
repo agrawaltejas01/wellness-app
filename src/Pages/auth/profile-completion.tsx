@@ -392,6 +392,13 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
   const handleStep2Submit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Move to step 3
+    setCurrentStep(3);
+  };
+
+  const handleStep3Submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
     setIsLoading(true);
     
     const userPayload: IUser = {
@@ -410,20 +417,44 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
     setCurrentStep(1);
   };
 
-  const handleSkip = () => {
-    // Skip photo upload and complete profile
-    setIsLoading(true);
-    
-    const userPayload: IUser = {
-      id: userFromState?.id || userDetails?.id,
-      name: formData.name.trim(),
-      phone: formData.phone,
-      gender: formData.gender as "M" | "F" | "O",
-      dob: new Date(formData.dob).toISOString().split('T')[0],
-      noOfBookings: userFromState?.noOfBookings ?? 0,
-    };
+  const handleBackToStep2 = () => {
+    setCurrentStep(2);
+  };
 
-    updateUserMutation(userPayload);
+  const handleSkip = () => {
+    // Skip current step
+    if (currentStep === 2) {
+      // Skip photo upload and move to step 3
+      setCurrentStep(3);
+    } else if (currentStep === 3) {
+      // Skip health permissions and complete profile
+      setIsLoading(true);
+      
+      const userPayload: IUser = {
+        id: userFromState?.id || userDetails?.id,
+        name: formData.name.trim(),
+        phone: formData.phone,
+        gender: formData.gender as "M" | "F" | "O",
+        dob: new Date(formData.dob).toISOString().split('T')[0],
+        noOfBookings: userFromState?.noOfBookings ?? 0,
+      };
+
+      updateUserMutation(userPayload);
+    }
+  };
+
+  const handleRequestHealthPermissions = () => {
+    // Send message to React Native WebView only if platform is iOS
+    if (isFromApp && platform === "ios" && window?.ReactNativeWebView) {
+      window.ReactNativeWebView.postMessage(JSON.stringify({
+        type: 'request_health_permissions'
+      }));
+      
+      Mixpanel.track("health_permissions_requested", {
+        user_id: userFromState?.id || userDetails?.id,
+        platform: platform
+      });
+    }
   };
 
   const PhotoOptionsMenu = () => {
@@ -505,7 +536,7 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
     <div className="sm:w-full min-h-screen bg-white flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between p-6">
-        {currentStep === 2 ? (
+        {(currentStep === 2 || currentStep === 3) ? (
           <button
             onClick={handleSkip}
             disabled={isLoading}
@@ -525,10 +556,10 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div 
             className="bg-black h-2 rounded-full transition-all duration-300"
-            style={{ width: `${(currentStep / 2) * 100}%` }}
+            style={{ width: `${(currentStep / 3) * 100}%` }}
           ></div>
         </div>
-        <p className="text-sm text-gray-600 mt-2 text-center">Step {currentStep} of 2</p>
+        <p className="text-sm text-gray-600 mt-2 text-center">Step {currentStep} of 3</p>
       </div>
 
       {/* Main Content */}
@@ -537,12 +568,18 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
           {/* Title */}
           <div className="text-center mb-8">
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              {currentStep === 1 ? "Your game, Your profile." : "Add a profile photo"}
+              {currentStep === 1 
+                ? "Your game, Your profile." 
+                : currentStep === 2 
+                ? "Add a profile photo"
+                : "Connect Apple Health"}
             </h1>
             <p className="text-gray-600">
               {currentStep === 1 
                 ? "Help us personalize your experience ⚡️"
-                : "Let others recognize you on the court 📸"
+                : currentStep === 2
+                ? "Let others recognize you on the court 📸"
+                : "Sync your fitness data for better insights 🏃‍♂️"
               }
             </p>
           </div>
@@ -761,6 +798,84 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
                 <button
                   type="button"
                   onClick={handleBackToStep1}
+                  className="w-full py-4 px-6 rounded-lg font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition-all"
+                >
+                  Back
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className={`w-full py-4 px-6 rounded-lg font-semibold text-white transition-all ${
+                    isLoading
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-black hover:bg-gray-800 active:bg-gray-900"
+                  }`}
+                >
+                  Continue
+                </button>
+              </div>
+            </form>
+          )}
+
+          {/* Step 3: Apple Health Permissions */}
+          {currentStep === 3 && (
+            <form onSubmit={handleStep3Submit} className="space-y-6">
+              <div className="flex flex-col items-center">
+                {/* Health Icon/Illustration */}
+                <div className="mb-8">
+                  <div className="w-24 h-24 bg-gradient-to-br from-red-500 to-pink-500 rounded-full flex items-center justify-center">
+                    <svg 
+                      className="w-12 h-12 text-white" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        strokeWidth={2} 
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" 
+                      />
+                    </svg>
+                  </div>
+                </div>
+
+                <h2 className="text-xl font-semibold text-gray-900 mb-4 text-center">
+                  Connect Apple Health
+                </h2>
+                
+                <p className="text-gray-600 text-center mb-6">
+                  Allow us to access your Apple Health data to provide personalized fitness insights and track your progress.
+                </p>
+
+                {/* Request Permissions Button */}
+                {isFromApp && platform === "ios" && (
+                  <button
+                    type="button"
+                    onClick={handleRequestHealthPermissions}
+                    className="w-full py-4 px-6 rounded-lg font-semibold text-white bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 active:from-red-700 active:to-pink-700 transition-all mb-4"
+                  >
+                    Connect Apple Health
+                  </button>
+                )}
+
+                {!isFromApp || platform !== "ios" ? (
+                  <p className="text-sm text-gray-500 text-center mb-4">
+                    Apple Health integration is available on iOS devices.
+                  </p>
+                ) : null}
+
+                <p className="mt-4 text-sm text-gray-500 text-center">
+                  You can skip this step and connect later from settings
+                </p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="space-y-3">
+                <button
+                  type="button"
+                  onClick={handleBackToStep2}
                   className="w-full py-4 px-6 rounded-lg font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition-all"
                 >
                   Back
