@@ -42,6 +42,7 @@ import BottomNav from "../../components/bottom-nav";
 import GameHighlights from "./game-highlights";
 import { getUpcomingBookings } from "../../apis/bookings/upcoming";
 import UpcomingBooking from "./upcoming-booking";
+import KeepMovingBanner from "./keep-moving-banner";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -423,7 +424,6 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
           </div>
         ) : (
           <>
-
             <UpcomingBooking userId={userDetails?.id as unknown as string} />
 
             {/* Leaderboard Section */}
@@ -432,6 +432,8 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
             {/* Game Highlights Section - Only show for available activities */}
             <GameHighlights />
             
+            {/* Keep Moving Banner */}
+            <KeepMovingBanner />
           </>
         )}
       </div>
