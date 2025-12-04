@@ -31,16 +31,17 @@ const ActivitySelector: React.FC<ActivitySelectorProps> = ({
                 className="flex-1 cursor-pointer relative"
                 onClick={() => handleActivityClick(activity)}
               >
-                <div className="flex flex-col items-center justify-center py-3 sm:py-4 md:py-5 px-1 sm:px-2">
+                <div 
+                  className="flex flex-col items-center justify-center py-3 sm:py-4 md:py-5 px-1 sm:px-2 rounded-lg transition-all duration-200"
+                  style={{
+                    background: isSelected 
+                      ? "linear-gradient(to top, rgba(76, 175, 80, 0.1) 0%, rgba(76, 175, 80, 0.05) 100%)"
+                      : "transparent",
+                  }}
+                >
                   {/* Activity Icon */}
                   <div
                     className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 flex items-center justify-center mb-2 sm:mb-3 transition-all duration-200"
-                    style={{
-                      filter: isSelected
-                        ? "none"
-                        : "grayscale(100%) brightness(1.2)",
-                      opacity: isSelected ? 1 : 0.4,
-                    }}
                   >
                     <div className="w-full h-full flex items-center justify-center">
                       {activityToSvgMap(activity)}
@@ -53,7 +54,7 @@ const ActivitySelector: React.FC<ActivitySelectorProps> = ({
                     style={{
                       fontFamily: "Plus Jakarta Sans, sans-serif",
                       letterSpacing: "0.5px",
-                      color: isSelected ? "#000000" : "#AAAAAA",
+                      color: "#000000",
                     }}
                   >
                     {displayName}
