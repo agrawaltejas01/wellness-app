@@ -150,6 +150,10 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
       console.log("notification token stored successfully!");
     },
   });
+
+  useEffect(() => {
+    window?.ReactNativeWebView?.postMessage("request_health_permissions");
+  }, [userDetails]);
   
 
   // useEffect(()=>{
