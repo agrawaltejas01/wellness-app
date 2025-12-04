@@ -18,7 +18,7 @@ import { IGymCard } from "../../types/gyms";
 import { getPlusDetailsOfUser } from "../../apis/user/plus";
 import { useAtom } from "jotai/react";
 import { plusDetailsAtom, userDetailsAtom } from "../../atoms/atom";
-import IUser, { IPlusDetails } from "../../types/user";
+import IUser, { IBookings, IPlusDetails } from "../../types/user";
 import useAuthRedirect from "../auth/redirect-hook";
 import { Mixpanel } from "../../mixpanel/init";
 import LandingFooter from "../landing/Footer";
@@ -40,6 +40,8 @@ import ProfileHeader from "./profile-header";
 import ActivitySelector from "./activity-selector";
 import BottomNav from "../../components/bottom-nav";
 import GameHighlights from "./game-highlights";
+import { getUpcomingBookings } from "../../apis/bookings/upcoming";
+import UpcomingBooking from "./upcoming-booking";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -421,6 +423,8 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
           </div>
         ) : (
           <>
+
+            <UpcomingBooking userId={userDetails?.id as unknown as string} />
 
             {/* Leaderboard Section */}
             <LeaderboardHome activityId={1} />

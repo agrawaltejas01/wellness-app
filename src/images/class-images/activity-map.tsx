@@ -18,6 +18,8 @@ import { ReactComponent as PickleballIcon } from "./pickleball-icon.svg";
 import { ReactComponent as GymDayPass } from "./gymdaypass.svg";
 import { ReactComponent as Ride } from "./ride.svg"
 import BadmintonKidsImg from "./badminton-coaching.png"
+import shuttlecockIcon from "../activities/shuttlecock.png"
+import fitnessIcon from "../activities/fitness.png"
 
 const activityToSvgMap = (activity: string): JSX.Element => {
   activity = activity.toLowerCase();
@@ -38,8 +40,8 @@ const activityToSvgMap = (activity: string): JSX.Element => {
     </span>
   );
   const badminton = (
-    <span>
-      <BadmintonIcon />
+    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
+      <img src={shuttlecockIcon} alt="Badminton" style={{ width: '70%', height: '70%', objectFit: 'contain' }} />
     </span>
   );
   const badmintonOld = (
@@ -78,8 +80,8 @@ const activityToSvgMap = (activity: string): JSX.Element => {
     </span>
   );
   const gym = (
-    <span>
-      <FitnessIcon />
+    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
+      <img src={fitnessIcon} alt="Fitness" style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
     </span>
   );
   const gymOld = (

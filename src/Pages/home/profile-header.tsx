@@ -4,6 +4,7 @@ import IUser from "../../types/user";
 import { useEffect, useState } from "react";
 import { Mixpanel } from "../../mixpanel/init";
 import { navigate } from "@reach/router";
+import coinImage from "../../images/utils/coin.png";
 
 interface ProfileHeaderProps {
   userDetails: IUser;
@@ -107,61 +108,39 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ userDetails }) => {
 
         {/* Right section - Coins */}
         <div
-          className="flex flex-row items-center gap-1.5 sm:gap-2 md:gap-3 px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 md:py-3 rounded-full cursor-pointer flex-shrink-0"
+          className="flex flex-row items-center gap-1.5 sm:gap-2 md:gap-3 pl-2 sm:pl-3 md:pl-4 pr-3 sm:pr-4 md:pr-5 py-1.5 sm:py-2 md:py-3 rounded-full cursor-pointer flex-shrink-0"
           style={{
-            backgroundColor: "#FFF9E6",
+            backgroundColor: "#FED52C3D",
           }}
           onClick={handleCoinsClick}
         >
-          {/* Coin icon - 3D layered effect */}
-          <div className="relative flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10">
-            <div
-              className="absolute rounded-full"
-              style={{
-                width: "100%",
-                height: "100%",
-                backgroundColor: "#D4A017",
-                top: "12%",
-              }}
-            />
-            <div
-              className="absolute rounded-full"
-              style={{
-                width: "100%",
-                height: "100%",
-                backgroundColor: "#FFD700",
-                border: "2px solid #FFA500",
-              }}
-            />
-            <div
-              className="absolute rounded-full"
-              style={{
-                width: "50%",
-                height: "50%",
-                backgroundColor: "#FFE55C",
-                top: "15%",
-                left: "15%",
-                opacity: 0.7,
-              }}
+          {/* Coin icon */}
+          <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14">
+            <img
+              src={coinImage}
+              alt="Coin"
+              className="w-full h-full rounded-full object-cover"
             />
           </div>
 
           {/* Coins text */}
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-start">
             <p
-              className="text-lg sm:text-2xl md:text-3xl font-extrabold leading-none"
+              className="text-lg sm:text-2xl md:text-3xl leading-none"
               style={{
-                fontFamily: "Plus Jakarta Sans, sans-serif",
+                fontFamily: "General Sans, sans-serif",
                 color: "#000000",
+                fontWeight: "bold",
               }}
             >
               {coins}
             </p>
             <p
-              className="text-xs sm:text-xs md:text-sm font-semibold tracking-wide leading-none mt-0.5"
+              className="text-xs sm:text-xs md:text-sm tracking-wide leading-none mt-0.5"
               style={{
-                fontFamily: "Plus Jakarta Sans, sans-serif",
+                fontFamily: "General Sans, sans-serif",
                 color: "#000000",
+                fontWeight: "regular",
               }}
             >
               COINS
