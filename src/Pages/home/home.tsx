@@ -152,7 +152,9 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
   });
 
   useEffect(() => {
-    window?.ReactNativeWebView?.postMessage("request_health_permissions");
+    if(userDetails?.id) {
+      window?.ReactNativeWebView?.postMessage("request_health_permissions");
+    }
   }, [userDetails]);
   
 
