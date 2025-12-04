@@ -141,7 +141,7 @@ const CoinsCheckout: React.FC<ICoinsCheckout> = ({coinPackage, setShowCoinsCheck
                 </div>
             </div>
             <div className="flex flex-row justify-between font-bold text-sm mb-4 mx-4">
-                <button className="w-full bg-black font-bold text-white text-lg rounded-lg px-4 py-4" onClick={() => {
+                <button className="w-full font-bold text-black text-lg rounded-lg px-4 py-4" style={{background: 'linear-gradient(135deg, rgba(254, 213, 44, 0.24) 0%, rgba(254, 213, 44, 0.4) 100%)'}} onClick={() => {
                     handleBuyNow(coinPackage.Id, setLoading);
                     Mixpanel.track("clicked_buy_coins_button", {
                         userId: userId,

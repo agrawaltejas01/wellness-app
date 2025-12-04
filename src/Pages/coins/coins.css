@@ -31,11 +31,11 @@
 
 /* Balance Card */
 .coins-balance-card {
-    background: #000;
+    background: linear-gradient(135deg, rgba(254, 213, 44, 0.24) 0%, rgba(254, 213, 44, 0.4) 100%);
     border-radius: 8px;
     padding: 24px 20px;
     margin-bottom: 24px;
-    color: white;
+    color: #000;
 }
 
 /* Packages Grid */
@@ -56,8 +56,8 @@
 
 /* Discount Badge */
 .coins-discount-badge {
-    background: #000;
-    color: white;
+    background: linear-gradient(135deg, rgba(254, 213, 44, 0.24) 0%, rgba(254, 213, 44, 0.4) 100%);
+    color: #000;
     font-size: 10px;
     font-weight: 600;
     padding: 4px 8px;
@@ -69,8 +69,8 @@
 /* Buy Button */
 .coins-buy-button {
     width: 100%;
-    background: #000;
-    color: white;
+    background: linear-gradient(135deg, rgba(254, 213, 44, 0.24) 0%, rgba(254, 213, 44, 0.4) 100%);
+    color: #000;
     font-size: 14px;
     font-weight: 500;
     padding: 12px;
@@ -78,15 +78,15 @@
     border: none;
     cursor: pointer;
     letter-spacing: 0.2px;
-    transition: opacity 0.2s;
+    transition: all 0.2s;
 }
 
 .coins-buy-button:hover {
-    opacity: 0.9;
+    background: linear-gradient(135deg, rgba(254, 213, 44, 0.3) 0%, rgba(254, 213, 44, 0.5) 100%);
 }
 
 .coins-buy-button:active {
-    opacity: 0.8;
+    background: linear-gradient(135deg, rgba(254, 213, 44, 0.2) 0%, rgba(254, 213, 44, 0.35) 100%);
 }
 
 /* Laptop Responsive Styles */
