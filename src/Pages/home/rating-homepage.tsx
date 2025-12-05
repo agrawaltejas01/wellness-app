@@ -124,7 +124,7 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
                                 },
                                 {
                                     title: "Track your game & improve",
-                                    subtitle: "with Zenvision AI coach",
+                                    subtitle: "with ZenVision AI coach",
                                     img: (
                                         <img 
                                             src={playerImg} 
@@ -198,7 +198,7 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
                         },
                         {
                             title: "Track your game & improve",
-                            subtitle: "with Zenvision AI coach",
+                            subtitle: "with ZenVision AI coach",
                             img: (
                                 <img 
                                     src={playerImg} 
