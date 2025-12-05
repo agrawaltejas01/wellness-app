@@ -13,20 +13,21 @@ import { ReactComponent as FitnessIcon } from "./fitness-icon.svg";
 import { ReactComponent as Cricket } from "./cricket.svg";
 import { ReactComponent as Dance } from "./dance.svg";
 import { ReactComponent as Football } from "./football.svg";
-import { ReactComponent as Pickleball } from "./pickleball.svg";
-import { ReactComponent as PickleballIcon } from "./pickleball-icon.svg";
 import { ReactComponent as GymDayPass } from "./gymdaypass.svg";
 import { ReactComponent as Ride } from "./ride.svg"
 import BadmintonKidsImg from "./badminton-coaching.png"
 import shuttlecockIcon from "../activities/shuttlecock.png"
 import fitnessIcon from "../activities/fitness.png"
+import pickleballIcon from "../activities/pickleball.png"
+import yogaIcon from "../activities/yoga.png"
+import swimmingIcon from "../activities/swimming.png"
 
 const activityToSvgMap = (activity: string): JSX.Element => {
   activity = activity.toLowerCase();
 
   const yoga = (
     <span>
-      <Yoga />
+      <img src={yogaIcon} alt="Yoga" style={{ width: '70%', height: '70%', objectFit: 'contain' }} />
     </span>
   );
   const pilate = (
@@ -36,7 +37,7 @@ const activityToSvgMap = (activity: string): JSX.Element => {
   );
   const swimming = (
     <span>
-      <Swimming />
+      <img src={swimmingIcon} alt="Swimming" style={{ width: '70%', height: '70%', objectFit: 'contain' }} />
     </span>
   );
   const badminton = (
@@ -99,14 +100,14 @@ const activityToSvgMap = (activity: string): JSX.Element => {
       <Football />
     </span>
   );
-  const pickleball = (
-    <span>
-      <PickleballIcon />
+  const pickleball = (  
+    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
+      <img src={pickleballIcon} alt="Pickleball" style={{ width: '70%', height: '70%', objectFit: 'contain' }} />
     </span>
   );
   const pickleballOld = (
     <span>
-      <Pickleball />
+      <img src={pickleballIcon} alt="Pickleball" style={{ width: '70%', height: '70%', objectFit: 'contain' }} />
     </span>
   );
   const cricket = (
