@@ -43,6 +43,7 @@ import GameHighlights from "./game-highlights";
 import { getUpcomingBookings } from "../../apis/bookings/upcoming";
 import UpcomingBooking from "./upcoming-booking";
 import KeepMovingBanner from "./keep-moving-banner";
+import RatingHomepage from "./rating-homepage";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -426,6 +427,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
           <>
             <UpcomingBooking userId={userDetails?.id as unknown as string} />
 
+            <RatingHomepage userDetails={userDetails} />
             {/* Leaderboard Section */}
             <LeaderboardHome activityId={1} />
 
