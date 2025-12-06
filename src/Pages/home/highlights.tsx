@@ -12,9 +12,8 @@ import { formatDate } from "../../utils/date";
 import highlightImage from "../../images/home/highlight.jpeg";
 import { formatTimeIntToAmPm } from "../../utils/date";
 
-const Highlights = ({leftComponentHeight}: {leftComponentHeight: number}) => {
+const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight: number, videoHighlights: any[]}) => {
   const navigate = useNavigate();
-  const [videoHighlights, setVideoHighlights] = useState<any[]>([]);
   const userDetails = JSON.parse(window.localStorage["zenfitx-user-details"] || '{}');
   const [navigateUrl, setNavigateUrl] = useState<string>("");
   const [stateUrl, setStateUrl] = useState<string>("");
@@ -28,26 +27,6 @@ const Highlights = ({leftComponentHeight}: {leftComponentHeight: number}) => {
   const [showStatsModal, setShowStatsModal] = useState(false);
   const [selectedHighlight, setSelectedHighlight] = useState<any>(null);
   const [finalSelectedHighlight, setFinalSelectedHighlight] = useState<any>(null);
-  const {mutate: _getHighlights} = useMutation({
-    mutationFn: getHighlights,
-    onSuccess: (result) => {
-      if(result && result.length > 0) {
-       setVideoHighlights(result);
-      }
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-    onSettled: () => {
-      
-      console.log("Highlights fetched");
-    //   alert(videoHighlights);
-    },
-  });
-
-  useEffect(() => {
-    _getHighlights(userId);
-  }, []);
 
   const handleNavigate = () => {
     
@@ -76,7 +55,7 @@ const Highlights = ({leftComponentHeight}: {leftComponentHeight: number}) => {
                     <div className="absolute top-0 left-0 w-full p-2 md:p-3 flex justify-center" style={{ backgroundColor: '#EBEBEB' }}>
                         <span className="text-black md:text-base lg:text-lg font-medium">Your last highlight!</span>
                     </div>
-                    <div className="absolute bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 flex items-center justify-center">
+                    <div className="absolute bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 flex items-center justify-center" onClick={handleNavigate}>
                         <div className="relative w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16">
                             <svg className="absolute inset-0 w-full h-full" viewBox="0 0 48 48">
                                 <defs>

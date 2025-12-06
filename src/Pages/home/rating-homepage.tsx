@@ -276,12 +276,15 @@ const Rating = ({rating, zenScore, zenRank, games, isLoadingRating, isLoadingGam
     const zenScoreCardRef = useRef<HTMLDivElement>(null);
     const ratingBadgeRef = useRef<HTMLDivElement>(null);
     const userDetails = JSON.parse(window.localStorage["zenfitx-user-details"] || '{}');
-    const [highlightLink, setHighlightLink] = useState<string>("");
+    const [videoHighlights, setVideoHighlights] = useState<any[]>([]);
 
     const { mutate: _getHighlights } = useMutation({
         mutationFn: getHighlights,
         onSuccess: (result) => {
-            setHighlightLink(result?.highlight_link || "ss");
+            if(result && result.length > 0) {
+                setVideoHighlights(result);
+            }
+            setVideoHighlights([{id: '1', batch_id: '1', batch_name: 'Batch 1', highlight_link: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'}]);
         },
     });
     
@@ -326,8 +329,8 @@ const Rating = ({rating, zenScore, zenRank, games, isLoadingRating, isLoadingGam
 
     return (
         <div className="flex flex-col gap-4 justify-between mt-4 px-4 md:px-8 lg:px-12 max-w-6xl mx-auto">
-            <div className={`flex flex-row gap-4 md:gap-6 lg:gap-8 ${highlightLink.length === 0 ? 'justify-center' : ''}`}>
-                <div className={`flex flex-col gap-4 md:gap-5 lg:gap-6 ${highlightLink.length > 0 ? 'w-1/2' : 'max-w-md'}`}>
+            <div className={`flex flex-row gap-4 md:gap-6 lg:gap-8 ${videoHighlights.length === 0 ? 'justify-center' : ''}`}>
+                <div className={`flex flex-col gap-4 md:gap-5 lg:gap-6 ${videoHighlights.length > 0 ? 'w-1/2' : 'max-w-md'}`}>
                     <div ref={zenScoreCardRef}>
                         <ZenScoreCard zenScore={zenScore} zenRank={zenRank} />
                     </div>
@@ -335,11 +338,11 @@ const Rating = ({rating, zenScore, zenRank, games, isLoadingRating, isLoadingGam
                         <RatingBadgeHomeScreen rating={rating} />
                     </div>
                 </div>
-                {highlightLink.length > 0 && 
-                <Highlights leftComponentHeight={leftComponentHeight || 0} />}
+                {videoHighlights.length > 0 && 
+                <Highlights leftComponentHeight={leftComponentHeight || 0} videoHighlights={videoHighlights} />}
             </div> 
-            <div className={`${highlightLink.length === 0 ? 'flex justify-center' : 'w-full'} max-w-md mx-auto md:max-w-lg lg:max-w-xl`} onClick={()=>{navigate('/badminton'); Mixpanel.track('book_badminton_clicked', {user_id: userDetails.id})}}>
-                <div className={`rounded-full p-2 md:p-3 lg:p-4 mt-2 items-center justify-center bg-white text-black border border-black ${highlightLink.length > 0 ? 'w-full' : ''}`} style={{ backgroundColor: '#009605' }}>
+            <div className={`${videoHighlights.length === 0 ? 'flex justify-center' : 'w-full'} max-w-md mx-auto md:max-w-lg lg:max-w-xl`} onClick={()=>{navigate('/badminton'); Mixpanel.track('book_badminton_clicked', {user_id: userDetails.id})}}>
+                <div className={`rounded-full p-2 md:p-3 lg:p-4 mt-2 items-center justify-center bg-white text-black border border-black ${videoHighlights.length > 0 ? 'w-full' : ''}`} style={{ backgroundColor: '#009605' }}>
                     <div className="flex flex-row justify-center gap-1 p-1 px-8">
                         <PlusWhite className="w-4 h-4 md:w-5 md:h-5" />
                         <span className="font-bold text-white text-sm">Book Game</span>
