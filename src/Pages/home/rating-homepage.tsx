@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import IUser from "../../types/user";
 import {ReactComponent as Growth} from "../../images/home/growth.svg"
 import { navigate } from "@reach/router";
@@ -17,6 +17,11 @@ import videoImg from "../../images/home/video.png";
 import video2Img from "../../images/home/video-2.png";
 import verifiedBadgeImg from "../../images/home/verified-badge.png";
 import playerImg from "../../images/home/player.png";
+import RatingBadgeHomeScreen from "../../utils/rating-badge-homescreen";
+import ZenScoreCard from "./zen-score-card";
+import highlightImage from "../../images/home/highlight.jpeg";
+import {ReactComponent as RightArrow} from "../../images/home/right-arrow.svg";
+import { getHighlights } from "../../apis/highlights/highlights";
 
 
 const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boolean}) => {
@@ -264,39 +269,110 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
     )
 }
 
-const Rating = ({rating, games, isLoadingRating, isLoadingGames}: {rating: number, games: number, isLoadingRating: boolean, isLoadingGames: boolean}) => {
+const Rating = ({rating, zenScore, zenRank, games, isLoadingRating, isLoadingGames}: {rating: number, zenScore: number, zenRank: number, games: number, isLoadingRating: boolean, isLoadingGames: boolean}) => {
     const [isRatingInfoModalOpen, setIsRatingInfoModalOpen] = useState(false);
+    const [leftComponentHeight, setLeftComponentHeight] = useState<number | null>(null);
+    const zenScoreCardRef = useRef<HTMLDivElement>(null);
+    const ratingBadgeRef = useRef<HTMLDivElement>(null);
     const userDetails = JSON.parse(window.localStorage["zenfitx-user-details"] || '{}');
+    const [highlightLink, setHighlightLink] = useState<string>("");
+
+    const { mutate: _getHighlights } = useMutation({
+        mutationFn: getHighlights,
+        onSuccess: (result) => {
+            setHighlightLink(result?.highlight_link || "ss");
+        },
+    });
+    
+    useEffect(() => {
+        _getHighlights(userDetails?.id as string);
+    }, []);
+
+    useEffect(() => {
+        const updateHeight = () => {
+            if (zenScoreCardRef.current && ratingBadgeRef.current) {
+                const zenScoreHeight = zenScoreCardRef.current.offsetHeight;
+                const ratingBadgeHeight = ratingBadgeRef.current.offsetHeight;
+                const gap = 16; // gap-4 = 1rem = 16px
+                const totalHeight = zenScoreHeight + ratingBadgeHeight + gap;
+                setLeftComponentHeight(totalHeight);
+            }
+        };
+
+        // Initial measurement with a small delay to ensure DOM is ready
+        const timeoutId = setTimeout(updateHeight, 0);
+
+        // Update on window resize
+        window.addEventListener('resize', updateHeight);
+
+        // Use ResizeObserver for more accurate measurements when content changes
+        const resizeObserver = new ResizeObserver(updateHeight);
+        if (zenScoreCardRef.current) {
+            resizeObserver.observe(zenScoreCardRef.current);
+        }
+        if (ratingBadgeRef.current) {
+            resizeObserver.observe(ratingBadgeRef.current);
+        }
+
+        return () => {
+            clearTimeout(timeoutId);
+            window.removeEventListener('resize', updateHeight);
+            resizeObserver.disconnect();
+        };
+    }, [zenScore, zenRank, rating]);
+
+
 
     return (
-        <div className="flex flex-col gap-4 items-center justify-center mt-4">
-            <div className="flex flex-row gap-4">
-                <div className={`flex flex-col w-1/2 text-black text-xs pl-4 pr-2 items-center ${isLoadingRating ? 'animate-pulse-slow' : ''}`} onClick={()=>{setIsRatingInfoModalOpen(true); Mixpanel.track("open_rating_info_modal", {user_id: userDetails.id})}}>
-                    <div className="flex flex-row gap-1">
-                        <div className="text-5xl">{isLoadingRating ? '...' : rating/100}</div>
-                        <div className="text-2xl self-end">/10</div>
+        <div className="flex flex-col gap-4 justify-between mt-4 px-4 md:px-8 lg:px-12 max-w-6xl mx-auto">
+            <div className={`flex flex-row gap-4 md:gap-6 lg:gap-8 ${highlightLink.length === 0 ? 'justify-center' : ''}`}>
+                <div className={`flex flex-col gap-4 md:gap-5 lg:gap-6 ${highlightLink.length > 0 ? 'w-1/2' : 'max-w-md'}`}>
+                    <div ref={zenScoreCardRef}>
+                        <ZenScoreCard zenScore={zenScore} zenRank={zenRank} />
                     </div>
-                    <div className="flex flex-row gap-1">
-                    <div className="font-extralight">
-                        Rating
+                    <div ref={ratingBadgeRef}>
+                        <RatingBadgeHomeScreen rating={rating} />
                     </div>
-                    <div className="font-extralight">
-                        (ZBR)
-                    </div>
-                        <InfoCircleOutlined className="w-3 h-3 self-center" />
-                    </div>
-                </div> 
-                <div className="border-r border-gray" />
-                <div className={`w-1/2 flex flex-col text-black text-xs pr-4 pl-2 items-center ${isLoadingGames ? 'animate-pulse-slow' : ''}`}>
-                    <div className="text-5xl">{isLoadingGames ? '...' : games}</div>
-                    <div className="font-extralight">Games</div>
                 </div>
-            </div>
-            <div className="w-full" onClick={()=>{navigate('/badminton'); Mixpanel.track('book_badminton_clicked', {user_id: userDetails.id})}}>
-                <div className="rounded-full p-2 mt-2 w-full items-center justify-center bg-white text-black border border-black border-dashed">
-                    <div className="flex flex-row justify-center gap-1 p-1">
-                        <Plus />
-                        <span className="font-light">Book Badminton</span>
+                {highlightLink.length > 0 && <div 
+                    className="w-1/2 border rounded-3xl overflow-hidden flex relative"
+                    style={{ height: leftComponentHeight ? `${leftComponentHeight}px` : 'auto' }}
+                >
+                    <img src={highlightImage} alt="Highlight" className="w-full h-full object-cover" />
+                    <div className="absolute top-0 left-0 w-full p-2 md:p-3 flex justify-center" style={{ backgroundColor: '#EBEBEB' }}>
+                        <span className="text-black md:text-base lg:text-lg font-medium">Your last highlight!</span>
+                    </div>
+                    <div className="absolute bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 flex items-center justify-center">
+                        <div className="relative w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16">
+                            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 48 48">
+                                <defs>
+                                    <linearGradient id="borderGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stopColor="#009605" />
+                                        <stop offset="100%" stopColor="#BCAF32" />
+                                    </linearGradient>
+                                </defs>
+                                <circle
+                                    cx="24"
+                                    cy="24"
+                                    r="22"
+                                    fill="none"
+                                    stroke="url(#borderGradient)"
+                                    strokeWidth="2"
+                                    strokeDasharray="4 4"
+                                />
+                            </svg>
+                            <div className="flex items-center justify-center w-full h-full">
+                                <RightArrow className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14" />
+                            </div>
+                        </div>
+                    </div>
+                </div>}
+            </div> 
+            <div className={`${highlightLink.length === 0 ? 'flex justify-center' : 'w-full'} max-w-md mx-auto md:max-w-lg lg:max-w-xl`} onClick={()=>{navigate('/badminton'); Mixpanel.track('book_badminton_clicked', {user_id: userDetails.id})}}>
+                <div className={`rounded-full p-2 md:p-3 lg:p-4 mt-2 items-center justify-center bg-white text-black border border-black ${highlightLink.length > 0 ? 'w-full' : ''}`} style={{ backgroundColor: '#009605' }}>
+                    <div className="flex flex-row justify-center gap-1 p-1 px-8">
+                        <PlusWhite className="w-4 h-4 md:w-5 md:h-5" />
+                        <span className="font-bold text-white text-sm">Book Game</span>
                     </div>
                 </div>
             </div>
@@ -314,6 +390,8 @@ const Rating = ({rating, games, isLoadingRating, isLoadingGames}: {rating: numbe
 const RatingHomepage: React.FC<{userDetails: IUser}> = ({userDetails}) => {
 
     const [rating, setRating] = useState(0);
+    const [zenScore, setZenScore] = useState(221);
+    const [zenRank, setZenRank] = useState(189);
     const [games, setGames] = useState(0);
     const [isLoadingRating, setIsLoadingRating] = useState(true);
     const [isLoadingGames, setIsLoadingGames] = useState(true);
@@ -321,7 +399,7 @@ const RatingHomepage: React.FC<{userDetails: IUser}> = ({userDetails}) => {
     const { mutate: _getRatings } = useMutation({
         mutationFn: getRatings,
         onSuccess: (result) => {
-            setRating(result.rating.rating);
+            setRating(650);
             setIsLoadingRating(false);
         },
         onError: () => {
@@ -352,8 +430,8 @@ const RatingHomepage: React.FC<{userDetails: IUser}> = ({userDetails}) => {
 
     return (
         <div className="mt-2 w-full">
-            {/* {!isLoadingRating && rating === 0 ? <NoRating games={games} isLoadingGames={isLoadingGames} /> : <Rating rating={rating} games={games} isLoadingRating={isLoadingRating} isLoadingGames={isLoadingGames} />} */}
-            <NoRating games={games} isLoadingGames={isLoadingGames} />
+            {!isLoadingRating && rating === 0 ? <NoRating games={games} isLoadingGames={isLoadingGames} /> : <Rating rating={rating} zenScore={zenScore} zenRank={zenRank} games={games} isLoadingRating={isLoadingRating} isLoadingGames={isLoadingGames} />}
+            {/* <NoRating games={games} isLoadingGames={isLoadingGames} /> */}
         </div>
     )
 }
