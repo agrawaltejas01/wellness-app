@@ -22,6 +22,7 @@ import ZenScoreCard from "./zen-score-card";
 import highlightImage from "../../images/home/highlight.jpeg";
 import {ReactComponent as RightArrow} from "../../images/home/right-arrow.svg";
 import { getHighlights } from "../../apis/highlights/highlights";
+import Highlights from "./highlights";
 
 
 const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boolean}) => {
@@ -334,39 +335,8 @@ const Rating = ({rating, zenScore, zenRank, games, isLoadingRating, isLoadingGam
                         <RatingBadgeHomeScreen rating={rating} />
                     </div>
                 </div>
-                {highlightLink.length > 0 && <div 
-                    className="w-1/2 border rounded-3xl overflow-hidden flex relative"
-                    style={{ height: leftComponentHeight ? `${leftComponentHeight}px` : 'auto' }}
-                >
-                    <img src={highlightImage} alt="Highlight" className="w-full h-full object-cover" />
-                    <div className="absolute top-0 left-0 w-full p-2 md:p-3 flex justify-center" style={{ backgroundColor: '#EBEBEB' }}>
-                        <span className="text-black md:text-base lg:text-lg font-medium">Your last highlight!</span>
-                    </div>
-                    <div className="absolute bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 flex items-center justify-center">
-                        <div className="relative w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16">
-                            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 48 48">
-                                <defs>
-                                    <linearGradient id="borderGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                        <stop offset="0%" stopColor="#009605" />
-                                        <stop offset="100%" stopColor="#BCAF32" />
-                                    </linearGradient>
-                                </defs>
-                                <circle
-                                    cx="24"
-                                    cy="24"
-                                    r="22"
-                                    fill="none"
-                                    stroke="url(#borderGradient)"
-                                    strokeWidth="2"
-                                    strokeDasharray="4 4"
-                                />
-                            </svg>
-                            <div className="flex items-center justify-center w-full h-full">
-                                <RightArrow className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14" />
-                            </div>
-                        </div>
-                    </div>
-                </div>}
+                {highlightLink.length > 0 && 
+                <Highlights leftComponentHeight={leftComponentHeight || 0} />}
             </div> 
             <div className={`${highlightLink.length === 0 ? 'flex justify-center' : 'w-full'} max-w-md mx-auto md:max-w-lg lg:max-w-xl`} onClick={()=>{navigate('/badminton'); Mixpanel.track('book_badminton_clicked', {user_id: userDetails.id})}}>
                 <div className={`rounded-full p-2 md:p-3 lg:p-4 mt-2 items-center justify-center bg-white text-black border border-black ${highlightLink.length > 0 ? 'w-full' : ''}`} style={{ backgroundColor: '#009605' }}>
