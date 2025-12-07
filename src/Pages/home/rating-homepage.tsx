@@ -332,7 +332,7 @@ const Rating = ({rating, zenScore, zenRank, games, isLoadingRating, isLoadingGam
             <div className={`flex flex-row gap-4 md:gap-6 lg:gap-8 ${videoHighlights.length === 0 ? 'justify-center' : ''}`}>
                 <div className={`flex flex-col gap-4 md:gap-5 lg:gap-6 ${videoHighlights.length > 0 ? 'w-1/2' : 'max-w-md'}`}>
                     <div ref={zenScoreCardRef}>
-                        <ZenScoreCard zenScore={zenScore} zenRank={zenRank} />
+                        <ZenScoreCard zenScore={zenScore} zenRank={zenRank} totalRank={300} />
                     </div>
                     <div ref={ratingBadgeRef}>
                         <RatingBadgeHomeScreen rating={rating} />
@@ -363,8 +363,9 @@ const Rating = ({rating, zenScore, zenRank, games, isLoadingRating, isLoadingGam
 const RatingHomepage: React.FC<{userDetails: IUser}> = ({userDetails}) => {
 
     const [rating, setRating] = useState(0);
-    const [zenScore, setZenScore] = useState(221);
-    const [zenRank, setZenRank] = useState(189);
+    const [zenScore, setZenScore] = useState(0);
+    const [zenRank, setZenRank] = useState(0);
+    const [totalCount, setTotalCount] = useState(0);
     const [games, setGames] = useState(0);
     const [isLoadingRating, setIsLoadingRating] = useState(true);
     const [isLoadingGames, setIsLoadingGames] = useState(true);
@@ -372,8 +373,11 @@ const RatingHomepage: React.FC<{userDetails: IUser}> = ({userDetails}) => {
     const { mutate: _getRatings } = useMutation({
         mutationFn: getRatings,
         onSuccess: (result) => {
-            setRating(650);
+            setRating(result.rating.Rating.rating || 0);
             setIsLoadingRating(false);
+            setZenScore(result.rating.Rating.zenScore || 0);
+            setZenRank(result.rating.rank || 0);
+            setTotalCount(result.rating.totalCount || 0);
         },
         onError: () => {
             setIsLoadingRating(false);

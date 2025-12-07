@@ -266,8 +266,8 @@ const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
           {isLastCarouselImage ? (
             <button
               onClick={handleGetStarted}
-              className="group relative w-full md:w-auto md:px-16 lg:px-20 py-4 md:py-6 text-lg md:text-xl font-bold text-black rounded-3xl shadow-2xl transform hover:scale-105 transition-all duration-300 ease-out border border-gray-300/30 hover:border-gray-400/50"
-              style={{ background: 'linear-gradient(to right, rgba(199, 255, 202, 1), rgba(238, 255, 183, 1))' }}
+              className="group text-white font-bold relative w-full md:w-auto md:px-16 lg:px-20 py-4 md:py-6 text-lg md:text-xl font-bold text-black rounded-3xl shadow-2xl transform hover:scale-105 transition-all duration-300 ease-out border border-gray-300/30 hover:border-gray-400/50"
+              style={{ background: 'black' }}
             >
               {/* Button Background Effects */}
               <div className="absolute inset-0 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-300" style={{ background: 'linear-gradient(to right, rgba(199, 255, 202, 0.3), rgba(238, 255, 183, 0.3))' }} />
@@ -276,21 +276,21 @@ const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
               {/* Button Text */}
               <span className="relative z-10 flex items-center justify-center gap-3 text-lg">
                 Get Started
-                <svg 
+                {/* <svg 
                   className="w-6 h-6 transform group-hover:translate-x-1 transition-transform duration-300" 
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
-                >
+                > 
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
+                </svg> */}
               </span>
             </button>
           ) : (
             <button
               onClick={handleNextClick}
-              className="group relative w-full md:w-auto md:px-16 lg:px-20 py-4 md:py-6 text-lg md:text-xl font-bold text-black rounded-3xl shadow-2xl transform hover:scale-105 transition-all duration-300 ease-out border border-gray-300/30 hover:border-gray-400/50"
-              style={{ background: 'linear-gradient(to right, rgba(199, 255, 202, 1), rgba(238, 255, 183, 1))' }}
+              className="group relative text-black font-bold w-full md:w-auto md:px-16 lg:px-20 py-4 md:py-6 text-lg md:text-xl font-bold text-black rounded-3xl shadow-2xl transform hover:scale-105 transition-all duration-300 ease-out border border-gray-300/30 hover:border-gray-400/50"
+              style={{ background: '#e4e4e4' }}
             >
               {/* Button Background Effects */}
               <div className="absolute inset-0 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-300" style={{ background: 'linear-gradient(to right, rgba(199, 255, 202, 0.3), rgba(238, 255, 183, 0.3))' }} />
@@ -299,14 +299,14 @@ const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
               {/* Button Text */}
               <span className="relative z-10 flex items-center justify-center gap-3 text-lg">
                 Next
-                <svg 
+                {/* <svg 
                   className="w-6 h-6 transform group-hover:translate-x-1 transition-transform duration-300" 
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
+                </svg> */}
               </span>
             </button>
           )}
