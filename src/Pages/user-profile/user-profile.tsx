@@ -40,6 +40,9 @@ const UserProfile: React.FC<IUserProfile> = () => {
   const [showPhotoOptions, setShowPhotoOptions] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
+  const [appVersion, setAppVersion] = useState<string>("");
+  const [isFromApp, setIsFromApp] = useState<boolean>(false);
+  const [platform, setPlatform] = useState<string>("");
 
   // Fetch user rating data
   const { mutate: fetchRating } = useMutation({
@@ -64,6 +67,12 @@ const UserProfile: React.FC<IUserProfile> = () => {
       setIsLoading(false);
     },
   });
+
+  useEffect(() => {
+    setAppVersion(window.platformInfo?.appVersion || "");
+    setPlatform(window.platformInfo?.platform || "");
+    setIsFromApp(window?.isFromApp || false);
+  }, []);
 
   useEffect(() => {
     if (userDetails?.id) {
@@ -335,9 +344,17 @@ const UserProfile: React.FC<IUserProfile> = () => {
       uploadHeaders: { 'x-wellness-jwt': token },
       uploadFieldName: 'profilePicture',
     }));
+
+    if(!window.ReactNativeWebView) {
+      fileInputRef.current?.click();
+    }
   };
 
   const handleEditProfilePicture = () => {
+    if(isFromApp && appVersion < '1.2.5') {
+      message.error("Please update the app to the latest version to edit your profile picture.");
+      return;
+    }
     setShowPhotoOptions(true);
   };
 
@@ -364,7 +381,7 @@ const UserProfile: React.FC<IUserProfile> = () => {
             </div> */}
             
             {/* Take Photo Option */}
-            <button
+            {isFromApp && platform === "ios" && <button
               onClick={handleTakePhoto}
               className="w-full px-4 text-center border-b border-gray-200 active:bg-gray-100 transition-colors ios-action-button"
               style={{ 
@@ -377,7 +394,7 @@ const UserProfile: React.FC<IUserProfile> = () => {
               }}
             >
               Take Photo
-            </button>
+            </button>}
             
             {/* Choose from Gallery Option */}
             <button
@@ -503,7 +520,7 @@ const UserProfile: React.FC<IUserProfile> = () => {
                 }
               }}
             >
-              {isUploadingImage ? 'Uploading...' : 'Upload'}
+              {isUploadingImage ? 'Uploading...' : 'Edit'}
             </span>
             <h1 className="text-2xl font-bold mt-4 mb-1">{userDetails.name}</h1>
             <p className="text-gray-300 text-sm">{userDetails.phone}</p>
@@ -516,7 +533,7 @@ const UserProfile: React.FC<IUserProfile> = () => {
             <div className="grid grid-cols-2 gap-6">
               <div className="text-center">
                 <div className="text-3xl font-bold text-emerald-500 mb-1">
-                  {playerStats.rating/100}
+                  {playerStats.rating ? playerStats.rating/100 : '-'}
                 </div>
                 <div className="text-sm text-gray-500">Rating</div>
               </div>
@@ -531,7 +548,7 @@ const UserProfile: React.FC<IUserProfile> = () => {
         </div>
 
         {/* Bio Section */}
-        <div className="px-4 pb-4">
+        {/* <div className="px-4 pb-4">
           <div className="bg-white rounded-2xl p-6 shadow-sm">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold text-gray-900">About Me</h3>
@@ -582,7 +599,7 @@ const UserProfile: React.FC<IUserProfile> = () => {
               </p>
             )}
           </div>
-        </div>
+        </div> */}
 
         {/* Profile Information */}
         <div className="px-4 pb-6">

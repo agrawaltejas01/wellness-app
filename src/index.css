@@ -20,23 +20,6 @@ code {
     @apply bg-blue-500 text-white;
     /* other custom properties */
   }
-  
-  /* Fix for date input width consistency on mobile */
-  input[type="date"] {
-    -webkit-appearance: none;
-    -moz-appearance: textfield;
-    box-sizing: border-box !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-  }
-  
-  /* Ensure consistent width calculation for all inputs */
-  input[type="text"],
-  input[type="tel"],
-  input[type="date"],
-  select {
-    box-sizing: border-box !important;
-  }
 }
 
 /* Custom animations for onboarding page */

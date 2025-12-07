@@ -34,6 +34,7 @@ import info from "../../images/utils/info.svg";
 import Checkbox from "antd/es/checkbox/Checkbox";
 import RentInfo from "./rent-info";
 import { CenterModal } from "../profile/center-modal";
+import { DISCOUNT_ALLOWED_BATCH_IDS } from "../../utils/offers";
 import RatingBadge from "../../utils/rating-badge";
 
 // Function to convert 24-hour time to 12-hour format
@@ -248,6 +249,10 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
         if (batchDetails) {
           if (!isFromApp) {
             setShowDiscount(false);
+          } else if (batchDetails.batchId && DISCOUNT_ALLOWED_BATCH_IDS.includes(batchDetails.batchId)) {
+            setShowDiscount(true);
+          } else if (batchDetails.id && DISCOUNT_ALLOWED_BATCH_IDS.includes(batchDetails.id)) {
+            setShowDiscount(true);
           } else if (batchDetails.offerPercentage === 0) {
             setShowDiscount(false);
           } else if (!userDetails) {
@@ -523,8 +528,8 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
     if (!gym || !batchDetails || !gotPastBookings) return <Loader />;
 
     return (
-        <div className="flex flex-col">
-            <div className="flex flex-row items-center pl-4 py-3">
+        <div className="checkout-v3-container flex flex-col">
+            <div className="checkout-v3-header flex flex-row items-center py-3">
                 <BackButtonCheckout onClick={() => navigate(`/checkout/batch/${batchId}`)} />
                 <div className="flex flex-col font-jakarta ml-4">
                     <div className="flex flex-row font-jakarta font-bold text-sm">
@@ -543,6 +548,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                     <p className="text-xs font-normal text-activity-name-checkout-page pt-1">{batchDetails?.activityName} at {gym?.name}</p>
                 </div>
             </div>
+            <div className="checkout-v3-content">
             {isCoplayerCardEnabled && <div className="flex flex-row px-4 pt-4">
                 <div className="flex flex-col justify-between w-full bg-white shadow-gray rounded-xl">
                     <SpotsLeftCheckout spotsLeft={spotsLeft} spotsTotal={spotsTotal} noOfGuests={noOfGuests} />
@@ -564,7 +570,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                 <div className="flex flex-col justify-between w-full bg-white shadow-gray rounded-xl">
                     <div className={`flex flex-row justify-between px-4 pt-4 ${totalSavings > 0 ? "" : "pb-2"}`}>
                         <p className="text-sm font-bold">To pay</p>
-                        <p className="text-sm font-bold">{Rs}{gym?.gymId == 41 ? totalAmount + 500 : totalAmount}</p>
+                        <p className="text-sm font-bold">{Rs}{gym?.gymId == 41 ? totalAmount + (pastAppBookings[41] ? 0 : 500) : totalAmount}</p>
                     </div>
                     <div className={`flex flex-row justify-between px-4 ${totalSavings > 0 ? "pt-2 pb-4" : " "}`}>
                         {totalSavings > 0 && <p className="text-xs text-gray font-sm">Total saved {Rs}{totalSavings}</p>}
@@ -601,7 +607,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                           <p className="text-sm font-sm">{Rs}{equipmentCharges}</p>
                         </div>
                     </div>}
-                    {gym?.gymId == 41 && <div className="flex flex-row justify-between px-4 pb-6">
+                    {gym?.gymId == 41 && !pastAppBookings[41] && <div className="flex flex-row justify-between px-4 pb-6">
                           <p className="text-sm font-sm">One Time Registration Fee</p>
                           <p className="text-sm font-sm">{Rs}500</p>
                         </div>}
@@ -624,7 +630,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                       </div>}
                 </div>
             </div>
-            {gym?.gymId == 41 && <div className="flex flex-col mt-4 mx-4 px-4 pt-4 rounded-xl bg-white shadow-gray">
+            {gym?.gymId == 41 && !pastAppBookings[41] && <div className="flex flex-col mt-4 mx-4 px-4 pt-4 rounded-xl bg-white shadow-gray">
                 <div className="flex flex-col justify-between w-full">
                     <p className="text-sm font-sm font-bold">Enter Kid's Details</p>
                 </div>
@@ -747,12 +753,38 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                 </div>
               </div>
             </div>} */}
+            </div>
+            <div className="flex flex-row px-4 pt-4">
+            {showEquipmentRentalInfo && 
+              <CenterModal isOpen={showEquipmentRentalInfo} onClose={() => {setShowEquipmentRentalInfo(false)}} title="Shuttle Rental">
+                <RentInfo />
+              </CenterModal>
+            }
+            </div>
+            {/* {coinsAvailable > 0 && <div className="flex flex-row px-4 items-center">
+              <div className="flex flex-row justify-between w-full bg-white shadow-gray rounded-xl items-center">
+                <div className="flex flex-row gap-4 items-center p-4">
+                  <div className="flex flex-row gap-2 items-center justify-center" style={{width: "30px", height: "30px"}}>
+                      <Wallet />
+                  </div>
+                  <div className="flex flex-row gap-2 items-center">
+                    <div className="flex flex-col">
+                      <p className="text-sm font-sm">Pay with ZenfitX Cash</p>
+                      <p className="text-xs text-gray">Balance: {coinsAvailable}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-row items-center justify-center p-2">
+                  {coinsUsed > 0 ? <ToggleButtonOn onClick={() => setCoinsUsed(0)} /> : <ToggleButtonOff onClick={() => setCoinsUsed(1)} />}
+                </div>
+              </div>
+            </div>} */}
             <BookNowFooter
                 batchDetails={batchDetails}
                 gymData={gym}
                 batchId={Number(batchId)}
                 checkoutType={ECheckoutType.BATCH}
-                totalAmount={gym?.gymId == 41 ? totalAmount + 500 : totalAmount || batchDetails?.price || 0}
+                totalAmount={gym?.gymId == 41 ? totalAmount + (pastAppBookings[41] ? 0 : 500) : totalAmount || batchDetails?.price || 0}
                 comingFrom={EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE}
                 totalGuests={noOfGuests}
                 totalSavings={totalSavings}
@@ -763,7 +795,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                 equipmentRentalCharges={isRentalChargesChecked ? equipmentCharges : 0}
                 disabled={
                   (selectedRides.length !== noOfGuests && batchDetails?.isRideActivity) ||
-                  (gym?.gymId == 41 && (!kidName.trim() || kidAge <= 0 || kidAge > 18 || !kidGender.trim() || !kidJerseySize.trim()))
+                  (gym?.gymId == 41 && !pastAppBookings[41] && (!kidName.trim() || kidAge <= 0 || kidAge > 18 || !kidGender.trim() || !kidJerseySize.trim()))
                 }
             />
         </div>

@@ -1,7 +1,6 @@
 import { navigate } from "@reach/router";
 import { useState } from "react";
-import { addUserHighlight } from "../../apis/highlights/highlights";
-import { useMutation } from "@tanstack/react-query";
+import { Mixpanel } from "../../mixpanel/init";
 
 const SelectHighlight = ({highlights, setFinalSelectedHighlight, matchId, batchId, setShowStatsModal, setShowSelectHighlightsModal}: {highlights: any[], setFinalSelectedHighlight: (highlight: any) => void, matchId: number, batchId: number, setShowStatsModal: (show: boolean) => void, setShowSelectHighlightsModal: (show: boolean) => void}) => {
     
@@ -15,26 +14,20 @@ const SelectHighlight = ({highlights, setFinalSelectedHighlight, matchId, batchI
     const handleSelectHighlight = (id: string) => {
         setSelectedHighlightId(id);
     }
-
-    const {mutate: _addUserHighlight} = useMutation({
-        mutationFn: ({userId, highlightId}: {userId: string, highlightId: string}) => addUserHighlight(userId, highlightId),
-        onSuccess: (result) => {
-            // setShowStatsModal(true);
-            setShowSelectHighlightsModal(false);
-        },
-        onError: (error) => {
-            console.log(error);
-        },
-    });
     
     const handleContinue = () => {
         if (selectedHighlightId) {
+
+            Mixpanel.track("selected_highlight", {
+                userId: userId,
+                highlightId: selectedHighlightId,
+            });
+
             const selectedHighlight = sortedHighlights.find((highlight: any) => highlight.id === selectedHighlightId);
             setFinalSelectedHighlight(selectedHighlight);
             // setShowStatsModal(true);
             setShowSelectHighlightsModal(false);
             navigate("/stats", { state: { highlight_link: selectedHighlight?.highlight_link, rally_link: selectedHighlight?.rally_link, heatmap_link: selectedHighlight?.heatmap_link } });
-            // _addUserHighlight({userId, highlightId: selectedHighlightId});
         }
     }
     

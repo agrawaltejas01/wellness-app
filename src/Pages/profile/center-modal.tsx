@@ -123,7 +123,7 @@ const CenterModal: React.FC<CenterModalProps> = ({
               </div>
             )}
             {subtitle && (
-              <div id="modal-subtitle" className="text-sm font-normal text-gray-600 mt-1">
+              <div id="modal-subtitle" className="text-xs font-normal text-gray-600 mt-1">
                 {subtitle}
               </div>
             )}

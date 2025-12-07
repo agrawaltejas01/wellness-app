@@ -244,7 +244,7 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
       case 'completed':
         return 'Downloaded!';
       case 'error':
-        return 'Failed';
+        return 'Download Failed';
       default:
         return 'Download';
     }
@@ -297,50 +297,13 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
             </button>
             <button
               onClick={handleDownload}
-              className={`flex flex-col items-center relative ${downloadStatus !== 'idle' && downloadStatus !== 'error' ? 'pointer-events-none' : ''}`}
+              className={`flex flex-col items-center ${downloadStatus !== 'idle' ? 'opacity-50 pointer-events-none' : ''}`}
               style={{ WebkitTapHighlightColor: 'transparent' }}
             >
-              {/* Spinning Loader Ring */}
-              {downloadStatus === 'downloading' && (
-                <svg 
-                  className="absolute w-12 h-12 -top-2 animate-spin" 
-                  viewBox="0 0 50 50"
-                  style={{ animationDuration: '1s' }}
-                >
-                  <circle
-                    cx="25"
-                    cy="25"
-                    r="20"
-                    stroke="rgba(255, 255, 255, 0.3)"
-                    strokeWidth="3"
-                    fill="none"
-                  />
-                  <circle
-                    cx="25"
-                    cy="25"
-                    r="20"
-                    stroke="white"
-                    strokeWidth="3"
-                    fill="none"
-                    strokeDasharray="80, 200"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              )}
-              
-              {/* Download Icon with Pulse Animation */}
-              <svg 
-                className={`w-8 h-8 ${downloadStatus === 'downloading' ? 'animate-pulse' : ''}`} 
-                fill="white" 
-                viewBox="0 0 24 24"
-              >
+              <svg className="w-8 h-8" fill="white" viewBox="0 0 24 24">
                 <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
               </svg>
-              
-              {/* Button Text */}
-              <span className={`text-xs text-white font-semibold mt-1 ${downloadStatus === 'downloading' ? 'animate-pulse' : ''}`}>
-                Download
-              </span>
+              <span className="text-xs text-white">Download</span>
             </button>
             <button
               onClick={toggleMute}
@@ -392,7 +355,7 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
       </div>
 
       {/* Highlight Text at Top-Left Corner */}
-      <div className="absolute top-4 left-4 z-20" onClick={() => navigate(-1)}>
+      <div className="absolute top-4 left-4 z-20" onClick={() => navigate('/', {replace: true})}>
         <span className="font-semibold text-lg text-white"><BackButton /></span>
       </div>
 

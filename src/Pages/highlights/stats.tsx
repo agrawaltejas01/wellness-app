@@ -3,25 +3,37 @@ import ReelsVideoPlayer from "./a";
 import { useState } from "react";
 import { BottomUpModal } from "../profile/half-page-modal";
 import { ReactComponent as BackButtonCheckout } from '../../images/utils/back-button-checkout.svg';
+import { Mixpanel } from "../../mixpanel/init";
 
 interface IStats extends RouteComponentProps {}
 
 const Stats: React.FC<IStats> = () => {
 
   const {highlight_link, rally_link, heatmap_link} = useLocation().state as {highlight_link: string, rally_link: string, heatmap_link: string};
-
+  const userDetails = JSON.parse(window.localStorage["zenfitx-user-details"] || '{}');
+  const userId = userDetails.id;
+  
   const handleHighlightClick = () => {
+    Mixpanel.track("clicked_match_highlights_on_match_recap", {
+      userId: userId,
+    });
     navigate("/highlights", { state: { url: highlight_link } });
   };
 
   const handleRallyClick = () => {
     // navigate("/highlights", { state: { url: StatsProps.rally_link } });
+    Mixpanel.track("clicked_top_rallies_on_match_recap", {
+      userId: userId,
+    });
     navigate("/highlights", { state: { url: rally_link } });
   };
 
   const handleHeatMapClick = () => {
     // navigate("/highlights", { state: { url: StatsProps.heat_map_link } });
     // navigate("/highlights", { state: { url: heat_map_link } });
+    Mixpanel.track("clicked_movement_heatmap_on_match_recap", {
+      userId: userId,
+    });
     navigate("/heat-map", { state: { heatmap_link: heatmap_link } });
   };
 

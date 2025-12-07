@@ -103,24 +103,25 @@ function createUpperFlexTiles(isFromApp: boolean, pastAppBookings: PastAppBookin
 }
 
 function createLowerFlexTiles(isFromApp: boolean, pastAppBookings: PastAppBookingObject) {
-  return (
-    <Flex
-      style={{
-        flex: 1,
-        justifyContent: "space-evenly",
-        alignContent: "center",
-        gap: "8px",
-      }}
-    >
-      <span>{classTile("yoga", isFromApp, pastAppBookings)}</span>
-      <span>{classTile("pickleball", isFromApp, pastAppBookings)}</span>
-      <span> {classTile("football", isFromApp, pastAppBookings)} </span>
-      <span> {classTile("gym", isFromApp, pastAppBookings)} </span>
-      <span> {classTile("zumba", isFromApp, pastAppBookings)} </span>
-      {/* <span> {classTile("boxing", isFromApp, pastAppBookings)} </span>  */}
-      {/* <span> {classTile("gymming", isFromApp, pastAppBookings)} </span> */}
-    </Flex>
-  );
+  return null;
+  // return (
+  //   <Flex
+  //     style={{
+  //       flex: 1,
+  //       justifyContent: "space-evenly",
+  //       alignContent: "center",
+  //       gap: "8px",
+  //     }}
+  //   >
+  //     <span>{classTile("yoga", isFromApp, pastAppBookings)}</span>
+  //     <span>{classTile("pickleball", isFromApp, pastAppBookings)}</span>
+  //     <span> {classTile("football", isFromApp, pastAppBookings)} </span>
+  //     <span> {classTile("gym", isFromApp, pastAppBookings)} </span>
+  //     <span> {classTile("zumba", isFromApp, pastAppBookings)} </span>
+  //     {/* <span> {classTile("boxing", isFromApp, pastAppBookings)} </span>  */}
+  //     {/* <span> {classTile("gymming", isFromApp, pastAppBookings)} </span> */}
+  //   </Flex>
+  // );
 }
 
 interface IClassesNearYou extends RouteComponentProps  {}

@@ -191,38 +191,43 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
 
   return (
     <ScrollableContent bottomPadding={100}>
-    <div className="flex flex-col">
-        <div className="flex flex-col bg-gradient-to-r from-black to-transparent bg-cover bg-center"
+    <div className="batch-checkout-container flex flex-col">
+        <div className="batch-hero-section flex flex-col bg-gradient-to-r from-black to-transparent bg-cover bg-center"
              style={{ backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0)), url(${batchDetails?.image || require('../../images/utils/pickleball.png')})` }}>
-          <div className="flex flex-row justify-between pl-2 pt-2 pr-2">
-            <BackButton onClick={() => navigateToHome()} />
-            <ShareButton id="share-button" onClick={() => setIsShareButtonClicked(true)} />
-          </div>
-          <div className="flex flex-col px-6 text-white ">
-            <p className="text-sm font-normal font-jakarta pt-3">{activity.toLowerCase()}</p>
-            <p className="text-xl font-normal font-jakarta pt-1">{activityName}</p>
-            <p className="text-xs font-normal font-jakarta pt-1 inline-flex items-center gap-1"><LocationIcon />{location}</p>
-            <div className="flex flex-row pt-1 pb-4 text-white font-jakarta text-2xl pt-3">
-              {!gym?.isOnlyWeekend && <p className="text-white">{batchDetails?.date ? formatDate(batchDetails.date)["date suffix"] : "Date not available"}</p>}
-              {!gym?.isOnlyWeekend && <p className="dotWhite"></p>}
-              {batchDetails?.isDayPass ? <p className="text-white">All Day</p> : 
-              <>
-                <p className="text-white">{formatTimeIntToAmPm(batchDetails?.startTime || 0)}</p>
-                <p className="dotWhite"></p>
-                <p className="text-white">{batchDetails?.DurationMin} mins</p>
-              </>
-              }
+          <div className="batch-hero-wrapper">
+            <div className="flex flex-row justify-between pl-2 pt-2 pr-2">
+              <BackButton onClick={() => navigateToHome()} />
+              <ShareButton id="share-button" onClick={() => setIsShareButtonClicked(true)} />
+            </div>
+            <div className="flex flex-col px-6 text-white batch-hero-content">
+              <p className="text-sm font-normal font-jakarta pt-3 batch-activity-type">{activity.toLowerCase()}</p>
+              <p className="text-xl font-normal font-jakarta pt-1 batch-activity-name">{activityName}</p>
+              <p className="text-xs font-normal font-jakarta pt-1 inline-flex items-center gap-1 batch-location"><LocationIcon />{location}</p>
+              <div className="flex flex-row pt-1 pb-4 text-white font-jakarta text-2xl pt-3 batch-timing-info">
+                {!gym?.isOnlyWeekend && <p className="text-white">{batchDetails?.date ? formatDate(batchDetails.date)["date suffix"] : "Date not available"}</p>}
+                {!gym?.isOnlyWeekend && <p className="dotWhite"></p>}
+                {batchDetails?.isDayPass ? <p className="text-white">All Day</p> : 
+                <>
+                  <p className="text-white">{formatTimeIntToAmPm(batchDetails?.startTime || 0)}</p>
+                  <p className="dotWhite"></p>
+                  <p className="text-white">{batchDetails?.DurationMin} mins</p>
+                </>
+                }
+              </div>
             </div>
           </div>
         </div>
-        <div>
-          {isCoplayerCardEnabled && <SpotsLeft spotsLeft={spotsLeft} spotsTotal={spotsTotal} />}
-          {isCoplayerCardEnabled && <CoplayerCard players={players} loading={!gotCoplayers} spotsLeft={spotsLeft} spotsTotal={spotsTotal}/>}
-          {batchDetails?.aboutTheActivity && <AboutTheActivity aboutTheActivity={batchDetails?.aboutTheActivity} />}
-          {batchDetails?.whatToExpect && <WhatToExpect whatToExpect={batchDetails?.whatToExpect} />}
-          {batchDetails?.whatToBring && <WhatToBring whatToBring={batchDetails?.whatToBring} />}
-          {batchDetails?.moreInfo && <MoreInfo moreInfo={batchDetails?.moreInfo} />}
-          {gym && (
+        <div className="batch-content-wrapper">
+          <div className="batch-content-inner">
+            {isCoplayerCardEnabled && <SpotsLeft spotsLeft={spotsLeft} spotsTotal={spotsTotal} />}
+            {isCoplayerCardEnabled && <CoplayerCard players={players} loading={!gotCoplayers} spotsLeft={spotsLeft} spotsTotal={spotsTotal}/>}
+            {batchDetails?.aboutTheActivity && <AboutTheActivity aboutTheActivity={batchDetails?.aboutTheActivity} />}
+            {batchDetails?.whatToExpect && <WhatToExpect whatToExpect={batchDetails?.whatToExpect} />}
+            {batchDetails?.whatToBring && <WhatToBring whatToBring={batchDetails?.whatToBring} />}
+            {batchDetails?.moreInfo && <MoreInfo moreInfo={batchDetails?.moreInfo} />}
+          </div>
+        </div>
+        {gym && (
           <BookNowFooter
             checkoutType={ECheckoutType.BATCH}
             batchDetails={batchDetails}
@@ -235,7 +240,6 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
             onBeforeAction={handleBookNowClick}
           />
         )}
-        </div>
       </div>
       </ScrollableContent>
   )

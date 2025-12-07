@@ -323,6 +323,7 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
   return (
     <>
       <div
+        className="lg:p-6 lg:pb-0 lg:flex lg:flex-col lg:min-h-screen"
         style={{
           padding: "16px 24px",
         }}
@@ -435,22 +436,38 @@ const GymInfo: React.FC<IGymInfo> = ({ gymData }) => {
           <div>Choose Activity</div>
         </div>}
         {!hideChooseActivityForGymIds.includes(gymData?.gymId) && <div className="activities">
-          {gymData?.activities?.map((activity: string) => {
+          {gymData?.activities?.map((activity: string, index: number) => {
             return (
-              <span
+              <div
+                key={index}
+                className="flex flex-col items-center justify-center cursor-pointer hover:opacity-80 transition-opacity activity-tile"
                 style={{
-                  marginRight: "16px",
-                  height: "90px",
-                  display: "inline-block",
+                  width: "90px",
+                  flexShrink: 0,
                 }}
                 onClick={() => {
-                  // navigate(`/batch?activity=${activity.toLowerCase()}`)
-                  // navigate(`/batch`)
                   navigateToBatches(activity);
                 }}
               >
-                {activityToSvgMap(activity)}
-              </span>
+                <div 
+                  className="activity-icon-wrapper"
+                  style={{ 
+                    width: "70px", 
+                    height: "70px", 
+                    display: "flex", 
+                    alignItems: "center", 
+                    justifyContent: "center",
+                    marginBottom: "4px"
+                  }}
+                >
+                  <div style={{ width: "100%", height: "100%" }}>
+                    {activityToSvgMap(activity)}
+                  </div>
+                </div>
+                <p className="text-xs text-center font-medium text-gray-700" style={{ lineHeight: "1.2" }}>
+                  {activity.charAt(0) + activity.slice(1).toLowerCase()}
+                </p>
+              </div>
             );
           })}
         </div>}

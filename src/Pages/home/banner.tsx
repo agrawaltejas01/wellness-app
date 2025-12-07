@@ -13,7 +13,6 @@ import CoinsHomepage from "../coins/coins-homepage";
 import { getCoins } from "../../apis/coins/coins";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import Highlights from "./highlights";
 
 
 

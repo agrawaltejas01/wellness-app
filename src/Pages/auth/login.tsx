@@ -105,7 +105,8 @@ const Login: React.FC<ILoginProps> = () => {
   function submitButton() {
     submitClicked.current = true;
 
-    _createUser({ name: input.name, phone: input.phone, noOfBookings: 0 });
+    // _createUser({ name: input.name, phone: input.phone, noOfBookings: 0 });
+    _checkUserPhoneAndSendOtp(input.phone);
   }
 
   const buttonDisabled = () => {

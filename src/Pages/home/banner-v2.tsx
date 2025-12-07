@@ -71,7 +71,7 @@ const HomeBannerV2: React.FC<{userDetails: IUser}> = ({userDetails}) => {
                       alignItems: 'center',
                       padding: '2px'
                       }}
-                      onClick={()=> handleUserProfileClick() }
+                      onClick={()=>{handleUserProfileClick()}}
                   >
                   <div
                       style={{
@@ -103,7 +103,7 @@ const HomeBannerV2: React.FC<{userDetails: IUser}> = ({userDetails}) => {
                       },
                     },
                   })}>
-                  <div className="text-white text-sm">Complete your profile!</div>
+                  <div className="text-white text-xs">Complete your profile!</div>
               </div>}
               </div>
               </div>

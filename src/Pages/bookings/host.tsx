@@ -6,6 +6,7 @@ import { getGymsByActivity } from "../../apis/gym/activities";
 import { IGymCard } from "../../types/gyms";
 import { getBookingsForHost } from "../../apis/bookings/host";
 import SkillCapsule from "../../components/skill-capsule";
+import RatingBadge from "../../utils/rating-badge";
 
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -168,10 +169,13 @@ const BookingInfoHost: React.FC<RouteComponentProps> = () => {
                             <div key={index} className="flex flex-row py-2 px-2 gap-2 w-full justify-between rounded-lg bg-white">
                                 <div className="flex flex-col gap-2">
                                     <p className="text-sm font-light px-2">{booking["name"]} {booking["noOfGuests"] > 1 ? `(+${booking["noOfGuests"] - 1} guests)` : ""} </p>
-                                    <SkillCapsule
+                                    {/* <SkillCapsule
                                         level={booking["skillLevel"]}
                                         editable={false}
-                                    />
+                                    /> */}
+                                    <div className="flex flex-row gap-2">
+                                        {booking['rating'] ? <RatingBadge rating={booking['rating']} playerRating={true} /> : <h1 className="text-xs font-light bg-gray-100 rounded-full px-2 py-1"> Not rated yet </h1>}
+                                    </div>
                                 </div>
                                 <div className="flex flex-col gap-2 items-end">
                                     <p className="text-sm font-light"> <span className="text-sm font-light">💰</span> {booking["coins"].toLowerCase()} </p>

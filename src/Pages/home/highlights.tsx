@@ -7,13 +7,13 @@ import { getHighlights } from "../../apis/highlights/highlights";
 import { BottomUpModal } from "../profile/half-page-modal";
 import SelectHighlight from "./select-highlight";
 import { Mixpanel } from "../../mixpanel/init";
-import Stats from "../highlights/stats";
+// import Stats from "../highlights/stats";
 import { formatDate } from "../../utils/date";
+import highlightImage from "../../images/home/highlight.jpeg";
 import { formatTimeIntToAmPm } from "../../utils/date";
 
-const Highlights = () => {
+const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight: number, videoHighlights: any[]}) => {
   const navigate = useNavigate();
-  const [videoHighlights, setVideoHighlights] = useState<any[]>([]);
   const userDetails = JSON.parse(window.localStorage["zenfitx-user-details"] || '{}');
   const [navigateUrl, setNavigateUrl] = useState<string>("");
   const [stateUrl, setStateUrl] = useState<string>("");
@@ -27,28 +27,13 @@ const Highlights = () => {
   const [showStatsModal, setShowStatsModal] = useState(false);
   const [selectedHighlight, setSelectedHighlight] = useState<any>(null);
   const [finalSelectedHighlight, setFinalSelectedHighlight] = useState<any>(null);
-  const {mutate: _getHighlights} = useMutation({
-    mutationFn: getHighlights,
-    onSuccess: (result) => {
-      if(result && result.length > 0) {
-       setVideoHighlights(result);
-      }
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-    onSettled: () => {
-      
-      console.log("Highlights fetched");
-    //   alert(videoHighlights);
-    },
-  });
-
-  useEffect(() => {
-    _getHighlights(userId);
-  }, []);
 
   const handleNavigate = () => {
+    
+    Mixpanel.track("clicked_highlights_on_home_page", {
+      userId: userId,
+    });
+
     if(videoHighlights && videoHighlights.length > 0) {
       // const userHighlight = videoHighlights.find((highlight: any) => highlight.user_id == userId);
       // const userHighlight = videoHighlights[0].user_highlights[0];
@@ -62,23 +47,39 @@ const Highlights = () => {
   }
   return (  
     videoHighlights.length > 0 ? <>
-    <div className="flex flex-row rounded-3xl gap-2 px-4 py-2 justify-between shadow-[0_0_15px_rgba(0,0,0,0.1)] cursor-pointer"
-     onClick={()=>{
-      handleNavigate();
-     }}>
-      <div className="flex flex-row gap-2 justify-center px-2">
-      <img src={highlights} alt="Highlights" style={{ width: "50px", height: "75px" }} />
-        <div className="flex flex-col gap-1 px-6 justify-center">
-          <h1 className="text-sm font-bold text-black">Your game highlight's ready.</h1>
-          <h1 className="text-xs text-black">Checkout now!</h1>
-        </div>
-      </div>
-      <div className="flex flex-row gap-2 justify-center">
-        <div className="flex flex-col justify-center"> 
-          <RightArrow />
-        </div>
-      </div>
-    </div>
+    <div 
+                    className="w-1/2 border rounded-3xl overflow-hidden flex relative"
+                    style={{ height: leftComponentHeight ? `${leftComponentHeight}px` : 'auto' }}
+                >
+                    <img src={highlightImage} alt="Highlight" className="w-full h-full object-cover" />
+                    <div className="absolute top-0 left-0 w-full p-2 md:p-3 flex justify-center" style={{ backgroundColor: '#EBEBEB' }}>
+                        <span className="text-black md:text-base lg:text-lg font-medium">Your last highlight!</span>
+                    </div>
+                    <div className="absolute bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 flex items-center justify-center" onClick={handleNavigate}>
+                        <div className="relative w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16">
+                            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 48 48">
+                                <defs>
+                                    <linearGradient id="borderGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stopColor="#009605" />
+                                        <stop offset="100%" stopColor="#BCAF32" />
+                                    </linearGradient>
+                                </defs>
+                                <circle
+                                    cx="24"
+                                    cy="24"
+                                    r="22"
+                                    fill="none"
+                                    stroke="url(#borderGradient)"
+                                    strokeWidth="2"
+                                    strokeDasharray="4 4"
+                                />
+                            </svg>
+                            <div className="flex items-center justify-center w-full h-full">
+                                <RightArrow className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
     {showSelectHighlightsModal && (<BottomUpModal
       isOpen={showSelectHighlightsModal}
       onClose={() => setShowSelectHighlightsModal(false)}

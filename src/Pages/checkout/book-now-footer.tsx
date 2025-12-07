@@ -382,6 +382,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   }, []);
 
   useEffect(() => {
+    const registrationFee = gymData?.gymId && pastAppBookings.hasOwnProperty(gymData.gymId) ? 0 : 500;
     if (showDiscount && batchDetails) {
       const finalPrice = calculateFinalPrice(
         batchDetails.price || 0,
@@ -393,9 +394,9 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
         coinsUsed || 0,
         equipmentRentalCharges || 0
       );
-      setDiscountedAmount(props.comingFrom == EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE && gymData?.gymId == 41 ? finalPrice + 500 : finalPrice);
+      setDiscountedAmount(props.comingFrom == EBookNowComingFromPage.BATCH_CHECKOUT_BOOKING_PAGE && gymData?.gymId == 41 ? finalPrice + registrationFee : finalPrice);
     }
-  }, [showDiscount, batchDetails, totalGuests, coinsAvailable, coinsUsed, equipmentRentalCharges]);
+  }, [showDiscount, batchDetails, totalGuests, coinsAvailable, coinsUsed, equipmentRentalCharges, pastAppBookings]);
 
   const discountText =
     gymData?.discountType === "FLAT"
@@ -489,9 +490,7 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
   const showLoginCTA = !userDetails && !props.forceBookNowCta;
   return (
     <>
-      <Flex
-        flex={1}
-        justify="stretch"
+      <div className="book-now-footer-wrapper"
         style={{
           // maxHeight: "18vh",
           backgroundColor: "white",
@@ -503,8 +502,15 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
           position: "fixed",
           bottom: 0,
           width: "100%",
+          display: "flex",
+          justifyContent: "center",
         }}
       >
+        <div className="book-now-footer-content" style={{ 
+          display: "flex", 
+          flexDirection: "column",
+          width: "100%"
+        }}>
         {showDiscount && !showLoginCTA && <div className="discountLine">{discountText}</div>}
         {errorMessage && (
           <div className="text-sm text-red-600 text-center absolute -top-8 left-0 right-0">
@@ -618,7 +624,8 @@ const BookNowFooter: React.FC<IBookNowFooter> = (props) => {
             </button>
           </div>
         )}
-      </Flex>
+        </div>
+      </div>
     </>
   );
 };

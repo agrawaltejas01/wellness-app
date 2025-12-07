@@ -15,6 +15,7 @@ import { BottomUpModal } from "../profile/half-page-modal";
 import { toLetterCase } from "../../utils/string-operation";
 import Faqs from "./faqs";
 import { Mixpanel } from "../../mixpanel/init";
+import "./coins.css";
 // import ConfettiSystem from "../../components/confetti-system";
 
 function loadScript(src: string) {
@@ -138,8 +139,8 @@ const Coins: React.FC<RouteComponentProps> = () => {
             handler: (response: any) => {
               if (response.razorpay_payment_id) {
                 setOrderStatus('success');
-                // setShowConfetti(true);
-                navigate("/", { replace: true });       
+                setShowConfetti(true);
+                // navigate("/");       
               }
             },
           };
@@ -161,53 +162,85 @@ const Coins: React.FC<RouteComponentProps> = () => {
 
     return (
 
-        <div>   
-            <div className="flex flex-col items-center justify-center shadow-md">
-                <div className="flex gap-2 mt-4 items-center justify-center">
-                    <BackArrow className="cursor-pointer absolute left-4" onClick={() => {
+        <div className="coins-page-container">   
+            {/* Header */}
+            <div className="coins-header sticky top-0 z-10 bg-white shadow-sm">
+                <div className="coins-header-content">
+                    <BackArrow className="cursor-pointer" onClick={() => {
                         navigate("/");
                     }} />
-                    <p className="text-md font-bold">ZenfitX Coins (1 Coin = ₹1)</p>
-                </div>
-                <hr className="w-full mt-4"/>
-            </div>
-            <div className="flex flex-col items-center justify-center rounded-full bg-mint-green text-black shadow-lg px-8 py-4 mt-4  mx-4"> 
-                <p className="text-md font-bold">Available ZenfitX Coins: {coins}</p>
-            </div>
-            <div className="flex flex-col w-full text-sm mt-4"> 
-                { coinsPackages && coinsPackages.map((coinsPackage: any) => (
-                    <div className="flex flex-row rounded-lg bg-gray-100 text-black shadow-md px-8 py-4 mt-4 mx-4 items-center justify-between">
-                        <div className="flex flex-col gap-2">
-                            <p className="text-md ">{coinsPackage.Name}</p>
-                            <p className="text-md">{coinsPackage.CoinValue} Coins</p>
-                            <div className="flex flex-row gap-2">
-                                <p className="text-md line-through">₹{coinsPackage.CoinValue}</p>
-                                <p className="text-md font-bold">₹{coinsPackage.SellingPrice}</p>
-                            </div>
-                            <p className="text-md">{Math.floor(((coinsPackage.CoinValue - coinsPackage.SellingPrice) / coinsPackage.CoinValue) * 100)}% Off</p>
-                            <p className="text-md">Validity: {coinsPackage.ValidityDays} days</p>
-                        </div>
-                        <button className="bg-black text-white rounded-lg px-4 py-2" onClick={() => {
-                            setCoinPackage(coinsPackage);
-                            setShowCoinsCheckout(true);
-                            Mixpanel.track("clicked_buy_now_button_on_coins_page", {
-                                userId: userId,
-                                coinsPackage: coinsPackage,
-                            });
-                            // handleBuyNow(coinsPackage.Id, setLoading);
-                        }}>Buy Now</button>
+                    <div className="flex flex-col items-center">
+                        <h1 className="text-lg lg:text-2xl font-bold">ZenfitX Coins</h1>
+                        <p className="text-xs lg:text-sm text-gray-600">1 Coin = ₹1</p>
                     </div>
-                ))}
-            </div>
-            <Faqs />
-            {/* Success Message */}
-            {/* {orderStatus === 'success' && (
-                <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
-                    <p className="text-green-800 text-center">
-                    🎉 Watch the SVG confetti celebration!
-                    </p>
+                    <div className="w-6"></div>
                 </div>
-            )} */}
+            </div>
+
+            {/* Content */}
+            <div className="coins-content">
+                {/* Balance Card */}
+                <div className="coins-balance-card">
+                    <div className="flex flex-col gap-1">
+                        <p className="text-xs lg:text-sm opacity-70 uppercase tracking-wider">Your Balance</p>
+                        <p className="text-4xl lg:text-5xl font-bold">{coins.toLocaleString()}</p>
+                        <p className="text-sm lg:text-base opacity-80">ZenfitX Coins</p>
+                    </div>
+                </div>
+
+                {/* Packages Grid */}
+                <div className="coins-packages-grid">
+                    { coinsPackages && coinsPackages.map((coinsPackage: any) => (
+                        <div key={coinsPackage.Id} className="coins-package-card">
+                            <div className="flex flex-col h-full gap-5">
+                                {/* Header */}
+                                <div className="flex items-start justify-between">
+                                    <div>
+                                        <h3 className="text-sm lg:text-base font-medium text-gray-600 mb-1">{coinsPackage.Name}</h3>
+                                        <p className="text-2xl lg:text-3xl font-bold">{coinsPackage.CoinValue.toLocaleString()} <span className="text-lg lg:text-xl font-normal text-gray-500">Coins</span></p>
+                                    </div>
+                                    <span className="coins-discount-badge">
+                                        {Math.floor(((coinsPackage.CoinValue - coinsPackage.SellingPrice) / coinsPackage.CoinValue) * 100)}% OFF
+                                    </span>
+                                </div>
+
+                                {/* Price */}
+                                <div className="flex items-baseline gap-2">
+                                    <span className="text-3xl lg:text-4xl font-bold">₹{coinsPackage.SellingPrice.toLocaleString()}</span>
+                                    <span className="text-lg text-gray-400 line-through">₹{coinsPackage.CoinValue.toLocaleString()}</span>
+                                </div>
+
+                                {/* Validity */}
+                                {coinsPackage.CoinValue < 10000 && (
+                                    <p className="text-sm text-gray-600">
+                                        Valid for {coinsPackage.ValidityDays} days
+                                    </p>
+                                )}
+
+                                {/* Buy Button */}
+                                <button 
+                                    className="coins-buy-button mt-auto"
+                                    onClick={() => {
+                                        setCoinPackage(coinsPackage);
+                                        setShowCoinsCheckout(true);
+                                        Mixpanel.track("clicked_buy_now_button_on_coins_page", {
+                                            userId: userId,
+                                            coinsPackage: coinsPackage,
+                                        });
+                                    }}
+                                >
+                                    Buy Now
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* FAQs */}
+                <Faqs />
+            </div>
+
+            {/* Modal */}
             {showCoinsCheckout && (
                 <BottomUpModal 
                 isOpen={showCoinsCheckout} 
@@ -218,7 +251,6 @@ const Coins: React.FC<RouteComponentProps> = () => {
                 borderBottom={true}
                 >
                 <CoinsCheckout coinPackage={coinPackage as CoinsPackage} setShowCoinsCheckout={setShowCoinsCheckout} />
-                {/* <Button type="primary" onClick={() => {setShowCancelReasonModal(true); setShowCancelModal(false)}}>Cancel Booking</Button> */}
                 </BottomUpModal>
             )}
         </div>

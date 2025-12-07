@@ -28,11 +28,11 @@ const CoplayerCard = ( {players, loading, spotsLeft, spotsTotal}: {players: any[
         // } else 
     if(players.length > 0) {
         return (
-            <div className="flex-col items-center justify-between shadow-gray rounded-xl mx-4 my-3 ">
+            <div className="coplayer-card-section flex-col items-center justify-between shadow-gray rounded-xl mx-4 my-3 ">
                 <div className="flex-col items-center justify-between px-4">
-                <h1 className="text-sm font-semibold pt-3"> Players ({spotsTotal - spotsLeft})</h1>
+                <h1 className="text-sm font-semibold pt-3 coplayer-card-title"> Players ({spotsTotal - spotsLeft})</h1>
                 <div className="flex flex-row gap-1">
-                    <h1 className="text-xs font-normal text-#626262 pt-1 pb-1">ZBR is a verified rating assigned by ZenVision AI</h1>
+                    <h1 className="text-xs font-normal text-#626262 pt-1 pb-1 coplayer-zbr-text">ZBR is a verified rating assigned by ZenVision AI</h1>
                     <InfoCircleOutlined className="w-3 h-3 self-center" onClick={()=>{setShowZBRInfoModal(true)}} />
                 </div>
             </div>
@@ -41,7 +41,7 @@ const CoplayerCard = ( {players, loading, spotsLeft, spotsTotal}: {players: any[
                     isOpen={showZBRInfoModal}
                     onClose={() => setShowZBRInfoModal(false)}
                     title="ZBR Games"
-                    subtitle=""
+                    subtitle="ZenfitX Badminton Rating"
                     showCloseButton={false}
                     children={<div className="flex flex-col mt-2 text-xs gap-1">
                       <span>🎯 ZBR: your verified badminton rating, assigned after your first recorded match using ZenVision AI

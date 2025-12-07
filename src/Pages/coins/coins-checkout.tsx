@@ -122,10 +122,10 @@ const CoinsCheckout: React.FC<ICoinsCheckout> = ({coinPackage, setShowCoinsCheck
     
     return (
         <div className="flex flex-col">
-            <div className="flex flex-row justify-between rounded-md bg-white text-black shadow-lg px-4 py-4 mt-4 mx-4">
+            {coinPackage.CoinValue < 10000 && <div className="flex flex-row justify-between rounded-md bg-white text-black shadow-lg px-4 py-4 mt-4 mx-4">
                 <div className="flex flex-row">Valid for</div>
                 <div className="flex flex-row font-bold">{coinPackage.ValidityDays} days</div>
-            </div>
+            </div>}
             <div className="flex flex-col rounded-md bg-white text-black shadow-lg px-4 py-4 mt-4 mx-4 mb-4"> 
                 <div className="flex flex-row justify-between font-bold text-sm">
                     <div className="flex flex-row">To Pay</div>
@@ -141,7 +141,7 @@ const CoinsCheckout: React.FC<ICoinsCheckout> = ({coinPackage, setShowCoinsCheck
                 </div>
             </div>
             <div className="flex flex-row justify-between font-bold text-sm mb-4 mx-4">
-                <button className="w-full bg-black font-bold text-white text-lg rounded-lg px-4 py-4" onClick={() => {
+                <button className="w-full font-bold text-black text-lg rounded-lg px-4 py-4" style={{background: 'linear-gradient(135deg, rgba(254, 213, 44, 0.24) 0%, rgba(254, 213, 44, 0.4) 100%)'}} onClick={() => {
                     handleBuyNow(coinPackage.Id, setLoading);
                     Mixpanel.track("clicked_buy_coins_button", {
                         userId: userId,

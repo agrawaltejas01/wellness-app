@@ -25,8 +25,8 @@ export function formatDate(date: string | number | Date) {
   let momentDate = getMomentDate(date);
   return {
     isoDate: momentDate.format("YYYY-MM-DD"),
-    "date suffix - Day": momentDate.format("Do MMMM - ddd"),
-    "date suffix": momentDate.format("Do MMMM "),
+    "date suffix - Day": momentDate.format("Do MMM - ddd"),
+    "date suffix": momentDate.format("Do MMM "),
   };
 }
 

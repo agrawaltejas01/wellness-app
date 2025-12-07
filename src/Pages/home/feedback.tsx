@@ -7,11 +7,7 @@ import { BottomUpModal } from "../profile/half-page-modal";
 import { navigate } from "@reach/router";
 import { Mixpanel } from "../../mixpanel/init";
 
-interface FeedbackProps {
-    showFeedback?: boolean;
-}
-
-const Feedback: React.FC<FeedbackProps> = ({showFeedback = false}) => {
+const Feedback: React.FC = () => {
     const userDetails = JSON.parse(window.localStorage["zenfitx-user-details"] || '{}');
     const userId = userDetails.id;
     const [feedback, setFeedback] = useState<any>(null);
@@ -42,7 +38,7 @@ const Feedback: React.FC<FeedbackProps> = ({showFeedback = false}) => {
         onSuccess: (data) => {
             if(data.data.feedbacks?.length > 0) {
                 setFeedback(data.data.feedbacks[0]);
-                if(showFeedback) {
+                if(feedback) {
                     setShowRatingModal(true);
                 } else {
                     setFeedbackModal(true);
@@ -84,8 +80,11 @@ const Feedback: React.FC<FeedbackProps> = ({showFeedback = false}) => {
                 activity: feedback?.activity,
                 user_id: userId,
                 batch_id: feedback?.batch_id,
+                status: status
             });
-            navigate('/feedback-thankyou', {state: {success: true}});
+            if(status == 'SUBMITTED') {
+                navigate('/feedback-thankyou', {state: {success: true}});
+            }
         },
         onError: (error) => {   
             console.log(error);
@@ -94,6 +93,7 @@ const Feedback: React.FC<FeedbackProps> = ({showFeedback = false}) => {
                 activity: feedback?.activity,
                 user_id: userId,
                 batch_id: feedback?.batch_id,
+                status: status
             });
             navigate('/feedback-thankyou', {state: {success: false}});
         }
@@ -110,7 +110,7 @@ const Feedback: React.FC<FeedbackProps> = ({showFeedback = false}) => {
     }, [feedback]);
 
     useEffect(() => {
-        setFeedbackReasons(allFeedbackReasons.filter((reason: any) => reason.rating == rating).sort((a: any, b: any) => a.reason_text.length - b.reason_text.length));
+        setFeedbackReasons(allFeedbackReasons?.filter((reason: any) => reason.rating == rating).sort((a: any, b: any) => a.reason_text.length - b.reason_text.length));
     }, [rating]);
 
     // Initialize selectedReasons when feedbackReasons is loaded
@@ -161,10 +161,11 @@ const Feedback: React.FC<FeedbackProps> = ({showFeedback = false}) => {
                     batch_id: feedback?.batch_id,
                 });
                 setFeedbackModal(false);
+                setStatus('OPTED_OUT');
                 handleSubmit('OPTED_OUT');
             }}>×</p>
-            <div className="flex flex-col items-center justify-center pt-2 mb-4">
-                <p className="text-xs text-gray pb-1">Rate your game</p>        
+            <div className="flex flex-col items-center justify-center pt-2">
+                <p className="text-xs text-gray pb-1">Rate your sesh</p>        
                 <p className="text-sm text-gray-500 font-bold pb-2">{feedback?.gym_name} - {feedback?.activity.toLowerCase()}</p>
                 <div className="flex flex-row items-center justify-center gap-3">
                     {Array.from({length: 5}).map((_, index) => (
@@ -198,6 +199,7 @@ const Feedback: React.FC<FeedbackProps> = ({showFeedback = false}) => {
                         batch_id: feedback?.batch_id,
                     });
                     setShowRatingModal(false);
+                    setStatus('OPTED_OUT');
                     handleSubmit('OPTED_OUT');
                 }}
                 children={
@@ -212,10 +214,9 @@ const Feedback: React.FC<FeedbackProps> = ({showFeedback = false}) => {
                                             setClickedStar(true);
                                             setSelectedReasons(new Array(feedbackReasons?.length || 0).fill(false));
                                         }
-                                        // if(rating == 5) {
-                                        //     setOtherReason('');
-                                        // }
-                                    }
+                                        if(rating == 5) {
+                                            setOtherReason('');
+                                        }}
                                 } />
                             ))}
                             {Array.from({length: 5 - rating}).map((_, index) => (
@@ -237,8 +238,7 @@ const Feedback: React.FC<FeedbackProps> = ({showFeedback = false}) => {
                                 </div>  
                             </div>
                         )}
-                        
-                        {rating > 0 && <div className={`text-sm font-semibold text-center rounded-full px-6 py-3 mb-4 cursor-pointer ${showOtherReasonModal ? 'bg-black text-white' : 'bg-gray-100 text-black'}`} 
+                        {<div className={`text-sm font-semibold text-center rounded-full px-6 py-3 mb-4 cursor-pointer ${showOtherReasonModal ? 'bg-black text-white' : 'bg-gray-100 text-black'}`} 
                         onClick={() => {
                             setShowOtherReasonModal(!showOtherReasonModal);
                             setOtherReason('');
@@ -257,6 +257,7 @@ const Feedback: React.FC<FeedbackProps> = ({showFeedback = false}) => {
                                 user_id: userId,
                                 batch_id: feedback?.batch_id,
                             });
+                            setStatus('SUBMITTED');
                             handleSubmit('SUBMITTED');
                         }}> 
                             <p className="text-md font-bold py-3">Submit</p>
