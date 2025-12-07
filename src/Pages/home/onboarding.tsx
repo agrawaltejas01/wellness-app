@@ -21,7 +21,28 @@ const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
   const touchStartXRef = useRef<number | null>(null);
   const touchStartYRef = useRef<number | null>(null);
 
+  // Defensive check so logged-in users aren’t sent back to login
+  const isUserLoggedIn = () => {
+    try {
+      const token = localStorage.getItem("zenfitx-access-token");
+      const userDetails = localStorage.getItem("zenfitx-user-details");
+      return Boolean(
+        (token && token !== "null" && token !== '""') ||
+        (userDetails && userDetails !== "null" && userDetails !== "{}")
+      );
+    } catch {
+      return false;
+    }
+  };
+
   useEffect(() => {
+    // If user is already logged in, close onboarding and skip timers entirely
+    if (isUserLoggedIn()) {
+      setOnboarding(false);
+      navigate("/", { replace: true });
+      return;
+    }
+
     Mixpanel.track("open_onboarding_page");
     
     // Preload first image first - show component once it's loaded
@@ -105,6 +126,13 @@ const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
   }, []);
 
   const handleGetStarted = () => {
+    // If already logged in, stay in app instead of redirecting to login
+    if (isUserLoggedIn()) {
+      setOnboarding(false);
+      navigate('/', { replace: true });
+      return;
+    }
+
     setShowLoader(true);
     Mixpanel.track("clicked_get_started_on_onboarding_page");
     navigate('/login', { state: { signup: true } });

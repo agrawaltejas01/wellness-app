@@ -342,7 +342,7 @@ const Rating = ({rating, zenScore, zenRank, games, isLoadingRating, isLoadingGam
                 <Highlights leftComponentHeight={leftComponentHeight || 0} videoHighlights={videoHighlights} />}
             </div> 
             <div className={`${videoHighlights.length === 0 ? 'flex justify-center' : 'w-full'} max-w-md mx-auto md:max-w-lg lg:max-w-xl`} onClick={()=>{navigate('/badminton'); Mixpanel.track('book_badminton_clicked', {user_id: userDetails.id})}}>
-                <div className={`rounded-full p-2 md:p-3 lg:p-4 mt-2 items-center justify-center bg-white text-black border border-black ${videoHighlights.length > 0 ? 'w-full' : ''}`} style={{ backgroundColor: '#009605' }}>
+                <div className={`rounded-full py-2 md:py-3 lg:py-4 mt-2 items-center justify-center bg-white text-black border border-black ${videoHighlights.length > 0 ? 'w-full' : ''}`} style={{ backgroundColor: '#009605' }}>
                     <div className="flex flex-row justify-center gap-1 p-1 px-8">
                         <PlusWhite className="w-4 h-4 md:w-5 md:h-5" />
                         <span className="font-bold text-white text-sm">Book Game</span>
