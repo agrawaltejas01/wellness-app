@@ -133,7 +133,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ userDetails }) => {
                 fontWeight: "bold",
               }}
             >
-              {coins}
+              {coins === 0 ? 'Buy' : coins}
             </p>
             <p
               className="text-xs sm:text-xs md:text-sm tracking-wide leading-none mt-0.5"
