@@ -68,7 +68,7 @@ const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
       secondImageTimeoutRef.current = setTimeout(() => {
         setCurrentImage('https://zfx-gyms.zenfitx.link/onboarding/second.avif');
         
-        // After showing second image for 2 seconds, start carousel
+        // After showing second image for 5 seconds, start carousel
         carouselStartTimeoutRef.current = setTimeout(() => {
           const carouselImages = [
             'https://zfx-gyms.zenfitx.link/onboarding/third.avif',
@@ -103,7 +103,7 @@ const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
           
           startCarouselInterval();
         }, 5000);
-      }, 5000);
+      }, 2000);
     };
     firstImg.onerror = () => {
       setImageLoaded(true);
