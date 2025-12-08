@@ -8,49 +8,48 @@ interface Highlight {
   id: string;
   thumbnail: string;
   videoUrl: string;
-  location: string;
-  sessionTime: string;
-  date: string;
 }
 
 const GameHighlights: React.FC = () => {
   const navigate = useNavigate();
-  const [highlights, setHighlights] = useState<Highlight[]>([]);
-  const userDetails = JSON.parse(
-    window.localStorage["zenfitx-user-details"] || "{}"
-  );
-  const userId = userDetails.id;
 
-  const { mutate: _getHighlights } = useMutation({
-    mutationFn: getHighlights,
-    onSuccess: (result) => {
-      console.log("Highlights result:", result);
-      // Parse the highlights data from API
-      if (result?.highlights && Array.isArray(result.highlights)) {
-        setHighlights(result.highlights);
-      }
-    },
-    onError: (error) => {
-      console.log("Error fetching highlights:", error);
-    },
-  });
+const highlights: Highlight[] = [
+  {
+    id: '1',
+    thumbnail: 'https://zfx-gyms.zenfitx.link/highlights/h1_thumbnail.avif',
+    videoUrl: 'https://zfx-gyms.zenfitx.link/highlights/H1.mp4',
+  },
+  {
+    id: '2',
+    thumbnail: 'https://zfx-gyms.zenfitx.link/highlights/h2_thumbnail.avif',
+    videoUrl: 'https://zfx-gyms.zenfitx.link/highlights/H2.mp4',
+  },
+  {
+    id: '3',
+    thumbnail: 'https://zfx-gyms.zenfitx.link/highlights/h3_thumbnail.avif',
+    videoUrl: 'https://zfx-gyms.zenfitx.link/highlights/H3.MOV',
+  },
+  {
+    id: '4',
+    thumbnail: 'https://zfx-gyms.zenfitx.link/highlights/h4_thumbnail.avif',
+    videoUrl: 'https://zfx-gyms.zenfitx.link/highlights/H4.mp4',
+  },
+  {
+    id: '5',
+    thumbnail: 'https://zfx-gyms.zenfitx.link/highlights/h5_thumbnail.avif',
+    videoUrl: 'https://zfx-gyms.zenfitx.link/highlights/H5.mp4',
+  },
+  {
+    id: '6',
+    thumbnail: 'https://zfx-gyms.zenfitx.link/highlights/h6_thumbnail.avif',
+    videoUrl: 'https://zfx-gyms.zenfitx.link/highlights/H6.mp4',
+  },
+];
 
-  useEffect(() => {
-    if (userId) {
-      _getHighlights(userId);
-    }
-  }, [userId]);
-
-  const handleGetHighlights = () => {
-    Mixpanel.track("get_highlights_clicked");
-    // Navigate to highlights upload or info page
-    navigate("/highlights");
-  };
 
   const handleHighlightClick = (highlight: Highlight) => {
     Mixpanel.track("highlight_card_clicked", {
-      highlight_id: highlight.id,
-      location: highlight.location,
+      highlight_id: highlight.id
     });
     navigate("/highlights", { state: { url: highlight.videoUrl } });
   };
@@ -84,7 +83,6 @@ const GameHighlights: React.FC = () => {
         <div className="flex overflow-x-auto scrollbar-hide gap-2 sm:gap-3 md:gap-4 pb-4">
           {/* Get Your Highlights Card */}
           <div
-            onClick={handleGetHighlights}
             className="flex-shrink-0 w-40 sm:w-56 md:w-64 lg:w-72 h-64 sm:h-80 md:h-96 rounded-2xl sm:rounded-3xl cursor-pointer transition-transform duration-200 hover:scale-105 relative overflow-hidden"
             style={{
               background: "linear-gradient(135deg, #1a4d1a 0%, #2d7a2d 100%)",
@@ -135,7 +133,7 @@ const GameHighlights: React.FC = () => {
               }}
             >
               {/* Location and Session Info */}
-              <div className="absolute bottom-3 left-3 right-3 sm:bottom-6 sm:left-6 sm:right-6">
+              {/* <div className="absolute bottom-3 left-3 right-3 sm:bottom-6 sm:left-6 sm:right-6">
                 <div className="flex items-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
                   <div
                     className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full"
@@ -158,7 +156,7 @@ const GameHighlights: React.FC = () => {
                 >
                   {highlight.sessionTime}
                 </h3>
-              </div>
+              </div> */}
             </div>
           ))}
 
