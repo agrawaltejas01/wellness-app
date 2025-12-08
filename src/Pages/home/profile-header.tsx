@@ -143,14 +143,14 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ userDetails }) => {
               {coins === 0 ? '25% off' : coins}
             </p>
             <p
-              className="sm:text-xs md:text-sm tracking-wide leading-none mt-0.5"
+              className="sm:text-xs md:text-sm tracking-wide leading-none mt-0.5 pr-1"
               style={{
                 fontFamily: "General Sans, sans-serif",
                 color: "#000000",
                 fontSize: "10px",
               }}
             >
-              Buy Coins
+              {coins === 0 ? 'Buy Coins' : 'Coins'}
             </p>
           </div>
         </div>
