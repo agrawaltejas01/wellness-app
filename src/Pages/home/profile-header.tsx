@@ -87,8 +87,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ userDetails }) => {
                 />
               ) : (
                 <div
-                  className="w-full h-full rounded-full flex items-center justify-center text-white text-sm sm:text-lg md:text-xl font-bold"
-                  style={{ backgroundColor: "#000000" }}
+                  className="w-full h-full rounded-full flex items-center justify-center text-black text-lg sm:text-lg md:text-xl font-bold bg-gray-200"
                 >
                   {firstName.charAt(0).toUpperCase()}
                 </div>
