@@ -301,6 +301,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
       return (
         <Card
           className={batch.slots == batch.slotsBooked ? "disabledSoldOut" : ""}
+          bordered={false}
           style={{
             // paddingTop: "16px",
             // paddingBottom: "16px",
@@ -308,6 +309,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
             // paddingRight: "16px",
             borderTopWidth: "0px",
             borderBottomWidth: "0px",
+            boxShadow: "none",
           }}
           onClick={() => {
             Mixpanel.track("clicked_batch_tile_on_schedule_page", {

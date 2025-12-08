@@ -15,7 +15,7 @@
 }
 
 .date-tiles-container {
-    margin: 0px 8px 0px 0px;
+    margin: 0 24px;
 }
 
 @media (min-width: 1024px) {
@@ -490,13 +490,13 @@ text-decoration-line: line-through;
 
 .activity-tiles-wrapper {
     padding-left: 24px;
-    padding-right: 24px;
+    padding-right: 24px; 
 }
 
 .batches-list-wrapper {
     margin-top: 10px;
-    padding-left: 24px;
-    padding-right: 24px;
+    padding-left: 3px;
+    padding-right: 3px;
 }
 
 @media (min-width: 1024px) {
