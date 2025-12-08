@@ -177,7 +177,12 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
       </div>
       <div className="h-screen" />
     </BottomUpModal>)}
-    </> : <></>
+    </> : <div
+      className="w-1/2 border rounded-3xl flex items-center justify-center"
+      style={{ backgroundColor: '#EBEBEB', height: leftComponentHeight ? `${leftComponentHeight}px` : 'auto' }}
+    >
+      <span className="text-gray-500 md:text-base lg:text-lg text-sm text-center px-4">Your Highlight will appear here</span>
+    </div>
   );
 };
 
