@@ -74,6 +74,7 @@ const BottomNav: React.FC = () => {
               backgroundColor: "#4CAF50",
               borderRadius: "50px",
               boxShadow: "0 4px 12px rgba(76, 175, 80, 0.3)",
+              borderBottom: "2px solid #000000",
             }}
           >
             <svg

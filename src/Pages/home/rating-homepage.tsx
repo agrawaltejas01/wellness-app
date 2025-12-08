@@ -169,7 +169,11 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
                             ))}
                         </Carousel>
                         <div className="w-full z-10 p-4 pt-0 mt-auto">
-                            <div className="rounded-full p-3 w-full flex items-center justify-center text-white bg-[#388E3C]" onClick={()=>{navigate('/badminton'); Mixpanel.track('book_badminton_clicked', {user_id: userDetails.id})}}>
+                            <div 
+                                className="rounded-full p-3 w-full flex items-center justify-center text-white bg-[#388E3C]" 
+                                style={{ borderBottom: "2px solid #000000" }}
+                                onClick={()=>{navigate('/badminton'); Mixpanel.track('book_badminton_clicked', {user_id: userDetails.id})}}
+                            >
                                 <div className="flex flex-row justify-center gap-2 items-center">
                                     <PlusWhite className="w-4 h-4"/>
                                     <span className="font-medium">Book Game</span>
@@ -240,7 +244,11 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
                                 </div>
                             </div>
                             <div className="w-full mt-4 z-10 p-4 pt-0">
-                                <div className="rounded-full p-3 w-full flex items-center justify-center text-white bg-[#388E3C]" onClick={()=>{navigate('/badminton'); Mixpanel.track('book_badminton_clicked', {user_id: userDetails.id})}}>
+                                <div 
+                                    className="rounded-full p-3 w-full flex items-center justify-center text-white bg-[#388E3C]" 
+                                    style={{ borderBottom: "2px solid #000000" }}
+                                    onClick={()=>{navigate('/badminton'); Mixpanel.track('book_badminton_clicked', {user_id: userDetails.id})}}
+                                >
                                     <div className="flex flex-row justify-center gap-2 items-center">
                                         <PlusWhite className="w-4 h-4"/>
                                         <span className="font-medium">Book Game</span>
