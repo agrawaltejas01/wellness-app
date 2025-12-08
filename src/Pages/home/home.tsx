@@ -164,11 +164,11 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     },
   });
 
-  useEffect(() => {
-    if(userDetails?.id) {
-      window?.ReactNativeWebView?.postMessage("request_health_permissions");
-    }
-  }, [userDetails]);
+  // useEffect(() => {
+  //   if(userDetails?.id) {
+  //     window?.ReactNativeWebView?.postMessage("request_health_permissions");
+  //   }
+  // }, [userDetails]);
   
 
   // useEffect(()=>{
