@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Mixpanel } from "../../mixpanel/init";
 import { navigate } from "@reach/router";
 import coinImage from "../../images/utils/coin.png";
+import verifiedBadgeImg from "../../images/home/verified-badge-player.png";
 
 interface ProfileHeaderProps {
   userDetails: IUser;
@@ -53,32 +54,37 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ userDetails }) => {
         {/* Left section - Profile and greeting */}
         <div className="flex flex-row items-center gap-2 sm:gap-3 md:gap-4 flex-1 min-w-0">
           {/* Profile picture with border */}
-          <div
-            className="cursor-pointer rounded-full flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20"
-            onClick={handleProfileClick}
-            style={{
-              border: "2px solid #000000",
-              padding: "2px",
-              overflow: "hidden",
-            }}
-          >
-            {profilePicture ? (
-              <img
-                src={profilePicture}
-                alt={firstName}
-                className="w-full h-full rounded-full object-cover"
-                style={{
-                  display: "block",
-                }}
-              />
-            ) : (
-              <div
-                className="w-full h-full rounded-full flex items-center justify-center text-white text-sm sm:text-lg md:text-xl font-bold"
-                style={{ backgroundColor: "#000000" }}
-              >
-                {firstName.charAt(0).toUpperCase()}
-              </div>
-            )}
+          <div className="relative">
+            <div
+              className="cursor-pointer rounded-full flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20"
+              onClick={handleProfileClick}
+              style={{
+                overflow: "hidden",
+              }}
+            >
+              {profilePicture ? (
+                <img
+                  src={profilePicture}
+                  alt={firstName}
+                  className="w-full h-full rounded-full object-cover"
+                  style={{
+                    display: "block",
+                  }}
+                />
+              ) : (
+                <div
+                  className="w-full h-full rounded-full flex items-center justify-center text-white text-sm sm:text-lg md:text-xl font-bold"
+                  style={{ backgroundColor: "#000000" }}
+                >
+                  {firstName.charAt(0).toUpperCase()}
+                </div>
+              )}
+            </div>
+            <img
+              src={verifiedBadgeImg}
+              alt="Verified player"
+              className="absolute -top-1 -right-1 w-5 h-5 sm:w-6 sm:h-6"
+            />
           </div>
 
           {/* Greeting text */}
@@ -90,7 +96,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ userDetails }) => {
                 color: "#000000",
               }}
             >
-              Hey {firstName},
+              {firstName},
             </h1>
             <p
               className="text-xs sm:text-sm md:text-base font-normal leading-tight"
