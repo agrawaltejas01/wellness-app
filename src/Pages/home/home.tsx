@@ -351,7 +351,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     setSelectedActivity(activity);
     
     // Navigate to gymming page for FITNESS/GYMMING activity
-    if (activity === "GYMMING" || activity === "FITNESS") {
+    if (activity === "GYMMING" || activity === "FITNESS" || activity === "FITNESS & RECOVERY") {
       Mixpanel.track("navigate_to_gymming", { activity });
       navigate("/gymming");
       return;
