@@ -42,7 +42,7 @@ const activityToSvgMap = (activity: string): JSX.Element => {
   );
   const badminton = (
     <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-      <img src={shuttlecockIcon} alt="Badminton" style={{ width: '70%', height: '70%', objectFit: 'contain' }} />
+      <img src={shuttlecockIcon} alt="Badminton" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
     </span>
   );
   const badmintonOld = (
@@ -82,7 +82,7 @@ const activityToSvgMap = (activity: string): JSX.Element => {
   );
   const gym = (
     <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-      <img src={fitnessIcon} alt="Fitness" style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+      <img src={fitnessIcon} alt="Fitness" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
     </span>
   );
   const gymOld = (
@@ -102,7 +102,7 @@ const activityToSvgMap = (activity: string): JSX.Element => {
   );
   const pickleball = (  
     <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-      <img src={pickleballIcon} alt="Pickleball" style={{ width: '70%', height: '70%', objectFit: 'contain' }} />
+      <img src={pickleballIcon} alt="Pickleball" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
     </span>
   );
   const pickleballOld = (

@@ -108,14 +108,14 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ userDetails }) => {
 
         {/* Right section - Coins */}
         <div
-          className="flex flex-row items-center gap-1.5 sm:gap-2 md:gap-3 pl-2 sm:pl-3 md:pl-4 pr-3 sm:pr-4 md:pr-5 py-1.5 sm:py-2 md:py-3 rounded-full cursor-pointer flex-shrink-0"
+          className="flex flex-row items-center sm:gap-2 md:gap-3 pl-1 sm:pl-2 md:pl-4 pr-1 sm:pr-4 md:pr-5 py-1 sm:py-2 md:py-3 rounded-full cursor-pointer flex-shrink-0"
           style={{
             backgroundColor: "#FED52C3D",
           }}
           onClick={handleCoinsClick}
         >
           {/* Coin icon */}
-          <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14">
+          <div className="flex-shrink-0 w-8 h-8 sm:w-12 sm:h-12 md:w-14 md:h-14">
             <img
               src={coinImage}
               alt="Coin"
@@ -126,24 +126,25 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ userDetails }) => {
           {/* Coins text */}
           <div className="flex flex-col items-start">
             <p
-              className="text-lg sm:text-2xl md:text-3xl leading-none"
+              className="sm:text-2xl md:text-3xl leading-none pr-1"
               style={{
                 fontFamily: "General Sans, sans-serif",
                 color: "#000000",
                 fontWeight: "bold",
+                fontSize: "14px",
               }}
             >
-              {coins === 0 ? 'Buy' : coins}
+              {coins === 0 ? '25% off' : coins}
             </p>
             <p
-              className="text-xs sm:text-xs md:text-sm tracking-wide leading-none mt-0.5"
+              className="sm:text-xs md:text-sm tracking-wide leading-none mt-0.5"
               style={{
                 fontFamily: "General Sans, sans-serif",
                 color: "#000000",
-                fontWeight: "regular",
+                fontSize: "10px",
               }}
             >
-              COINS
+              Buy Coins
             </p>
           </div>
         </div>

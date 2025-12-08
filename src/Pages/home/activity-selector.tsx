@@ -41,7 +41,7 @@ const ActivitySelector: React.FC<ActivitySelectorProps> = ({
                 >
                   {/* Activity Icon */}
                   <div
-                    className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 flex items-center justify-center mb-2 sm:mb-3 transition-all duration-200"
+                    className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 flex items-center justify-center mb-2 sm:mb-3 transition-all duration-200"
                   >
                     <div className="w-full h-full flex items-center justify-center">
                       {activityToSvgMap(activity)}
@@ -50,11 +50,12 @@ const ActivitySelector: React.FC<ActivitySelectorProps> = ({
 
                   {/* Activity Name */}
                   <p
-                    className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-center transition-colors duration-200"
+                    className="sm:text-sm md:text-base lg:text-lg font-semibold text-center transition-colors duration-200"
                     style={{
                       fontFamily: "Plus Jakarta Sans, sans-serif",
                       letterSpacing: "0.5px",
                       color: "#000000",
+                      fontSize: "10px",
                     }}
                   >
                     {displayName}
