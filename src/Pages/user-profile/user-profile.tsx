@@ -192,7 +192,7 @@ const UserProfile: React.FC<IUserProfile> = () => {
         </button>
         <button
           onClick={() => navigate("/profile")}
-          className="text-white bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded-lg text-sm font-semibold"
+          className="text-black bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg text-sm font-semibold"
         >
           Booking
         </button>
@@ -657,7 +657,7 @@ const UserProfile: React.FC<IUserProfile> = () => {
         <div className="px-4 pb-10">
           <button
             onClick={handleLogout}
-            className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded-lg shadow-sm"
+            className="w-full bg-gray-200 hover:bg-gray-300 text-black font-semibold py-3 rounded-lg shadow-sm"
           >
             Logout
           </button>
