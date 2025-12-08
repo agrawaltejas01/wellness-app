@@ -18,7 +18,9 @@ const ActivitySelector: React.FC<ActivitySelectorProps> = ({
   };
 
   return (
-    <div className="w-full bg-white" style={{ backgroundColor: "#FAFAFA" }}>
+    <div className="w-full bg-white" 
+    // style={{ backgroundColor: "#FAFAFA" }}
+    >
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-stretch px-2 sm:px-4 md:px-6">
           {activities.map((activity) => {
@@ -30,14 +32,15 @@ const ActivitySelector: React.FC<ActivitySelectorProps> = ({
                 key={activity}
                 className="flex-1 cursor-pointer relative"
                 onClick={() => handleActivityClick(activity)}
+                style={{
+                  background: isSelected 
+                    ? "linear-gradient(to top, rgba(76, 175, 80, 0.1) 0%, rgba(76, 175, 80, 0.05) 100%)"
+                    : "transparent",
+                }}
               >
                 <div 
                   className="flex flex-col items-center justify-center py-3 sm:py-4 md:py-5 px-1 sm:px-2 rounded-lg transition-all duration-200"
-                  style={{
-                    background: isSelected 
-                      ? "linear-gradient(to top, rgba(76, 175, 80, 0.1) 0%, rgba(76, 175, 80, 0.05) 100%)"
-                      : "transparent",
-                  }}
+                  
                 >
                   {/* Activity Icon */}
                   <div
