@@ -538,11 +538,11 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
       <div className="flex items-center justify-between p-6">
         {(currentStep === 2 || currentStep === 3) ? (
           <button
-            onClick={handleSkip}
+            onClick={currentStep === 2 ? handleBackToStep1 : handleBackToStep2}
             disabled={isLoading}
             className="text-gray-600 hover:text-gray-900 font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Skip
+            Back
           </button>
         ) : (
           <div className="w-8"></div>
@@ -569,17 +569,17 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
           <div className="text-center mb-8">
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
               {currentStep === 1 
-                ? "Your game, Your profile." 
+                ? "Create your player profile." 
                 : currentStep === 2 
-                ? "Add a profile photo"
-                : "Connect Apple Health"}
+                ? "Show us your game face"
+                : "Unlock deeper insights"}
             </h1>
             <p className="text-gray-600">
               {currentStep === 1 
                 ? "Help us personalize your experience ⚡️"
                 : currentStep === 2
-                ? "Let others recognize you on the court 📸"
-                : "Sync your fitness data for better insights 🏃‍♂️"
+                ? "Add a photo to start receiving your highlights"
+                : "Sync for better analysis and improvement tips"
               }
             </p>
           </div>
@@ -788,21 +788,13 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
                   <p className="mt-2 text-sm text-gray-600 mb-4">Photo uploaded successfully!</p>
                 )}
 
-                <p className="mt-4 text-sm text-gray-500 text-center">
+                {/* <p className="mt-4 text-sm text-gray-500 text-center">
                   You can skip this step and add a photo later
-                </p>
+                </p> */}
               </div>
 
               {/* Action Buttons */}
               <div className="space-y-3">
-                <button
-                  type="button"
-                  onClick={handleBackToStep1}
-                  className="w-full py-4 px-6 rounded-lg font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition-all"
-                >
-                  Back
-                </button>
-
                 <button
                   type="submit"
                   disabled={isLoading}
@@ -813,6 +805,15 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
                   }`}
                 >
                   Continue
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleSkip}
+                  disabled={isLoading}
+                  className="w-full py-4 px-6 rounded-lg font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Skip
                 </button>
               </div>
             </form>
@@ -845,9 +846,9 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
                   Connect Apple Health
                 </h2>
                 
-                <p className="text-gray-600 text-center mb-6">
+                {/* <p className="text-gray-600 text-center mb-6">
                   Allow us to access your Apple Health data to provide personalized fitness insights and track your progress.
-                </p>
+                </p> */}
 
                 {/* Request Permissions Button */}
                 {isFromApp && platform === "ios" && (
@@ -866,21 +867,13 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
                   </p>
                 ) : null}
 
-                <p className="mt-4 text-sm text-gray-500 text-center">
+                {/* <p className="mt-4 text-sm text-gray-500 text-center">
                   You can skip this step and connect later from settings
-                </p>
+                </p> */}
               </div>
 
               {/* Action Buttons */}
               <div className="space-y-3">
-                <button
-                  type="button"
-                  onClick={handleBackToStep2}
-                  className="w-full py-4 px-6 rounded-lg font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition-all"
-                >
-                  Back
-                </button>
-
                 <button
                   type="submit"
                   disabled={isLoading}
@@ -898,6 +891,15 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
                   ) : (
                     "Complete Profile"
                   )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleSkip}
+                  disabled={isLoading}
+                  className="w-full py-4 px-6 rounded-lg font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Skip
                 </button>
               </div>
             </form>
