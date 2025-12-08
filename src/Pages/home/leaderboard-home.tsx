@@ -3,6 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { getTop3Players, getLeaderboard } from "../../apis/leaderboard/leaderboard";
 import { useEffect, useState } from "react";
 import { Mixpanel } from "../../mixpanel/init";
+import verifiedBadgeImg from "../../images/home/verified-badge-player.png";
 import "./leaderboard-home.css";
 
 const LeaderboardHome = ({activityId}: {activityId: number}) => {
@@ -154,21 +155,12 @@ const LeaderboardHome = ({activityId}: {activityId: number}) => {
                                         <div 
                                             className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 z-20"
                                         >
-                                            {/* Green circle with checkmark */}
-                                            <div 
-                                                className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-green-500 flex items-center justify-center shadow-md verified-badge"
-                                            >
-                                                <svg 
-                                                    className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" 
-                                                    fill="none" 
-                                                    stroke="currentColor" 
-                                                    strokeWidth="3"
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                                                </svg>
-                                    </div>
-                                </div>
+                                            <img
+                                                src={verifiedBadgeImg}
+                                                alt="Verified player"
+                                                className="w-6 h-6 sm:w-7 sm:h-7 verified-badge"
+                                            />
+                                        </div>
                                         
                                         {/* Avatar circle with green dashed border */}
                                         <div 
