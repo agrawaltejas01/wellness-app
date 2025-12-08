@@ -7,10 +7,11 @@ import { Mixpanel } from '../../mixpanel/init';
 // Define prop types
 interface ReelsVideoPlayerProps {
   src: string;
-  caption: string;
+  caption?: string;
+  downloadEnabled?: boolean;
 }
 
-const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => {
+const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", downloadEnabled = true }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [isMuted, setIsMuted] = useState<boolean>(true);
@@ -315,7 +316,8 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
               </svg>
               <span className="text-xs text-white">Share</span>
             </button>
-            <button
+            {downloadEnabled && (
+              <button
               onClick={handleDownload}
               className={`flex flex-col items-center relative ${downloadStatus !== 'idle' && downloadStatus !== 'error' ? 'pointer-events-none' : ''}`}
               style={{ WebkitTapHighlightColor: 'transparent' }}
@@ -362,6 +364,7 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption }) => 
                 Download
               </span>
             </button>
+            )}
             <button
               onClick={toggleMute}
               className="flex flex-col items-center"

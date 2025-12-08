@@ -5,7 +5,7 @@ interface IHighlights extends RouteComponentProps {}
 
 const Highlights: React.FC<IHighlights> = () => {
 
-  const {url} = useLocation().state as {url: string};
+  const {url, downloadEnabled = true} = useLocation().state as {url: string, downloadEnabled: boolean};
 
   const handleShare = () => {
     const video = document.getElementById("video") as HTMLVideoElement;
@@ -40,7 +40,7 @@ const Highlights: React.FC<IHighlights> = () => {
     //     </div>
     //   </div>
     // </div>
-    <ReelsVideoPlayer src={url} caption="" />
+    <ReelsVideoPlayer src={url} caption="" downloadEnabled={downloadEnabled} />
   );
 };
 
