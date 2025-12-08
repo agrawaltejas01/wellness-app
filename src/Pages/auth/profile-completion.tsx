@@ -446,9 +446,7 @@ const ProfileCompletion: React.FC<IProfileCompletionProps> = () => {
   const handleRequestHealthPermissions = () => {
     // Send message to React Native WebView only if platform is iOS
     if (isFromApp && platform === "ios" && window?.ReactNativeWebView) {
-      window.ReactNativeWebView.postMessage(JSON.stringify({
-        type: 'request_health_permissions'
-      }));
+      window?.ReactNativeWebView?.postMessage("request_health_permissions");
       
       Mixpanel.track("health_permissions_requested", {
         user_id: userFromState?.id || userDetails?.id,
