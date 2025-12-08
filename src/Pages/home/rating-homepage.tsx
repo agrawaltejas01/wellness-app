@@ -25,6 +25,22 @@ import { getHighlights } from "../../apis/highlights/highlights";
 import Highlights from "./highlights";
 
 
+const RatingLoadingSkeleton = () => {
+    return (
+        <div className="flex flex-col gap-4 mt-4 px-4 md:px-8 lg:px-12 max-w-6xl mx-auto">
+            <div className="flex flex-row gap-4 md:gap-6 lg:gap-8">
+                <div className="flex flex-col gap-4 md:gap-5 lg:gap-6 w-full">
+                    <div className="rounded-3xl bg-gray-200 h-48 animate-pulse" />
+                    <div className="rounded-full bg-gray-200 h-16 animate-pulse" />
+                </div>
+                <div className="hidden md:block flex-1">
+                    <div className="rounded-2xl bg-gray-200 h-full min-h-[260px] animate-pulse" />
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boolean}) => {
     const [isRatingInfoModalOpen, setIsRatingInfoModalOpen] = useState(false);
     const userDetails = JSON.parse(window.localStorage["zenfitx-user-details"] || '{}');
@@ -336,6 +352,7 @@ const Rating = ({rating, zenScore, zenRank, games, isLoadingRating, isLoadingGam
 
 
     return (
+        isLoadingRating || isLoadingGames ? <RatingLoadingSkeleton /> :
         <div className="flex flex-col gap-4 justify-between mt-4 px-4 md:px-8 lg:px-12 max-w-6xl mx-auto">
             <div className={`flex flex-row gap-4 md:gap-6 lg:gap-8 ${videoHighlights.length === 0 ? 'justify-center' : ''}`}>
                 <div className={`flex flex-col gap-4 md:gap-5 lg:gap-6 ${videoHighlights.length > 0 ? 'w-1/2' : 'max-w-md'}`}>
