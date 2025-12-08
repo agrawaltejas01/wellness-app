@@ -73,7 +73,7 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
                     <span className="italic" style={{ fontSize: '16px', color: '#4C4C4C' }}>Unlock the Pro Experience</span>
                     <div className="flex flex-row items-center">
                         <span className="italic" style={{ fontSize: '16px', color: '#4C4C4C' }}>with ZenVision AI</span>
-                        <InfoCircleOutlined className="w-3.5 h-3.5 self-center ml-1" />
+                        <InfoCircleOutlined className="w-3.5 h-3.5 self-center ml-1" onClick={()=>setIsRatingInfoModalOpen(true)} />
                     </div>
                 </div>
                 <div className="flex flex-row">
@@ -289,8 +289,8 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
             <CenterModal
                 isOpen={isRatingInfoModalOpen}
                 onClose={()=>setIsRatingInfoModalOpen(false)}
-                title="Rating (ZBR) - Quick Guide"
-                subtitle="ZenfitX Badminton Rating"
+                title="How it works?"
+                subtitle=""
                 children={<RatingInfo />}
             />
         </div>
