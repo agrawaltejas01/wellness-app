@@ -2,7 +2,7 @@ import { RouteComponentProps, navigate } from "@reach/router";
 import { Button, Input, message } from "antd";
 import { EditOutlined, SaveOutlined, CloseOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import { useAtom } from "jotai/react";
-import { userDetailsAtom } from "../../atoms/atom";
+import { accessTokenAtom, userDetailsAtom } from "../../atoms/atom";
 import { useEffect, useState, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { getRatings } from "../../apis/ratings/ratings";
@@ -30,6 +30,7 @@ const formatDate = (date: string) => {
 
 const UserProfile: React.FC<IUserProfile> = () => {
   const [userDetails, setUserDetails] = useAtom(userDetailsAtom);
+  const [, setAccessToken] = useAtom(accessTokenAtom);
   const [isLoading, setIsLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [userBio, setUserBio] = useState("");
@@ -172,14 +173,30 @@ const UserProfile: React.FC<IUserProfile> = () => {
     setEditMode(false);
   };
 
+  const handleLogout = () => {
+    setUserDetails(null);
+    setAccessToken("");
+    localStorage.removeItem("zenfitx-access-token");
+    localStorage.removeItem("zenfitx-user-details");
+    navigate("/login");
+  };
+
   const NavigationHeader = () => (
     <div className="bg-black p-4 sticky top-0 z-10">
-      <button 
-        onClick={() => navigate("/")}
-        className="text-white p-2 rounded-full"
-      >
-        <ArrowLeftOutlined className="text-lg" />
-      </button>
+      <div className="flex items-center justify-between">
+        <button 
+          onClick={() => navigate("/")}
+          className="text-white p-2 rounded-full"
+        >
+          <ArrowLeftOutlined className="text-lg" />
+        </button>
+        <button
+          onClick={() => navigate("/profile")}
+          className="text-white bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded-lg text-sm font-semibold"
+        >
+          Booking
+        </button>
+      </div>
     </div>
   );
 
@@ -634,6 +651,16 @@ const UserProfile: React.FC<IUserProfile> = () => {
               </div> */}
             </div>
           </div>
+        </div>
+
+        {/* Logout */}
+        <div className="px-4 pb-10">
+          <button
+            onClick={handleLogout}
+            className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded-lg shadow-sm"
+          >
+            Logout
+          </button>
         </div>
       </div>
     </>
