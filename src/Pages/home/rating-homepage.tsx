@@ -294,7 +294,7 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
     )
 }
 
-const Rating = ({rating, zenScore, zenRank, games, isLoadingRating, isLoadingGames}: {rating: number, zenScore: number, zenRank: number, games: number, isLoadingRating: boolean, isLoadingGames: boolean}) => {
+const Rating = ({rating, zenScore, zenRank, games, totalCount, isLoadingRating, isLoadingGames}: {rating: number, zenScore: number, zenRank: number, games: number, totalCount: number, isLoadingRating: boolean, isLoadingGames: boolean}) => {
     const [isRatingInfoModalOpen, setIsRatingInfoModalOpen] = useState(false);
     const [leftComponentHeight, setLeftComponentHeight] = useState<number | null>(null);
     const zenScoreCardRef = useRef<HTMLDivElement>(null);
@@ -357,7 +357,7 @@ const Rating = ({rating, zenScore, zenRank, games, isLoadingRating, isLoadingGam
             <div className={`flex flex-row gap-4 md:gap-6 lg:gap-8 ${videoHighlights.length === 0 ? 'justify-center' : ''}`}>
                 <div className={`flex flex-col gap-4 md:gap-5 lg:gap-6 ${videoHighlights.length > 0 ? 'w-1/2' : 'max-w-md'}`}>
                     <div ref={zenScoreCardRef}>
-                        <ZenScoreCard zenScore={zenScore} zenRank={zenRank} totalRank={300} />
+                        <ZenScoreCard zenScore={zenScore} zenRank={zenRank} totalRank={totalCount} />
                     </div>
                     <div ref={ratingBadgeRef}>
                         <RatingBadgeHomeScreen rating={rating} />
@@ -398,11 +398,12 @@ const RatingHomepage: React.FC<{userDetails: IUser}> = ({userDetails}) => {
     const { mutate: _getRatings } = useMutation({
         mutationFn: getRatings,
         onSuccess: (result) => {
+            console.log(result);
             setRating(result.rating.Rating.rating || 0);
             setIsLoadingRating(false);
             setZenScore(result.rating.Rating.zenScore || 0);
             setZenRank(result.rating.rank || 0);
-            setTotalCount(result.rating.totalCount || 0);
+            setTotalCount(result.rating.total_count || 0);
         },
         onError: () => {
             setIsLoadingRating(false);
@@ -432,7 +433,7 @@ const RatingHomepage: React.FC<{userDetails: IUser}> = ({userDetails}) => {
 
     return (
         <div className="mt-2 w-full">
-            {!isLoadingRating && rating === 0 ? <div className="flex flex-col gap-4 justify-between mt-4 px-4 md:px-8 lg:px-12 max-w-6xl mx-auto"><NoRating games={games} isLoadingGames={isLoadingGames} /></div> : <Rating rating={rating} zenScore={zenScore} zenRank={zenRank} games={games} isLoadingRating={isLoadingRating} isLoadingGames={isLoadingGames} />}
+            {!isLoadingRating && rating === 0 ? <NoRating games={games} isLoadingGames={isLoadingGames} /> : <Rating rating={rating} zenScore={zenScore} zenRank={zenRank} games={games} totalCount={totalCount} isLoadingRating={isLoadingRating} isLoadingGames={isLoadingGames} />}
             {/* <NoRating games={games} isLoadingGames={isLoadingGames} /> */}
         </div>
     )

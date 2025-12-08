@@ -10,11 +10,11 @@ const getBackgroundColor = (rating: number) => {
 
 export const RatingBadgeHomeScreen: React.FC<{ rating: number}> = ({ rating }) => {
     return (
-        <div className="flex flex-row items-center gap-1 rounded-full py-4 justify-center" style={{backgroundColor: getBackgroundColor(rating).backgroundColor}}>
+        <div className="flex flex-row items-center gap-1 rounded-full py-4 justify-between px-4" style={{backgroundColor: getBackgroundColor(rating).backgroundColor}}>
             <div className="text-black" style={{ fontFamily: "Plus Jakarta Sans, sans-serif", fontSize: '10px',letterSpacing: '0.15em' }}>
                 <b>ZBR</b> <span className="text-light">RATING</span>
             </div>
-            <div className="px-2 rounded-full text-white font-bold py-1" style={{backgroundColor: getBackgroundColor(rating).fontColor, fontSize: '16px'}}>
+            <div className="px-2 py-1 rounded-full text-white font-bold" style={{backgroundColor: getBackgroundColor(rating).fontColor, fontSize: '16px'}}>
               {(rating / 100)} ⭐️ 
             </div>
             
