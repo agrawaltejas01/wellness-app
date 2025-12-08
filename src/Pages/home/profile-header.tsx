@@ -6,6 +6,7 @@ import { Mixpanel } from "../../mixpanel/init";
 import { navigate } from "@reach/router";
 import coinImage from "../../images/utils/coin.png";
 import verifiedBadgeImg from "../../images/home/verified-badge-player.png";
+import { getRatings } from "../../apis/ratings/ratings";
 
 interface ProfileHeaderProps {
   userDetails: IUser;
@@ -14,6 +15,7 @@ interface ProfileHeaderProps {
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({ userDetails }) => {
   const [coins, setCoins] = useState(0);
   const [profilePicture, setProfilePicture] = useState<string>("");
+  const [isRatedPlayer, setIsRatedPlayer] = useState(false);
 
   const { mutate: _getCoins } = useMutation({
     mutationFn: getCoins,
@@ -22,9 +24,21 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ userDetails }) => {
     },
   });
 
+  const { mutate: _getRatings } = useMutation({
+    mutationFn: getRatings,
+    onSuccess: (result) => {
+      const ratingValue = result?.rating?.Rating?.rating || 0;
+      setIsRatedPlayer(ratingValue > 0);
+    },
+    onError: () => {
+      setIsRatedPlayer(false);
+    },
+  });
+
   useEffect(() => {
     if (userDetails?.id) {
       _getCoins(userDetails.id as number);
+      _getRatings(userDetails.id as number);
     }
   }, [userDetails?.id]);
 
@@ -80,11 +94,13 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ userDetails }) => {
                 </div>
               )}
             </div>
-            <img
-              src={verifiedBadgeImg}
-              alt="Verified player"
-              className="absolute -top-1 -right-1 w-5 h-5 sm:w-6 sm:h-6"
-            />
+            {isRatedPlayer && (
+              <img
+                src={verifiedBadgeImg}
+                alt="Verified player"
+                className="absolute -top-1 -right-1 w-5 h-5 sm:w-6 sm:h-6"
+              />
+            )}
           </div>
 
           {/* Greeting text */}
