@@ -25,7 +25,8 @@ interface LeaderboardPlayer {
     user_id: number;
     rank?: number;
     lastGamePlayedDate?: string;
-}
+    zen_score?: number | undefined;
+}   
 
 interface UserRating {
     rating: number;
@@ -270,9 +271,9 @@ const Leaderboard = (props: LeaderboardProps) => {
     };
 
     const getPodiumHeight = (rank: number) => {
-        if (rank === 0) return 'h-32 sm:h-36 lg:h-44'; // 1st place tallest
-        if (rank === 1) return 'h-24 sm:h-28 lg:h-32'; // 2nd place
-        return 'h-20 sm:h-24 lg:h-28'; // 3rd place
+        if (rank === 0) return 'h-16 sm:h-36 lg:h-44'; // 1st place tallest
+        if (rank === 1) return 'h-12 sm:h-28 lg:h-32'; // 2nd place
+        return 'h-8 sm:h-24 lg:h-28'; // 3rd place
     };
 
     const getAvatarColor = (rank: number) => {
@@ -383,7 +384,7 @@ const Leaderboard = (props: LeaderboardProps) => {
                                                 className="text-xs sm:text-sm text-gray-500"
                                                 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
                                             >
-                                                {(player.rating / 100).toFixed(0)} zen score
+                                                {(player.zen_score || 0).toFixed(0)} zen score
                                             </p>
                                         </div>
 
@@ -534,9 +535,9 @@ const Leaderboard = (props: LeaderboardProps) => {
                                                 </span>
                                             </div>
                                         </div>
-                                        <div className="flex flex-col items-end">
-                                            <span className="ranking-rating-value text-sm lg:text-lg font-bold text-gray-900">{player.rating/100}</span>
-                                            <span className="ranking-rating-label text-xs lg:text-sm text-green-700">Rating</span>
+                                        <div className="flex flex-col items-center bg-gray-100 rounded-xl p-2 lg:p-4">
+                                            <span className="ranking-rating-value text-sm lg:text-lg font-bold text-gray-900" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{player.zen_score || 0}</span>
+                                            <span className="ranking-rating-label text-xs lg:text-sm text-green-700" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Zen Score</span>
                                         </div>
                                     </div>
                                 </div>
