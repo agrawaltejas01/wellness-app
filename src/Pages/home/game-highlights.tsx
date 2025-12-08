@@ -17,7 +17,7 @@ const highlights: Highlight[] = [
   {
     id: '1',
     thumbnail: 'https://zfx-gyms.zenfitx.link/highlights/h1_thumbnail.avif',
-    videoUrl: 'https://zfx-gyms.zenfitx.link/highlights/H1.mp4',
+    videoUrl: 'https://zfx-gyms.zenfitx.link/highlights/H1.MP4',
   },
   {
     id: '2',
@@ -37,12 +37,12 @@ const highlights: Highlight[] = [
   {
     id: '5',
     thumbnail: 'https://zfx-gyms.zenfitx.link/highlights/h5_thumbnail.avif',
-    videoUrl: 'https://zfx-gyms.zenfitx.link/highlights/H5.mp4',
+    videoUrl: 'https://zfx-gyms.zenfitx.link/highlights/H5.MP4',
   },
   {
     id: '6',
     thumbnail: 'https://zfx-gyms.zenfitx.link/highlights/h6_thumbnail.avif',
-    videoUrl: 'https://zfx-gyms.zenfitx.link/highlights/H6.mp4',
+    videoUrl: 'https://zfx-gyms.zenfitx.link/highlights/H6.MP4',
   },
 ];
 
