@@ -441,11 +441,12 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
             <UpcomingBooking userId={userDetails?.id as unknown as string} />
 
             <RatingHomepage userDetails={userDetails} />
-            {/* Leaderboard Section */}
-            <LeaderboardHome activityId={1} />
 
             {/* Game Highlights Section - Only show for available activities */}
             <GameHighlights />
+            
+            {/* Leaderboard Section */}
+            <LeaderboardHome activityId={1} />
             
             {/* Keep Moving Banner */}
             <KeepMovingBanner />
