@@ -2,7 +2,7 @@ import vectorImg from "../../images/home/vector.png";
 import { ReactComponent as InfoCircleOutlined } from "../../images/utils/info.svg";
 const ZenScoreCard = ({zenScore, zenRank, totalRank}: {zenScore: number, zenRank: number, totalRank: number}) => {
     const clampedZenScore = Math.max(0, Math.min(zenScore, 1000));
-    const size = 56;
+    const size = 48;
     const strokeWidth = 4;
     const radius = (size - strokeWidth) / 2;
     const circumference = 2 * Math.PI * radius;
@@ -10,9 +10,10 @@ const ZenScoreCard = ({zenScore, zenRank, totalRank}: {zenScore: number, zenRank
     const dashOffset = circumference * (1 - progressRatio);
 
     return (
-        <div className="flex flex-col items-center p-2 rounded-3xl" style={{ backgroundColor: '#EBEBEB' }}>
+        <div className="relative flex flex-col items-center py-2 rounded-3xl" style={{ backgroundColor: '#EBEBEB' }}>
+            <InfoCircleOutlined className="absolute top-2 right-2 w-3 h-3" />
             
-            <span style={{ fontSize: '12px', fontStyle: 'italic', color: '#505050', fontFamily: "Plus Jakarta Sans" }}>ZEN Rank</span>
+            <span style={{ fontSize: '12px', fontStyle: 'italic', color: '#505050', fontFamily: "Plus Jakarta Sans" }}>Rank</span>
             
             <span style={{ fontSize: '44px', fontWeight: 'bold', color: 'black', fontFamily: "Plus Jakarta Sans", margin: 0, padding: 0, lineHeight: 1 }}>{zenRank}</span>
             
@@ -23,9 +24,9 @@ const ZenScoreCard = ({zenScore, zenRank, totalRank}: {zenScore: number, zenRank
 
             <div className="flex flex-row gap-2 rounded-3xl p-2 mt-4 items-center" style={{ background: 'linear-gradient(to right, white, #EBEBEB)' }}>            
                 
-                <span style={{ fontSize: '10px', fontStyle: 'italic', fontFamily: "Plus Jakarta Sans", fontWeight: 'normal', color: '#505050' }}>ZEN Score</span>
+                <span style={{ fontSize: '12px', fontStyle: 'italic', fontFamily: "Plus Jakarta Sans", fontWeight: 'normal', color: '#505050' }}>ZEN Score</span>
                 
-                <InfoCircleOutlined className="w-2 h-2 self-center" />
+                {/* <InfoCircleOutlined className="w-2 h-2 self-center" /> */}
                 
                 <div
                     className="relative rounded-full inline-flex items-center justify-center"
@@ -67,8 +68,8 @@ const ZenScoreCard = ({zenScore, zenRank, totalRank}: {zenScore: number, zenRank
                             fontFamily: "Plus Jakarta Sans",
                             fontWeight: 'bold',
                             color: 'black',
-                            width: '48px',
-                            height: '48px',
+                            width: '44px',
+                            height: '44px',
                             borderRadius: '50%',
                             boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
                         }}

@@ -150,6 +150,7 @@ const activityToSvgMap = (activity: string): JSX.Element => {
     gymming: gym,
     gym: gym,
     fitness: gym,
+    "fitness & recovery": gym,
     cricket: cricket,
     dance: dance,
     pickleball: pickleball,
