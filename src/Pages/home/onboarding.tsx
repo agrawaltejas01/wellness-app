@@ -89,17 +89,16 @@ const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
               clearInterval(carouselIntervalRef.current);
             }
             carouselIntervalRef.current = setInterval(() => {
-              // If currently on fifth.avif (last image), navigate to login instead of looping
+              // Stop auto-advancing once we reach the last slide; wait for user action
               if (carouselIndexRef.current === carouselImages.length - 1) {
                 if (carouselIntervalRef.current) {
                   clearInterval(carouselIntervalRef.current);
                 }
-                handleGetStarted();
-              } else {
-                carouselIndexRef.current = (carouselIndexRef.current + 1) % carouselImages.length;
-                setCarouselIndex(carouselIndexRef.current);
-                setCurrentImage(carouselImages[carouselIndexRef.current]);
+                return;
               }
+              carouselIndexRef.current = (carouselIndexRef.current + 1) % carouselImages.length;
+              setCarouselIndex(carouselIndexRef.current);
+              setCurrentImage(carouselImages[carouselIndexRef.current]);
             }, 5000);
           };
           
@@ -148,17 +147,14 @@ const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
     }
 
     if (direction === 'next') {
-      // If clicking on fifth.avif, navigate to login page
-      if (currentImage.includes('fifth.avif')) {
-        handleGetStarted();
-        return;
-      }
-      
       // Advance to next image (if not already on last image)
       if (carouselIndexRef.current < carouselImagesRef.current.length - 1) {
         carouselIndexRef.current = carouselIndexRef.current + 1;
         setCarouselIndex(carouselIndexRef.current);
         setCurrentImage(carouselImagesRef.current[carouselIndexRef.current]);
+      } else {
+        // Already on last image; wait for explicit Get Started click
+        return;
       }
     } else {
       // Go to previous image (if not already on first carousel image)
@@ -171,17 +167,16 @@ const Onboarding: React.FC<Onboarding> = ({ setOnboarding }) => {
     
     // Restart interval for next auto-advance
     carouselIntervalRef.current = setInterval(() => {
-      // If currently on fifth.avif (last image), navigate to login instead of looping
+      // Stop auto-advancing at the last slide; require Get Started
       if (carouselIndexRef.current === carouselImagesRef.current.length - 1) {
         if (carouselIntervalRef.current) {
           clearInterval(carouselIntervalRef.current);
         }
-        handleGetStarted();
-      } else {
-        carouselIndexRef.current = (carouselIndexRef.current + 1) % carouselImagesRef.current.length;
-        setCarouselIndex(carouselIndexRef.current);
-        setCurrentImage(carouselImagesRef.current[carouselIndexRef.current]);
+        return;
       }
+      carouselIndexRef.current = (carouselIndexRef.current + 1) % carouselImagesRef.current.length;
+      setCarouselIndex(carouselIndexRef.current);
+      setCurrentImage(carouselImagesRef.current[carouselIndexRef.current]);
     }, 5000);
   };
 
