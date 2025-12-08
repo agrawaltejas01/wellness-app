@@ -31,6 +31,7 @@ const LeaderboardHome = ({activityId}: {activityId: number}) => {
             const players = result.leaderboard || [];
             const sortedPlayers = sortPlayersByRatingAndGames([...players]);
             setTopPlayers(sortedPlayers.slice(0, 3));
+            setTotalPlayers(result.totalCount || 0);
             setIsLoading(false);
         },
         onError: () => {
@@ -39,19 +40,19 @@ const LeaderboardHome = ({activityId}: {activityId: number}) => {
     });
 
     // Get total player count
-    const { mutate: _getTotalPlayers } = useMutation({
-        mutationFn: getLeaderboard,
-        onSuccess: (result) => {
-            // You might want to get this from a different endpoint
-            // For now using a placeholder
-            setTotalPlayers(1123);
-        },
-        onError: () => {}
-    });
+    // const { mutate: _getTotalPlayers } = useMutation({
+    //     mutationFn: getLeaderboard,
+    //     onSuccess: (result) => {
+    //         // You might want to get this from a different endpoint
+    //         // For now using a placeholder
+    //         setTotalPlayers(1123);
+    //     },
+    //     onError: () => {}
+    // });
 
     useEffect(() => {
         _getTop3Players(activityId);
-        _getTotalPlayers({activityId, pageSize: 1, pageNumber: 0});
+        // _getTotalPlayers({activityId, pageSize: 1, pageNumber: 0});
     }, [activityId]);
 
     // Get player initials
