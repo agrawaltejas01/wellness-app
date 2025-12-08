@@ -46,7 +46,7 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
     const userDetails = JSON.parse(window.localStorage["zenfitx-user-details"] || '{}');
 
     return (
-        <div className="flex flex-col gap-2 items-center justify-center">
+        <div className="flex flex-col items-center justify-center">
             {/* <Growth />
             <div className="flex flex-row gap-2 rounded-full bg-white p-2">
                 <div className="flex flex-col text-black text-xs pl-4 pr-2 items-center" onClick={() => {setIsRatingInfoModalOpen(true); Mixpanel.track("open_rating_info_modal", {user_id: userDetails.id})}}>
@@ -68,10 +68,13 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
                     <span className="font-extralight text-sm">Track, Improve & Play smartly with ZenVision AI</span>
                 </div>
             </div> */}
-            <div className="flex flex-col items-center mt-2 font-jakarta">
+            <div className="flex flex-col items-center">
                 <div className="flex flex-col items-center">
-                    <span className="italic" style={{ fontSize: '16px' }}>Track, Improve & Play Smartly</span>
-                    <span className="italic" style={{ fontSize: '16px' }}>with ZenVision AI</span>
+                    <span className="italic" style={{ fontSize: '16px', color: '#4C4C4C' }}>Unlock the Pro Experience</span>
+                    <div className="flex flex-row items-center">
+                        <span className="italic" style={{ fontSize: '16px', color: '#4C4C4C' }}>with ZenVision AI</span>
+                        <InfoCircleOutlined className="w-3.5 h-3.5 self-center ml-1" />
+                    </div>
                 </div>
                 <div className="flex flex-row">
                     <span className="font-bold" style={{ fontSize: '24px', color: '#4C4C4C' }}>Book your first game</span>
@@ -90,7 +93,7 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
                 
                 {/* Mobile View - Carousel */}
                 <div className="block md:hidden w-full flex justify-center py-2">
-                    <div className="relative w-full mx-4 bg-white rounded-2xl shadow-[0_6px_18px_rgba(0,0,0,0.15)] flex flex-col justify-between min-h-[240px] overflow-hidden">
+                    <div className="relative w-full mx-6 bg-white rounded-2xl shadow-[0_6px_18px_rgba(0,0,0,0.15)] flex flex-col justify-between min-h-[240px] overflow-hidden">
                         <Carousel
                             className="rating-carousel"
                             showArrows={false}
@@ -127,7 +130,7 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
                             {[
                                 {
                                     title: "Get your game highlights",
-                                    subtitle: "Best shots & rallies auto-captured",
+                                    subtitle: "Your best shots auto-captured",
                                     img: (
                                         <>
                                             <img 
@@ -145,24 +148,24 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
                                     )
                                 },
                                 {
-                                    title: "Track your game & improve",
-                                    subtitle: "with ZenVision AI coach",
-                                    img: (
-                                        <img 
-                                            src={playerImg} 
-                                            alt="Player" 
-                                            className="w-40 h-40 object-contain"
-                                        />
-                                    )
-                                },
-                                {
                                     title: "Unlock your verified badge & ZBR",
-                                    subtitle: "Join verified players community & compete on leaderboards",
+                                    subtitle: "AI analyzes your game to rate you",
                                     img: (
                                         <img 
                                             src={verifiedBadgeImg} 
                                             alt="Verified Badge" 
                                             className="w-24 h-24 object-contain"
+                                        />
+                                    )
+                                },
+                                {
+                                    title: "Track your game & improve",
+                                    subtitle: "Insights by ZenVision AI coach",
+                                    img: (
+                                        <img 
+                                            src={playerImg} 
+                                            alt="Player" 
+                                            className="w-40 h-40 object-contain"
                                         />
                                     )
                                 }
@@ -171,12 +174,12 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
                                     <div className="absolute top-0 right-0">
                                         {card.img}
                                     </div>
-                                    <div className="relative w-full p-4">
-                                        <div className="flex flex-col items-start mt-8 w-2/3 text-left">
-                                            <div className="text-black font-bold leading-tight mb-2" style={{ fontSize: '20px' }}>
+                                    <div className="relative w-full pt-4 pr-4 pl-4 pb-2">
+                                        <div className="flex flex-col items-start mt-2 w-2/3 text-left">
+                                            <div className="text-black font-bold leading-tight mb-2" style={{ fontSize: '20px', fontFamily: "Plus Jakarta Sans" }}>
                                                 {card.title}
                                             </div>
-                                            <div className="text-gray-500 text-xs font-light">
+                                            <div className="text-gray-500 font-light" style={{ fontSize: '12px', fontFamily: "Plus Jakarta Sans" }}>
                                                 {card.subtitle}
                                             </div>
                                         </div>
@@ -186,15 +189,15 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
                         </Carousel>
                         <div className="w-full z-10 p-4 pt-0 mt-auto">
                             <div 
-                                className="rounded-full p-3 w-full flex items-center justify-center text-white bg-[#388E3C]" 
+                                className="rounded-full p-3 w-full flex items-center justify-center text-white bg-[#009605]" 
                                 style={{ borderBottom: "2px solid #000000" }}
                                 onClick={()=>{navigate('/badminton'); Mixpanel.track('book_badminton_clicked', {user_id: userDetails.id})}}
                             >
                                 <div className="flex flex-row justify-center gap-2 items-center">
-                                    <PlusWhite className="w-4 h-4"/>
-                                    <span className="font-medium">Book Game</span>
+                                    <PlusWhite className="w-5 h-5"/>
+                                    <span className="font-bold" style={{ fontSize: '16px' }}>Book Badminton</span>
                                 </div>
-                            </div>
+                            </div>  
                         </div>
                     </div>
                 </div>
@@ -261,13 +264,13 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
                             </div>
                             <div className="w-full mt-4 z-10 p-4 pt-0">
                                 <div 
-                                    className="rounded-full p-3 w-full flex items-center justify-center text-white bg-[#388E3C]" 
+                                    className="rounded-full p-3 w-full flex items-center justify-center text-white bg-[#009605]" 
                                     style={{ borderBottom: "2px solid #000000" }}
                                     onClick={()=>{navigate('/badminton'); Mixpanel.track('book_badminton_clicked', {user_id: userDetails.id})}}
                                 >
                                     <div className="flex flex-row justify-center gap-2 items-center">
                                         <PlusWhite className="w-4 h-4"/>
-                                        <span className="font-medium">Book Game</span>
+                                        <span className="font-bold" style={{ fontSize: '16px' }}>Book Badminton</span>
                                     </div>
                                 </div>
                             </div>
@@ -368,9 +371,9 @@ const Rating = ({rating, zenScore, zenRank, games, totalCount, isLoadingRating, 
             </div> 
             <div className={`${videoHighlights.length === 0 ? 'flex justify-center' : 'w-full'} max-w-md mx-auto md:max-w-lg lg:max-w-xl`} onClick={()=>{navigate('/badminton'); Mixpanel.track('book_badminton_clicked', {user_id: userDetails.id})}}>
                 <div className={`rounded-full py-2 md:py-3 lg:py-4 mt-2 items-center justify-center bg-white text-black border border-black ${videoHighlights.length > 0 ? 'w-full' : ''}`} style={{ backgroundColor: '#009605' }}>
-                    <div className="flex flex-row justify-center gap-1 p-1 px-8">
-                        <PlusWhite className="w-4 h-4 md:w-5 md:h-5 self-center" />
-                        <span className="font-bold text-white text-sm">Book Game</span>
+                    <div className="flex flex-row justify-center gap-1 p-1 py-2 px-8">
+                        <PlusWhite className="w-4 h-4 md:w-5 md:h-5" />
+                        <span className="font-bold text-white text-sm">Book Badminton</span>
                     </div>
                 </div>
             </div>
@@ -432,7 +435,7 @@ const RatingHomepage: React.FC<{userDetails: IUser}> = ({userDetails}) => {
     const isLoading = isLoadingRating || isLoadingGames;
 
     return (
-        <div className="mt-2 w-full">
+        <div className="mt-2 pb-2 w-full" style={{ background: 'linear-gradient(to top, #E3F6E4, #FFFFFF)' }}>
             {!isLoadingRating && rating === 0 ? <NoRating games={games} isLoadingGames={isLoadingGames} /> : <Rating rating={rating} zenScore={zenScore} zenRank={zenRank} games={games} totalCount={totalCount} isLoadingRating={isLoadingRating} isLoadingGames={isLoadingGames} />}
             {/* <NoRating games={games} isLoadingGames={isLoadingGames} /> */}
         </div>

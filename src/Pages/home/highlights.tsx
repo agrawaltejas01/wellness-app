@@ -53,7 +53,7 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
                 >
                     <img src={highlightImage} alt="Highlight" className="w-full h-full object-cover" />
                     <div className="absolute top-0 left-0 w-full p-2 md:p-3 flex justify-center" style={{ backgroundColor: '#EBEBEB' }}>
-                        <span className="text-black md:text-base lg:text-lg font-medium">Your last highlight!</span>
+                        <span className="text-black md:text-base lg:text-lg text-xs">Your last highlight!</span>
                     </div>
                     <div className="absolute bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 flex items-center justify-center" onClick={handleNavigate}>
                         <div className="relative w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16">

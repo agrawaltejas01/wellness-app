@@ -67,9 +67,9 @@ const LeaderboardHome = ({activityId}: {activityId: number}) => {
     };
 
     const getPodiumHeight = (rank: number) => {
-        if (rank === 0) return 'h-32 sm:h-36 lg:h-44'; // 1st place tallest
-        if (rank === 1) return 'h-24 sm:h-28 lg:h-32'; // 2nd place
-        return 'h-20 sm:h-24 lg:h-28'; // 3rd place
+        if (rank === 0) return 'h-16 sm:h-36 lg:h-44'; // 1st place tallest
+        if (rank === 1) return 'h-12 sm:h-28 lg:h-32'; // 2nd place
+        return 'h-8 sm:h-24 lg:h-28'; // 3rd place
     };
 
     const getRankBadgeColor = (rank: number) => {
@@ -90,7 +90,7 @@ const LeaderboardHome = ({activityId}: {activityId: number}) => {
     const displayOrder = topPlayers.length >= 3 ? [topPlayers[1], topPlayers[0], topPlayers[2]] : [];
 
     return (
-        <div className="leaderboard-home-container mx-3 mb-4 mt-6 sm:mx-4 lg:mx-auto lg:max-w-3xl">
+        <div className="leaderboard-home-container mx-4 mb-4 mt-6 sm:mx-4 lg:mx-auto lg:max-w-3xl">
             {/* Title */}
             <div className="flex items-center justify-center mb-10 sm:mb-12 lg:mb-16 fade-in">
                 <div 
@@ -101,7 +101,7 @@ const LeaderboardHome = ({activityId}: {activityId: number}) => {
                     className="px-4 sm:px-6 text-sm sm:text-base tracking-[0.3em] sm:tracking-[0.4em] text-gray-400 font-semibold uppercase"
                     style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
                 >
-                    LEADERBOARD
+                    TOP RANKED PLAYERS
                 </h2>
                 <div 
                     className="flex-1 h-0.5 max-w-[120px] sm:max-w-[180px]"
@@ -212,8 +212,8 @@ const LeaderboardHome = ({activityId}: {activityId: number}) => {
                                             {player.name}
                                         </p>
                                         <p 
-                                            className="text-xs sm:text-sm text-gray-500"
-                                            style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+                                            className="sm:text-sm text-gray-500"
+                                            style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '10px' }}
                                         >
                                             {(player.rating / 100).toFixed(0)} zen score
                                         </p>

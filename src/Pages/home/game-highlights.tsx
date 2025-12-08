@@ -71,7 +71,7 @@ const highlights: Highlight[] = [
               color: "#000000",
             }}
           >
-            GAME HIGHLIGHTS
+            TRENDING HIGHLIGHTS
           </h2>
           <div 
             className="flex-1 h-0.5 max-w-[120px] sm:max-w-[180px]"
@@ -81,45 +81,6 @@ const highlights: Highlight[] = [
 
         {/* Horizontal scrolling cards */}
         <div className="flex overflow-x-auto scrollbar-hide gap-2 sm:gap-3 md:gap-4 pb-4">
-          {/* Get Your Highlights Card */}
-          <div
-            className="flex-shrink-0 w-40 sm:w-56 md:w-64 lg:w-72 h-64 sm:h-80 md:h-96 rounded-2xl sm:rounded-3xl cursor-pointer transition-transform duration-200 hover:scale-105 relative overflow-hidden"
-            style={{
-              background: "linear-gradient(135deg, #1a4d1a 0%, #2d7a2d 100%)",
-            }}
-          >
-            {/* Arrow Icon */}
-            <div className="absolute top-3 right-3 sm:top-6 sm:right-6">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="rgba(255, 255, 255, 0.3)"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="w-6 h-6 sm:w-10 sm:h-10 md:w-12 md:h-12"
-              >
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
-            </div>
-
-            {/* Text */}
-            <div className="absolute bottom-4 left-3 right-3 sm:bottom-8 sm:left-6 sm:right-6">
-              <h3
-                className="text-white text-xl sm:text-3xl md:text-4xl font-bold leading-tight"
-                style={{
-                  fontFamily: "Plus Jakarta Sans, sans-serif",
-                }}
-              >
-                Get
-                <br />
-                Your
-                <br />
-                Highlights
-              </h3>
-            </div>
-          </div>
 
           {/* Highlight Video Cards */}
           {highlights.map((highlight) => (

@@ -78,7 +78,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     : null;
 
   // Hardcoded activities
-  const [activities, setActivities] = useState<string[]>(["BADMINTON", "PICKLEBALL", "FITNESS"]);
+  const [activities, setActivities] = useState<string[]>(["BADMINTON", "PICKLEBALL", "FITNESS & RECOVERY"]);
   const [selectedActivity, setSelectedActivity] = useState<string | undefined>(
     activitySelectedFromFilters || activitySelected || "BADMINTON"
   );
