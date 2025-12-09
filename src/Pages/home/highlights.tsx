@@ -29,6 +29,11 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
   const [showStatsModal, setShowStatsModal] = useState(false);
   const [selectedHighlight, setSelectedHighlight] = useState<any>(null);
   const [finalSelectedHighlight, setFinalSelectedHighlight] = useState<any>(null);
+  const [height, setHeight] = useState<number>(0);
+
+  useEffect(() => {
+    setHeight(leftComponentHeight);
+  }, [leftComponentHeight]);
 
   const handleNavigate = () => {
     
@@ -37,13 +42,12 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
     });
 
     if(videoHighlights && videoHighlights.length > 0) {
-      // const userHighlight = videoHighlights.find((highlight: any) => highlight.user_id == userId);
-      // const userHighlight = videoHighlights[0].user_highlights[0];
+      const userHighlight = videoHighlights.find((highlight: any) => highlight.user_id == userId);
       // if(userHighlight) {
-        // setShowSelectHighlightsModal(true);
+        setShowSelectHighlightsModal(true);
         // navigate("/highlights", {state: {url: userHighlight.highlight_link}});
         // setShowStatsModal(true);
-        setShowSelectHighlightsBatchesModal(true);
+        // setShowSelectHighlightsBatchesModal(true);
       // }
     } 
   }
@@ -51,13 +55,19 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
     videoHighlights.length > 0 ? <>
     <div 
                     className="w-1/2 border rounded-3xl overflow-hidden flex relative"
-                    style={{ height: leftComponentHeight ? `${leftComponentHeight}px` : 'auto' }}
+                    style={{ height: height ? `${height}px` : 'auto', 
+                      backgroundImage: `url('${EMPTY_HIGHLIGHTS_BG_URL}')`,
+                      backgroundSize: 'cover',
+                      backgroundRepeat: 'repeat',
+                      backgroundPosition: 'center',
+                    }}
+                    onClick={handleNavigate}
                 >
-                    <img src={highlightImage} alt="Highlight" className="w-full h-full object-cover" />
+                    {/* <img src={highlightImage} alt="Highlight" className="w-full h-full object-cover" /> */}
                     <div className="absolute top-0 left-0 w-full p-2 md:p-3 flex justify-center" style={{ backgroundColor: '#EBEBEB' }}>
                         <span className="text-black md:text-base lg:text-lg text-xs">Your last highlight!</span>
                     </div>
-                    <div className="absolute bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 flex items-center justify-center" onClick={handleNavigate}>
+                    <div className="absolute bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 flex items-center justify-center">
                         <div className="relative w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16">
                             <svg className="absolute inset-0 w-full h-full" viewBox="0 0 48 48">
                                 <defs>
@@ -90,7 +100,7 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
       showCloseButton={false}
     >
       <div className="flex flex-col gap-2">
-          <SelectHighlight highlights={videoHighlights} setFinalSelectedHighlight={setFinalSelectedHighlight} matchId={matchIdHighlights} batchId={batchIdHighlights} setShowStatsModal={setShowStatsModal} setShowSelectHighlightsModal={setShowSelectHighlightsModal} />
+          <SelectHighlight highlights={videoHighlights} setFinalSelectedHighlight={setFinalSelectedHighlight} matchId={2} batchId={47326} setShowStatsModal={setShowStatsModal} setShowSelectHighlightsModal={setShowSelectHighlightsModal} />
       </div>
     </BottomUpModal>)}
     {/* {showStatsModal && (<BottomUpModal
