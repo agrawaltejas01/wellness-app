@@ -143,12 +143,13 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
         );
       } else
         return (
-          <img
-            key={`${gym.gymId}-${ind}`}
-            src={p.url}
-            width="100%"
-            height={"200px"}
-          />
+          <div key={`${gym.gymId}-${ind}`} className="carousel-image-wrapper">
+            <img
+              src={p.url}
+              alt={`${gym.name} - ${ind + 1}`}
+              className="carousel-image"
+            />
+          </div>
         );
     });
     return (

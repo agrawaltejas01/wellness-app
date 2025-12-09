@@ -154,7 +154,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   const { mutate: _getRatings } = useMutation({
     mutationFn: getRatings,
     onSuccess: (result) => {
-      setRatings(result.rating.rating);
+      setRatings(result.rating.Rating.rating);
     },
     onError: (error) => {
       errorToast("Error in getting ratings");
@@ -295,6 +295,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
       return (
         <Card
           className={batch.slots == batch.slotsBooked ? "disabledSoldOut" : ""}
+          bordered={false}
           style={{
             // paddingTop: "16px",
             // paddingBottom: "16px",
@@ -302,6 +303,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
             // paddingRight: "16px",
             borderTopWidth: "0px",
             borderBottomWidth: "0px",
+            boxShadow: "none",
           }}
           onClick={() => {
             Mixpanel.track("clicked_batch_tile_on_schedule_page", {
@@ -616,11 +618,12 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   };
 
   function generateDateTiles() {
+    const isMobile = window.innerWidth < 1024;
     const style: React.CSSProperties = {
       cursor: "pointer",
-      fontSize: "14px",
-      width: "44px",
-      height: "44px",
+      fontSize: isMobile ? "14px" : "16px",
+      width: isMobile ? "44px" : "56px",
+      height: isMobile ? "44px" : "56px",
     };
 
     let selectedStyle: React.CSSProperties = {
@@ -715,9 +718,9 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
             scrollbarWidth: "none",
             msOverflowStyle: "none",
             WebkitOverflowScrolling: "touch",
-            gap: "9px",
+            gap: isMobile ? "9px" : "12px",
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: isMobile ? "space-between" : "flex-start",
             // padding: "0"
           }}
         >
@@ -725,7 +728,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
             <span
               key={dateString}
               style={{
-                flex: "0 0 44px",
+                flex: isMobile ? "0 0 44px" : "0 0 56px",
                 display: "flex",
                 justifyContent: "center",
               }}
@@ -743,55 +746,58 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
       <MetaPixel />
       {/* <SwipeHandler onSwipeRight={handleSwipeRight}> */}
       {/* <PullToRefresh onRefresh={handleRefresh}> */}
-      <div>
+      <div className="schedule-page-container">
         <div className="stickyWrap">
           {" "}
           <Banner />
           <div className="dateTileWrap">
-            <div className="detailWrap">
-              <div className="flex items-center justify-between">
-                <div className="backBtn" onClick={() => goToGymPage()}>
-                  {backBtn()}
+            <div className="schedule-content-wrapper">
+              <div className="detailWrap">
+                <div className="flex items-center justify-between">
+                  <div className="backBtn" onClick={() => goToGymPage()}>
+                    {backBtn()}
+                  </div>
+                  <div className="text-sm cursor-pointer underline text-green-500" onClick={() => setShowHowItWorksModal(true)}>
+                    ZBR Games?
+                  </div>
                 </div>
-                <div className="text-sm cursor-pointer underline text-green-500" onClick={() => setShowHowItWorksModal(true)}>
-                  ZBR Games?
-                </div>
+                <div className="gymNames" style={{ fontSize: gym?.name?.length > 30 ? "15px" : "20px" }} >{gym?.name}</div>
+                {gym?.area && (
+                  <div className="locationName">
+                    <span>{locationIcon()}</span>
+                    <span>{gym?.area}</span>
+                  </div>
+                )}
               </div>
-              <div className="gymNames" style={{ fontSize: gym?.name?.length > 30 ? "15px" : "20px" }} >{gym?.name}</div>
-              {gym?.area && (
-                <div className="locationName">
-                  <span>{locationIcon()}</span>
-                  <span>{gym?.area}</span>
-                </div>
-              )}
-            </div>
-            <div style={{ margin: "0px 8px 0px 24px" }}>
-              {!gym?.isOnlyWeekend && generateDateTiles()}
+              <div className="date-tiles-container">
+                {!gym?.isOnlyWeekend && generateDateTiles()}
+              </div>
             </div>
           </div>
         </div>
 
-        {!gym?.isOnlyWeekend && (
-          <Flex flex={1} style={{ paddingLeft: "24px" }}>
-            <ActivityTiles
-              activities={gym.activities}
-              activitySelected={selectedActivity}
-              onClickFunction={(activity: string) => {
-                Mixpanel.track("clicked_activity_pill_gym", {
-                  gymId: gym.gymId,
-                  activity,
-                });
-                setSelectedActivity(activity);
-                _getGymBatchesForDate({
-                  id: gym.gymId,
-                  date: selectedDate,
-                  activity: activity,
-                });
-              }}
-              reposition
-            />
-          </Flex>
-        )}
+        <div className="schedule-content-wrapper schedule-batches-section">
+          {!gym?.isOnlyWeekend && (
+            <Flex flex={1} className="activity-tiles-wrapper">
+              <ActivityTiles
+                activities={gym.activities}
+                activitySelected={selectedActivity}
+                onClickFunction={(activity: string) => {
+                  Mixpanel.track("clicked_activity_pill_gym", {
+                    gymId: gym.gymId,
+                    activity,
+                  });
+                  setSelectedActivity(activity);
+                  _getGymBatchesForDate({
+                    id: gym.gymId,
+                    date: selectedDate,
+                    activity: activity,
+                  });
+                }}
+                reposition
+              />
+            </Flex>
+          )}
 
         {gym?.gymId == 41 && (
           <Flex flex={1} style={{ paddingLeft: "24px" }}>
@@ -816,11 +822,12 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
         )}
         
 
-        <Flex flex={3} style={{ marginTop: "10px" }}>
-          {batches && batches.length
-            ? generateBatchTile(gym, batches)
-            : noBatchComponent()}
-        </Flex>
+          <Flex flex={3} className="batches-list-wrapper">
+            {batches && batches.length
+              ? generateBatchTile(gym, batches)
+              : noBatchComponent()}
+          </Flex>
+        </div>
       </div>
       {/* </PullToRefresh> */}
       {/* </SwipeHandler> */}

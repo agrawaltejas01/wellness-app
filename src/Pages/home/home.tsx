@@ -18,7 +18,7 @@ import { IGymCard } from "../../types/gyms";
 import { getPlusDetailsOfUser } from "../../apis/user/plus";
 import { useAtom } from "jotai/react";
 import { plusDetailsAtom, userDetailsAtom } from "../../atoms/atom";
-import IUser, { IPlusDetails } from "../../types/user";
+import IUser, { IBookings, IPlusDetails } from "../../types/user";
 import useAuthRedirect from "../auth/redirect-hook";
 import { Mixpanel } from "../../mixpanel/init";
 import LandingFooter from "../landing/Footer";
@@ -36,6 +36,14 @@ import LeaderboardHome from "./leaderboard-home";
 import Highlights from "./highlights";
 import ProfileCompletion from "../auth/profile-completion";
 import GetStarted from "./get-started";
+import ProfileHeader from "./profile-header";
+import ActivitySelector from "./activity-selector";
+import BottomNav from "../../components/bottom-nav";
+import GameHighlights from "./game-highlights";
+import { getUpcomingBookings } from "../../apis/bookings/upcoming";
+import UpcomingBooking from "./upcoming-booking";
+import KeepMovingBanner from "./keep-moving-banner";
+import RatingHomepage from "./rating-homepage";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -69,9 +77,11 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     ? (locationStates as any).showClassesNearYouFilters
     : null;
 
-  activitySelected = activitySelectedFromFilters || activitySelected;
-  showClassesNearYou = showClassesNearYouFilters == false ? false : true;
-  const [activities, setActivities] = useState<string[]>([]);
+  // Hardcoded activities
+  const [activities, setActivities] = useState<string[]>(["BADMINTON", "PICKLEBALL", "FITNESS & RECOVERY"]);
+  const [selectedActivity, setSelectedActivity] = useState<string | undefined>(
+    activitySelectedFromFilters || activitySelected || "BADMINTON"
+  );
   const [gymCardsData, setGymCardsData] = useState<IGymCard[]>([]);
   const [pastAppBookings, setPastAppBookings] = useState<PastAppBookingObject>({});
   const [isFromApp, setIsFromApp] = useState(false);
@@ -85,16 +95,20 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
 
   const mixpanelSet = useRef(false);
 
-  const { mutate: _getAllActivities } = useMutation({
-    mutationFn: getAllActivities,
-    onError: () => {
-      errorToast("Error in getting activities near you");
-    },
-    onSuccess: (result) => {
-      console.log("activities - ", result);
-      setActivities(result.activities);
-    },
-  });
+  // Commented out - using hardcoded activities instead
+  // const { mutate: _getAllActivities } = useMutation({
+  //   mutationFn: getAllActivities,
+  //   onError: () => {
+  //     errorToast("Error in getting activities near you");
+  //   },
+  //   onSuccess: (result) => {
+  //     console.log("activities - ", result);
+  //     console.log("activities array - ", result.activities);
+  //     if (result.activities && result.activities.length > 0) {
+  //       setActivities(result.activities);
+  //     }
+  //   },
+  // });
 
   const { mutate: _getUserDeatils } = useMutation({
     mutationFn: getUserDeatils,
@@ -149,6 +163,12 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
       console.log("notification token stored successfully!");
     },
   });
+
+  // useEffect(() => {
+  //   if(userDetails?.id) {
+  //     window?.ReactNativeWebView?.postMessage("request_health_permissions");
+  //   }
+  // }, [userDetails]);
   
 
   // useEffect(()=>{
@@ -209,17 +229,22 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
     // if (!userDetails || (userDetails && userDetails.noOfBookings < 1) || !userDetails?.name || !userDetails?.gender || !userDetails?.dob) {
       _getUserDeatils();
     // }
-    _getAllActivities();
+    // _getAllActivities(); // Commented out - using hardcoded activities
     if(userDetails){
       const userId = JSON.parse(window.localStorage["zenfitx-user-details"]).id || null;
       _getPastAppBookings(userId)
       setGotPastAppBookings(true);
     }
     setGotPastAppBookings(true);
-    _getGymsByActivities(activitySelected);
 
     // _getPlusDetailsOfUser(userDetails?.phone as string);
-  }, [activitySelected]);
+  }, []);
+
+  useEffect(() => {
+    if (selectedActivity) {
+      _getGymsByActivities(selectedActivity);
+    }
+  }, [selectedActivity]);
 
   useEffect(() => {
     if(window.platformInfo?.platform == "ios") {
@@ -266,57 +291,164 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
 
   if(showUpdatePopup) return <ForceUpdatePopup />
   if (showOnBoarding()) return <Onboarding setOnboarding={setOnboarding} />;
-  if (!activities.length || !gotPastBookings) return <Loader />;
+  if (!gotPastBookings) {
+    return <Loader />;
+  }
   if(!userDetails?.name || !userDetails?.gender || !userDetails?.dob) return <GetStarted />;
+
+  // return (
+  //   <>
+  //     <MetaPixel />
+  //     {/* <PullToRefresh onRefresh={handleRefresh}> */}
+  //     <div>
+  //     <Flex flex={1} vertical style={{ overflowX: "hidden" }}>
+  //       <div>
+  //         <Space></Space>
+
+  //         {/* {userDetails?.phone && <Flex flex={1}>
+  //           <ProfileBanner />
+  //         </Flex>} */}
+
+  //         <Flex flex={3}>
+  //           <HomeBannerV2 userDetails={userDetails as IUser} />
+  //         </Flex>
+
+  //         <LeaderboardHome activityId={1} />
+  //         <div className="w-full mt-2 px-5">
+  //           <Highlights />
+  //         </div>
+
+  //         <div className="w-full mt-2 px-5">
+  //           <CoinsHomepage />
+  //         </div>
+
+
+  //         {showClassesNearYou ? (
+  //           <Flex style={{ marginLeft: "16px" }} flex={3}>
+  //             <ClassesNearYou />
+  //           </Flex>
+  //         ) : null}
+  //       </div>
+
+  //       <Flex flex={3} style={{ margin: "0 5%" }}>
+  //         <CentersAroundYou
+  //           activities={activities}
+  //           activitySelected={activitySelected}
+  //           gymCardsData={gymCardsData}
+  //           showClassesNearYou={showClassesNearYou}
+  //         />
+  //       </Flex>
+  //     </Flex>
+  //     </div>
+  //     <div className="flex flex-col fixed bottom-0 left-0 right-0 z-1000">
+  //           <Feedback />
+  //     </div>
+  //     {/* </PullToRefresh> */}
+  //   </>
+  // );
+
+  const handleActivitySelect = (activity: string) => {
+    setSelectedActivity(activity);
+    
+    // Navigate to gymming page for FITNESS/GYMMING activity
+    if (activity === "GYMMING" || activity === "FITNESS" || activity === "FITNESS & RECOVERY") {
+      Mixpanel.track("navigate_to_gymming", { activity });
+      navigate("/gymming");
+      return;
+    }
+    
+    _getGymsByActivities(activity);
+  };
+
+  const isComingSoon = selectedActivity === "PICKLEBALL";
 
   return (
     <>
       <MetaPixel />
-      {/* <PullToRefresh onRefresh={handleRefresh}> */}
-      <div>
-      <Flex flex={1} vertical style={{ overflowX: "hidden" }}>
-        <div>
-          <Space></Space>
-
-          {/* {userDetails?.phone && <Flex flex={1}>
-            <ProfileBanner />
-          </Flex>} */}
-
-          <Flex flex={3}>
-            <HomeBannerV2 userDetails={userDetails as IUser} />
-          </Flex>
-
-          <LeaderboardHome activityId={1} />
-          <div className="w-full mt-2 px-5">
-            <Highlights />
+      <div className={`min-h-screen bg-white ${!isComingSoon ? 'pb-24' : ''}`}>
+        {/* Profile Header */}
+        <ProfileHeader userDetails={userDetails as IUser} />
+        
+        {/* Activity Selector */}
+        <ActivitySelector
+          activities={activities}
+          selectedActivity={selectedActivity}
+          onActivitySelect={handleActivitySelect}
+        />
+        
+        {/* Coming Soon Message */}
+        {isComingSoon ? (
+          <div className="flex flex-col items-center justify-center py-16 sm:py-24 px-4">
+            <div className="text-center max-w-md">
+              <div className="mb-6">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-20 h-20 sm:w-24 sm:h-24 mx-auto text-gray-300"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+              </div>
+              <h2
+                className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4"
+                style={{
+                  fontFamily: "Plus Jakarta Sans, sans-serif",
+                  color: "#000000",
+                }}
+              >
+                Coming Soon!
+              </h2>
+              <p
+                className="text-base sm:text-lg text-gray-600 mb-6"
+                style={{
+                  fontFamily: "Plus Jakarta Sans, sans-serif",
+                }}
+              >
+                We're working hard to bring {selectedActivity?.toLowerCase()} to you. Stay tuned for updates!
+              </p>
+              <div
+                className="inline-block px-6 py-3 rounded-full"
+                style={{
+                  backgroundColor: "#F5F5F5",
+                }}
+              >
+                <p
+                  className="text-sm font-semibold"
+                  style={{
+                    fontFamily: "Plus Jakarta Sans, sans-serif",
+                    color: "#666666",
+                  }}
+                >
+                  🚀 Launching Soon
+                </p>
+              </div>
+            </div>
           </div>
+        ) : (
+          <>
+            <UpcomingBooking userId={userDetails?.id as unknown as string} />
 
-          <div className="w-full mt-2 px-5">
-            <CoinsHomepage />
-          </div>
+            <RatingHomepage userDetails={userDetails} />
 
-
-          {showClassesNearYou ? (
-            <Flex style={{ marginLeft: "16px" }} flex={3}>
-              <ClassesNearYou />
-            </Flex>
-          ) : null}
-        </div>
-
-        <Flex flex={3} style={{ margin: "0 5%" }}>
-          <CentersAroundYou
-            activities={activities}
-            activitySelected={activitySelected}
-            gymCardsData={gymCardsData}
-            showClassesNearYou={showClassesNearYou}
-          />
-        </Flex>
-      </Flex>
+            {/* Game Highlights Section - Only show for available activities */}
+            <GameHighlights />
+            
+            {/* Leaderboard Section */}
+            <LeaderboardHome activityId={1} />
+            
+            {/* Keep Moving Banner */}
+            <KeepMovingBanner />
+          </>
+        )}
       </div>
-      <div className="flex flex-col fixed bottom-0 left-0 right-0 z-1000">
-            <Feedback />
-      </div>
-      {/* </PullToRefresh> */}
+      
+      {/* Bottom Navigation - Hide for coming soon activities */}
+      {!isComingSoon && <BottomNav />}
     </>
   );
 };

@@ -1,0 +1,186 @@
+/* Coins Page Styling */
+
+.coins-page-container {
+    min-height: 100vh;
+    background: #fafafa;
+}
+
+/* Header */
+.coins-header {
+    background: white;
+    padding: 16px;
+    border-bottom: 1px solid #e5e7eb;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.coins-header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 100%;
+}
+
+/* Content */
+.coins-content {
+    padding: 20px 16px 80px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* Balance Card */
+.coins-balance-card {
+    background: linear-gradient(135deg, rgba(254, 213, 44, 0.24) 0%, rgba(254, 213, 44, 0.4) 100%);
+    border-radius: 8px;
+    padding: 24px 20px;
+    margin-bottom: 24px;
+    color: #000;
+}
+
+/* Packages Grid */
+.coins-packages-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 48px;
+}
+
+/* Package Card */
+.coins-package-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid #e5e7eb;
+}
+
+/* Discount Badge */
+.coins-discount-badge {
+    background: linear-gradient(135deg, rgba(254, 213, 44, 0.24) 0%, rgba(254, 213, 44, 0.4) 100%);
+    color: #000;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+}
+
+/* Buy Button */
+.coins-buy-button {
+    width: 100%;
+    background: linear-gradient(135deg, rgba(254, 213, 44, 0.24) 0%, rgba(254, 213, 44, 0.4) 100%);
+    color: #000;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.2px;
+    transition: all 0.2s;
+}
+
+.coins-buy-button:hover {
+    background: linear-gradient(135deg, rgba(254, 213, 44, 0.3) 0%, rgba(254, 213, 44, 0.5) 100%);
+}
+
+.coins-buy-button:active {
+    background: linear-gradient(135deg, rgba(254, 213, 44, 0.2) 0%, rgba(254, 213, 44, 0.35) 100%);
+}
+
+/* Laptop Responsive Styles */
+@media (min-width: 1024px) {
+    .coins-header {
+        padding: 20px;
+    }
+    
+    .coins-header-content {
+        max-width: 760px;
+        margin: 0 auto;
+    }
+    
+    .coins-content {
+        max-width: 760px;
+        padding: 32px 20px 80px;
+        margin: 0 auto;
+    }
+    
+    .coins-balance-card {
+        padding: 28px 32px;
+        margin-bottom: 32px;
+    }
+    
+    .coins-packages-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        margin-bottom: 56px;
+    }
+    
+    .coins-package-card {
+        padding: 24px;
+    }
+    
+    .coins-discount-badge {
+        font-size: 10px;
+        padding: 4px 8px;
+    }
+    
+    .coins-buy-button {
+        font-size: 14px;
+        padding: 12px;
+    }
+}
+
+/* FAQs Section */
+.coins-faqs-section {
+    margin-top: 48px;
+    margin-bottom: 48px;
+}
+
+.faqs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.faq-item {
+    background: white;
+}
+
+.faq-question {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+}
+
+.faq-answer {
+    padding: 0 16px 16px 16px;
+    border-top: 1px solid #f3f4f6;
+}
+
+@media (min-width: 1024px) {
+    .coins-faqs-section {
+        margin-top: 56px;
+        margin-bottom: 64px;
+    }
+    
+    .faq-question {
+        padding: 18px 20px;
+    }
+    
+    .faq-answer {
+        padding: 0 20px 18px 20px;
+    }
+}
+

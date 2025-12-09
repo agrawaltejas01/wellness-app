@@ -1,0 +1,118 @@
+/* Leaderboard Home Component Styles */
+
+.leaderboard-home-container {
+  max-width: 100%;
+}
+
+/* Smooth hover animations */
+.podium-player:hover {
+  transform: translateY(-4px);
+  transition: transform 0.3s ease;
+}
+
+/* Responsive adjustments for tablets and laptops */
+@media (min-width: 768px) {
+  .leaderboard-home-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Large laptop/desktop optimization */
+@media (min-width: 1024px) {
+  .leaderboard-home-container {
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+  
+  /* Make avatars bigger on large screens */
+  .podium-avatar-large {
+    width: 88px;
+    height: 88px;
+  }
+  
+  .podium-avatar-medium {
+    width: 72px;
+    height: 72px;
+  }
+  
+  .podium-avatar-small {
+    width: 64px;
+    height: 64px;
+  }
+  
+  /* Enhance shadows on large screens */
+  .podium-card {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .podium-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+}
+
+/* Extra large screens */
+@media (min-width: 1280px) {
+  .leaderboard-home-container {
+    max-width: 1000px;
+  }
+}
+
+/* Smooth animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.fade-in-delay-1 {
+  animation: fadeIn 0.5s ease-out 0.1s both;
+}
+
+.fade-in-delay-2 {
+  animation: fadeIn 0.5s ease-out 0.2s both;
+}
+
+.fade-in-delay-3 {
+  animation: fadeIn 0.5s ease-out 0.3s both;
+}
+
+/* Crown animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) translateX(-50%);
+  }
+  50% {
+    transform: translateY(-6px) translateX(-50%);
+  }
+}
+
+.crown-float {
+  animation: float 2s ease-in-out infinite;
+}
+
+/* Podium glow effect */
+.podium-glow-1 {
+  box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);
+}
+
+.podium-glow-2 {
+  box-shadow: 0 4px 20px rgba(251, 191, 36, 0.3);
+}
+
+.podium-glow-3 {
+  box-shadow: 0 4px 20px rgba(253, 224, 71, 0.3);
+}
+

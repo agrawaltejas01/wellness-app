@@ -1,0 +1,210 @@
+import { useNavigate } from "@reach/router";
+import { useEffect, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { getHighlights } from "../../apis/highlights/highlights";
+import { Mixpanel } from "../../mixpanel/init";
+
+interface Highlight {
+  id: string;
+  thumbnail: string;
+  videoUrl: string;
+}
+
+const GameHighlights: React.FC = () => {
+  const navigate = useNavigate();
+
+const highlights: Highlight[] = [
+  {
+    id: '1',
+    thumbnail: 'https://zfx-gyms.zenfitx.link/highlights/h1_thumbnail.avif',
+    videoUrl: 'https://zfx-gyms.zenfitx.link/highlights/H1.MP4',
+  },
+  {
+    id: '2',
+    thumbnail: 'https://zfx-gyms.zenfitx.link/highlights/h2_thumbnail.avif',
+    videoUrl: 'https://zfx-gyms.zenfitx.link/highlights/H2.mp4',
+  },
+  {
+    id: '3',
+    thumbnail: 'https://zfx-gyms.zenfitx.link/highlights/h3_thumbnail.avif',
+    videoUrl: 'https://zfx-gyms.zenfitx.link/highlights/H3.MOV',
+  },
+  {
+    id: '4',
+    thumbnail: 'https://zfx-gyms.zenfitx.link/highlights/h4_thumbnail.avif',
+    videoUrl: 'https://zfx-gyms.zenfitx.link/highlights/H4.mp4',
+  },
+  {
+    id: '5',
+    thumbnail: 'https://zfx-gyms.zenfitx.link/highlights/h5_thumbnail.avif',
+    videoUrl: 'https://zfx-gyms.zenfitx.link/highlights/H5.MP4',
+  },
+  {
+    id: '6',
+    thumbnail: 'https://zfx-gyms.zenfitx.link/highlights/h6_thumbnail.avif',
+    videoUrl: 'https://zfx-gyms.zenfitx.link/highlights/H6.MP4',
+  },
+];
+
+
+  const handleHighlightClick = (highlight: Highlight) => {
+    Mixpanel.track("highlight_card_clicked", {
+      highlight_id: highlight.id
+    });
+    navigate("/highlights", { state: { url: highlight.videoUrl, downloadEnabled: false } });
+  };
+
+  return (
+    <div className="w-full py-6 sm:py-8 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        {/* Heading with decorative lines */}
+        <div className="flex items-center justify-center mb-6 sm:mb-8">
+          <div 
+            className="flex-1 h-0.5 max-w-[120px] sm:max-w-[180px]"
+            style={{ background: 'linear-gradient(to left, #e6e6e6, #ffffff)' }}
+          ></div>
+          <h2
+            className="px-4 sm:px-6 text-sm sm:text-base font-bold text-center"
+            style={{
+              fontFamily: "Plus Jakarta Sans, sans-serif",
+              letterSpacing: "2px",
+              color: "#000000",
+            }}
+          >
+            TRENDING HIGHLIGHTS
+          </h2>
+          <div 
+            className="flex-1 h-0.5 max-w-[120px] sm:max-w-[180px]"
+            style={{ background: 'linear-gradient(to right, #e6e6e6, #ffffff)' }}
+          ></div>
+        </div>
+
+        {/* Horizontal scrolling cards */}
+        <div className="flex overflow-x-auto scrollbar-hide gap-2 sm:gap-3 md:gap-4 pb-4">
+
+          {/* Highlight Video Cards */}
+          {highlights.map((highlight) => (
+            <div
+              key={highlight.id}
+              onClick={() => handleHighlightClick(highlight)}
+              className="flex-shrink-0 w-40 sm:w-56 md:w-64 lg:w-72 h-64 sm:h-80 md:h-96 rounded-2xl sm:rounded-3xl cursor-pointer transition-transform duration-200 hover:scale-105 relative overflow-hidden"
+              style={{
+                background: `linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%), url(${highlight.thumbnail}) center/cover`,
+                backgroundColor: "#2a2a2a",
+              }}
+            >
+              {/* Location and Session Info */}
+              {/* <div className="absolute bottom-3 left-3 right-3 sm:bottom-6 sm:left-6 sm:right-6">
+                <div className="flex items-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
+                  <div
+                    className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full"
+                    style={{ backgroundColor: "#ff4444" }}
+                  ></div>
+                  <p
+                    className="text-white text-xs sm:text-sm md:text-base italic opacity-90"
+                    style={{
+                      fontFamily: "Plus Jakarta Sans, sans-serif",
+                    }}
+                  >
+                    {highlight.location}
+                  </p>
+                </div>
+                <h3
+                  className="text-white text-base sm:text-2xl md:text-3xl font-bold"
+                  style={{
+                    fontFamily: "Plus Jakarta Sans, sans-serif",
+                  }}
+                >
+                  {highlight.sessionTime}
+                </h3>
+              </div> */}
+            </div>
+          ))}
+
+          {/* Placeholder cards if no highlights */}
+          {highlights.length === 0 && (
+            <>
+              <div
+                className="flex-shrink-0 w-40 sm:w-56 md:w-64 lg:w-72 h-64 sm:h-80 md:h-96 rounded-2xl sm:rounded-3xl relative overflow-hidden"
+                style={{
+                  background: "linear-gradient(to bottom, #3a3a3a, #2a2a2a)",
+                }}
+              >
+                <div className="absolute bottom-3 left-3 right-3 sm:bottom-6 sm:left-6 sm:right-6">
+                  <div className="flex items-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
+                    <div
+                      className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full"
+                      style={{ backgroundColor: "#ff4444" }}
+                    ></div>
+                    <p
+                      className="text-white text-xs sm:text-sm md:text-base italic opacity-90"
+                      style={{
+                        fontFamily: "Plus Jakarta Sans, sans-serif",
+                      }}
+                    >
+                      Coolulu
+                    </p>
+                  </div>
+                  <h3
+                    className="text-white text-base sm:text-2xl md:text-3xl font-bold"
+                    style={{
+                      fontFamily: "Plus Jakarta Sans, sans-serif",
+                    }}
+                  >
+                    08-PM SESH
+                  </h3>
+                </div>
+              </div>
+
+              <div
+                className="flex-shrink-0 w-40 sm:w-56 md:w-64 lg:w-72 h-64 sm:h-80 md:h-96 rounded-2xl sm:rounded-3xl relative overflow-hidden"
+                style={{
+                  background: "linear-gradient(to bottom, #3a3a3a, #2a2a2a)",
+                }}
+              >
+                <div className="absolute bottom-3 left-3 right-3 sm:bottom-6 sm:left-6 sm:right-6">
+                  <div className="flex items-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
+                    <div
+                      className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full"
+                      style={{ backgroundColor: "#ff4444" }}
+                    ></div>
+                    <p
+                      className="text-white text-xs sm:text-sm md:text-base italic opacity-90"
+                      style={{
+                        fontFamily: "Plus Jakarta Sans, sans-serif",
+                      }}
+                    >
+                      Coolulu
+                    </p>
+                  </div>
+                  <h3
+                    className="text-white text-base sm:text-2xl md:text-3xl font-bold"
+                    style={{
+                      fontFamily: "Plus Jakarta Sans, sans-serif",
+                    }}
+                  >
+                    04-PM SESH
+                  </h3>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Custom scrollbar styles */}
+      <style>{`
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
+    </div>
+  );
+};
+
+export default GameHighlights;
+

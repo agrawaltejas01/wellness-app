@@ -11,8 +11,8 @@ const WhatToBring = ({whatToBring}: {whatToBring: string}) => {
     }, [whatToBring]);
 
     return (
-        <div className="flex flex-col justify-center px-8 pt-3">
-        <h1 className="text-sm font-bold">What to bring</h1>
+        <div className="what-to-bring-section flex flex-col justify-center px-8 pt-3">
+        <h1 className="text-sm font-bold what-to-bring-title">What to bring</h1>
         <ul className="list-disc text-sm font-normal mt-2 pl-2"> 
             {whatToBringList && whatToBringList.map((item, index) => (
                 <li key={index} className="text-sm text-activity-description">{item}</li>
