@@ -137,7 +137,7 @@ const Leaderboard = (props: LeaderboardProps) => {
                 setUserRating(prev => ({ ...prev, rating: 0 } as UserRating));
                 return;
             }
-            setUserRating(prev => ({ ...prev, rating: result.rating.rating || 0 } as UserRating));
+            setUserRating(prev => ({ ...prev, rating: result.rating.Rating.rating || 0 } as UserRating));
         },
         onError: (error) => {
             console.error("Error getting user rating:", error);
