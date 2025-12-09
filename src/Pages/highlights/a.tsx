@@ -9,12 +9,13 @@ interface ReelsVideoPlayerProps {
   src: string;
   caption?: string;
   downloadEnabled?: boolean;
+  muted?: boolean;
 }
 
-const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", downloadEnabled = true }) => {
+const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", downloadEnabled = true, muted = true }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
-  const [isMuted, setIsMuted] = useState<boolean>(true);
+  const [isMuted, setIsMuted] = useState<boolean>(muted);
   const [progress, setProgress] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
