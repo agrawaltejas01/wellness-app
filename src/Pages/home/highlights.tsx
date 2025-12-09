@@ -12,6 +12,8 @@ import { formatDate } from "../../utils/date";
 import highlightImage from "../../images/home/highlight.jpeg";
 import { formatTimeIntToAmPm } from "../../utils/date";
 
+const EMPTY_HIGHLIGHTS_BG_URL = "https://zfx-gyms.zenfitx.link/highlights/sample.gif";
+
 const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight: number, videoHighlights: any[]}) => {
   const navigate = useNavigate();
   const userDetails = JSON.parse(window.localStorage["zenfitx-user-details"] || '{}');
@@ -178,10 +180,16 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
       <div className="h-screen" />
     </BottomUpModal>)}
     </> : <div
-      className="w-1/2 border rounded-3xl flex items-center justify-center"
-      style={{ backgroundColor: '#EBEBEB', height: leftComponentHeight ? `${leftComponentHeight}px` : 'auto' }}
+      className="w-1/2 border rounded-3xl flex items-center justify-center relative overflow-hidden"
+      style={{
+        backgroundImage: `linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('${EMPTY_HIGHLIGHTS_BG_URL}')`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'repeat',
+        backgroundPosition: 'center',
+        height: leftComponentHeight ? `${leftComponentHeight}px` : 'auto'
+      }}
     >
-      <span className="text-gray-500 md:text-base lg:text-lg text-sm text-center px-4">Your Highlight will appear here</span>
+      <span className="text-white md:text-base lg:text-lg text-sm text-center px-4 drop-shadow">Your Highlight will appear here</span>
     </div>
   );
 };
