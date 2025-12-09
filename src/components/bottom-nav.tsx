@@ -95,7 +95,7 @@ const BottomNav: React.FC = () => {
                 fontFamily: "Plus Jakarta Sans, sans-serif",
               }}
             >
-              Book Game
+              Book
             </span>
           </button>
 
