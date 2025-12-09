@@ -154,7 +154,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   const { mutate: _getRatings } = useMutation({
     mutationFn: getRatings,
     onSuccess: (result) => {
-      setRatings(result.rating.rating);
+      setRatings(result.rating.Rating.rating);
     },
     onError: (error) => {
       errorToast("Error in getting ratings");

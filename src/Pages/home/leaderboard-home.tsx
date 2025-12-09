@@ -216,7 +216,7 @@ const LeaderboardHome = ({activityId}: {activityId: number}) => {
                                             className="sm:text-sm text-gray-500"
                                             style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '10px' }}
                                         >
-                                            {(player.zen_score).toFixed(0)} zen score
+                                            {(player.zen_score)} zen score
                                         </p>
                                 </div>
 
