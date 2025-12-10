@@ -41,60 +41,62 @@ export function shouldShowDiscount(
   batch: IBatch | null
 ): boolean {
   // If request is not from app, don't show discount
-  return false;
+  if(gym.gymId != 41 && gym.gymId != 44) {
+    return false;
+  }
   if(!isFromApp) {
     return false;
   }
 
-  // if(batch?.id && DISCOUNT_ALLOWED_BATCH_IDS.includes(batch?.id)) {
-  //   return true;
-  // }
-  // if(batch?.batchId && DISCOUNT_ALLOWED_BATCH_IDS.includes(batch?.batchId)) {
-  //   return true;
-  // }
+  if(batch?.id && DISCOUNT_ALLOWED_BATCH_IDS.includes(batch?.id)) {
+    return true;
+  }
+  if(batch?.batchId && DISCOUNT_ALLOWED_BATCH_IDS.includes(batch?.batchId)) {
+    return true;
+  }
 
-  // if(batch?.offerPercentage === 0) {
+  if(batch?.offerPercentage === 0) {
+    return false;
+  }
+
+  if(batch?.discountType === "NONE" || batch?.discountType === "" || batch?.offerType === EOfferType.BATCH_WITH_GUESTS){
+    return false;
+  }
+
+
+  // Case 2: If user is not logged in
+  if(!userDetails){
+    return true;
+  }
+
+  // Case 3: If user has past booking
+  if(hasPastBooking(gym.gymId, pastAppBookings) || !isFromApp){
+    return false;
+  }
+
+  if(gym.offerPercentage === 0) {
+    return false;
+  }
+
+  //Case 1: If gym is not offering any discount
+  if(gym.discountType === "NONE" || gym.discountType === "" || gym.offerType === EOfferType.BATCH_WITH_GUESTS){
+    return false;
+  }
+  return true;
+
+  // Check for conditions that definitely hide discount
+  // if (
+  //   gym.discountType === "NONE" ||
+  //   gym.discountType === "" ||
+  //   !isFromApp ||
+  //   gym.offerType === EOfferType.BATCH_WITH_GUESTS ||
+  //   hasPastBooking(gym.gymId, pastAppBookings)
+  // ) {
   //   return false;
   // }
 
-  // if(batch?.discountType === "NONE" || batch?.discountType === "" || batch?.offerType === EOfferType.BATCH_WITH_GUESTS){
-  //   return false;
-  // }
-
-
-  // // Case 2: If user is not logged in
-  // if(!userDetails){
-  //   return true;
-  // }
-
-  // // Case 3: If user has past booking
-  // if(hasPastBooking(gym.gymId, pastAppBookings) || !isFromApp){
-  //   return false;
-  // }
-
-  // if(gym.offerPercentage === 0) {
-  //   return false;
-  // }
-
-  // //Case 1: If gym is not offering any discount
-  // if(gym.discountType === "NONE" || gym.discountType === "" || gym.offerType === EOfferType.BATCH_WITH_GUESTS){
-  //   return false;
-  // }
-  // return true;
-
-  // // Check for conditions that definitely hide discount
-  // // if (
-  // //   gym.discountType === "NONE" ||
-  // //   gym.discountType === "" ||
-  // //   !isFromApp ||
-  // //   gym.offerType === EOfferType.BATCH_WITH_GUESTS ||
-  // //   hasPastBooking(gym.gymId, pastAppBookings)
-  // // ) {
-  // //   return false;
-  // // }
-
-  // // Show discount for new users or if no disqualifying conditions met
-  // // return !userDetails || true;
+  // Show discount for new users or if no disqualifying conditions met
+  // return !userDetails || true;
 }
 
 /**
