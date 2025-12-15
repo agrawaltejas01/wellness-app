@@ -23,11 +23,13 @@ const SelectHighlight = ({highlights, setFinalSelectedHighlight, matchId, batchI
                 highlightId: selectedHighlightId,
             });
 
+            const heatmaps = sortedHighlights.map((highlight: any) => highlight.heatmap_link).join(',');
+
             const selectedHighlight = sortedHighlights.find((highlight: any) => highlight.id === selectedHighlightId);
             setFinalSelectedHighlight(selectedHighlight);
             // setShowStatsModal(true);
             setShowSelectHighlightsModal(false);
-            navigate("/stats", { state: { highlight_link: selectedHighlight?.highlight_link, rally_link: selectedHighlight?.rally_link, heatmap_link: selectedHighlight?.heatmap_link } });
+            navigate("/stats", { state: { highlight_link: selectedHighlight?.highlight_link, rally_link: selectedHighlight?.rally_link, heatmap_link: heatmaps } });
         }
     }
     

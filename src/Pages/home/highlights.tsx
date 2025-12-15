@@ -42,12 +42,12 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
     });
 
     if(videoHighlights && videoHighlights.length > 0) {
-      const userHighlight = videoHighlights.find((highlight: any) => highlight.user_id == userId);
+      // const userHighlight = videoHighlights.find((highlight: any) => highlight.user_id == userId);
       // if(userHighlight) {
-        setShowSelectHighlightsModal(true);
+        // setShowSelectHighlightsModal(true);
         // navigate("/highlights", {state: {url: userHighlight.highlight_link}});
         // setShowStatsModal(true);
-        // setShowSelectHighlightsBatchesModal(true);
+        setShowSelectHighlightsBatchesModal(true);
       // }
     } 
   }
@@ -100,7 +100,7 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
       showCloseButton={false}
     >
       <div className="flex flex-col gap-2">
-          <SelectHighlight highlights={videoHighlights} setFinalSelectedHighlight={setFinalSelectedHighlight} matchId={2} batchId={47326} setShowStatsModal={setShowStatsModal} setShowSelectHighlightsModal={setShowSelectHighlightsModal} />
+          <SelectHighlight highlights={videoHighlights} setFinalSelectedHighlight={setFinalSelectedHighlight} matchId={matchIdHighlights} batchId={batchIdHighlights} setShowStatsModal={setShowStatsModal} setShowSelectHighlightsModal={setShowSelectHighlightsModal} />
       </div>
     </BottomUpModal>)}
     {/* {showStatsModal && (<BottomUpModal

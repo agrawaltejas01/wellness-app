@@ -308,7 +308,7 @@ const Rating = ({rating, zenScore, zenRank, games, totalCount, isLoadingRating, 
     const { mutate: _getHighlights } = useMutation({
         mutationFn: getHighlights,
         onSuccess: (result) => {
-            if(result && result.length > 0 && userDetails?.id == '4') {
+            if(result && result.length > 0) {
                 setVideoHighlights(result);
             }
         },
