@@ -11,6 +11,7 @@ import { Mixpanel } from "../../mixpanel/init";
 import { formatDate } from "../../utils/date";
 import highlightImage from "../../images/home/highlight.jpeg";
 import { formatTimeIntToAmPm } from "../../utils/date";
+import { ReactComponent as BackButtonCheckout } from '../../images/utils/back-button-checkout.svg';
 
 const EMPTY_HIGHLIGHTS_BG_URL = "https://zfx-gyms.zenfitx.link/highlights/sample.gif";
 
@@ -100,7 +101,7 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
       showCloseButton={false}
     >
       <div className="flex flex-col gap-2">
-          <SelectHighlight highlights={videoHighlights} setFinalSelectedHighlight={setFinalSelectedHighlight} matchId={matchIdHighlights} batchId={batchIdHighlights} setShowStatsModal={setShowStatsModal} setShowSelectHighlightsModal={setShowSelectHighlightsModal} />
+          <SelectHighlight highlights={videoHighlights} setFinalSelectedHighlight={setFinalSelectedHighlight} matchId={matchIdHighlights} batchId={batchIdHighlights} setShowStatsModal={setShowStatsModal} setShowSelectHighlightsModal={setShowSelectHighlightsModal} setSelectedBatchHighlightsModal={setSelectedBatchHighlightsModal} />
       </div>
     </BottomUpModal>)}
     {/* {showStatsModal && (<BottomUpModal
@@ -115,7 +116,7 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
     {showSelectHighlightsBatchesModal && (<BottomUpModal
       isOpen={showSelectHighlightsBatchesModal}
       onClose={() => setShowSelectHighlightsBatchesModal(false)}
-      title="Select Batches"
+      title="Choose Time"
       borderBottom={true}
       showCloseButton={false}
     >
@@ -155,11 +156,19 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
     {selectedBatchHighlightsModal && (<BottomUpModal
       isOpen={selectedBatchHighlightsModal}
       onClose={() => setSelectedBatchHighlightsModal(false)}
-      title="Selected Batch Highlights"
+      title="Choose Match Number"
       borderBottom={true}
       showCloseButton={false}
       maxHeight="100%"
     >
+      <div className="flex flex-row justify-between items-center mt-2">
+        <button
+          className="px-3 py-1 text-xs rounded-md text-indigo-600 font-medium focus:outline-none transition"
+          onClick={() => {setShowSelectHighlightsBatchesModal(true); setSelectedBatchHighlightsModal(false);}}
+        >
+          <BackButtonCheckout className="w-4 h-4" />
+        </button>
+      </div>
       <div className="flex flex-col gap-2 px-2 mt-2">
         {videoHighlights.filter((highlight: any, index: number, self: any[]) => 
           index === self.findIndex((h: any) => h.match_id === highlight.match_id)
@@ -176,6 +185,12 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
             <div className="flex flex-col">
               <span className="text-base font-semibold text-gray-900">Match <span className="text-indigo-600">#{highlight.match_id}</span></span>
               <span className="text-xs text-gray-500 mt-1">Highlight</span>
+              <div className="flex flex-row gap-2 mt-2">
+                {videoHighlights.filter((h: any) => h.match_id === highlight.match_id).map((h: any) => (
+                  <img src={h.thumbnail_link} alt="Highlight" className="w-10 h-10 object-cover object-top rounded-full" />
+                ))}
+                
+              </div>
             </div>
             <div className="flex-1 flex justify-end items-center">
               <button

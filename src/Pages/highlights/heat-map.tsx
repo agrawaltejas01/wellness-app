@@ -5,7 +5,7 @@ import { ReactComponent as BackButtonCheckout } from '../../images/utils/back-bu
 interface IHeatMap extends RouteComponentProps {}
 
 const HeatMap: React.FC<IHeatMap> = () => {
-  const {heatmap_link} = useLocation().state as {heatmap_link: string};
+  const {heatmap_link, playerId} = useLocation().state as {heatmap_link: string, playerId: number};
   const images = heatmap_link.split(',').map(link => link.trim()).filter(link => link.length > 0);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -22,6 +22,10 @@ const HeatMap: React.FC<IHeatMap> = () => {
       {/* Back Button */}
       <div className="w-full max-w-4xl mx-auto mb-4">
         <BackButtonCheckout onClick={() => navigate(-1)} className="cursor-pointer" />
+      </div>
+
+      <div className="text-center">
+        <h1 className="text-base font-bold text-black">You're Player {playerId} in this game.</h1>
       </div>
       
       {/* Carousel Container */}

@@ -9,7 +9,7 @@ interface IStats extends RouteComponentProps {}
 
 const Stats: React.FC<IStats> = () => {
 
-  const {highlight_link, rally_link, heatmap_link} = useLocation().state as {highlight_link: string, rally_link: string, heatmap_link: string};
+  const {highlight_link, rally_link, heatmap_link, playerId} = useLocation().state as {highlight_link: string, rally_link: string, heatmap_link: string, playerId: number};
   const userDetails = JSON.parse(window.localStorage["zenfitx-user-details"] || '{}');
   const userId = userDetails.id;
   
@@ -34,11 +34,11 @@ const Stats: React.FC<IStats> = () => {
     Mixpanel.track("clicked_movement_heatmap_on_match_recap", {
       userId: userId,
     });
-    navigate("/heat-map", { state: { heatmap_link: heatmap_link } });
+    navigate("/heat-map", { state: { heatmap_link: heatmap_link, playerId: playerId } });
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen" style={{ background: 'linear-gradient(to top, #E3F6E4, #FFFFFF)' }}>
       <div className="w-full max-w-4xl mx-auto mt-4 px-4">
         <BackButtonCheckout onClick={() => navigate(-1)} className="cursor-pointer" />
       </div>

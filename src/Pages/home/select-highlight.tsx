@@ -1,8 +1,9 @@
 import { navigate } from "@reach/router";
 import { useState } from "react";
 import { Mixpanel } from "../../mixpanel/init";
+import { ReactComponent as BackButtonCheckout } from '../../images/utils/back-button-checkout.svg';
 
-const SelectHighlight = ({highlights, setFinalSelectedHighlight, matchId, batchId, setShowStatsModal, setShowSelectHighlightsModal}: {highlights: any[], setFinalSelectedHighlight: (highlight: any) => void, matchId: number, batchId: number, setShowStatsModal: (show: boolean) => void, setShowSelectHighlightsModal: (show: boolean) => void}) => {
+const SelectHighlight = ({highlights, setFinalSelectedHighlight, matchId, batchId, setShowStatsModal, setShowSelectHighlightsModal, setSelectedBatchHighlightsModal}: {highlights: any[], setFinalSelectedHighlight: (highlight: any) => void, matchId: number, batchId: number, setShowStatsModal: (show: boolean) => void, setShowSelectHighlightsModal: (show: boolean) => void, setSelectedBatchHighlightsModal: (show: boolean) => void}) => {
     
     const [selectedHighlightId, setSelectedHighlightId] = useState<string | null>(null);
     const [selectedHighlight, setSelectedHighlight] = useState<any>(null);
@@ -29,14 +30,23 @@ const SelectHighlight = ({highlights, setFinalSelectedHighlight, matchId, batchI
             setFinalSelectedHighlight(selectedHighlight);
             // setShowStatsModal(true);
             setShowSelectHighlightsModal(false);
-            navigate("/stats", { state: { highlight_link: selectedHighlight?.highlight_link, rally_link: selectedHighlight?.rally_link, heatmap_link: heatmaps } });
+            navigate("/stats", { state: { highlight_link: selectedHighlight?.highlight_link, rally_link: selectedHighlight?.rally_link, heatmap_link: heatmaps, playerId: selectedHighlight?.player_id } });
         }
     }
     
     return (
         <div>
         <div className="flex flex-col gap-4 px-4 pb-4">  
-            <h1 className="text-base font-bold text-black">Please identify yourself</h1>
+            <div className="flex flex-row items-center mt-2 gap-2">
+                <button
+                    className="py-1 text-xs rounded-md text-indigo-600 font-medium focus:outline-none transition"
+                    onClick={() => {setSelectedBatchHighlightsModal(true); setShowSelectHighlightsModal(false);}}
+                >
+                    <BackButtonCheckout className="w-4 h-4" />
+                </button>
+                <h1 className="text-base font-bold text-black">Please identify yourself</h1>
+            </div>
+            
             <div className="grid grid-cols-2 gap-4">
                     {sortedHighlights.map((highlight: any) => {
                         const isSelected = selectedHighlightId === highlight.id;
@@ -76,6 +86,21 @@ const SelectHighlight = ({highlights, setFinalSelectedHighlight, matchId, batchI
                                         </svg>
                                     </div>
                                 )}
+                                {!isSelected && (
+                                    <div className="absolute top-4 right-4 border-2 border-gray-300 rounded-full p-2 shadow-lg animate-[scale-in_0.3s_ease-in-out]">
+                                        <svg 
+                                            className="w-5 h-5 text-white" 
+                                            fill="none" 
+                                            strokeLinecap="round" 
+                                            strokeLinejoin="round" 
+                                            strokeWidth="3" 
+                                            viewBox="0 0 24 24" 
+                                            stroke="currentColor"
+                                        >
+                                            <path d=""></path>
+                                        </svg>
+                                    </div>
+                                )}
                             </div>
                             <h1 className={`text-sm rounded-b-3xl font-bold text-center p-3 transition-all duration-300 ${
                                 isSelected 
@@ -98,7 +123,7 @@ const SelectHighlight = ({highlights, setFinalSelectedHighlight, matchId, batchI
             }`}
             style={{ width: 'calc(100% - 2rem)' }}
         >
-            Continue
+            {!selectedHighlightId ? "Select to continue" : "Continue"}
         </button>  
         </div>
     );
