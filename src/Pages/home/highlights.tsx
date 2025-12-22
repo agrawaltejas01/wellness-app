@@ -21,6 +21,12 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
   const [navigateUrl, setNavigateUrl] = useState<string>("");
   const [stateUrl, setStateUrl] = useState<string>("");
   const userId = userDetails.id;
+
+  // Check if the user hasn't seen ANY highlights (user_id not present in any highlight)
+  const hasNewHighlights = videoHighlights.length > 0 && videoHighlights.every((highlight: any) => {
+    const userIds = highlight.user_id ? highlight.user_id.split(',') : [];
+    return !userIds.includes(userId.toString());
+  });
   const [showSelectHighlightsModal, setShowSelectHighlightsModal] = useState(false);
   const [showSelectHighlightsBatchesModal, setShowSelectHighlightsBatchesModal] = useState(false);
   const [selectedBatchHighlightsModal, setSelectedBatchHighlightsModal] = useState(false);
@@ -54,10 +60,10 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
   }
   return (  
     videoHighlights.length > 0 ? <>
-    <div 
+    <div
                     className="w-1/2 border rounded-3xl overflow-hidden flex relative"
-                    style={{ height: height ? `${height}px` : 'auto', 
-                      backgroundImage: `url('${EMPTY_HIGHLIGHTS_BG_URL}')`,
+                    style={{ height: height ? `${height}px` : 'auto',
+                      backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${EMPTY_HIGHLIGHTS_BG_URL}')`,
                       backgroundSize: 'cover',
                       backgroundRepeat: 'repeat',
                       backgroundPosition: 'center',
@@ -65,8 +71,10 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
                     onClick={handleNavigate}
                 >
                     {/* <img src={highlightImage} alt="Highlight" className="w-full h-full object-cover" /> */}
-                    <div className="absolute top-0 left-0 w-full p-2 md:p-3 flex justify-center" style={{ backgroundColor: '#EBEBEB' }}>
-                        <span className="text-black md:text-base lg:text-lg text-xs">Your last highlight!</span>
+                    <div className={`absolute inset-0 flex items-center justify-center ${hasNewHighlights ? 'animate-pulse' : ''}`}>
+                        <span className={`md:text-base lg:text-lg text-xs font-bold ${hasNewHighlights ? 'text-white drop-shadow-lg' : 'text-black'}`}>
+                          {hasNewHighlights ? '🔥 New Highlights!' : 'Your last highlight!'}
+                        </span>
                     </div>
                     <div className="absolute bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 flex items-center justify-center">
                         <div className="relative w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16">
