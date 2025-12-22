@@ -17,7 +17,7 @@ const Stats: React.FC<IStats> = () => {
     Mixpanel.track("clicked_match_highlights_on_match_recap", {
       userId: userId,
     });
-    navigate("/highlights", { state: { url: highlight_link } });
+    navigate("/highlights", { state: { url: highlight_link, muted: false } });
   };
 
   const handleRallyClick = () => {
