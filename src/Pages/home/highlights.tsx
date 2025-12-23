@@ -70,24 +70,23 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
                     onClick={handleNavigate}
                 >
                     {/* <img src={highlightImage} alt="Highlight" className="w-full h-full object-cover" /> */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        {hasNewHighlights ? (
-                          <div className="bg-yellow-400 rounded-lg px-4 py-3 shadow-lg">
-                            <div className="text-center">
-                              <div className="md:text-lg lg:text-xl text-sm font-bold text-black">New Highlight</div>
-                              <div className="md:text-lg lg:text-xl text-sm font-bold text-black">is Ready! 🔥</div>
-                              <div className="md:text-sm lg:text-base text-xs font-semibold text-black mt-1">Click to watch</div>
-                            </div>
+                    {hasNewHighlights ? (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="bg-yellow-400 rounded-lg px-4 py-3 shadow-lg">
+                          <div className="text-center">
+                            <div className="md:text-lg lg:text-xl text-sm font-bold text-black">New Highlight</div>
+                            <div className="md:text-lg lg:text-xl text-sm font-bold text-black">is Ready! 🔥</div>
+                            <div className="md:text-sm lg:text-base text-xs font-semibold text-black mt-1">Click to watch</div>
                           </div>
-                        ) : (
-                          <div className="bg-yellow-400 rounded-lg px-4 py-3 shadow-lg">
-                            <div className="text-center">
-                              <div className="md:text-lg lg:text-xl text-sm font-bold text-black">Your last highlight!</div>
-                              <div className="md:text-sm lg:text-base text-xs font-semibold text-black mt-1">Click to watch</div>
-                            </div>
-                          </div>
-                        )}
-                    </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="absolute top-0 left-0 right-0">
+                        <div className="rounded-t-3xl px-4 py-2 text-center">
+                          <div className="md:text-lg lg:text-xl text-sm font-bold text-white drop-shadow">Your Last Highlight</div>
+                        </div>
+                      </div>
+                    )}
                     <div className="absolute bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 flex items-center justify-center">
                         <div className="relative w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16">
                             <svg className="absolute inset-0 w-full h-full" viewBox="0 0 48 48">
