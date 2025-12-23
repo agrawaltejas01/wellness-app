@@ -250,12 +250,12 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
                                   <div className="flex gap-1.5 mt-1">
                                     {videoHighlights
                                       .filter((h: any) => h.match_id === highlight.match_id)
-                                      .slice(0, 3)
+                                      .slice(0, 4)
                                       .map((h: any, idx: number) => (
                                         <div
                                           key={idx}
                                           className="relative w-7 h-7 rounded-full border-1.5 border-white shadow-sm overflow-hidden hover:scale-105 transition-transform duration-200"
-                                          style={{ zIndex: 4 - idx }}
+                                          style={{ zIndex: 5 - idx }}
                                         >
                                           <img
                                             src={h.thumbnail_link}
@@ -264,9 +264,9 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
                                           />
                                         </div>
                                       ))}
-                                    {videoHighlights.filter((h: any) => h.match_id === highlight.match_id).length > 3 && (
+                                    {videoHighlights.filter((h: any) => h.match_id === highlight.match_id).length > 4 && (
                                       <div className="w-7 h-7 rounded-full bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center text-white text-xs font-bold border-1.5 border-white shadow-sm">
-                                        +{videoHighlights.filter((h: any) => h.match_id === highlight.match_id).length - 3}
+                                        +{videoHighlights.filter((h: any) => h.match_id === highlight.match_id).length - 4}
                                       </div>
                                     )}
                                   </div>
