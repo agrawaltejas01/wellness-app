@@ -78,7 +78,7 @@ const HeatMap: React.FC<IHeatMap> = () => {
           }
         `}
       </style>
-      <div className="relative min-h-screen flex flex-col bg-slate-50 px-4 py-4">
+      <div className="relative h-screen flex flex-col bg-slate-50 px-4 py-4 overflow-hidden">
       {/* Back Button */}
       <div className="flex flex-row justify-between items-center w-full max-w-4xl mx-auto mb-4">
         <BackButtonCheckout onClick={() => navigate(-1)} className="cursor-pointer" />
@@ -92,7 +92,7 @@ const HeatMap: React.FC<IHeatMap> = () => {
       
       
       {/* Scroll Container */}
-      <div className="w-full max-w-4xl mx-auto flex-1 flex flex-col justify-center">
+      <div className="w-full max-w-4xl mx-auto flex flex-col justify-center overflow-hidden">
         {!imagesLoaded ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
@@ -115,7 +115,7 @@ const HeatMap: React.FC<IHeatMap> = () => {
             >
               {/* Grid View - First Slide */}
           <div className="flex-shrink-0 w-full snap-center">
-            <div className="shadow-lg bg-white p-4" style={{ height: '70vh' }}>
+            <div className="shadow-lg bg-white p-4" style={{ height: 'calc(100vh - 200px)' }}>
               <div className="grid grid-cols-2 gap-4 h-full">
                 {images.map((image, index) => (
                   <div key={index} className="flex flex-col">
@@ -142,7 +142,7 @@ const HeatMap: React.FC<IHeatMap> = () => {
                 src={image}
                 alt={`Heat Map ${index + 1}`}
                 className="rounded-2xl shadow-lg w-full h-auto"
-                style={{ maxHeight: '70vh', background: '#444', objectFit: 'contain' }}
+                style={{ maxHeight: 'calc(100vh - 200px)', background: '#444', objectFit: 'contain' }}
               />
             </div>
           ))}
