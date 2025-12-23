@@ -204,8 +204,8 @@ const BottomUpModal: React.FC<BottomUpModalProps> = ({
         </div>
 
         {/* Modal content with scrollable area */}
-        <div 
-          className="overflow-y-auto"
+        <div
+          className="overflow-y-auto overflow-x-hidden"
           style={{ maxHeight: 'calc(100% - 120px)' }}
         >
           <div className="">
