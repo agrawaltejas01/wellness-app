@@ -142,9 +142,15 @@ const BottomUpModal: React.FC<BottomUpModalProps> = ({
         </div>
 
         {/* Modal content with scrollable area */}
+<<<<<<< HEAD
         <div 
           className="overflow-y-auto"
           style={{ maxHeight: 'calc(90vh - 120px)' }}
+=======
+        <div
+          className="overflow-y-auto overflow-x-hidden"
+          style={{ maxHeight: 'calc(100% - 120px)' }}
+>>>>>>> 1ff15fa (modal issue fixed)
         >
           <div className="">
             {children}

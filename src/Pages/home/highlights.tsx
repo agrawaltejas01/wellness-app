@@ -141,7 +141,7 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
       showCloseButton={false}
       maxHeight="100%"
     >
-      <div className="flex flex-col h-screen bg-gradient-to-b from-slate-50 to-white">
+      <div className="flex flex-col bg-gradient-to-b from-slate-50 to-white">
         {/* Header */}
         <div className="relative px-4 py-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 text-white shadow-lg">
           {/* Background Pattern */}
@@ -167,7 +167,7 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
         </div>
 
         {/* All Batches and Matches */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto mb-10">
           <div className="px-4 py-4 space-y-6">
             {/* Group highlights by batch */}
             {videoHighlights
