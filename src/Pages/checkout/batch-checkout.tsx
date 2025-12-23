@@ -196,17 +196,29 @@ const BatchCheckout: React.FC<IClassCheckout> = () => {
   useEffect(() => {
     const shareButton = document.getElementById("share-button");
     shareButton?.addEventListener("click", () => {
-      if (navigator.share && gotGymDetails && gotBatchDetails) {
-        navigator
-          .share({
+      if (gotGymDetails && gotBatchDetails) {
+        // Check if running in React Native WebView on Android
+        if (window.ReactNativeWebView && window.platformInfo?.platform === "android") {
+          // Send message to React Native to open native share modal
+          window?.ReactNativeWebView?.postMessage(JSON.stringify({
+            type: 'shareContent',
             title: "ZenfitX",
             text: `Hey, Join me for ${batchDetails?.activityName} at ${("0" + batchDetails?.startTime.toString()).slice(-4).substring(0, 2)}:00 on ${new Date(`${batchDetails?.date}`).toDateString()} at the ${gym?.name}. Let's sweat it out together! 😬`,
             url: window.location.href,
-          })
-          .then(() => console.log("Successful share"))
-          .catch((error) => console.log("Error sharing", error));
-      } else {
-        console.log("Share not supported on this browser, do it the old way.");
+          }));
+        } else if (navigator.share) {
+          // Use Web Share API for browsers that support it (including iOS WebView)
+          navigator
+            .share({
+              title: "ZenfitX",
+              text: `Hey, Join me for ${batchDetails?.activityName} at ${("0" + batchDetails?.startTime.toString()).slice(-4).substring(0, 2)}:00 on ${new Date(`${batchDetails?.date}`).toDateString()} at the ${gym?.name}. Let's sweat it out together! 😬`,
+              url: window.location.href,
+            })
+            .then(() => console.log("Successful share"))
+            .catch((error) => console.log("Error sharing", error));
+        } else {
+          console.log("Share not supported on this browser, do it the old way.");
+        }
       }
     });
     shareButton?.removeEventListener("click", () => {
