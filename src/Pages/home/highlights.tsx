@@ -116,7 +116,7 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
     {showSelectHighlightsModal && (<BottomUpModal
       isOpen={showSelectHighlightsModal}
       onClose={() => setShowSelectHighlightsModal(false)}
-      title="Select Highlights"
+      title=""
       borderBottom={true}
       showCloseButton={false}
     >
@@ -254,7 +254,7 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
                                       .map((h: any, idx: number) => (
                                         <div
                                           key={idx}
-                                          className="relative w-7 h-7 rounded-full border-1.5 border-white shadow-sm overflow-hidden hover:scale-105 transition-transform duration-200"
+                                          className="relative w-9 h-9 rounded-full border-1.5 border-white shadow-sm overflow-hidden hover:scale-105 transition-transform duration-200"
                                           style={{ zIndex: 5 - idx }}
                                         >
                                           <img
