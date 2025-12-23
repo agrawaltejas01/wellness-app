@@ -80,14 +80,16 @@ const HeatMap: React.FC<IHeatMap> = () => {
       </style>
       <div className="relative min-h-screen flex flex-col bg-slate-50 px-4 py-4">
       {/* Back Button */}
-      <div className="w-full max-w-4xl mx-auto mb-4">
+      <div className="flex flex-row justify-between items-center w-full max-w-4xl mx-auto mb-4">
         <BackButtonCheckout onClick={() => navigate(-1)} className="cursor-pointer" />
+        <div className="text-center">
+          <h1 className="text-sm font-bold text-black mb-1">Court Coverage</h1>
+          <p className="text-xs text-gray-600">You're player {playerId} in this game</p>
+        </div>
+        <div></div>
       </div>
 
-      <div className="text-center">
-        <h1 className="text-xl font-bold text-black mb-1">Court Coverage</h1>
-        <p className="text-sm text-gray-600">You're player {playerId} in this game</p>
-      </div>
+      
       
       {/* Scroll Container */}
       <div className="w-full max-w-4xl mx-auto flex-1 flex flex-col justify-center">
