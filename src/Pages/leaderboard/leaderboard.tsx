@@ -137,7 +137,7 @@ const Leaderboard = (props: LeaderboardProps) => {
                 setUserRating(prev => ({ ...prev, rating: 0 } as UserRating));
                 return;
             }
-            setUserRating(prev => ({ ...prev, rating: result.rating.rating || 0 } as UserRating));
+            setUserRating(prev => ({ ...prev, rating: result.rating.Rating.rating || 0 } as UserRating));
         },
         onError: (error) => {
             console.error("Error getting user rating:", error);
@@ -298,7 +298,7 @@ const Leaderboard = (props: LeaderboardProps) => {
                         </button>
                         <div className="flex flex-col">
                             <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">Leaderboard 🏆</h1>
-                            <span className="text-xs lg:text-sm text-gray-500 font-normal">Last updated: Nov 19th, 12 PM</span>
+                            <span className="text-xs lg:text-sm text-gray-500 font-normal">Last updated: Dec 9th, 12 PM</span>
                         </div>
                     </div>
                     <button 

@@ -158,7 +158,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   const { mutate: _getRatings } = useMutation({
     mutationFn: getRatings,
     onSuccess: (result) => {
-      setRatings(result.rating.rating);
+      setRatings(result.rating.Rating.rating);
     },
     onError: (error) => {
       errorToast("Error in getting ratings");
@@ -807,29 +807,29 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
             </Flex>
           )}
 
-          {gym?.gymId == 41 && (
-            <Flex flex={1} className="activity-tiles-wrapper">
-              <ActivityTiles
-                activities={gym.activities}
-                activitySelected={selectedActivity}
-                onClickFunction={(activity: string) => {
-                  Mixpanel.track("clicked_activity_pill_gym", {
-                    gymId: gym.gymId,
-                    activity,
-                  });
-                  setSelectedActivity(activity);
-                  _getGymBatchesForDate({
-                    id: gym.gymId,
-                    activity: activity,
-                    date: "2025-11-25",
-                    userId: userId,
-                  });
-                }}
-                reposition
-              />
-            </Flex>
-          )}
-          
+        {gym?.gymId == 41 && (
+          <Flex flex={1} style={{ paddingLeft: "24px" }}>
+            <ActivityTiles
+              activities={gym.activities}
+              activitySelected={selectedActivity}
+              onClickFunction={(activity: string) => {
+                Mixpanel.track("clicked_activity_pill_gym", {
+                  gymId: gym.gymId,
+                  activity,
+                });
+                setSelectedActivity(activity);
+                _getGymBatchesForDate({
+                  id: gym.gymId,
+                  activity: activity,
+                  date: "2025-12-23",
+                  userId: userId,
+                });
+              }}
+              reposition
+            />
+          </Flex>
+        )}
+        
 
           <Flex flex={3} className="batches-list-wrapper">
             {batches && batches.length

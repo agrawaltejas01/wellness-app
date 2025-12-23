@@ -138,7 +138,7 @@ const HomeBanner: React.FC = () => {
         {/* Try different fitness activities in your area with us! */}
       {/* </div> */}
         
-      <div className="w-full mt-2">
+      <div className="w-full mt-6">
         <CoinsHomepage />
       </div>
     </div>}

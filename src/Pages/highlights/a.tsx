@@ -2,24 +2,35 @@ import React, { useRef, useState, useEffect } from 'react';
 import { ReactComponent as BackButton } from '../../images/utils/back-button.svg';
 import { navigate } from '@reach/router';
 import { message } from 'antd';
+import { Mixpanel } from '../../mixpanel/init';
 
 // Define prop types
 interface ReelsVideoPlayerProps {
   src: string;
   caption?: string;
   downloadEnabled?: boolean;
+  muted?: boolean;
 }
 
-const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", downloadEnabled = true }) => {
+const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", downloadEnabled = true, muted = true }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
-  const [isMuted, setIsMuted] = useState<boolean>(true);
+  const [isMuted, setIsMuted] = useState<boolean>(muted);
   const [progress, setProgress] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
   const [downloadStatus, setDownloadStatus] = useState('idle'); // idle, downloading, completed, error
   const [statusMessage, setStatusMessage] = useState('');
   const [fileName, setFileName] = useState("highlight.mp4");
+
+  const userDetails = JSON.parse(window.localStorage["zenfitx-user-details"] || '{}');
+  const userId = userDetails?.id;
+
+  useEffect(() => {
+    Mixpanel.track("viewed_highlight_video_page", {
+      userId: userId,
+    });
+  }, []);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -86,6 +97,9 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
   };
 
   const toggleMute = (): void => {
+    Mixpanel.track("clicked_mute_on_highlights_page", {
+      userId: userId,
+    });
     if (videoRef.current) {
       const video = videoRef.current;
       video.muted = !isMuted;
@@ -94,6 +108,10 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
   };
 
   const handleShare = (): void => {
+
+    Mixpanel.track("clicked_share_on_highlights_page", {
+      userId: userId,
+    });
     if (navigator.share) {
       navigator.share({
         title: 'Check out this video!',
@@ -152,6 +170,9 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
   }, [fileName]);
 
     const handleDownload = async (): Promise<void> => {
+      Mixpanel.track("clicked_download_on_highlights_page", {
+        userId: userId,
+      });
         // if (videoRef.current) {
         //   try {
         //     const proxyURL = `${process.env.REACT_APP_BE_URL}/highlights/download?url=${encodeURIComponent(src)}`; // Adjust to your server URL if hosted remotely
@@ -245,7 +266,7 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
       case 'completed':
         return 'Downloaded!';
       case 'error':
-        return 'Download Failed';
+        return 'Failed';
       default:
         return 'Download';
     }
@@ -299,13 +320,50 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
             {downloadEnabled && (
               <button
               onClick={handleDownload}
-              className={`flex flex-col items-center ${downloadStatus !== 'idle' ? 'opacity-50 pointer-events-none' : ''}`}
+              className={`flex flex-col items-center relative ${downloadStatus !== 'idle' && downloadStatus !== 'error' ? 'pointer-events-none' : ''}`}
               style={{ WebkitTapHighlightColor: 'transparent' }}
             >
-              <svg className="w-8 h-8" fill="white" viewBox="0 0 24 24">
+              {/* Spinning Loader Ring */}
+              {downloadStatus === 'downloading' && (
+                <svg 
+                  className="absolute w-12 h-12 -top-2 animate-spin" 
+                  viewBox="0 0 50 50"
+                  style={{ animationDuration: '1s' }}
+                >
+                  <circle
+                    cx="25"
+                    cy="25"
+                    r="20"
+                    stroke="rgba(255, 255, 255, 0.3)"
+                    strokeWidth="3"
+                    fill="none"
+                  />
+                  <circle
+                    cx="25"
+                    cy="25"
+                    r="20"
+                    stroke="white"
+                    strokeWidth="3"
+                    fill="none"
+                    strokeDasharray="80, 200"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              )}
+              
+              {/* Download Icon with Pulse Animation */}
+              <svg 
+                className={`w-8 h-8 ${downloadStatus === 'downloading' ? 'animate-pulse' : ''}`} 
+                fill="white" 
+                viewBox="0 0 24 24"
+              >
                 <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
               </svg>
-              <span className="text-xs text-white">Download</span>
+              
+              {/* Button Text */}
+              <span className={`text-xs text-white font-semibold mt-1 ${downloadStatus === 'downloading' ? 'animate-pulse' : ''}`}>
+                Download
+              </span>
             </button>
             )}
             <button
@@ -358,7 +416,7 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
       </div>
 
       {/* Highlight Text at Top-Left Corner */}
-      <div className="absolute top-4 left-4 z-20" onClick={() => navigate('/', {replace: true})}>
+      <div className="absolute top-4 left-4 z-20" onClick={() => navigate(-1)}>
         <span className="font-semibold text-lg text-white"><BackButton /></span>
       </div>
 

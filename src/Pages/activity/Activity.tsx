@@ -204,7 +204,7 @@ const Activity: React.FC<IActivity> = ({}) => {
                 </defs>
               </svg>
               <span className="text-xs text-green-700 font-medium">
-                {discount[gymCard.gymId as keyof typeof discount]?.replace("Rs.", "₹") || "Special discount available"}
+                {discount[gymCard.gymId as keyof typeof discount]?.replace("Rs.", "₹") || ""}
               </span>
             </div>
           )}

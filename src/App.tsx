@@ -31,8 +31,8 @@ import Leaderboard from "./Pages/leaderboard/leaderboard";
 import UserProfile from "./Pages/user-profile/user-profile";
 import Highlights from "./Pages/highlights/highlights";
 import GetStarted from "./Pages/home/get-started";
-import HeatMap from "./Pages/highlights/heat-map";
 import Stats from "./Pages/highlights/stats";
+import HeatMap from "./Pages/highlights/heat-map";    
 
 // Create a client
 const queryClient = new QueryClient();

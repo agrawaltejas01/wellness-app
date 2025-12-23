@@ -11,6 +11,9 @@ import { Mixpanel } from "../../mixpanel/init";
 import { formatDate } from "../../utils/date";
 import highlightImage from "../../images/home/highlight.jpeg";
 import { formatTimeIntToAmPm } from "../../utils/date";
+import { ReactComponent as BackButtonCheckout } from '../../images/utils/back-button-checkout.svg';
+
+const EMPTY_HIGHLIGHTS_BG_URL = "https://zfx-gyms.zenfitx.link/highlights/sample.gif";
 
 const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight: number, videoHighlights: any[]}) => {
   const navigate = useNavigate();
@@ -18,15 +21,25 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
   const [navigateUrl, setNavigateUrl] = useState<string>("");
   const [stateUrl, setStateUrl] = useState<string>("");
   const userId = userDetails.id;
+
+  // Check if the user hasn't seen ANY highlights (user_id not present in any highlight)
+  const hasNewHighlights = videoHighlights.length > 0 && videoHighlights.every((highlight: any) => {
+    const userIds = highlight.user_id ? highlight.user_id.split(',') : [];
+    return !userIds.includes(userId.toString());
+  });
+  // const hasNewHighlights = false;
   const [showSelectHighlightsModal, setShowSelectHighlightsModal] = useState(false);
-  const [showSelectHighlightsBatchesModal, setShowSelectHighlightsBatchesModal] = useState(false);
-  const [selectedBatchHighlightsModal, setSelectedBatchHighlightsModal] = useState(false);
-  const [batchIdHighlights, setBatchIdHighlights] = useState(0);
-  const [selectedMatchHighlights, setSelectedMatchHighlights] = useState(false);
+  const [showAllHighlightsModal, setShowAllHighlightsModal] = useState(false);
   const [matchIdHighlights, setMatchIdHighlights] = useState(0);
+  const [batchIdHighlights, setBatchIdHighlights] = useState(0);
   const [showStatsModal, setShowStatsModal] = useState(false);
   const [selectedHighlight, setSelectedHighlight] = useState<any>(null);
   const [finalSelectedHighlight, setFinalSelectedHighlight] = useState<any>(null);
+  const [height, setHeight] = useState<number>(0);
+
+  useEffect(() => {
+    setHeight(leftComponentHeight);
+  }, [leftComponentHeight]);
 
   const handleNavigate = () => {
     
@@ -36,26 +49,46 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
 
     if(videoHighlights && videoHighlights.length > 0) {
       // const userHighlight = videoHighlights.find((highlight: any) => highlight.user_id == userId);
-      // const userHighlight = videoHighlights[0].user_highlights[0];
       // if(userHighlight) {
         // setShowSelectHighlightsModal(true);
         // navigate("/highlights", {state: {url: userHighlight.highlight_link}});
         // setShowStatsModal(true);
-        setShowSelectHighlightsBatchesModal(true);
+        setShowAllHighlightsModal(true);
       // }
     } 
   }
   return (  
     videoHighlights.length > 0 ? <>
-    <div 
+    <div
                     className="w-1/2 border rounded-3xl overflow-hidden flex relative"
-                    style={{ height: leftComponentHeight ? `${leftComponentHeight}px` : 'auto' }}
+                    style={{ height: height ? `${height}px` : 'auto',
+                      backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${EMPTY_HIGHLIGHTS_BG_URL}')`,
+                      backgroundSize: 'cover',
+                      backgroundRepeat: 'repeat',
+                      backgroundPosition: 'center',
+                    }}
+                    onClick={handleNavigate}
                 >
-                    <img src={highlightImage} alt="Highlight" className="w-full h-full object-cover" />
-                    <div className="absolute top-0 left-0 w-full p-2 md:p-3 flex justify-center" style={{ backgroundColor: '#EBEBEB' }}>
-                        <span className="text-black md:text-base lg:text-lg text-xs">Your last highlight!</span>
+                    {/* <img src={highlightImage} alt="Highlight" className="w-full h-full object-cover" /> */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        {hasNewHighlights ? (
+                          <div className="bg-yellow-400 rounded-lg px-4 py-3 shadow-lg">
+                            <div className="text-center">
+                              <div className="md:text-lg lg:text-xl text-sm font-bold text-black">New Highlight</div>
+                              <div className="md:text-lg lg:text-xl text-sm font-bold text-black">is Ready! 🔥</div>
+                              <div className="md:text-sm lg:text-base text-xs font-semibold text-black mt-1">Click to watch</div>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="bg-yellow-400 rounded-lg px-4 py-3 shadow-lg">
+                            <div className="text-center">
+                              <div className="md:text-lg lg:text-xl text-sm font-bold text-black">Your last highlight!</div>
+                              <div className="md:text-sm lg:text-base text-xs font-semibold text-black mt-1">Click to watch</div>
+                            </div>
+                          </div>
+                        )}
                     </div>
-                    <div className="absolute bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 flex items-center justify-center" onClick={handleNavigate}>
+                    <div className="absolute bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 flex items-center justify-center">
                         <div className="relative w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16">
                             <svg className="absolute inset-0 w-full h-full" viewBox="0 0 48 48">
                                 <defs>
@@ -88,7 +121,7 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
       showCloseButton={false}
     >
       <div className="flex flex-col gap-2">
-          <SelectHighlight highlights={videoHighlights} setFinalSelectedHighlight={setFinalSelectedHighlight} matchId={matchIdHighlights} batchId={batchIdHighlights} setShowStatsModal={setShowStatsModal} setShowSelectHighlightsModal={setShowSelectHighlightsModal} />
+          <SelectHighlight highlights={videoHighlights} setFinalSelectedHighlight={setFinalSelectedHighlight} matchId={matchIdHighlights} batchId={batchIdHighlights} setShowStatsModal={setShowStatsModal} setShowSelectHighlightsModal={setShowSelectHighlightsModal} setSelectedBatchId={() => setShowAllHighlightsModal(true)} />
       </div>
     </BottomUpModal>)}
     {/* {showStatsModal && (<BottomUpModal
@@ -100,88 +133,182 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
       <Stats />
       <div className="h-screen" />
     </BottomUpModal>)} */}
-    {showSelectHighlightsBatchesModal && (<BottomUpModal
-      isOpen={showSelectHighlightsBatchesModal}
-      onClose={() => setShowSelectHighlightsBatchesModal(false)}
-      title="Select Batches"
-      borderBottom={true}
-      showCloseButton={false}
-    >
-      <div className="flex flex-col gap-2 h-full px-4 pb-4">
-        {videoHighlights.filter((highlight: any, index: number, self: any[]) => 
-          // This line ensures that only the first occurrence of each unique batch_id remains in the filtered array,
-          // effectively removing duplicates by returning true only for the first match of each batch_id.
-          index === self.findIndex((h: any) => h.batch_id === highlight.batch_id)
-        ).map((highlight: any) => (
-          <div key={highlight.id} className="flex flex-row justify-between px-2 py-2 " onClick={() => {
-            setSelectedBatchHighlightsModal(true);
-            setBatchIdHighlights(highlight.batch_id);
-            setShowSelectHighlightsBatchesModal(false);
-          }}> 
-            <div className="flex flex-col gap-2 rounded-lg border border-gray-200 bg-gradient-to-br from-white to-gray-50 w-full px-4 py-3 shadow-sm hover:shadow-md transition-shadow duration-200">
-              <span className="text-sm font-semibold text-gray-800">{highlight.batch_name}</span>
-              <div className="flex flex-row gap-3 text-xs text-gray-600">
-                <span className="flex items-center gap-1">
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  {formatDate(highlight.date)["date suffix"]}
-                </span>
-                <span className="flex items-center gap-1">
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  {formatTimeIntToAmPm(highlight.start_time || 0)}
-                </span>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="h-screen" />
-    </BottomUpModal>)}
-    {selectedBatchHighlightsModal && (<BottomUpModal
-      isOpen={selectedBatchHighlightsModal}
-      onClose={() => setSelectedBatchHighlightsModal(false)}
-      title="Selected Batch Highlights"
-      borderBottom={true}
+    {showAllHighlightsModal && (<BottomUpModal
+      isOpen={showAllHighlightsModal}
+      onClose={() => setShowAllHighlightsModal(false)}
+      title=""
+      borderBottom={false}
       showCloseButton={false}
       maxHeight="100%"
     >
-      <div className="flex flex-col gap-2 px-2 mt-2">
-        {videoHighlights.filter((highlight: any, index: number, self: any[]) => 
-          index === self.findIndex((h: any) => h.match_id === highlight.match_id)
-        ).map((highlight: any) => (
-          <div
-            key={highlight.id}
-            className="flex flex-row items-center gap-4 px-4 py-3 rounded-2xl bg-white/90 border border-gray-100 shadow-md hover:shadow-lg transition-shadow duration-200 cursor-pointer group"
-            onClick={() => {
-              setShowSelectHighlightsModal(true);
-              setMatchIdHighlights(highlight.match_id);
-              setSelectedBatchHighlightsModal(false);
-            }}
-          >
-            <div className="flex flex-col">
-              <span className="text-base font-semibold text-gray-900">Match <span className="text-indigo-600">#{highlight.match_id}</span></span>
-              <span className="text-xs text-gray-500 mt-1">Highlight</span>
-            </div>
-            <div className="flex-1 flex justify-end items-center">
-              <button
-                className="px-3 py-1 text-xs rounded-md bg-indigo-50 text-indigo-600 font-medium border border-indigo-100 shadow-sm hover:bg-indigo-100 focus:outline-none transition"
-              >
-                View
-              </button>
+      <div className="flex flex-col h-screen bg-gradient-to-b from-slate-50 to-white">
+        {/* Header */}
+        <div className="relative px-4 py-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 text-white shadow-lg">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-0 left-0 w-24 h-24 bg-white rounded-full -translate-x-12 -translate-y-12"></div>
+            <div className="absolute top-0 right-0 w-20 h-20 bg-white rounded-full translate-x-10 -translate-y-10"></div>
+            <div className="absolute bottom-0 left-1/4 w-16 h-16 bg-white rounded-full translate-y-8"></div>
+          </div>
+
+          <div className="relative z-10">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-lg font-bold">Your Highlights</h2>
+                <p className="text-indigo-100 text-xs">Choose your match to watch</p>
+              </div>
             </div>
           </div>
-        ))}
+        </div>
+
+        {/* All Batches and Matches */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="px-4 py-4 space-y-6">
+            {/* Group highlights by batch */}
+            {videoHighlights
+              .filter((highlight: any, index: number, self: any[]) =>
+                index === self.findIndex((h: any) => h.batch_id === highlight.batch_id)
+              )
+              .map((batch: any, batchIndex: number) => {
+                // Get all matches for this batch
+                const batchMatches = videoHighlights
+                  .filter((highlight: any) => highlight.batch_id === batch.batch_id)
+                  .filter((highlight: any, index: number, self: any[]) =>
+                    index === self.findIndex((h: any) => h.match_id === highlight.match_id)
+                  );
+
+                return (
+                  <div key={batch.batch_id} className="space-y-4">
+                    {/* Batch Sub Header */}
+                    <div className="px-1 py-2">
+                      <div className="flex items-center gap-2">
+                        {/* <div className="w-6 h-6 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white font-bold text-xs">
+                          {batchIndex + 1}
+                        </div> */}
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-sm font-medium text-gray-800 truncate">{batch.batch_name}</h4>
+                          <div className="flex gap-2 text-xs text-gray-500 mt-0.5">
+                            <span className="flex items-center gap-1">
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                              </svg>
+                              {formatDate(batch.date)["date suffix"]}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                              {formatTimeIntToAmPm(batch.start_time || 0)}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Matches for this batch */}
+                    <div className="space-y-2.5 pl-3">
+                      {batchMatches.map((highlight: any, matchIndex: number) => (
+                        <div
+                          key={highlight.id}
+                          className="group relative overflow-hidden rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-200 cursor-pointer hover:scale-[1.01] hover:-translate-y-0.5"
+                          onClick={() => {
+                            setShowSelectHighlightsModal(true);
+                            setMatchIdHighlights(highlight.match_id);
+                            setBatchIdHighlights(highlight.batch_id);
+                            setShowAllHighlightsModal(false);
+                          }}
+                        >
+                          {/* Subtle gradient overlay on hover */}
+                          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                          <div className="relative p-3">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-3 flex-1">
+                                {/* Match Number Badge */}
+                                <div className="flex-shrink-0">
+                                  {/* <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-md">
+                                    {matchIndex + 1}
+                                  </div> */}
+                                </div>
+
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-1.5 mb-0.5">
+                                    <h4 className="text-sm font-semibold text-gray-900">
+                                      Match <span className="text-indigo-600">#{highlight.match_id}</span>
+                                    </h4>
+                                    {/* <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></div> */}
+                                  </div>
+
+                                  {/* <p className="text-xs text-gray-600 mb-2">Ready to watch your highlights</p> */}
+
+                                  {/* Player Thumbnails */}
+                                  <div className="flex gap-1.5 mt-1">
+                                    {videoHighlights
+                                      .filter((h: any) => h.match_id === highlight.match_id)
+                                      .slice(0, 3)
+                                      .map((h: any, idx: number) => (
+                                        <div
+                                          key={idx}
+                                          className="relative w-7 h-7 rounded-full border-1.5 border-white shadow-sm overflow-hidden hover:scale-105 transition-transform duration-200"
+                                          style={{ zIndex: 4 - idx }}
+                                        >
+                                          <img
+                                            src={h.thumbnail_link}
+                                            alt={`Player ${idx + 1}`}
+                                            className="w-full h-full object-cover object-top"
+                                          />
+                                        </div>
+                                      ))}
+                                    {videoHighlights.filter((h: any) => h.match_id === highlight.match_id).length > 3 && (
+                                      <div className="w-7 h-7 rounded-full bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center text-white text-xs font-bold border-1.5 border-white shadow-sm">
+                                        +{videoHighlights.filter((h: any) => h.match_id === highlight.match_id).length - 3}
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Action Button */}
+                              <div className="flex-shrink-0 ml-3">
+                                <div className="relative">
+                                  <button className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium rounded-lg shadow-md hover:shadow-lg hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 group-hover:scale-105 text-xs">
+                                    <span>Watch</span>
+                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                    </svg>
+                                  </button>
+                                  {/* Subtle glow effect */}
+                                  <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg blur opacity-20 group-hover:opacity-40 transition-opacity duration-200 -z-10"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
+        </div>
       </div>
-      <div className="h-screen" />
     </BottomUpModal>)}
     </> : <div
-      className="w-1/2 border rounded-3xl flex items-center justify-center"
-      style={{ backgroundColor: '#EBEBEB', height: leftComponentHeight ? `${leftComponentHeight}px` : 'auto' }}
+      className="w-1/2 border rounded-3xl flex items-center justify-center relative overflow-hidden"
+      style={{
+        backgroundImage: `linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('${EMPTY_HIGHLIGHTS_BG_URL}')`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'repeat',
+        backgroundPosition: 'center',
+        height: leftComponentHeight ? `${leftComponentHeight}px` : 'auto'
+      }}
     >
-      <span className="text-gray-500 md:text-base lg:text-lg text-sm text-center px-4">Your Highlight will appear here</span>
+      <span className="text-white md:text-base lg:text-lg text-sm text-center px-4 drop-shadow">Your Highlight will appear here</span>
     </div>
   );
 };

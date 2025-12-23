@@ -455,7 +455,7 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
       </div>
       
       {/* Bottom Navigation - Hide for coming soon activities */}
-      {!isComingSoon && <BottomNav />}
+      {/* {!isComingSoon && <BottomNav />} */}
     </>
   );
 };

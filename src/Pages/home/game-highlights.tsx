@@ -51,7 +51,7 @@ const highlights: Highlight[] = [
     Mixpanel.track("highlight_card_clicked", {
       highlight_id: highlight.id
     });
-    navigate("/highlights", { state: { url: highlight.videoUrl, downloadEnabled: false } });
+    navigate("/highlights", { state: { url: highlight.videoUrl, downloadEnabled: false, muted: false } });
   };
 
   return (
