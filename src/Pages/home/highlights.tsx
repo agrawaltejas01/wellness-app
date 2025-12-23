@@ -159,8 +159,8 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
                 </svg>
               </div>
               <div>
-                <h2 className="text-lg font-bold">Your Highlights</h2>
-                <p className="text-indigo-100 text-xs">Choose your match to watch</p>
+                <h2 className="text-lg font-bold">Select Match</h2>
+                <p className="text-indigo-100 text-xs">Select the match you played in to get your highlight</p>
               </div>
             </div>
           </div>
@@ -277,7 +277,7 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
                               <div className="flex-shrink-0 ml-3">
                                 <div className="relative">
                                   <button className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium rounded-lg shadow-md hover:shadow-lg hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 group-hover:scale-105 text-xs">
-                                    <span>Watch</span>
+                                    <span>View</span>
                                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                     </svg>

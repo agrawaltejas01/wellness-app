@@ -62,8 +62,8 @@ const SelectHighlight = ({highlights, setFinalSelectedHighlight, matchId, batchI
                         <BackButtonCheckout className="w-4 h-4 text-white" />
                     </button>
                     <div>
-                        <h2 className="text-xl font-bold">Identify Yourself</h2>
-                        <p className="text-indigo-100 text-sm">Choose your player card to continue</p>
+                        <h2 className="text-xl font-bold">Spot Yourself</h2>
+                        <p className="text-indigo-100 text-xs">Spot yourself in the lineup below to unlock your highlights</p>
                     </div>
                 </div>
             </div>
