@@ -438,7 +438,7 @@ const RatingHomepage: React.FC<{userDetails: IUser}> = ({userDetails}) => {
 
     return (
         <div className="mt-2 pb-2 w-full" style={{ background: 'linear-gradient(to top, #E3F6E4, #FFFFFF)' }}>
-            <Rating rating={rating} zenScore={zenScore} zenRank={zenRank} games={games} totalCount={totalCount} isLoadingRating={isLoadingRating} isLoadingGames={isLoadingGames} />
+            {!isLoadingRating && rating === 0 ? <NoRating games={games} isLoadingGames={isLoadingGames} /> : <Rating rating={rating} zenScore={zenScore} zenRank={zenRank} games={games} totalCount={totalCount} isLoadingRating={isLoadingRating} isLoadingGames={isLoadingGames} />}
             {/* <NoRating games={games} isLoadingGames={isLoadingGames} /> */}
         </div>
     )
