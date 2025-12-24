@@ -114,14 +114,15 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
     });
 
     // Check if running in React Native WebView on Android
-    if (window.ReactNativeWebView && window.platformInfo?.platform === "android") {
-      // Send message to React Native to open native share modal
-      window?.ReactNativeWebView?.postMessage(JSON.stringify({
-        type: 'shareVideo',
-        title: 'Check out this video!',
-        url: src,
-      }));
-    } else if (navigator.share) {
+    // if (window.ReactNativeWebView && window.platformInfo?.platform === "android") {
+    //   // Send message to React Native to open native share modal
+    //   window?.ReactNativeWebView?.postMessage(JSON.stringify({
+    //     type: 'shareVideo',
+    //     title: 'Check out this video!',
+    //     url: src,
+    //   }));
+    // } else 
+    if (navigator.share) {
       // Use Web Share API for browsers that support it (including iOS WebView)
       navigator.share({
         title: 'Check out this video!',
