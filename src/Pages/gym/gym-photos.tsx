@@ -35,7 +35,18 @@ const GymPhotos: React.FC<IGymPhotos> = ({ gym, showArray = true }) => {
   useEffect(() => {
     const shareButton = document.getElementById("share-button");
     shareButton?.addEventListener("click", () => {
+      // Check if running in React Native WebView on Android
+      // if (window.ReactNativeWebView && window.platformInfo?.platform === "android") {
+      //   // Send message to React Native to open native share modal
+      //   window?.ReactNativeWebView?.postMessage(JSON.stringify({
+      //     type: 'shareContent',
+      //     title: "ZenfitX",
+      //     text: `Hey, I just discovered this awesome fitness studio on ZenfitX called ${gym?.name}. Check it out and let's plan some awesome activities together! 😉 `,
+      //     url: window.location.href,
+      //   }));
+      // } else 
       if (navigator.share) {
+        // Use Web Share API for browsers that support it
         navigator
           .share({
             title: "ZenfitX",

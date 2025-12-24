@@ -25,7 +25,7 @@ const Stats: React.FC<IStats> = () => {
     Mixpanel.track("clicked_top_rallies_on_match_recap", {
       userId: userId,
     });
-    navigate("/highlights", { state: { url: rally_link } });
+    navigate("/highlights", { state: { url: rally_link, muted: false } });
   };
 
   const handleHeatMapClick = () => {
@@ -184,8 +184,8 @@ const Stats: React.FC<IStats> = () => {
                 </svg>
               </div>
               <div className="flex-1 text-left">
-                <h3 className="text-white font-bold text-base mb-1">Movement Heatmap</h3>
-                <p className="text-white/80 text-xs">Your court coverage, visualized</p>
+                <h3 className="text-white font-bold text-base mb-1">Your Court Coverage</h3>
+                <p className="text-white/80 text-xs">Movement heatmap, visualized</p>
               </div>
               <svg
                 className="w-6 h-6 text-white/80 group-hover:translate-x-1 transition-transform duration-300"
