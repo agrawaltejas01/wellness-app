@@ -1,11 +1,16 @@
 import { RouteComponentProps, navigate } from "@reach/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ReactComponent as ArrowDown } from "../../images/utils/arrow-down.svg";
 import { ReactComponent as BackButton } from "../../images/utils/back-button.svg";
 import "./zbr-faq.css";
 
 const ZbrFaq: React.FC<RouteComponentProps> = () => {
     const [open, setOpen] = useState<string | null>(null);
+
+    useEffect(() => {
+        // Scroll to top when component mounts
+        window.scrollTo(0, 0);
+    }, []);
 
     const faqs = [
         // ⭐ Highlight, Scoring & Ranking (ZBR vs. Zen Score)
