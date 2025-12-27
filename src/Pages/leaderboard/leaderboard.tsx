@@ -248,7 +248,7 @@ const Leaderboard = (props: LeaderboardProps) => {
             return {
                 borderColor: rank === 1 ? '#fbbf24' : rank === 2 ? '#9ca3af' : '#fb923c',
                 backgroundColor: rank === 1 ? '#fbbf24' : rank === 2 ? '#9ca3af' : '#fb923c',
-                fontColor: 'white'
+                fontColor: 'black'
             };
         }
         return {
@@ -516,9 +516,9 @@ const Leaderboard = (props: LeaderboardProps) => {
                                                 </div>
                                             </div>
                                             <div className="flex flex-col">
-                                                <span className="text-sm font-bold  text-gray-900">{player.name}</span>
-                                                <span className="text-xs text-green-700">{player.gamesPlayedCount} games</span>
-                                                <span className="text-green-700" style={{fontSize: '11px'}}>
+                                                <span className="text-sm font-bold text-gray-900">{player.name}</span>
+                                                <span className="" style={{color: 'gray', fontSize: '10px'}}>Games: {player.gamesPlayedCount} | ZBR: {player.rating ? player.rating/100 : "-"}</span>
+                                                <span className="italic" style={{fontSize: '10px', color: 'gray'}}>
                                                     {player.lastGamePlayedDate
                                                         ? (() => {
                                                             const lastPlayed = new Date(player.lastGamePlayedDate);
