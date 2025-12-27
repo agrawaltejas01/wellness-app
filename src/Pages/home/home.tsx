@@ -44,6 +44,7 @@ import { getUpcomingBookings } from "../../apis/bookings/upcoming";
 import UpcomingBooking from "./upcoming-booking";
 import KeepMovingBanner from "./keep-moving-banner";
 import RatingHomepage from "./rating-homepage";
+import ZbrFaq from "./zbr-faq";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type
@@ -450,6 +451,14 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
             
             {/* Keep Moving Banner */}
             <KeepMovingBanner />
+
+            <div
+              className="ml-4 rounded-full p-3 px-6 inline-block cursor-pointer"
+              style={{ backgroundColor: "#009605", borderBottom: "2px solid #000000" }}
+              onClick={() => navigate("/zbr-faq")}
+            >
+              <span className="text-sm text-white font-bold">FAQs</span>
+            </div>
           </>
         )}
       </div>
