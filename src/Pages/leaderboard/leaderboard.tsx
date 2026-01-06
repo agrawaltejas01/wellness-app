@@ -426,7 +426,7 @@ const Leaderboard = (props: LeaderboardProps) => {
                                     </div>
                                     <div className="flex items-center gap-1">
                                         <span className="text-sm lg:text-lg font-bold text-blue-600">{ userRating.rating ? userRating.rating : "-"}</span>
-                                        <span className="text-xs lg:text-sm text-gray-600">Rating</span>
+                                        <span className="text-xs lg:text-sm text-gray-600">Zen Score</span>
                                     </div>
                                 </div>
                                 {userRating.gamesPlayed === 0 && (
