@@ -101,9 +101,9 @@ const Leaderboard = (props: LeaderboardProps) => {
             }
 
             // Sort only the new players by rating and games played
-            const sortedNewPlayers = sortPlayersByRatingAndGames([...result.leaderboard]);
+            // const sortedNewPlayers = sortPlayersByRatingAndGames([...result.leaderboard]);
             
-            const playersWithRanks = sortedNewPlayers.map((player: LeaderboardPlayer, index: number) => ({
+            const playersWithRanks = result.leaderboard.map((player: LeaderboardPlayer, index: number) => ({
                 ...player,
                 rank: currentPage * pageSize + index + 1
             }));
