@@ -137,7 +137,7 @@ const Leaderboard = (props: LeaderboardProps) => {
                 setUserRating(prev => ({ ...prev, rating: 0 } as UserRating));
                 return;
             }
-            setUserRating(prev => ({ ...prev, rating: result.rating.Rating.rating || 0 } as UserRating));
+            setUserRating(prev => ({ ...prev, rating: result.rating.Rating.zenScore || 0 } as UserRating));
         },
         onError: (error) => {
             console.error("Error getting user rating:", error);
@@ -425,7 +425,7 @@ const Leaderboard = (props: LeaderboardProps) => {
                                         <span className="text-xs lg:text-sm text-gray-600">{userRating.gamesPlayed} games</span>
                                     </div>
                                     <div className="flex items-center gap-1">
-                                        <span className="text-sm lg:text-lg font-bold text-blue-600">{ userRating.rating ? userRating.rating/100 : "-"}</span>
+                                        <span className="text-sm lg:text-lg font-bold text-blue-600">{ userRating.rating ? userRating.rating : "-"}</span>
                                         <span className="text-xs lg:text-sm text-gray-600">Rating</span>
                                     </div>
                                 </div>
