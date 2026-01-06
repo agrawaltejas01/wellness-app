@@ -238,7 +238,7 @@ const Leaderboard = (props: LeaderboardProps) => {
 
     const getRankStyle = (rank: number) => {
         if (rank === 1) return { bg: 'bg-yellow-100', border: 'border-yellow-400', text: 'text-yellow-800' };
-        if (rank === 2) return { bg: 'bg-gray-100', border: 'border-gray-400', text: 'text-gray-800' };
+        if (rank === 2) return { bg: 'bg-blue-100', border: 'border-gray-400', text: 'text-gray-800' };
         if (rank === 3) return { bg: 'bg-orange-100', border: 'border-orange-400', text: 'text-orange-800' };
         return { bg: 'bg-white', border: 'border-gray-200', text: 'text-gray-800' };
     };
