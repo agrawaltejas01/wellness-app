@@ -31,6 +31,8 @@ interface LeaderboardPlayer {
 interface UserRating {
     rating: number;
     gamesPlayed: number;
+    rank?: number;
+    lastGamePlayedDate?: string;
 }
 
 interface CircleProps {
@@ -134,15 +136,30 @@ const Leaderboard = (props: LeaderboardProps) => {
         onSuccess: (result) => {
             // Handle null or undefined response
             if (!result || !result.rating) {
-                setUserRating(prev => ({ ...prev, rating: 0 } as UserRating));
+                setUserRating(prev => ({ 
+                    rating: 0, 
+                    gamesPlayed: prev?.gamesPlayed || 0,
+                    rank: prev?.rank || 0,
+                    lastGamePlayedDate: prev?.lastGamePlayedDate
+                }));
                 return;
             }
-            setUserRating(prev => ({ ...prev, rating: result.rating.Rating.zenScore || 0 } as UserRating));
+            setUserRating(prev => ({ 
+                ...prev, 
+                rating: result.rating.Rating.zenScore || 0, 
+                rank: result.rating.rank || 0,
+                lastGamePlayedDate: result.rating.Rating.lastPlayedAt || prev?.lastGamePlayedDate
+            } as UserRating));
         },
         onError: (error) => {
             console.error("Error getting user rating:", error);
             // Set default rating on error to prevent undefined state
-            setUserRating(prev => ({ ...prev, rating: 0 } as UserRating));
+            setUserRating(prev => ({ 
+                rating: 0, 
+                gamesPlayed: prev?.gamesPlayed || 0,
+                rank: prev?.rank || 0,
+                lastGamePlayedDate: prev?.lastGamePlayedDate
+            }));
         }
     });
 
@@ -153,14 +170,18 @@ const Leaderboard = (props: LeaderboardProps) => {
             if (!result) {
                 setUserRating(prev => ({ 
                     rating: prev?.rating || 0, 
-                    gamesPlayed: 0 
+                    gamesPlayed: 0,
+                    rank: prev?.rank || 0,
+                    lastGamePlayedDate: prev?.lastGamePlayedDate
                 }));
                 setIsUserRatingLoading(false);
                 return;
             }
             setUserRating(prev => ({ 
                 rating: prev?.rating || 0, 
-                gamesPlayed: result.gamesPlayedCount || 0 
+                gamesPlayed: result.gamesPlayedCount || 0,
+                rank: prev?.rank || 0,
+                lastGamePlayedDate: result.lastGamePlayedDate || prev?.lastGamePlayedDate
             }));
             setIsUserRatingLoading(false);
         },
@@ -169,7 +190,9 @@ const Leaderboard = (props: LeaderboardProps) => {
             // Set default games played on error
             setUserRating(prev => ({ 
                 rating: prev?.rating || 0, 
-                gamesPlayed: 0 
+                gamesPlayed: 0,
+                rank: prev?.rank || 0,
+                lastGamePlayedDate: prev?.lastGamePlayedDate
             }));
             setIsUserRatingLoading(false);
         }
@@ -413,20 +436,76 @@ const Leaderboard = (props: LeaderboardProps) => {
                             </div>
                         ) : userRating ? (
                             <div>
-                                <div className="user-performance-content bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 lg:p-4 border border-blue-200 flex items-center justify-between">
+                                <div className="user-performance-content bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 lg:p-6">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-3 lg:gap-4">
                                     <div className="flex items-center gap-2">
-                                        <div className="bg-blue-500 rounded-full p-1 lg:p-2">
-                                            <svg className="w-3 h-3 lg:w-5 lg:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                            </svg>
+                                                <span 
+                                                    className="text-sm lg:text-base font-bold"
+                                                    style={{ 
+                                                        color: '#374151',
+                                                        minWidth: '24px',
+                                                        textAlign: 'center'
+                                                    }}
+                                                >
+                                                    {userRating.rank || "-"}
+                                                </span>
+                                                <div className="relative" style={{ width: '32px', height: '32px' }}>
+                                                    <div 
+                                                        style={{
+                                                            width: '32px',
+                                                            height: '32px',
+                                                            borderRadius: '50%',
+                                                            border: `1px solid #e5e7eb`,
+                                                            backgroundColor: '#3b82f6',
+                                                            display: 'flex',
+                                                            justifyContent: 'center',
+                                                            alignItems: 'center',
+                                                            overflow: 'hidden'
+                                                        }}
+                                                    >
+                                                        <span 
+                                                            style={{
+                                                                fontSize: '14px',
+                                                                fontWeight: 'bold',
+                                                                fontFamily: 'Plus Jakarta Sans',
+                                                                color: 'white'
+                                                            }}
+                                                        >
+                                                            {getInitials(userDetails.name)}
+                                                        </span>
+                                                    </div>
+                                                    <img
+                                                        src={verifiedBadgeImg}
+                                                        alt="Verified player"
+                                                        className="absolute -top-1 -right-1 w-4 h-4"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="text-sm font-bold text-gray-900">{userDetails.name}</span>
+                                                <span className="" style={{color: 'gray', fontSize: '10px'}}>Games: {userRating.gamesPlayed} | ZBR: {userRating.rating ? userRating.rating/100 : "-"}</span>
+                                                <span className="italic" style={{fontSize: '10px', color: 'gray'}}>
+                                                    {userRating.lastGamePlayedDate
+                                                        ? (() => {
+                                                            const lastPlayed = new Date(userRating.lastGamePlayedDate);
+                                                            const today = new Date();
+                                                            // Reset both dates to midnight to ignore time
+                                                            lastPlayed.setHours(0,0,0,0);
+                                                            today.setHours(0,0,0,0);
+                                                            const diffTime = today.getTime() - lastPlayed.getTime();
+                                                            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                                                            return `Last played ${diffDays == 0 ? ' today' : diffDays == 1 ? ' yesterday' : diffDays + ' days ago'}`;
+                                                        })()
+                                                        : ''
+                                                    }
+                                                </span>
+                                            </div>
                                         </div>
-                                        <span className="font-bold text-xs lg:text-base text-gray-900">{userDetails.name}</span>
-                                        <span className="text-xs lg:text-sm text-gray-500">•</span>
-                                        <span className="text-xs lg:text-sm text-gray-600">{userRating.gamesPlayed} games</span>
+                                        <div className="flex flex-col items-center bg-white rounded-xl p-2 lg:p-4">
+                                            <span className="text-sm lg:text-lg font-bold text-gray-900" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{userRating.rating ? userRating.rating : "-"}</span>
+                                            <span className="text-xs lg:text-sm text-green-700" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Zen Score</span>
                                     </div>
-                                    <div className="flex items-center gap-1">
-                                        <span className="text-sm lg:text-lg font-bold text-blue-600">{ userRating.rating ? userRating.rating : "-"}</span>
-                                        <span className="text-xs lg:text-sm text-gray-600">Zen Score</span>
                                     </div>
                                 </div>
                                 {userRating.gamesPlayed === 0 && (
