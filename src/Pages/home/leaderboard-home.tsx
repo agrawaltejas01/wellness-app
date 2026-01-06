@@ -29,8 +29,8 @@ const LeaderboardHome = ({activityId}: {activityId: number}) => {
         mutationFn: getTop3Players,
         onSuccess: (result) => {
             const players = result.leaderboard || [];
-            const sortedPlayers = sortPlayersByRatingAndGames([...players]);
-            setTopPlayers(sortedPlayers.slice(0, 3));
+            // const sortedPlayers = sortPlayersByRatingAndGames([...players]);
+            setTopPlayers(players.slice(0, 3));
             setTotalPlayers(result.totalCount || 0);
             setIsLoading(false);
         },
