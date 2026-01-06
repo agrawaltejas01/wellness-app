@@ -18,7 +18,7 @@ export const RatingBadgeHomeScreen: React.FC<{ rating: number}> = ({ rating }) =
     return (
         <div className="flex flex-row items-center gap-1 rounded-full py-2 justify-between pl-4 px-3" style={{backgroundColor: getBackgroundColor(rating).backgroundColor}}>
             <div className="flex flex-col text-black" style={{ fontFamily: "Plus Jakarta Sans, sans-serif", fontSize: '10px',letterSpacing: '0.15em' }}>
-                <span className="font-bold text-xs">ZBR <InfoCircleOutlined className="w-2 h-2 self-center" onClick={()=>setIsRatingInfoModalOpen(true)} /> </span> 
+                <span className="font-bold text-xs">ZBR <InfoCircleOutlined className="w-3 h-3 self-center" onClick={()=>setIsRatingInfoModalOpen(true)} /> </span> 
                 <span className="text-light">RATING</span>
             </div>
             <div className="px-2 py-1 rounded-full text-white font-bold" style={{backgroundColor: getBackgroundColor(rating).fontColor, fontSize: '16px'}}>
