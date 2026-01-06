@@ -315,14 +315,14 @@ const Leaderboard = (props: LeaderboardProps) => {
                 {leaderboardData.length >= 3 && (
                     <div className="top-champions-card mb-6">
                         <h2 className="champions-title text-base lg:text-xl font-bold text-gray-900 mb-6 lg:mb-8">Top Champions</h2>
-                        <div className="flex justify-center items-end gap-2 sm:gap-3 lg:gap-4 mb-6 px-2 mt-10 sm:mt-12 lg:mt-16">
+                        <div className="flex justify-center items-end gap-2 sm:gap-4 lg:gap-6 mb-6 mt-10 sm:mt-12 lg:mt-16">
                             {/* Arrange in 2-1-3 order */}
                             {[leaderboardData[1], leaderboardData[0], leaderboardData[2]].map((player, displayIndex) => {
                                 const actualRank = displayIndex === 0 ? 1 : displayIndex === 1 ? 0 : 2;
                                 const rankNumber = actualRank + 1;
                                 
                                 return (
-                                    <div key={player.user_id} className="flex-1 flex flex-col items-center">
+                                    <div key={player.user_id} className="flex-1 flex flex-col items-center max-w-[33.333%]">
                                         {/* Rank badge */}
                                         <div className={`relative mb-2 sm:mb-3 fade-in-delay-${displayIndex + 1}`}>
                                             {/* Rank number behind avatar */}
