@@ -268,15 +268,15 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
   };
 
   return (
-    <div className="relative w-full h-screen bg-black flex flex-col">
-      {/* Back Button */}
-      <div className="absolute top-4 left-4 z-30" onClick={() => navigate(-1)}>
-        <span className="font-semibold text-lg text-white cursor-pointer"><BackButton /></span>
-      </div>
-
+    <div className="w-full min-h-screen bg-black flex flex-col" style={{ backgroundColor: '#000000' }}>
       {/* Video Container */}
-      <div className="flex-1 flex items-center justify-center px-2 pt-12 pb-4 relative">
-        <div className="relative w-full h-full max-w-[414px] overflow-hidden">
+      <div className="flex-1 flex items-start justify-center relative bg-black">
+        <div className="relative w-full h-full max-w-[414px] overflow-hidden bg-black">
+          {/* Back Button - Overlaid on Video */}
+          <div className="absolute top-2 left-2 z-30" onClick={() => navigate(-1)}>
+            <span className="font-semibold text-lg text-white cursor-pointer"><BackButton /></span>
+          </div>
+
           {/* Video */}
           <video
             ref={videoRef}
@@ -284,7 +284,7 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
             loop
             playsInline
             muted={isMuted}
-            className="w-full h-full object-contain bg-black"
+            className="w-full h-full object-cover bg-black"
             onClick={togglePlay}
             controls={false}
             preload="metadata"
@@ -384,7 +384,7 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
       </div>
 
       {/* Bottom Action Buttons */}
-      <div className="px-4 pb-12 flex gap-3" style={{ paddingBottom: 'max(3rem, env(safe-area-inset-bottom, 3rem))' }}>
+      <div className="px-4 pb-12 flex gap-3 bg-black" style={{ paddingBottom: 'max(3rem, env(safe-area-inset-bottom, 3rem))' }}>
         {/* Share on Instagram Button */}
         <button
           onClick={handleShareInstagram}
