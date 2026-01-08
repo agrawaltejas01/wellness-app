@@ -390,14 +390,15 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
           onClick={handleShareInstagram}
           className="flex-1 h-14 rounded-full flex items-center justify-center gap-2 font-semibold text-lg text-white"
           style={{ 
-            backgroundColor: '#4CAF50',
+            backgroundColor: '#009605',
             WebkitTapHighlightColor: 'transparent' 
           }}
         >
-          <svg className="w-6 h-6" fill="none" stroke="white" strokeWidth="2.5" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M12 8v8M8 12h8"/>
-          </svg>
+          <img 
+            src="https://zfx-gyms.zenfitx.link/images/onboarding/shareInstagram.avif" 
+            alt="Instagram" 
+            className="w-6 h-6"
+          />
           <span>Share on Instagram</span>
         </button>
 
@@ -406,7 +407,7 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
           onClick={handleShare}
           className="w-14 h-14 rounded-full flex items-center justify-center"
           style={{ 
-            backgroundColor: '#4CAF50',
+            backgroundColor: '#009605',
             WebkitTapHighlightColor: 'transparent' 
           }}
         >
