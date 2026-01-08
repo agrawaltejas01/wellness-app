@@ -405,7 +405,7 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
           }}
         >
           <img 
-            src="https://zfx-gyms.zenfitx.link/images/onboarding/b.avif" 
+            src="https://zfx-gyms.zenfitx.link/images/onboarding/shareInstagram.avif" 
             alt="Instagram" 
             className="w-6 h-6"
           />
