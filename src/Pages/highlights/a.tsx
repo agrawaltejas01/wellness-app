@@ -384,7 +384,7 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
       </div>
 
       {/* Bottom Action Buttons */}
-      <div className="px-4 pb-8 pt-2 flex gap-3">
+      <div className="px-4 pb-12 flex gap-3" style={{ paddingBottom: 'max(3rem, env(safe-area-inset-bottom, 3rem))' }}>
         {/* Share on Instagram Button */}
         <button
           onClick={handleShareInstagram}
