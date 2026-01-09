@@ -384,7 +384,7 @@ const Leaderboard = (props: LeaderboardProps) => {
                                                 className="text-xs sm:text-sm text-gray-500"
                                                 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
                                             >
-                                                {(player.zen_score || 0).toFixed(0)} zen score
+                                                {(player.zen_score || player.rating || 0).toFixed(0)} zen score
                                             </p>
                                         </div>
 
