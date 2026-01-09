@@ -24,6 +24,12 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
   const [fileName, setFileName] = useState("highlight.mp4");
   const [isVideoLoaded, setIsVideoLoaded] = useState<boolean>(false);
   
+  // Preload state and refs
+  const preloadedBlobRef = useRef<Blob | null>(null);
+  const preloadAbortControllerRef = useRef<AbortController | null>(null);
+  const [isPreloaded, setIsPreloaded] = useState(false);
+  const [isPreloading, setIsPreloading] = useState(false);
+  
   // Share progress state
   const [shareProgress, setShareProgress] = useState<{
     isSharing: boolean;
@@ -45,6 +51,75 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
       userId: userId,
     });
   }, []);
+
+  // Preload video in background for instant sharing/downloading
+  useEffect(() => {
+    const preloadVideo = async () => {
+      if (!src) return;
+
+      // For React Native WebView, tell native to preload
+      if (window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+          type: 'preloadVideo',
+          videoUrl: src,
+          fileName: fileName,
+        }));
+        return;
+      }
+
+      // For web browsers, preload the blob
+      try {
+        setIsPreloading(true);
+        preloadAbortControllerRef.current = new AbortController();
+        
+        const proxyURL = `${process.env.REACT_APP_BE_URL}/highlights/download?url=${encodeURIComponent(src)}`;
+        const response = await fetch(proxyURL, {
+          signal: preloadAbortControllerRef.current.signal
+        });
+        
+        if (!response.ok) throw new Error('Preload failed');
+        
+        const blob = await response.blob();
+        preloadedBlobRef.current = blob;
+        setIsPreloaded(true);
+        console.log('Video preloaded successfully');
+      } catch (error: any) {
+        if (error.name !== 'AbortError') {
+          console.log('Preload failed, will download on demand:', error);
+        }
+      } finally {
+        setIsPreloading(false);
+        preloadAbortControllerRef.current = null;
+      }
+    };
+
+    preloadVideo();
+  }, [src, fileName]);
+
+  // Cleanup on unmount - cancel preload, clear blob, tell native to delete
+  useEffect(() => {
+    return () => {
+      // Cancel any ongoing preload
+      if (preloadAbortControllerRef.current) {
+        preloadAbortControllerRef.current.abort();
+        preloadAbortControllerRef.current = null;
+      }
+      
+      // Clear the preloaded blob (for web)
+      if (preloadedBlobRef.current) {
+        preloadedBlobRef.current = null;
+        setIsPreloaded(false);
+      }
+      
+      // Tell React Native to delete the preloaded video
+      if (window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+          type: 'deletePreloadedVideo',
+          fileName: fileName,
+        }));
+      }
+    };
+  }, [fileName]);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -128,18 +203,55 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
     }
   };
 
-  const handleShareInstagram = (): void => {
+  const handleShareInstagram = async (): Promise<void> => {
     Mixpanel.track("clicked_share_instagram_on_highlights_page", {
       userId: userId,
     });
 
     // Check if running in React Native WebView
     if (window.ReactNativeWebView) {
+      // Use preloaded video if available (native handles this)
       window?.ReactNativeWebView?.postMessage(JSON.stringify({
         type: 'shareToInstagram',
         videoUrl: src,
+        fileName: fileName,
+        usePreloaded: true, // Signal to use preloaded file if available
       }));
-    } else if (navigator.share) {
+      return;
+    }
+    
+    // For web, try to share the actual video file
+    if (navigator.share && navigator.canShare) {
+      try {
+        let videoBlob = preloadedBlobRef.current;
+        
+        // If not preloaded, download now
+        if (!videoBlob) {
+          message.loading({ content: 'Preparing video...', key: 'share', duration: 0 });
+          const proxyURL = `${process.env.REACT_APP_BE_URL}/highlights/download?url=${encodeURIComponent(src)}`;
+          const response = await fetch(proxyURL);
+          if (!response.ok) throw new Error('Failed to fetch video');
+          videoBlob = await response.blob();
+          message.destroy('share');
+        }
+        
+        const videoFile = new File([videoBlob], 'highlight.mp4', { type: 'video/mp4' });
+        
+        if (navigator.canShare({ files: [videoFile] })) {
+          await navigator.share({
+            title: 'Check out my game highlights!',
+            files: [videoFile],
+          });
+          return;
+        }
+      } catch (error) {
+        console.log('File share failed, falling back to URL:', error);
+        message.destroy('share');
+      }
+    }
+    
+    // Fallback to URL share
+    if (navigator.share) {
       navigator.share({
         title: 'Check out my game highlights!',
         url: src,
@@ -155,20 +267,56 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
     }
   };
 
-  const handleShare = (): void => {
+  const handleShare = async (): Promise<void> => {
     Mixpanel.track("clicked_share_on_highlights_page", {
       userId: userId,
     });
 
     // Check if running in React Native WebView
     if (window.ReactNativeWebView) {
+      // Use preloaded video if available (native handles this)
       window.ReactNativeWebView.postMessage(JSON.stringify({
         type: 'shareVideo',
         videoUrl: src,
-        fileName: 'highlight.mp4',
-        title: 'Check out this video!'
+        fileName: fileName,
+        title: 'Check out this video!',
+        usePreloaded: true, // Signal to use preloaded file if available
       }));
-    } else if (navigator.share) {
+      return;
+    }
+    
+    // For web, try to share the actual video file
+    if (navigator.share && navigator.canShare) {
+      try {
+        let videoBlob = preloadedBlobRef.current;
+        
+        // If not preloaded, download now
+        if (!videoBlob) {
+          message.loading({ content: 'Preparing video...', key: 'share', duration: 0 });
+          const proxyURL = `${process.env.REACT_APP_BE_URL}/highlights/download?url=${encodeURIComponent(src)}`;
+          const response = await fetch(proxyURL);
+          if (!response.ok) throw new Error('Failed to fetch video');
+          videoBlob = await response.blob();
+          message.destroy('share');
+        }
+        
+        const videoFile = new File([videoBlob], 'highlight.mp4', { type: 'video/mp4' });
+        
+        if (navigator.canShare({ files: [videoFile] })) {
+          await navigator.share({
+            title: 'Check out this video!',
+            files: [videoFile],
+          });
+          return;
+        }
+      } catch (error) {
+        console.log('File share failed, falling back to URL:', error);
+        message.destroy('share');
+      }
+    }
+    
+    // Fallback to URL share
+    if (navigator.share) {
       navigator.share({
         title: 'Check out this video!',
         url: src,
@@ -205,6 +353,20 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
               setDownloadStatus('idle');
               setStatusMessage('');
             }, 1000);
+          }
+        }
+        
+        // Handle preload status from React Native
+        if (data.type === 'preloadStatus' && data.fileName === fileName) {
+          if (data.status === 'completed') {
+            setIsPreloaded(true);
+            setIsPreloading(false);
+            console.log('Video preloaded on native side');
+          } else if (data.status === 'downloading') {
+            setIsPreloading(true);
+          } else if (data.status === 'error') {
+            setIsPreloading(false);
+            console.log('Native preload failed:', data.error);
           }
         }
         
@@ -253,52 +415,60 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
     };
   }, [fileName]);
 
-    const handleDownload = async (): Promise<void> => {
-      Mixpanel.track("clicked_download_on_highlights_page", {
-        userId: userId,
-      });
+  const handleDownload = async (): Promise<void> => {
+    Mixpanel.track("clicked_download_on_highlights_page", {
+      userId: userId,
+    });
 
     if (window.ReactNativeWebView) {
-
-        if(window.platformInfo?.platform === "ios" && window?.platformInfo?.appVersion && window?.platformInfo?.appVersion < '1.2.4') {
-            alert('Download failed. Please update the app to the latest version.');
-            return;
-        }
-        // Send message to React Native
-        window?.ReactNativeWebView?.postMessage(JSON.stringify({
-          type: 'downloadVideo',
-          videoUrl: `${process.env.REACT_APP_BE_URL}/highlights/download?url=${encodeURIComponent(src)}`,
-          fileName: "highlight.mp4",
-        }));
-      } else {
-        // Fallback for web browsers
-        if (videoRef.current) {
-          try {
-            const proxyURL = `${process.env.REACT_APP_BE_URL}/highlights/download?url=${encodeURIComponent(src)}`;
-            const response = await fetch(proxyURL);
-            if (!response.ok) throw new Error('Network response was not ok');
-      
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'highlight.mp4';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(url);
-          } catch (error) {
-            console.error('Download failed:', error);
-            navigator.clipboard.writeText(src).then(() => {
-              alert('Download failed due to proxy or CDN restrictions. Video URL copied to clipboard. Please paste it into a browser or download manager to save the file manually.');
-            }).catch(clipboardError => {
-              console.error('Clipboard fallback failed:', clipboardError);
-              alert('Download failed. Please copy the video URL manually: ' + src);
-            });
-          }
-        }
+      if(window.platformInfo?.platform === "ios" && window?.platformInfo?.appVersion && window?.platformInfo?.appVersion < '1.2.4') {
+        alert('Download failed. Please update the app to the latest version.');
+        return;
       }
-      };
+      // Send message to React Native - use preloaded video if available
+      window?.ReactNativeWebView?.postMessage(JSON.stringify({
+        type: 'downloadVideo',
+        videoUrl: `${process.env.REACT_APP_BE_URL}/highlights/download?url=${encodeURIComponent(src)}`,
+        fileName: fileName,
+        usePreloaded: true, // Signal to use preloaded file if available
+      }));
+    } else {
+      // Fallback for web browsers - use preloaded blob if available
+      try {
+        let blob = preloadedBlobRef.current;
+        
+        // If not preloaded, download now
+        if (!blob) {
+          setDownloadStatus('downloading');
+          const proxyURL = `${process.env.REACT_APP_BE_URL}/highlights/download?url=${encodeURIComponent(src)}`;
+          const response = await fetch(proxyURL);
+          if (!response.ok) throw new Error('Network response was not ok');
+          blob = await response.blob();
+        }
+        
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'highlight.mp4';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+        
+        setDownloadStatus('idle');
+        message.success('Download completed');
+      } catch (error) {
+        console.error('Download failed:', error);
+        setDownloadStatus('idle');
+        navigator.clipboard.writeText(src).then(() => {
+          alert('Download failed due to proxy or CDN restrictions. Video URL copied to clipboard. Please paste it into a browser or download manager to save the file manually.');
+        }).catch(clipboardError => {
+          console.error('Clipboard fallback failed:', clipboardError);
+          alert('Download failed. Please copy the video URL manually: ' + src);
+        });
+      }
+    }
+  };
 
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (videoRef.current) {
