@@ -723,6 +723,66 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
             <div className="flex flex-row px-4 pt-4">
                 {offerStrip.current && <p className="text-xs text-center text-white rounded-lg p-2 bg-discountStrip w-full">{offerStrip.current}</p>}
             </div>
+            {gym?.gymId == 6 && <div
+            onClick={() => navigate('/highlights')}
+            style={{
+              position: 'relative',
+              margin: '0px 16px 8px 16px',
+              padding: '12px 24px',
+              borderRadius: '12px',
+              background: 'linear-gradient(135deg, #FFF5DC 0%, #FFEEBA 100%)',
+              overflow: 'hidden',
+              cursor: 'pointer',
+            }}
+          >
+            {/* Diagonal stripes - left */}
+            <div
+              style={{
+                position: 'absolute',
+                top: '-50%',
+                left: '40px',
+                width: '20px',
+                height: '200%',
+                background: 'rgba(255, 215, 100, 0.4)',
+                transform: 'rotate(45deg)',
+              }}
+            />
+            {/* Diagonal stripes - right */}
+            <div
+              style={{
+                position: 'absolute',
+                top: '-50%',
+                right: '40px',
+                width: '20px',
+                height: '200%',
+                background: 'rgba(255, 215, 100, 0.4)',
+                transform: 'rotate(45deg)',
+              }}
+            />
+            <div
+              style={{
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                zIndex: 1,
+              }}
+            >
+              <span style={{ fontSize: '16px' }}>✨</span>
+              <span
+                style={{
+                  fontSize: '14px',
+                  fontWeight: '700',
+                  color: '#1A1A1A',
+                  fontFamily: 'Plus Jakarta Sans',
+                }}
+              >
+                Get free highlight of your game
+              </span>
+              <span style={{ fontSize: '16px' }}>✨</span>
+            </div>
+          </div>}
             <div className="flex flex-row px-4 pt-4">
             {showEquipmentRentalInfo && 
               <CenterModal isOpen={showEquipmentRentalInfo} onClose={() => {setShowEquipmentRentalInfo(false)}} title="Shuttle Rental">

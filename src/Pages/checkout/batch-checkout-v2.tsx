@@ -228,6 +228,68 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
           </div>
         </div>
         <div className="batch-content-wrapper">
+          {gym?.gymId == 6 && (
+        <div
+            onClick={() => navigate('/highlights')}
+            style={{
+              position: 'relative',
+              margin: '16px 16px 8px 16px',
+              padding: '12px 24px',
+              borderRadius: '12px',
+              background: 'linear-gradient(135deg, #FFF5DC 0%, #FFEEBA 100%)',
+              overflow: 'hidden',
+              cursor: 'pointer',
+            }}
+          >
+            {/* Diagonal stripes - left */}
+            <div
+              style={{
+                position: 'absolute',
+                top: '-50%',
+                left: '40px',
+                width: '20px',
+                height: '200%',
+                background: 'rgba(255, 215, 100, 0.4)',
+                transform: 'rotate(45deg)',
+              }}
+            />
+            {/* Diagonal stripes - right */}
+            <div
+              style={{
+                position: 'absolute',
+                top: '-50%',
+                right: '40px',
+                width: '20px',
+                height: '200%',
+                background: 'rgba(255, 215, 100, 0.4)',
+                transform: 'rotate(45deg)',
+              }}
+            />
+            <div
+              style={{
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                zIndex: 1,
+              }}
+            >
+              <span style={{ fontSize: '16px' }}>✨</span>
+              <span
+                style={{
+                  fontSize: '14px',
+                  fontWeight: '700',
+                  color: '#1A1A1A',
+                  fontFamily: 'Plus Jakarta Sans',
+                }}
+              >
+                Get free highlight of your game
+              </span>
+              <span style={{ fontSize: '16px' }}>✨</span>
+            </div>
+          </div>
+          )}
           <div className="batch-content-inner">
             {isCoplayerCardEnabled && <SpotsLeft spotsLeft={spotsLeft} spotsTotal={spotsTotal} />}
             {isCoplayerCardEnabled && <CoplayerCard players={players} loading={!gotCoplayers} spotsLeft={spotsLeft} spotsTotal={spotsTotal}/>}
