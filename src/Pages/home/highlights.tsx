@@ -216,6 +216,11 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
                           key={highlight.id}
                           className="group relative overflow-hidden rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-200 cursor-pointer hover:scale-[1.01] hover:-translate-y-0.5"
                           onClick={() => {
+                            Mixpanel.track("clicked_view_match_on_highlights_page", {
+                              userId: userId,
+                              matchId: highlight.match_id,
+                              batchId: highlight.batch_id,
+                            });
                             setShowSelectHighlightsModal(true);
                             setMatchIdHighlights(highlight.match_id);
                             setBatchIdHighlights(highlight.batch_id);
