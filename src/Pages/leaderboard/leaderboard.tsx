@@ -536,7 +536,7 @@ const Leaderboard = (props: LeaderboardProps) => {
                                             </div>
                                         </div>
                                         <div className="flex flex-col items-center bg-gray-100 rounded-xl p-2 lg:p-4">
-                                            <span className="ranking-rating-value text-sm lg:text-lg font-bold text-gray-900" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{player.zen_score || 0}</span>
+                                            <span className="ranking-rating-value text-sm lg:text-lg font-bold text-gray-900" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{player.zen_score || player.rating || 0}</span>
                                             <span className="ranking-rating-label text-xs lg:text-sm text-green-700" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Zen Score</span>
                                         </div>
                                     </div>
