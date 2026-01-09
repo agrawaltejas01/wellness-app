@@ -824,7 +824,6 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           {/* Highlight Banner */}
           {gym?.gymId == 6 && (
           <div
-            onClick={() => navigate('/highlights')}
             style={{
               position: 'relative',
               margin: '0px 16px 8px 16px',

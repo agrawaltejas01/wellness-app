@@ -723,8 +723,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
             <div className="flex flex-row px-4 pt-4">
                 {offerStrip.current && <p className="text-xs text-center text-white rounded-lg p-2 bg-discountStrip w-full">{offerStrip.current}</p>}
             </div>
-            {gym?.gymId == 6 && <div
-            onClick={() => navigate('/highlights')}
+            {gym?.gymId == 6 && <div            
             style={{
               position: 'relative',
               margin: '0px 16px 8px 16px',

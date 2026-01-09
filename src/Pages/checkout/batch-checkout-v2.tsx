@@ -230,7 +230,6 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
         <div className="batch-content-wrapper">
           {gym?.gymId == 6 && (
         <div
-            onClick={() => navigate('/highlights')}
             style={{
               position: 'relative',
               margin: '16px 16px 8px 16px',
