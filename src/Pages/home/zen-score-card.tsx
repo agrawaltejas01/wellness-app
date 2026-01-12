@@ -1,6 +1,6 @@
 import { useState } from "react";
 import vectorImg from "../../images/home/vector.png";
-import { ReactComponent as InfoCircleOutlined } from "../../images/utils/info.svg";
+import { InfoCircleOutlined } from "@ant-design/icons";
 import {CenterModal} from "../profile/center-modal";    
 
 const ZenScoreInfo = () => {
