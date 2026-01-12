@@ -11,7 +11,7 @@ import {
   formatTimeIntToAmPm,
   getDayOfWeek,
 } from "../../utils/date";
-import { RightOutlined } from "@ant-design/icons";
+import { InfoCircleOutlined, RightOutlined } from "@ant-design/icons";
 import { IBatch, IGymDetails } from "../../types/gyms";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
@@ -84,6 +84,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   const [ratings, setRatings] = useState<number>(0);
   const [showRatingModal, setShowRatingModal] = useState<boolean>(false);
   const [showHowItWorksModal, setShowHowItWorksModal] = useState<boolean>(false);
+  const [showHighlightInfoModal, setShowHighlightInfoModal] = useState<boolean>(false);
   const urlParams = new URLSearchParams(window.location.search);
   const dateFromURL = urlParams.get("date");
 
@@ -879,6 +880,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
               >
                 Get free highlight of your game
               </span>
+              <InfoCircleOutlined className="w-3 h-3 self-center" onClick={() => setShowHighlightInfoModal(true)} />
               <span style={{ fontSize: '16px' }}>✨</span>
             </div>
           </div>
@@ -928,6 +930,18 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
             <span>⚪ Open Games: Anyone can join (ZBR or no ZBR)</span>
             <span>🆕 New players: You can play only Open games first → after 1st game a verified ZBR is assigned based on your game level </span>
           </div>}
+        />
+      )}
+      {showHighlightInfoModal && (
+        <CenterModal
+          isOpen={showHighlightInfoModal}
+          onClose={() => setShowHighlightInfoModal(false)}
+          title="Highlight of your game"
+          subtitle=""
+        children={<div className="flex flex-col mt-2 text-xs gap-1">
+          <span>Highlights of your best shots and longest rallies will be available on ZenfitX app within 24–48 hours after your game.
+          </span>      
+        </div>}
         />
       )}
     </>
