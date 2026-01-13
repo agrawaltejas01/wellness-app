@@ -443,6 +443,17 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
             
             {/* Keep Moving Banner */}
             <KeepMovingBanner />
+
+            <div
+              className="ml-4 rounded-full p-3 px-6 inline-block cursor-pointer"
+              style={{ backgroundColor: "#009605", borderBottom: "2px solid #000000" }}
+              onClick={() => {
+                Mixpanel.track("navigate_to_zbr_faq", {user_id: userDetails?.id}); 
+                navigate("/zbr-faq");
+              }}
+            >
+              <span className="text-sm text-white font-bold">FAQs</span>
+            </div>
           </>
         )}
       </div>
