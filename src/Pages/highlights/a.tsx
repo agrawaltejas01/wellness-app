@@ -604,54 +604,35 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
         </div>
       </div>
 
-      {/* Bottom Action Buttons */}
-      <div className="px-4 pb-12 mt-2 flex gap-3 bg-black" style={{ paddingBottom: 'max(3rem, env(safe-area-inset-bottom, 3rem))' }}>
-        {shareProgress.isSharing ? (
-          /* Progress Bar - shown when sharing */
-          <div className="flex-1 h-14 rounded-full flex flex-col items-center justify-center px-4 bg-[#1a1a1a] border border-white/10">
-            <p className="text-white text-sm font-medium mb-2">Loading...</p>
-            <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-[#009605] rounded-full transition-all duration-300 ease-out"
-                style={{ width: `${shareProgress.progress}%` }}
-              />
+      {/* Bottom Action Buttons - Only visible when video is loaded */}
+      {isVideoLoaded && (
+        <div className="px-4 pb-12 mt-2 flex gap-3 bg-black" style={{ paddingBottom: 'max(3rem, env(safe-area-inset-bottom, 3rem))' }}>
+          {shareProgress.isSharing ? (
+            /* Progress Bar - shown when sharing */
+            <div className="flex-1 h-14 rounded-full flex flex-col items-center justify-center px-4 bg-[#1a1a1a] border border-white/10">
+              <p className="text-white text-sm font-medium mb-2">Loading...</p>
+              <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-[#009605] rounded-full transition-all duration-300 ease-out"
+                  style={{ width: `${shareProgress.progress}%` }}
+                />
+              </div>
             </div>
-          </div>
-        ) : (
-          <>
-            {/* Share on Instagram Button */}
-            <button
-              onClick={handleShareInstagram}
-              className="flex-1 h-14 rounded-full flex items-center justify-center gap-2 font-semibold text-lg text-white"
-              style={{ 
-                backgroundColor: '#009605',
-                WebkitTapHighlightColor: 'transparent' 
-              }}
-            >
-              <img 
-                src="https://zfx-gyms.zenfitx.link/images/onboarding/shareInstagram.avif" 
-                alt="Instagram" 
-                className="w-6 h-6"
-              />
-              <span>Share on Instagram</span>
-            </button>
-
-            {/* Share Button */}
+          ) : (
+            /* Share Button */
             <button
               onClick={handleShare}
-              className="w-14 h-14 rounded-full flex items-center justify-center"
+              className="w-full h-14 rounded-full flex items-center justify-center font-semibold text-lg text-white"
               style={{ 
                 backgroundColor: '#009605',
                 WebkitTapHighlightColor: 'transparent' 
               }}
             >
-              <svg className="w-6 h-6" fill="white" viewBox="0 0 24 24">
-                <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
-              </svg>
+              <span>Share</span>
             </button>
-          </>
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
