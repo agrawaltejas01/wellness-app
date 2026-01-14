@@ -297,7 +297,7 @@ const NoRating = ({games, isLoadingGames}: {games: number, isLoadingGames: boole
     )
 }
 
-const Rating = ({rating, zenScore, zenRank, games, totalCount, isLoadingRating, isLoadingGames}: {rating: number, zenScore: number, zenRank: number, games: number, totalCount: number, isLoadingRating: boolean, isLoadingGames: boolean}) => {
+const Rating = ({rating, zenScore, zenRank, games, totalCount, previousRank, previousZenScore, isLoadingRating, isLoadingGames}: {rating: number, zenScore: number, zenRank: number, games: number, totalCount: number, previousRank: number, previousZenScore: number, isLoadingRating: boolean, isLoadingGames: boolean}) => {
     const [isRatingInfoModalOpen, setIsRatingInfoModalOpen] = useState(false);
     const [leftComponentHeight, setLeftComponentHeight] = useState<number | null>(null);
     const zenScoreCardRef = useRef<HTMLDivElement>(null);
@@ -359,7 +359,7 @@ const Rating = ({rating, zenScore, zenRank, games, totalCount, isLoadingRating, 
             <div className={`flex flex-row gap-4 md:gap-6 lg:gap-8 ${videoHighlights.length === 0 ? 'justify-center' : ''}`}>
                 <div className={`flex flex-col gap-4 md:gap-5 lg:gap-6 w-1/2`}>
                     <div ref={zenScoreCardRef}>
-                        <ZenScoreCard zenScore={zenScore} zenRank={zenRank} totalRank={totalCount} />
+                        <ZenScoreCard zenScore={zenScore} zenRank={zenRank} totalRank={totalCount} previousRank={previousRank} previousZenScore={previousZenScore} />
                     </div>
                     <div ref={ratingBadgeRef}>
                         <RatingBadgeHomeScreen rating={rating} />
@@ -399,7 +399,9 @@ const RatingHomepage: React.FC<{userDetails: IUser}> = ({userDetails}) => {
     const [games, setGames] = useState(0);
     const [isLoadingRating, setIsLoadingRating] = useState(true);
     const [isLoadingGames, setIsLoadingGames] = useState(true);
-
+    const [previousRank, setPreviousRank] = useState(3);
+    const [previousZenScore, setPreviousZenScore] = useState(200);
+    
     const { mutate: _getRatings } = useMutation({
         mutationFn: getRatings,
         onSuccess: (result) => {
@@ -409,6 +411,8 @@ const RatingHomepage: React.FC<{userDetails: IUser}> = ({userDetails}) => {
             setZenScore(result.rating.Rating.zenScore || 0);
             setZenRank(result.rating.rank || 0);
             setTotalCount(result.rating.total_count || 0);
+            // setPreviousRank(result.rating.previous_rank || 0);
+            // setPreviousZenScore(result.rating.previous_zen_score || 0);
         },
         onError: () => {
             setIsLoadingRating(false);
@@ -438,7 +442,7 @@ const RatingHomepage: React.FC<{userDetails: IUser}> = ({userDetails}) => {
 
     return (
         <div className="mt-2 pb-2 w-full" style={{ background: 'linear-gradient(to top, #E3F6E4, #FFFFFF)' }}>
-            {!isLoadingRating && rating === 0 ? <NoRating games={games} isLoadingGames={isLoadingGames} /> : <Rating rating={rating} zenScore={zenScore} zenRank={zenRank} games={games} totalCount={totalCount} isLoadingRating={isLoadingRating} isLoadingGames={isLoadingGames} />}
+            {!isLoadingRating && rating === 0 ? <NoRating games={games} isLoadingGames={isLoadingGames} /> : <Rating rating={rating} zenScore={zenScore} zenRank={zenRank} games={games} totalCount={totalCount} previousRank={previousRank} previousZenScore={previousZenScore} isLoadingRating={isLoadingRating} isLoadingGames={isLoadingGames} />}
             {/* <NoRating games={games} isLoadingGames={isLoadingGames} /> */}
         </div>
     )
