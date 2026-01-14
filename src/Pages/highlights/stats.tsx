@@ -17,7 +17,7 @@ const Stats: React.FC<IStats> = () => {
     Mixpanel.track("clicked_match_highlights_on_match_recap", {
       userId: userId,
     });
-    navigate("/highlights", { state: { url: highlight_link, muted: false } });
+    navigate("/highlights", { state: { url: highlight_link, muted: false, shareEnabled: true } });
   };
 
   const handleRallyClick = () => {
@@ -25,7 +25,7 @@ const Stats: React.FC<IStats> = () => {
     Mixpanel.track("clicked_top_rallies_on_match_recap", {
       userId: userId,
     });
-    navigate("/highlights", { state: { url: rally_link, muted: false } });
+    navigate("/highlights", { state: { url: rally_link, muted: false, shareEnabled: true } });
   };
 
   const handleHeatMapClick = () => {
