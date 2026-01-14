@@ -9,10 +9,11 @@ interface ReelsVideoPlayerProps {
   src: string;
   caption?: string;
   downloadEnabled?: boolean;
+  shareEnabled?: boolean;
   muted?: boolean;
 }
 
-const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", downloadEnabled = true, muted = true }) => {
+const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", downloadEnabled = true, shareEnabled = false, muted = true }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [isMuted, setIsMuted] = useState<boolean>(muted);
@@ -604,8 +605,8 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
         </div>
       </div>
 
-      {/* Bottom Action Buttons - Only visible when video is loaded */}
-      {isVideoLoaded && (
+      {/* Bottom Action Buttons - Only visible when video is loaded and share is enabled */}
+      {isVideoLoaded && shareEnabled && (
         <div className="px-4 pb-12 mt-2 flex gap-3 bg-black" style={{ paddingBottom: 'max(3rem, env(safe-area-inset-bottom, 3rem))' }}>
           {shareProgress.isSharing ? (
             /* Progress Bar - shown when sharing */
