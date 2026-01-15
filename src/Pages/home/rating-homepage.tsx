@@ -399,8 +399,8 @@ const RatingHomepage: React.FC<{userDetails: IUser}> = ({userDetails}) => {
     const [games, setGames] = useState(0);
     const [isLoadingRating, setIsLoadingRating] = useState(true);
     const [isLoadingGames, setIsLoadingGames] = useState(true);
-    const [previousRank, setPreviousRank] = useState(3);
-    const [previousZenScore, setPreviousZenScore] = useState(200);
+    const [previousRank, setPreviousRank] = useState(0);
+    const [previousZenScore, setPreviousZenScore] = useState(0);
     
     const { mutate: _getRatings } = useMutation({
         mutationFn: getRatings,
@@ -411,8 +411,8 @@ const RatingHomepage: React.FC<{userDetails: IUser}> = ({userDetails}) => {
             setZenScore(result.rating.Rating.zenScore || 0);
             setZenRank(result.rating.rank || 0);
             setTotalCount(result.rating.total_count || 0);
-            // setPreviousRank(result.rating.previous_rank || 0);
-            // setPreviousZenScore(result.rating.previous_zen_score || 0);
+            setPreviousRank(result.rating.previous_rank || 0);
+            setPreviousZenScore(result.rating.previous_zen_score || 0);
         },
         onError: () => {
             setIsLoadingRating(false);
