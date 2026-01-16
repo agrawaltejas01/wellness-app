@@ -94,8 +94,8 @@ const ZenScoreCard = ({zenScore, zenRank, totalRank, previousRank, previousZenSc
                                 : 'linear-gradient(90deg, #FFBDBD 0%, #F3F3F3 100%)'
                         }}
                     >
-                        <span style={{ fontSize: '6px', fontFamily: "Plus Jakarta Sans", fontWeight: 'normal', color: hasImprovedZenScore ? '#009605' : '#D32F2F' }}>
-                            <span style={{ fontWeight: 'bold', fontSize: '6px' }}>{hasImprovedZenScore ? '↑' : '↓'} {Math.abs(zenScoreChange)}</span> from yesterday
+                        <span style={{ fontSize: '8px', fontFamily: "Plus Jakarta Sans", fontWeight: 'normal', color: hasImprovedZenScore ? '#009605' : '#D32F2F' }}>
+                            <span style={{ fontWeight: 'bold', fontSize: '8px' }}>{hasImprovedZenScore ? '↑' : '↓'} {Math.abs(zenScoreChange)}</span> from yesterday
                         </span>
                     </div>
                 )}
