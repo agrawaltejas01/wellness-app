@@ -29,8 +29,8 @@ const LeaderboardHome = ({activityId}: {activityId: number}) => {
         mutationFn: getTop3Players,
         onSuccess: (result) => {
             const players = result.leaderboard || [];
-            const sortedPlayers = sortPlayersByRatingAndGames([...players]);
-            setTopPlayers(sortedPlayers.slice(0, 3));
+            // const sortedPlayers = sortPlayersByRatingAndGames([...players]);
+            setTopPlayers(players.slice(0, 3));
             setTotalPlayers(result.totalCount || 0);
             setIsLoading(false);
         },
@@ -129,13 +129,13 @@ const LeaderboardHome = ({activityId}: {activityId: number}) => {
             ) : (
                 <>
                     {/* Podium Display */}
-                    <div className="flex justify-center items-end gap-2 sm:gap-3 lg:gap-4 mb-6 px-2">
+                    <div className="flex justify-center items-end gap-2 sm:gap-4 lg:gap-6 mb-6">
                         {displayOrder.map((player, displayIndex) => {
                             const actualRank = displayIndex === 0 ? 1 : displayIndex === 1 ? 0 : 2;
                             const rankNumber = actualRank + 1;
                             
                             return (
-                                <div key={player.user_id} className="flex-1 flex flex-col items-center">
+                                <div key={player.user_id} className="flex-1 flex flex-col items-center max-w-[33.333%]">
                                     {/* Rank badge with optional crown */}
                                     <div className={`relative mb-2 sm:mb-3 fade-in-delay-${displayIndex + 1}`}>
                                         {/* Rank number behind avatar */}

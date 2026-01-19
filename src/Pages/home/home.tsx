@@ -44,6 +44,7 @@ import { getUpcomingBookings } from "../../apis/bookings/upcoming";
 import UpcomingBooking from "./upcoming-booking";
 import KeepMovingBanner from "./keep-moving-banner";
 import RatingHomepage from "./rating-homepage";
+import ZbrFaq from "./zbr-faq";
 
 interface PastAppBookingObject {
   [key: string]: any; // Or use a more specific type

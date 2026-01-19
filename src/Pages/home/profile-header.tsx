@@ -16,6 +16,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ userDetails }) => {
   const [coins, setCoins] = useState(0);
   const [profilePicture, setProfilePicture] = useState<string>("");
   const [isRatedPlayer, setIsRatedPlayer] = useState(false);
+  const [gamesPlayed, setGamesPlayed] = useState(0);
 
   const { mutate: _getCoins } = useMutation({
     mutationFn: getCoins,
@@ -29,6 +30,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ userDetails }) => {
     onSuccess: (result) => {
       const ratingValue = result?.rating?.Rating?.rating || 0;
       setIsRatedPlayer(ratingValue > 0);
+      setGamesPlayed(result?.rating?.Rating?.totalGamesPlayed || 0);
     },
     onError: () => {
       setIsRatedPlayer(false);
@@ -122,7 +124,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ userDetails }) => {
                 textUnderlineOffset: "3px",
               }}
             >
-              Let's look at your sesh!
+              {isRatedPlayer ? `${gamesPlayed} games played` : 'Unrated'}
             </p>
           </div>
         </div>
