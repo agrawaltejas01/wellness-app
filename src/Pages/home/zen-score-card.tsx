@@ -85,7 +85,7 @@ const ZenScoreCard = ({zenScore, zenRank, totalRank, previousRank, previousZenSc
                 
                 <div className="flex flex-col items-start">
                 <span style={{ fontSize: '12px', fontStyle: 'italic', fontFamily: "Plus Jakarta Sans", fontWeight: 'normal', color: '#505050' }}>ZEN Score</span>
-                {previousZenScore > 0 && (
+                {previousZenScore > 0 && zenScoreChange !== 0 && (
                     <div
                         className="flex items-center justify-center px-1 py-1 rounded"
                         style={{
