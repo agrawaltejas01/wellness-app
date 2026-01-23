@@ -115,13 +115,12 @@ const Highlights = ({leftComponentHeight, videoHighlights}: {leftComponentHeight
     {showSelectHighlightsModal && (<BottomUpModal
       isOpen={showSelectHighlightsModal}
       onClose={() => setShowSelectHighlightsModal(false)}
-      title=""
+      title="Spot Yourself"
+      subtitle="Spot yourself in the lineup below to unlock your highlights"
       borderBottom={true}
       showCloseButton={false}
     >
-      <div className="flex flex-col gap-2">
-          <SelectHighlight highlights={videoHighlights} setFinalSelectedHighlight={setFinalSelectedHighlight} matchId={matchIdHighlights} batchId={batchIdHighlights} setShowStatsModal={setShowStatsModal} setShowSelectHighlightsModal={setShowSelectHighlightsModal} setSelectedBatchId={() => setShowAllHighlightsModal(true)} />
-      </div>
+      <SelectHighlight highlights={videoHighlights} setFinalSelectedHighlight={setFinalSelectedHighlight} matchId={matchIdHighlights} batchId={batchIdHighlights} setShowStatsModal={setShowStatsModal} setShowSelectHighlightsModal={setShowSelectHighlightsModal} setSelectedBatchId={() => setShowAllHighlightsModal(true)} />
     </BottomUpModal>)}
     {/* {showStatsModal && (<BottomUpModal
       isOpen={showStatsModal}

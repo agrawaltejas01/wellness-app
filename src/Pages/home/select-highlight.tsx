@@ -1,7 +1,6 @@
 import { navigate } from "@reach/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Mixpanel } from "../../mixpanel/init";
-import { ReactComponent as BackButtonCheckout } from '../../images/utils/back-button-checkout.svg';
 import { useMutation } from "@tanstack/react-query";
 import { addUserHighlight } from "../../apis/highlights/highlights";
 
@@ -48,28 +47,10 @@ const SelectHighlight = ({highlights, setFinalSelectedHighlight, matchId, batchI
     }
     
     return (
-        <div className="flex flex-col">
-            {/* Header */}
-            <div className="px-6 py-5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg">
-                <div className="flex items-center gap-3 mb-2">
-                <button
-                    className="flex items-center justify-center w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 transition-colors duration-200 focus:outline-none"
-                    onClick={() => {
-                        setShowSelectHighlightsModal(false);
-                        setSelectedBatchId(null);
-                    }}
-                >
-                        <BackButtonCheckout className="w-4 h-4 text-white" />
-                    </button>
-                    <div>
-                        <h2 className="text-xl font-bold">Spot Yourself</h2>
-                        <p className="text-indigo-100 text-xs">Spot yourself in the lineup below to unlock your highlights</p>
-                    </div>
-                </div>
-            </div>
+        <div className="flex flex-col bg-white rounded-3xl shadow-xl overflow-hidden pt-4">
 
             {/* Content */}
-            <div className="px-6 py-6">
+            <div className="px-6 pb-4">
                 <div className="grid grid-cols-2 gap-3 max-w-sm mx-auto">
                     {sortedHighlights.map((highlight: any, index: number) => {
                         const isSelected = selectedHighlightId === highlight.id;
@@ -143,20 +124,27 @@ const SelectHighlight = ({highlights, setFinalSelectedHighlight, matchId, batchI
                 </div>
             </div>
 
-            {/* Continue Button */}
-            <div className="px-6 pb-4">
+            {/* Action Buttons */}
+            <div className="px-6 pb-6 flex gap-3">
+                <button
+                    onClick={() => {
+                        setShowSelectHighlightsModal(false);
+                        setSelectedBatchId(null);
+                    }}
+                    className="flex-1 py-3 px-6 rounded-2xl font-bold text-center transition-all duration-300 bg-gray-100 text-gray-700 hover:bg-gray-200 active:scale-95"
+                >
+                    Back
+                </button>
                 <button
                     onClick={handleContinue}
                     disabled={!selectedHighlightId}
-                    className={`w-full py-4 px-6 rounded-2xl font-bold text-center transition-all duration-300 transform ${
+                    className={`flex-1 py-3 px-6 rounded-2xl font-bold text-center transition-all duration-300 transform ${
                         selectedHighlightId
-                            ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg hover:shadow-xl hover:scale-105 active:scale-95'
+                            ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg hover:shadow-xl active:scale-95'
                             : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                     }`}
                 >
-                    <div className="flex items-center justify-center gap-2">
-                        <span>{!selectedHighlightId ? "Select to Continue" : "Continue"}</span>
-                    </div>
+                    Continue
                 </button>
             </div>
         </div>
