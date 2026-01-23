@@ -48,7 +48,7 @@ const SelectHighlight = ({highlights, setFinalSelectedHighlight, matchId, batchI
     }
     
     return (
-        <div className="bg-gradient-to-b from-slate-50 to-white flex flex-col">
+        <div className="flex flex-col">
             {/* Header */}
             <div className="px-6 py-5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg">
                 <div className="flex items-center gap-3 mb-2">
@@ -69,7 +69,7 @@ const SelectHighlight = ({highlights, setFinalSelectedHighlight, matchId, batchI
             </div>
 
             {/* Content */}
-            <div className="flex-1 px-6 py-6">
+            <div className="px-6 py-6">
                 <div className="grid grid-cols-2 gap-3 max-w-sm mx-auto">
                     {sortedHighlights.map((highlight: any, index: number) => {
                         const isSelected = selectedHighlightId === highlight.id;
