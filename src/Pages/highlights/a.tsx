@@ -623,12 +623,19 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
             /* Share Button */
             <button
               onClick={handleShare}
-              className="w-full h-14 rounded-full flex items-center justify-center font-semibold text-lg text-white"
+              className="w-full h-14 rounded-full flex items-center justify-center gap-2 font-semibold text-lg text-white"
               style={{ 
                 backgroundColor: '#009605',
                 WebkitTapHighlightColor: 'transparent' 
               }}
             >
+              <svg
+                className="w-5 h-5 text-white"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a3.27 3.27 0 000-1.39l7.05-4.11A2.99 2.99 0 0018 7.91 3 3 0 1015 5a2.9 2.9 0 00.09.7L8.04 9.81a3 3 0 100 4.38l7.05 4.11c-.05.23-.09.46-.09.7a3 3 0 103-2.92z" />
+              </svg>
               <span>Share</span>
             </button>
           )}
