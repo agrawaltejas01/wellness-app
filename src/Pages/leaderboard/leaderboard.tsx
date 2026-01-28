@@ -32,6 +32,7 @@ interface UserRating {
     rating: number;
     gamesPlayed: number;
     rank?: number;
+    zenScore?: number;
     lastGamePlayedDate?: string;
 }
 
@@ -138,6 +139,7 @@ const Leaderboard = (props: LeaderboardProps) => {
             if (!result || !result.rating) {
                 setUserRating(prev => ({ 
                     rating: 0, 
+                    zenScore: 0,
                     gamesPlayed: prev?.gamesPlayed || 0,
                     rank: prev?.rank || 0,
                     lastGamePlayedDate: prev?.lastGamePlayedDate
@@ -146,7 +148,8 @@ const Leaderboard = (props: LeaderboardProps) => {
             }
             setUserRating(prev => ({ 
                 ...prev, 
-                rating: result.rating.Rating.zenScore || 0, 
+                rating: result.rating.Rating.rating || 0, 
+                zenScore: result.rating.Rating.zenScore || 0,
                 rank: result.rating.rank || 0,
                 lastGamePlayedDate: result.rating.Rating.lastPlayedAt || prev?.lastGamePlayedDate
             } as UserRating));
@@ -156,6 +159,7 @@ const Leaderboard = (props: LeaderboardProps) => {
             // Set default rating on error to prevent undefined state
             setUserRating(prev => ({ 
                 rating: 0, 
+                zenScore: 0,
                 gamesPlayed: prev?.gamesPlayed || 0,
                 rank: prev?.rank || 0,
                 lastGamePlayedDate: prev?.lastGamePlayedDate
@@ -503,7 +507,7 @@ const Leaderboard = (props: LeaderboardProps) => {
                                             </div>
                                         </div>
                                         <div className="flex flex-col items-center bg-white rounded-xl p-2 lg:p-4">
-                                            <span className="text-sm lg:text-lg font-bold text-gray-900" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{userRating.rating ? userRating.rating : "-"}</span>
+                                            <span className="text-sm lg:text-lg font-bold text-gray-900" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{userRating.zenScore ? userRating.zenScore : "-"}</span>
                                             <span className="text-xs lg:text-sm text-green-700" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Zen Score</span>
                                     </div>
                                     </div>
