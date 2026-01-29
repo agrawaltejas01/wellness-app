@@ -275,6 +275,12 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
 
     // Check if running in React Native WebView
     if (window.ReactNativeWebView) {
+
+      if(window?.platformInfo?.appVersion && window?.platformInfo?.appVersion < '1.2.7') {
+        alert('Share failed. Please update the app to the latest version.');
+        return;
+      }
+
       // Use preloaded video if available (native handles this)
       window.ReactNativeWebView.postMessage(JSON.stringify({
         type: 'shareVideo',
@@ -422,7 +428,7 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
     });
 
     if (window.ReactNativeWebView) {
-      if(window.platformInfo?.platform === "ios" && window?.platformInfo?.appVersion && window?.platformInfo?.appVersion < '1.2.4') {
+      if(window?.platformInfo?.appVersion && window?.platformInfo?.appVersion < '1.2.7') {
         alert('Download failed. Please update the app to the latest version.');
         return;
       }
