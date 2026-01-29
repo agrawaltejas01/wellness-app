@@ -47,6 +47,30 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
   const userDetails = JSON.parse(window.localStorage["zenfitx-user-details"] || '{}');
   const userId = userDetails?.id;
 
+  // Helper function to redirect to app store
+  const redirectToAppStore = (): void => {
+    const platform = window?.platformInfo?.platform;
+    let appStoreUrl = '';
+    
+    if (platform === 'ios') {
+      appStoreUrl = 'https://apps.apple.com/in/app/zenfitx/id6736351969';
+    } else if (platform === 'android') {
+      appStoreUrl = 'https://play.google.com/store/apps/details?id=com.zenfitx.zenfitxapp';
+    } else {
+      // Fallback: detect from user agent
+      const userAgent = navigator.userAgent.toLowerCase();
+      if (/iphone|ipad|ipod/.test(userAgent)) {
+        appStoreUrl = 'https://apps.apple.com/in/app/zenfitx/id6736351969';
+      } else if (/android/.test(userAgent)) {
+        appStoreUrl = 'https://play.google.com/store/apps/details?id=com.zenfitx.zenfitxapp';
+      }
+    }
+    
+    if (appStoreUrl) {
+      window.location.href = appStoreUrl;
+    }
+  };
+
   useEffect(() => {
     Mixpanel.track("viewed_highlight_video_page", {
       userId: userId,
@@ -277,7 +301,8 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
     if (window.ReactNativeWebView) {
 
       if(window?.platformInfo?.appVersion && window?.platformInfo?.appVersion < '1.2.7') {
-        alert('Share failed. Please update the app to the latest version.');
+        // alert('Share failed. Please update the app to the latest version.');
+        redirectToAppStore();
         return;
       }
 
@@ -429,7 +454,8 @@ const ReelsVideoPlayer: React.FC<ReelsVideoPlayerProps> = ({ src, caption = "", 
 
     if (window.ReactNativeWebView) {
       if(window?.platformInfo?.appVersion && window?.platformInfo?.appVersion < '1.2.7') {
-        alert('Download failed. Please update the app to the latest version.');
+        // alert('Download failed. Please update the app to the latest version.');
+        redirectToAppStore();
         return;
       }
       // Send message to React Native - use preloaded video if available
