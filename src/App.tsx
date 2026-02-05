@@ -32,8 +32,9 @@ import UserProfile from "./Pages/user-profile/user-profile";
 import Highlights from "./Pages/highlights/highlights";
 import GetStarted from "./Pages/home/get-started";
 import Stats from "./Pages/highlights/stats";
-import HeatMap from "./Pages/highlights/heat-map";
-import ZbrFaq from "./Pages/home/zbr-faq";    
+import HeatMap from "./Pages/highlights/heat-map";    
+import ZbrFaq from "./Pages/home/zbr-faq";
+import CoachChat from "./Pages/coach/coach-chat";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -131,6 +132,7 @@ function App() {
           <HeatMap path="/heat-map" />
           <Leaderboard path="/leaderboard" />
           <UserProfile path="/user-profile" />
+          <CoachChat path="/coach" />
           <ZbrFaq path="/zbr-faq" />
         </Router>
       </AppLayout>

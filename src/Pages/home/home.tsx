@@ -38,6 +38,7 @@ import ProfileCompletion from "../auth/profile-completion";
 import GetStarted from "./get-started";
 import ProfileHeader from "./profile-header";
 import ActivitySelector from "./activity-selector";
+import AICoachBanner from "./ai-coach-banner";
 import BottomNav from "../../components/bottom-nav";
 import GameHighlights from "./game-highlights";
 import { getUpcomingBookings } from "../../apis/bookings/upcoming";
@@ -440,6 +441,9 @@ const Home: React.FC<IHome> = ({ activitySelected, showClassesNearYou }) => {
         ) : (
           <>
             <UpcomingBooking userId={userDetails?.id as unknown as string} />
+
+            {/* AI Coach Banner */}
+            <AICoachBanner userId={userDetails?.id} />
 
             <RatingHomepage userDetails={userDetails} />
 
