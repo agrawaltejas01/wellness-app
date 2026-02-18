@@ -63,6 +63,27 @@ const Circle = ({radius, borderColor, borderStyle, backgroundColor, character = 
     )
 }
 
+const getLastUpdatedTime = () => {
+    const now = new Date();
+    const lastUpdate = new Date(now);
+    lastUpdate.setHours(8, 0, 0, 0);
+
+    // If current time is before 8 AM today, use yesterday's 8 AM
+    if (now < lastUpdate) {
+        lastUpdate.setDate(lastUpdate.getDate() - 1);
+    }
+
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const day = lastUpdate.getDate();
+    const month = months[lastUpdate.getMonth()];
+    const suffix = day === 1 || day === 21 || day === 31 ? 'st'
+        : day === 2 || day === 22 ? 'nd'
+        : day === 3 || day === 23 ? 'rd'
+        : 'th';
+
+    return `${month} ${day}${suffix}, 8 AM`;
+};
+
 interface LeaderboardProps extends RouteComponentProps {}
 
 const Leaderboard = (props: LeaderboardProps) => {
@@ -325,7 +346,7 @@ const Leaderboard = (props: LeaderboardProps) => {
                         </button>
                         <div className="flex flex-col">
                             <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">Leaderboard 🏆</h1>
-                            <span className="text-xs lg:text-sm text-gray-500 font-normal">Last updated: Dec 9th, 12 PM</span>
+                            <span className="text-xs lg:text-sm text-gray-500 font-normal">Last updated: {getLastUpdatedTime()}</span>
                         </div>
                     </div>
                     <button 
