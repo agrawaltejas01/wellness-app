@@ -795,7 +795,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                             ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || null
                             : null;
                         if (userId) {
-                            _requestHighlight({ user_id: String(userId), batch_id: batchId });
+                            _requestHighlight({ user_id: userId, batch_id: Number(batchId) });
                         }
                     }
                     return true;
