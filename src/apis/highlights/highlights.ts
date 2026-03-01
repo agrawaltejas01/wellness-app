@@ -12,3 +12,8 @@ export async function addUserHighlight(userId: string, highlightId: string) {
   });
   return result.data;
 }
+
+export async function requestHighlight(body: { user_id: number; batch_id: number }) {
+  const result = await networkAdapter.post(`/highlights/request`, body);
+  return result.data;
+}
