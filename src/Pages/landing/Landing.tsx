@@ -1,12 +1,10 @@
 import { RouteComponentProps } from "@reach/router";
-import { Flex } from "antd";
 import LandingHeader from "./Header";
-import useWindowDimensions from "../../hooks/getWindowDimensions";
-import { useEffect } from "react";
+import LandingBody from "./Body";
 import LandingFooter from "./Footer";
-import LandingContent from "./Content";
-
-import LandingBG from "../../images/landing/landing-background.png";
+import "./style.css";
+import { useEffect } from "react";
+import useWindowDimensions from "../../hooks/getWindowDimensions";
 
 interface ILandingPage extends RouteComponentProps {}
 
@@ -18,26 +16,11 @@ const LandingPage: React.FC<ILandingPage> = () => {
   }, []);
 
   return (
-    <Flex
-      flex={1}
-      style={{
-        minHeight: `${dimensions.height * 0.13}vh`,
-        // backgroundImage: `url("${LandingBG}")`,
-        // backgroundRepeat: "no-repeat",
-        // backgroundSize: "100% 100%",
-      }}
-      vertical
-    >
-      <Flex flex={1} align="flex-start">
-        <LandingHeader />
-      </Flex>
-      <Flex flex={1} align="center">
-        <LandingContent />
-      </Flex>
-      <Flex flex={1} align="flex-end">
-        <LandingFooter />
-      </Flex>
-    </Flex>
+    <div className="landing-page">
+      <LandingHeader />
+      <LandingBody />
+      <LandingFooter />
+    </div>
   );
 };
 

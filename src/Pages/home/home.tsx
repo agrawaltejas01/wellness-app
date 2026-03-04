@@ -21,7 +21,6 @@ import { plusDetailsAtom, userDetailsAtom } from "../../atoms/atom";
 import IUser, { IBookings, IPlusDetails } from "../../types/user";
 import useAuthRedirect from "../auth/redirect-hook";
 import { Mixpanel } from "../../mixpanel/init";
-import LandingFooter from "../landing/Footer";
 import { getUserDeatils } from "../../apis/user/userDetails";
 import Onboarding from "./onboarding";
 import MetaPixel from "../../components/meta-pixel";

@@ -34,6 +34,7 @@ import GetStarted from "./Pages/home/get-started";
 import Stats from "./Pages/highlights/stats";
 import HeatMap from "./Pages/highlights/heat-map";    
 import ZbrFaq from "./Pages/home/zbr-faq";
+import LandingPage from "./Pages/landing/Landing";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -95,13 +96,14 @@ const AppLayout: React.FC<{ children: React.ReactNode}> = ({ children }) => {
 };
 
 function App() {
+  const isFromApp = (): boolean =>
+    typeof window !== "undefined" && !!(window as any).ReactNativeWebView;
 
   return (
     <QueryClientProvider client={queryClient}>
       <AppLayout>
         <Router>
-          {/* <LandingPage path="/" /> */}
-          <Home path="/" />
+          {isFromApp() ? <Home path="/" /> : <LandingPage path="/" />}
           <Activity path="/:activity" />
           {/* <Login path="/login" /> */}
           <VerifyMagicLink path="/verify" />

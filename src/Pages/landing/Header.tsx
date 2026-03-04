@@ -1,34 +1,24 @@
-import { navigate } from "@reach/router";
-import { Flex } from "antd";
+const LOGO_URL = "https://zfx-gyms.zenfitx.link/onboarding/logo.avif";
 
 const LandingHeader: React.FC = () => {
-  return (
-    <Flex
-      flex={1}
-      style={{
-        backgroundColor: "#05070B",
-        color: "white",
-        padding: "24px",
-      }}
-    >
-      <Flex
-        style={{ fontWeight: "bold", fontSize: "24px" }}
-        flex={1}
-        justify="flex-start"
-      >
-        ZenFitX
-      </Flex>
+  const scrollToFooter = () => {
+    document.querySelector(".landing-footer")?.scrollIntoView({ behavior: "smooth" });
+  };
 
-      <Flex
-        onClick={() => {
-          navigate("/");
-        }}
-        flex={1}
-        justify="flex-end"
-      >
-        Login
-      </Flex>
-    </Flex>
+  return (
+    <header className="landing-header">
+      <a href="/" className="landing-header__logo-link" aria-label="ZenFitX">
+        <img
+          src={LOGO_URL}
+          alt="ZenFitX"
+          className="landing-header__logo"
+          loading="eager"
+        />
+      </a>
+      <button className="landing-header__get-app" onClick={scrollToFooter}>
+        Get App
+      </button>
+    </header>
   );
 };
 
