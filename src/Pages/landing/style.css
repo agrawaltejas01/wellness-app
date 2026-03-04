@@ -33,23 +33,34 @@
 .landing-header__get-app {
   position: absolute;
   right: 40px;
-  padding: 9px 22px;
-  border: 1.5px solid rgba(255, 255, 255, 0.7);
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 100px;
+  background: #ffffff;
+  color: #009605;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
   white-space: nowrap;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s;
 }
 
 .landing-header__get-app:hover {
-  background: rgba(255, 255, 255, 0.22);
-  border-color: #ffffff;
+  background: #f0fff0;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.22);
 }
+
+.landing-header__get-app:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
 
 .landing-header__logo {
   height: 120px;
@@ -86,7 +97,7 @@
 
 .landing-hero__sub {
   margin: 0;
-  color: rgba(255, 255, 255, 0.85);
+  color: #ffffff;
   font-size: clamp(14px, 2vw, 20px);
   font-weight: 400;
   letter-spacing: 0.2px;
@@ -137,7 +148,7 @@
 }
 
 .landing-footer__label {
-  color: rgba(255, 255, 255, 0.75);
+  color: #ffffff;
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.8px;
@@ -145,12 +156,51 @@
   margin: 0;
 }
 
-.landing-footer__store-group {
+.landing-footer__content {
   display: flex;
   align-items: center;
+  gap: 28px;
+}
+
+/* QR code */
+.landing-footer__qr-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
-  justify-content: center;
+}
+
+.landing-footer__qr {
+  width: 110px;
+  height: 110px;
+  border-radius: 12px;
+  object-fit: contain;
+  background: #ffffff;
+  padding: 6px;
+  box-sizing: border-box;
+}
+
+.landing-footer__qr-hint {
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+}
+
+/* Vertical divider between QR and badges */
+.landing-footer__divider {
+  width: 1px;
+  height: 90px;
+  background: rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+}
+
+/* Store badges */
+.landing-footer__store-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
 }
 
 .landing-footer__badge-link {
@@ -163,17 +213,25 @@
   transform: scale(1.03);
 }
 
-/* Apple badge — has built-in padding in the SVG, keep as-is */
-.landing-footer__badge--apple {
+/* Fixed-size container so both badges are identical visual height */
+.landing-footer__badge-box {
+  width: 160px;
   height: 52px;
-  width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
-/* Google badge — has extra whitespace built in, compensate with negative margin */
+.landing-footer__badge {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Google badge has ~17% built-in whitespace top & bottom — scale it up to fill */
 .landing-footer__badge--google {
-  height: 78px;
-  width: auto;
-  margin: -13px 0;
+  transform: scale(1.35);
 }
 
 /* ─── Responsive ──────────────────────────────────────────────── */
@@ -285,8 +343,9 @@
 
   .landing-header__get-app {
     right: 20px;
-    padding: 7px 16px;
-    font-size: 13px;
+    padding: 8px 16px;
+    font-size: 12px;
+    gap: 5px;
   }
 
   .landing-hero {
@@ -298,21 +357,26 @@
     gap: 16px;
   }
 
+  .landing-footer__qr-wrap,
+  .landing-footer__divider {
+    display: none;
+  }
+
+  .landing-footer__content {
+    gap: 0;
+  }
+
   .landing-footer__store-group {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    gap: 14px;
     flex-wrap: nowrap;
   }
 
-  .landing-footer__badge--apple {
-    height: 40px;
-  }
-
-  .landing-footer__badge--google {
-    height: 60px;
-    margin: -10px 0;
+  .landing-footer__badge-box {
+    width: 140px;
+    height: 46px;
   }
 }
 
