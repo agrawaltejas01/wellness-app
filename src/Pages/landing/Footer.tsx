@@ -1,57 +1,44 @@
-import { nikitaAddress, helpLine, nikitaEmail } from "../../constants/info";
-import { useRef } from "react";
+const IOS_URL = "https://apps.apple.com/in/app/zenfitx/id6736351969";
+const ANDROID_URL =
+  "https://play.google.com/store/apps/details?id=com.zenfitx.zenfitxapp";
+
+const APPLE_BADGE =
+  "https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg";
+const GOOGLE_BADGE =
+  "https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png";
 
 const LandingFooter: React.FC = () => {
-  const clickCount = useRef(0);
-
   return (
     <footer className="landing-footer">
-      <div className="footer-container">
-        <div className="footer-content">
-          <div className="footer-section">
-            <h4 className="footer-heading">Contact Us</h4>
-            <div className="footer-links">
-              <p
-                onClick={() => {
-                  clickCount.current++;
-                  if (clickCount.current % 3 === 0) localStorage.clear();
-                }}
-              >
-                Phone: +91-{helpLine}
-              </p>
-              <p>Email: {nikitaEmail}</p>
-              <p className="footer-address">{nikitaAddress}</p>
-            </div>
-          </div>
+      <p className="landing-footer__label">Download the app</p>
+      <div className="landing-footer__store-group">
+        <a
+          href={IOS_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Download on the App Store"
+          className="landing-footer__badge-link"
+        >
+          <img
+            src={APPLE_BADGE}
+            alt="Download on the App Store"
+            className="landing-footer__badge landing-footer__badge--apple"
+          />
+        </a>
 
-          <div className="footer-section">
-            <h4 className="footer-heading">Legal</h4>
-            <div className="footer-links">
-              <a
-                href={require("../../docs/Privacy-Policy.pdf")}
-                download="ZenfitX-Privacy-Policy"
-              >
-                Privacy Policy
-              </a>
-              <a
-                href={require("../../docs/TNC.pdf")}
-                download="ZenfitX-TNC"
-              >
-                Terms & Conditions
-              </a>
-              <a
-                href={require("../../docs/Refund-Cancellation-Policy.pdf")}
-                download="ZenfitX-Refund&Cancellation"
-              >
-                Refund & Cancellation
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div className="footer-bottom">
-          <p>&copy; {new Date().getFullYear()} ZenfitX. All rights reserved.</p>
-        </div>
+        <a
+          href={ANDROID_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Get it on Google Play"
+          className="landing-footer__badge-link"
+        >
+          <img
+            src={GOOGLE_BADGE}
+            alt="Get it on Google Play"
+            className="landing-footer__badge landing-footer__badge--google"
+          />
+        </a>
       </div>
     </footer>
   );

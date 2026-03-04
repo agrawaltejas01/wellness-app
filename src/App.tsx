@@ -97,20 +97,11 @@ const AppLayout: React.FC<{ children: React.ReactNode}> = ({ children }) => {
 };
 
 function App() {
-  // Check if we're in a WebView
-  const isInWebView = Boolean(
-    (window as any).ReactNativeWebView ||
-    navigator.userAgent.toLowerCase().includes("wv") ||
-    navigator.userAgent.toLowerCase().includes("webview") ||
-    navigator.userAgent.toLowerCase().includes("react-native")
-  );
-
   return (
     <QueryClientProvider client={queryClient}>
       <AppLayout>
         <Router>
-          {/* Show LandingPage when NOT in WebView, otherwise show Home */}
-          {!isInWebView ? <LandingPage path="/" /> : <Home path="/" />}
+          <LandingPage path="/" />
           <Activity path="/:activity" />
           {/* <Login path="/login" /> */}
           <VerifyMagicLink path="/verify" />

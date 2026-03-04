@@ -18,7 +18,6 @@ import { useMutation } from "@tanstack/react-query";
 import { getBookingOfUser } from "../../apis/user/bookings";
 import { IBookings, IPlusDetails } from "../../types/user";
 import { Mixpanel } from "../../mixpanel/init";
-import LandingFooter from "../landing/Footer";
 import MetaPixel from "../../components/meta-pixel";
 import Loader from "../../components/Loader";
 import {handleRefresh} from '../../utils/refresh';
@@ -153,10 +152,6 @@ const Profile: React.FC<IProfile> = () => {
       
       <Flex flex={1} align="flex-end">
         <DeleteAccountButton />
-      </Flex>
-
-      <Flex flex={1} vertical align="flex-end">
-        <LandingFooter />
       </Flex>
 
       {/* <Flex flex={1} vertical align="flex-end">
