@@ -16,7 +16,7 @@ const LandingHeader: React.FC = () => {
         />
       </a>
       <button className="landing-header__get-app" onClick={scrollToFooter}>
-        Get App
+        Get the App
       </button>
     </header>
   );
