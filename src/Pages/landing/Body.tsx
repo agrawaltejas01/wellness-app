@@ -30,9 +30,9 @@ const LandingBody: React.FC = () => {
       <div className="landing-hero">
         <h1 className="landing-hero__headline">
           The Pro Experience.<br />
-          Unlocked for all.
+          For Everyday Players.
         </h1>
-        <p className="landing-hero__sub">with ZenVision AI</p>
+        <p className="landing-hero__sub">powered by ZenVision AI</p>
       </div>
 
       {/* ── Desktop: side-by-side grid ── */}
