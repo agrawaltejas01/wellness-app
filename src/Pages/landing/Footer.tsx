@@ -1,3 +1,5 @@
+import { Mixpanel } from "../../mixpanel/init";
+
 const IOS_URL = "https://apps.apple.com/in/app/zenfitx/id6736351969";
 const ANDROID_URL =
   "https://play.google.com/store/apps/details?id=com.zenfitx.zenfitxapp";
@@ -32,6 +34,7 @@ const LandingFooter: React.FC = () => {
             rel="noopener noreferrer"
             aria-label="Download on the App Store"
             className="landing-footer__badge-link"
+            onClick={() => Mixpanel.track("clicked_app_store_download")}
           >
             <div className="landing-footer__badge-box">
               <img
@@ -48,6 +51,7 @@ const LandingFooter: React.FC = () => {
             rel="noopener noreferrer"
             aria-label="Get it on Google Play"
             className="landing-footer__badge-link"
+            onClick={() => Mixpanel.track("clicked_google_play_download")}
           >
             <div className="landing-footer__badge-box">
               <img
