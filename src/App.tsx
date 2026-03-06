@@ -36,6 +36,9 @@ import HeatMap from "./Pages/highlights/heat-map";
 import ZbrFaq from "./Pages/home/zbr-faq";
 import LandingPage from "./Pages/landing/Landing";
 
+const isFromApp = (): boolean =>
+  typeof window !== "undefined" && !!(window as any).ReactNativeWebView;
+
 // Create a client
 const queryClient = new QueryClient();
 
