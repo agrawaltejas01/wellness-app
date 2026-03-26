@@ -228,6 +228,7 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
           </div>
         </div>
         <div className="batch-content-wrapper">
+          {/* Free highlight banner — disabled
           {gym?.gymId == 6 && (
         <div
             style={{
@@ -240,7 +241,6 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
               cursor: 'pointer',
             }}
           >
-            {/* Diagonal stripes - left */}
             <div
               style={{
                 position: 'absolute',
@@ -252,7 +252,6 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
                 transform: 'rotate(45deg)',
               }}
             />
-            {/* Diagonal stripes - right */}
             <div
               style={{
                 position: 'absolute',
@@ -289,6 +288,7 @@ const BatchCheckoutV2: React.FC<IClassCheckout> = () => {
             </div>
           </div>
           )}
+          */}
           <div className="batch-content-inner">
             {isCoplayerCardEnabled && <SpotsLeft spotsLeft={spotsLeft} spotsTotal={spotsTotal} />}
             {isCoplayerCardEnabled && <CoplayerCard players={players} loading={!gotCoplayers} spotsLeft={spotsLeft} spotsTotal={spotsTotal}/>}

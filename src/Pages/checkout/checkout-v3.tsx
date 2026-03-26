@@ -21,7 +21,7 @@ import { getUserSkillLevel } from "../../apis/user/userDetails";
 import { userDetailsAtom } from "../../atoms/atom";
 import { useAtom } from "jotai";
 import { saveNotificationToken } from "../../apis/notifications/notifications";
-import { requestHighlight } from "../../apis/highlights/highlights";
+// import { requestHighlight } from "../../apis/highlights/highlights";
 import { Mixpanel } from "../../mixpanel/init";
 import { Rs } from "../../constants/symbols";
 import { ACTIVITY_NAME_TO_ID_MAP, COPLAYER_CARD_ENABLED } from "../../constants/activities";
@@ -128,7 +128,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
     const [selectedRides, setSelectedRides] = useState<number[]>([]);
     const offerStrip = useRef("");
     const [showEquipmentRentalInfo, setShowEquipmentRentalInfo] = useState<boolean>(false);
-    const [isHighlightRequested, setIsHighlightRequested] = useState<boolean>(false);
+    // const [isHighlightRequested, setIsHighlightRequested] = useState<boolean>(false);
 
 
     const { mutate: _getActivityById } = useMutation({
@@ -184,12 +184,12 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
         },
     });
 
-    const { mutate: _requestHighlight } = useMutation({
-        mutationFn: requestHighlight,
-        onError: () => {
-            errorToast("Failed to request game highlight");
-        },
-    });
+    // const { mutate: _requestHighlight } = useMutation({
+    //     mutationFn: requestHighlight,
+    //     onError: () => {
+    //         errorToast("Failed to request game highlight");
+    //     },
+    // });
 
     // const { mutate: _getUserSkillLevel } = useMutation({
     //     mutationFn: getUserSkillLevel,
@@ -729,7 +729,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                     </select>
                 </div>
             </div>}
-            <div className="flex flex-row px-4 pt-4">
+            {/* <div className="flex flex-row px-4 pt-4">
                 <div className="flex flex-row justify-between w-full bg-white shadow-gray rounded-xl px-4 py-4 items-center">
                     <div className="flex flex-col">
                         <p className="text-sm font-bold">Request Game Highlight</p>
@@ -740,7 +740,7 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                         onChange={() => setIsHighlightRequested(!isHighlightRequested)}
                     />
                 </div>
-            </div>
+            </div> */}
             <div className="flex flex-row px-4 pt-4">
                 {offerStrip.current && <p className="text-xs text-center text-white rounded-lg p-2 bg-discountStrip w-full">{offerStrip.current}</p>}
             </div>
@@ -790,14 +790,14 @@ const CheckoutV3: React.FC<IClassCheckout> = ({skillLevel}) => {
                   (gym?.gymId == 41 && !pastAppBookings[41] && (!kidName.trim() || kidAge <= 0 || kidAge > 18 || !kidGender.trim() || !kidJerseySize.trim()))
                 }
                 onBeforeAction={() => {
-                    if (isHighlightRequested) {
-                        const userId = window.localStorage["zenfitx-user-details"]
-                            ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || null
-                            : null;
-                        if (userId) {
-                            _requestHighlight({ user_id: userId, batch_id: Number(batchId) });
-                        }
-                    }
+                    // if (isHighlightRequested) {
+                    //     const userId = window.localStorage["zenfitx-user-details"]
+                    //         ? JSON.parse(window.localStorage["zenfitx-user-details"]).id || null
+                    //         : null;
+                    //     if (userId) {
+                    //         _requestHighlight({ user_id: userId, batch_id: Number(batchId) });
+                    //     }
+                    // }
                     return true;
                 }}
             />

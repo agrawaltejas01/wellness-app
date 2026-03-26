@@ -11,7 +11,7 @@ import {
   formatTimeIntToAmPm,
   getDayOfWeek,
 } from "../../utils/date";
-import { InfoCircleOutlined, RightOutlined } from "@ant-design/icons";
+import { RightOutlined } from "@ant-design/icons";
 import { IBatch, IGymDetails } from "../../types/gyms";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
@@ -84,7 +84,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
   const [ratings, setRatings] = useState<number>(0);
   const [showRatingModal, setShowRatingModal] = useState<boolean>(false);
   const [showHowItWorksModal, setShowHowItWorksModal] = useState<boolean>(false);
-  const [showHighlightInfoModal, setShowHighlightInfoModal] = useState<boolean>(false);
+  // const [showHighlightInfoModal, setShowHighlightInfoModal] = useState<boolean>(false);
   const urlParams = new URLSearchParams(window.location.search);
   const dateFromURL = urlParams.get("date");
 
@@ -814,7 +814,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                 _getGymBatchesForDate({
                   id: gym.gymId,
                   activity: activity,
-                  date: "2026-03-25",
+                  date: "2026-03-27",
                 });
               }}
               reposition
@@ -822,7 +822,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           </Flex>
         )}
 
-          {/* Highlight Banner */}
+          {/* Highlight Banner — disabled
           {gym?.gymId == 6 && (
           <div
             style={{
@@ -835,7 +835,6 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
               cursor: 'pointer',
             }}
           >
-            {/* Diagonal stripes - left */}
             <div
               style={{
                 position: 'absolute',
@@ -847,7 +846,6 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
                 transform: 'rotate(45deg)',
               }}
             />
-            {/* Diagonal stripes - right */}
             <div
               style={{
                 position: 'absolute',
@@ -885,6 +883,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
             </div>
           </div>
           )}
+          */}
           <Flex flex={3} className="batches-list-wrapper">
             {batches && batches.length
               ? generateBatchTile(gym, batches)
@@ -932,7 +931,7 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           </div>}
         />
       )}
-      {showHighlightInfoModal && (
+      {/* {showHighlightInfoModal && (
         <CenterModal
           isOpen={showHighlightInfoModal}
           onClose={() => setShowHighlightInfoModal(false)}
@@ -940,10 +939,10 @@ const SchedulePage: React.FC<IClassCheckout> = ({}) => {
           subtitle=""
         children={<div className="flex flex-col mt-2 text-xs gap-1">
           <span>Highlights of your best shots and longest rallies will be available on ZenfitX app within 24–48 hours after your game.
-          </span>      
+          </span>
         </div>}
         />
-      )}
+      )} */}
     </>
   );
 };
